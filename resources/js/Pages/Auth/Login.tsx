@@ -1,5 +1,5 @@
 import { useEffect, FormEventHandler } from 'react';
-import Checkbox from '@/Components/Checkbox';
+import {CtuLogo} from '@/Components/CtuLogo';
 import LoginLayout from '@/Layouts/LoginLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
@@ -39,11 +39,16 @@ export default function Login({ status, canResetPassword }: { status?: string, c
             <Head title="Log in" />
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
-            <div className='flex justify-center items-center py-16'> 
-                <p className='text-white font-black tracking-widest text-5xl'>LOGIN</p>
+            <div className='flex justify-center items-center py-12 sm:py-8 md:py-10 lg:py-16 gap-5'> 
+                <div className="flex sm:hidden md:flex lg:hidden">
+                    <Link href="/">
+                        <CtuLogo className='w-[50px] h-[50px]'/>
+                    </Link>
+                </div>
+                <div className='text-white font-black tracking-widest text-5xl'>LOGIN</div>
             </div>
             <form onSubmit={submit}>
-                <div className="mt-4">
+                <div className="mt-1 sm:mt-2 md:mt-3 lg:mt-4">
                     <InputLabel className="text-white" htmlFor="employeeID" value="Employee ID" />
 
                     <TextInput
@@ -59,7 +64,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                     <InputError message={errors.email} className="mt-2" />
                 </div>
                 
-                <div className="mt-4">
+                <div className="mt-1 sm:mt-2 md:mt-3 lg:mt-4">
                     <InputLabel className="text-white" htmlFor="password" value="Password" />
 
                     <TextInput
@@ -86,7 +91,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                     </label>
                 </div>*/}
 
-                <div className="space-y-5">
+                <div className="space-y-5 mb-10 sm:mb-5 md:mb-7 lg:mb-8">
                     <div className="flex items-center justify-end mt-5">
                         {canResetPassword && (
                             <Link

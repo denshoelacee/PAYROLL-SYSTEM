@@ -1,13 +1,14 @@
 import React from 'react';
 import CTULOGO from '/resources/images/CTULOGO.png';
-export function CtuLogo() {
+
+type CtuLogoProps = {
+  className?: string;
+};
+
+export function CtuLogo({ className = '' }: CtuLogoProps) {
   return (
-    <>
     <div>
-      <img src={CTULOGO} alt="CTU Logo" className='w-[25em] h-[25em]' />
+      <img src={CTULOGO} alt="CTU Logo" className={`${className}`} />
     </div>
-    </>
   );
 }
-
-

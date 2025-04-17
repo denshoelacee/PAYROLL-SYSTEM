@@ -15,8 +15,8 @@ export default forwardRef(function TextInput(
         ref
     ) 
     {
-    const isPassword = type === "password";
-    const isnumber = type === "text-number";
+    const isPassword = (type === "password" ? true : false);
+    const isNumber = (type === "text-number" ? true : false);
     const [showPassword, setShowPassword] = useState(false);
     const localRef = useRef<HTMLInputElement>(null);
 
@@ -36,13 +36,13 @@ export default forwardRef(function TextInput(
                 <input
                 {...props}
                 type={isPassword ? (showPassword ? "text" : "password") : type}
-                className={
-                    'pl-10 py-2.5 rounded-xl shadow-sm focus:outline-none focus:ring-0 focus:border-transparent' +
-                    className
-                }
+                className={`py-2.5 rounded-xl shadow-sm focus:outline-none focus:ring-0 focus:border-transparent 
+                ${isPassword || isNumber ? "pl-10" : "pl-5"} 
+                ${className}`}
+
                 ref={localRef}
                 />
-                    {isnumber && (
+                    {isNumber && (
                     <div className="absolute top-3 left-3 text-emerald-700">
                         <CiUser
                         size={20}/>

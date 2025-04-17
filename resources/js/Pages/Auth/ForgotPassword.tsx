@@ -31,7 +31,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
             <form onSubmit={submit}>
                 <TextInput
                     id="email"
-                    type="email"
+                    type="text-number"
                     name="email"
                     value={data.email}
                     className="mt-1 block w-full"
@@ -42,7 +42,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                 <InputError message={errors.email} className="mt-2" />
 
                 <div className="flex items-center justify-end mt-4">
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                    <PrimaryButton className="" disabled={processing}>
                         Email Password Reset Link
                     </PrimaryButton>
                 </div>

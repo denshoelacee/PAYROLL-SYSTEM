@@ -38,7 +38,7 @@ const Trigger = ({ children }: PropsWithChildren) => {
     );
 };
 
-const Content = ({ align = 'right', width = '48', contentClasses = 'py-1 bg-white', children }: PropsWithChildren<{ align?: 'left'|'right', width?: '48', contentClasses?: string }>) => {
+const Content = ({ align = 'right', width = '40', contentClasses = 'py-1 bg-white', children }: PropsWithChildren<{ align?: 'left'|'right', width?: '40', contentClasses?: string }>) => {
     const { open, setOpen } = useContext(DropDownContext);
 
     let alignmentClasses = 'origin-top';
@@ -51,8 +51,8 @@ const Content = ({ align = 'right', width = '48', contentClasses = 'py-1 bg-whit
 
     let widthClasses = '';
 
-    if (width === '48') {
-        widthClasses = 'w-48';
+    if (width === '40') {
+        widthClasses = 'w-40';
     }
 
     return (
@@ -68,7 +68,7 @@ const Content = ({ align = 'right', width = '48', contentClasses = 'py-1 bg-whit
                 leaveTo="opacity-0 scale-95"
             >
                 <div
-                    className={`absolute z-50 mt-2 rounded-md shadow-lg ${alignmentClasses} ${widthClasses}`}
+                    className={`absolute z-50 rounded-md shadow-lg ${alignmentClasses} ${widthClasses}`}
                     onClick={() => setOpen(false)}
                 >
                     <div className={`rounded-md ring-1 ring-black ring-opacity-5 ` + contentClasses}>{children}</div>
@@ -83,7 +83,7 @@ const DropdownLink = ({ className = '', children, ...props }: InertiaLinkProps) 
         <Link
             {...props}
             className={
-                'block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out ' +
+                'block w-full px-4 py-2 text-start text-sm leading-5 text-white hover:bg-[#A6CCB8] focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out ' +
                 className
             }
         >

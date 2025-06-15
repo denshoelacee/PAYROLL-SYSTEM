@@ -15,6 +15,10 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors:{
+                'button-border-color' : "#67CFD5",
+                
+            },
             backgroundColor:{
                 'mainColor' : "#012424",
                 'buttonColor' : "#FFBB33"

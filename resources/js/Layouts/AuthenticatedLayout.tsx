@@ -12,13 +12,13 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                 <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-end h-16">
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
-                            <div className="pt-20 relative">
+                            <div className="pt-10 relative">
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md w-40">
                                             <button
                                                 type="button"
-                                                className="inline-flex items-center px-2 py-1 border-transparent text-md font-medium rounded-md text-white focus:outline-none transition ease-in-out duration-150"
+                                                className=" inline-flex items-center px-2 py-1 border-transparent text-md font-medium rounded-md text-white focus:outline-none transition ease-in-out duration-150"
                                             >
                                                 <CtuLogo className='w-15 h-8 pr-3'/>
                                                 {user.name}
@@ -29,7 +29,7 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                                         </span>
                                     </Dropdown.Trigger>
 
-                                    <Dropdown.Content align="right" width='40' contentClasses=" bg-mainColor ">
+                                    <Dropdown.Content align="right" contentClasses=" bg-mainColor w-40">
                                         <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
@@ -91,7 +91,7 @@ export default function Authenticated({ user, header, children }: PropsWithChild
             </nav>
 
             {header && (
-                <header className="bg-white shadow">
+                <header className="bg-mainColor">
                     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">{header}</div>
                 </header>
             )}

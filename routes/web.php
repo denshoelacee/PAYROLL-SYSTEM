@@ -24,15 +24,15 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return Inertia::render('Admin/Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/employee', function () {
-    return Inertia::render('Employee');
+    return Inertia::render('Admin/Employee');
 })->name('employee');
 
 Route::get('/payroll', function () {
-    return Inertia::render('Payroll');
+    return Inertia::render('Admin/Payroll');
 })->name('payroll');
 
 

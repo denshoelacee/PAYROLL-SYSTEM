@@ -21,20 +21,20 @@ export default function ForgotPassword({ status }: { status?: string }) {
         <GuestLayout>
             <Head title="Forgot Password" />
 
-            <div className="mb-4 mt-10 text-sm text-gray-600">
+            <div className="mb-4 mt-10 text-sm text-white ">
                 Forgot your password? No problem. Just let us know your email address and we will email you a password
                 reset link that will allow you to choose a new one.
             </div>
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
-            <InputLabel className="text-white" htmlFor="employeeID" value="Employee ID" />
+            <InputLabel className="text-white" htmlFor="employeeID" value="Email Address" />
             <form onSubmit={submit}>
                 <TextInput
                     id="email"
                     type="text-number"
                     name="email"
                     value={data.email}
-                    className="mt-1 block w-full"
+                    className="mt-1 block w-full bg-transparent text-white"
                     isFocused={true}
                     onChange={(e) => setData('email', e.target.value)}
                 />

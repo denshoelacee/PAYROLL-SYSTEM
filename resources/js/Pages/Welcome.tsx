@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { FaChevronUp } from "react-icons/fa6";
 import { CtuLogo } from '@/Components/CtuLogo';
 import { Developers } from '@/Components/Developers';
+import Modal from '@/Components/Modal';
+import useAOS from '@/hooks/useAOS';
 
 export default function Welcome({ auth }: PageProps) {
     const [isActive, setActive] = useState(false);
@@ -12,23 +14,25 @@ export default function Welcome({ auth }: PageProps) {
         setActive(!isActive);
     };
 
+    useAOS();
+
     return (
         <>
             <Head title="Welcome" />
             <div className="bg-mainColor min-h-screen flex flex-col">
                 {/* Header */}
-                <div className="sm:fixed sm:top-8 sm:right-0 p-6 text-end">
+                <div className=" sm:fixed sm:top-4 sm:right-0 p-6 text-end">
                     {auth.user ? (
                         <Link
                             href={route('dashboard')}
-                            className="border-2 border-[#67CFD5] rounded py-2 px-8 text-[#67CFD5]"
+                            className="border-2 border-button-border-color rounded py-2 px-8 text-[#67CFD5]"
                         >
                             Dashboard
                         </Link>
                     ) : (
                         <Link
                             href={route('login')}
-                            className="border-2 border-[#67CFD5] rounded py-2 px-8 text-[#67CFD5]"
+                            className="border-2 border-button-border-color rounded py-2 px-8 text-[#67CFD5]"
                         >
                             Login
                         </Link>
@@ -38,9 +42,11 @@ export default function Welcome({ auth }: PageProps) {
                 {/* Main Content */}
                 <div className="flex-grow w-full flex justify-center items-center py-40 px-8 md:px-32 bg-mainColor">
                     <div className="flex justify-center items-center flex-wrap gap-10">
-                        <div className="w-[20em] md:w-[45em]">
+                        <div data-aos="fade-right"
+                                data-aos-offset="500"
+                                data-aos-easing="ease-in-sine" className="w-[20em] md:w-[40em]">
                             <p className="font-bold text-4xl md:text-6xl text-white">
-                                Welcome to <span className="text-custom-word-color">CTU-Pay Payroll Management System</span>
+                                Welcome to <span className="text-custom-word-color">CTU Payroll Management System</span>
                             </p>
                             <div className="pt-5 md:pt-6 w-full md:w-[70%]">
                                 <p className="text-xl text-white">
@@ -48,13 +54,13 @@ export default function Welcome({ auth }: PageProps) {
                                 </p>
                             </div>
                         </div>
-                        <div className="hidden md:flex justify-center items-center mx-auto">
+                        <div data-aos="zoom-in" className="hidden md:flex justify-center items-center mx-auto">
                             <CtuLogo className='w-[25em] h-[25em]'/>
                         </div>
                     </div>
                 </div>
-
                 {/* Footer Slide */}
+                {/* 
                 <div className="relative h-6">
                     <div
                         className={`
@@ -73,6 +79,7 @@ export default function Welcome({ auth }: PageProps) {
                         <div className={`text-center transition-opacity duration-500 ${isActive ? 'opacity-100' : 'opacity-0'}`}>
                             <p className='text-2xl text-white'>Developers</p>
                         </div>
+                        
                         <div className={`w-full flex justify-center items-center transition-opacity duration-500 ${isActive ? 'opacity-100' : 'opacity-0'}`}>
                             <div className="pt-5 max-h-[450px] overflow-y-auto w-[100%] md:w-[70%]">
                                 <div className="flex flex-col md:flex-row justify-between items-center gap-6">
@@ -80,8 +87,10 @@ export default function Welcome({ auth }: PageProps) {
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
+                */}
             </div>
         </>
     );

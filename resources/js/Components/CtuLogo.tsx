@@ -7,7 +7,7 @@ type CtuLogoProps = {
 
 export function CtuLogo({ className = '' }: CtuLogoProps) {
   return (
-    <div>
+    <div className='w-auto'>
       <img src={CTULOGO} alt="CTU Logo" className={`${className}`} />
     </div>
   );

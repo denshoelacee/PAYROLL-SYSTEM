@@ -38,7 +38,7 @@ const Trigger = ({ children }: PropsWithChildren) => {
     );
 };
 
-const Content = ({ align = 'right', width = '40', contentClasses = 'py-1 bg-white', children }: PropsWithChildren<{ align?: 'left'|'right', width?: '40', contentClasses?: string }>) => {
+const Content = ({ align = 'right', className='', contentClasses = '', children }: PropsWithChildren<{ align?: 'left'|'right', className?:'', contentClasses?: string }>) => {
     const { open, setOpen } = useContext(DropDownContext);
 
     let alignmentClasses = 'origin-top';
@@ -49,11 +49,7 @@ const Content = ({ align = 'right', width = '40', contentClasses = 'py-1 bg-whit
         alignmentClasses = 'ltr:origin-top-right rtl:origin-top-left end-0';
     }
 
-    let widthClasses = '';
-
-    if (width === '40') {
-        widthClasses = 'w-40';
-    }
+    
 
     return (
         <>
@@ -68,10 +64,10 @@ const Content = ({ align = 'right', width = '40', contentClasses = 'py-1 bg-whit
                 leaveTo="opacity-0 scale-95"
             >
                 <div
-                    className={`absolute z-50 rounded-md shadow-lg ${alignmentClasses} ${widthClasses}`}
+                    className={`absolute z-50 rounded-md shadow-lg ${alignmentClasses}`}
                     onClick={() => setOpen(false)}
                 >
-                    <div className={`rounded-md ring-1 ring-black ring-opacity-5 ` + contentClasses}>{children}</div>
+                    <div className={`text-white bg-mainColor border border-button-border-color py-1.5 px-2 ` + contentClasses}>{children}</div>
                 </div>
             </Transition>
         </>

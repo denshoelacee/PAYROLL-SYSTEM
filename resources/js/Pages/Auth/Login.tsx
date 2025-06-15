@@ -48,35 +48,36 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                 <div className='text-white font-black tracking-widest text-5xl'>LOGIN</div>
             </div>
             <form onSubmit={submit}>
-                <div className="mt-1 sm:mt-2 md:mt-3 lg:mt-4">
+                <div className=" mt-1 sm:mt-2 md:mt-3 lg:mt-4 ">
                     <InputLabel className="text-white" htmlFor="employeeID" value="Employee ID" />
-
-                    <TextInput
-                        id="text-number"
-                        type="text-number"
-                        name="text-number"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        isFocused={true}
-                        onChange={inputHandler}
-                    />
+                    <div className="bg-white rounded-xl">
+                        <TextInput
+                            id="text-number"
+                            type="text-number"
+                            name="text-number"
+                            value={data.email}
+                            className="bg-white  block w-full"
+                            isFocused={true}
+                            onChange={inputHandler}
+                        />
+                    </div>
 
                     <InputError message={errors.email} className="mt-2" />
                 </div>
                 
                 <div className="mt-1 sm:mt-2 md:mt-3 lg:mt-4">
                     <InputLabel className="text-white" htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
+                    <div className="bg-white rounded-xl">
+                        <TextInput
+                            id="password"
+                            type="password"
+                            name="password"
+                            value={data.password}
+                            className=" block w-full"
+                            autoComplete="current-password"
+                            onChange={(e) => setData('password', e.target.value)}
+                        />
+                    </div>
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 

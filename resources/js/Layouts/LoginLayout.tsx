@@ -9,7 +9,7 @@ export default function LoginLayout({ children }: PropsWithChildren) {
                 <div className="hidden sm:hidden md:hidden lg:flex">
                     <Link href="/">
                         <CtuLogo className='w-[25em] h-[25em]'/>
-                        <p className='text-center text-5xl text-white pt-6 tracking-widest font-black'>CTU - Pay</p>
+                        <p className='text-center text-5xl text-white pt-6 tracking-widest font-black'>CTU Payroll</p>
                     </Link>
                 </div>
 

@@ -32,6 +32,7 @@ export default {
             },
             textColor: {
                 'custom-word-color': '#FFBB33',
+                'mainColor' : "#012424",
             },
             borderRadius:{
                 'custom-radius' : '50px',

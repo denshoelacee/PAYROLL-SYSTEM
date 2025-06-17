@@ -52,13 +52,14 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                     <InputLabel className="text-white" htmlFor="employeeID" value="Employee ID" />
                     <div className="bg-white rounded-xl">
                         <TextInput
-                            id="text-number"
-                            type="text-number"
-                            name="text-number"
+                            id="text"
+                            type="text"
+                            name="text"
                             value={data.email}
                             className="bg-white  block w-full"
                             isFocused={true}
                             onChange={inputHandler}
+                            pattern='^\d+$'
                         />
                     </div>
 

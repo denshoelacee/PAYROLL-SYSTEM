@@ -6,6 +6,7 @@ import { CtuLogo } from '@/Components/CtuLogo';
 import { Developers } from '@/Components/Developers';
 import Modal from '@/Components/Modal';
 import useAOS from '@/hooks/useAOS';
+import '../../styles/style.css';
 
 export default function Welcome({ auth }: PageProps) {
     const [isActive, setActive] = useState(false);
@@ -32,8 +33,7 @@ export default function Welcome({ auth }: PageProps) {
                     ) : (
                         <Link
                             href={route('login')}
-                            className="border-2 border-button-border-color rounded py-2 px-8 text-[#67CFD5]"
-                        >
+                            className="border-2 border-button-border-color rounded py-2 px-8 text-[#67CFD5] hover:bg-button-border-color hover:text-mainColor transition-all duration-300">
                             Login
                         </Link>
                     )}
@@ -42,9 +42,7 @@ export default function Welcome({ auth }: PageProps) {
                 {/* Main Content */}
                 <div className="flex-grow w-full flex justify-center items-center py-40 px-8 md:px-32 bg-mainColor">
                     <div className="flex justify-center items-center flex-wrap gap-10">
-                        <div data-aos="fade-right"
-                                data-aos-offset="500"
-                                data-aos-easing="ease-in-sine" className="w-[20em] md:w-[40em]">
+                        <div className="w-[20em] md:w-[40em]">
                             <p className="font-bold text-4xl md:text-6xl text-white">
                                 Welcome to <span className="text-custom-word-color">CTU Payroll Management System</span>
                             </p>
@@ -54,23 +52,22 @@ export default function Welcome({ auth }: PageProps) {
                                 </p>
                             </div>
                         </div>
-                        <div data-aos="zoom-in" className="hidden md:flex justify-center items-center mx-auto">
+                        <div className="hidden md:flex justify-center items-center mx-auto">
                             <CtuLogo className='w-[25em] h-[25em]'/>
                         </div>
                     </div>
                 </div>
                 {/* Footer Slide */}
-                {/* 
                 <div className="relative h-6">
                     <div
                         className={`
                             w-full h-[550px] py-4 rounded-t-3xl bg-[#012424] transition-all duration-500 ease-in-out
                             overflow-hidden
-                            ${isActive ? 'bg-custom-gradient-test -translate-y-[405px] opacity-100 max-h-[500px]' : 'translate-y-0 max-h-20'}
+                            ${isActive ? 'bg-mainColor -translate-y-[405px] opacity-100 max-h-[500px]' : 'translate-y-0 max-h-20'}
                         `}
                     >
                         <div className="w-full flex justify-center items-center">
-                            <button onClick={toggleActive} className="text-white">
+                            <button onClick={toggleActive} className="text-white bouncy-button">
                                 <FaChevronUp
                                     className={`text-3xl transition-transform duration-500 ease-in-out ${isActive ? 'rotate-180' : ''}`}
                                 />
@@ -81,7 +78,7 @@ export default function Welcome({ auth }: PageProps) {
                         </div>
                         
                         <div className={`w-full flex justify-center items-center transition-opacity duration-500 ${isActive ? 'opacity-100' : 'opacity-0'}`}>
-                            <div className="pt-5 max-h-[450px] overflow-y-auto w-[100%] md:w-[70%]">
+                            <div className="pt-5 max-h-[450px] overflow-y-auto w-[100%] md:w-[60%]">
                                 <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                                     <Developers />
                                 </div>
@@ -90,7 +87,7 @@ export default function Welcome({ auth }: PageProps) {
                         
                     </div>
                 </div>
-                */}
+            
             </div>
         </>
     );

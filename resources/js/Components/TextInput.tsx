@@ -12,14 +12,14 @@ import { IoEyeOutline, IoEyeOffOutline, IoLockClosedOutline } from "react-icons/
     export default forwardRef(function TextInput(
     {
         type = 'text',
-        className = '',
+        className = '',         
         isFocused = false,
         ...props
     }: InputHTMLAttributes<HTMLInputElement> & { isFocused?: boolean },
     ref
     ) {
         const isPassword = type === "password";
-        const isNumber = type === "text-number";
+        const isNumber = type === "text";
         const [showPassword, setShowPassword] = useState(false);
         const localRef = useRef<HTMLInputElement>(null);
 

@@ -26,7 +26,13 @@ export default function Login({ status, canResetPassword }: { status?: string, c
         post(route('login'));
     };
 
+    const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const {value } = e.target;
 
+        if(/^[0-9]*$/.test(value) ){
+            setData('employee_id', value);
+        }
+    }
     return (
         <LoginLayout>
             <Head title="Log in" />
@@ -46,12 +52,13 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                     <div className="bg-white rounded-xl">
                         <TextInput
                             id="employee_id"
-                            type="number"
+                            type="text"
                             name="employee_id"
                             value={data.employee_id}
                             className="bg-white  block w-full"
                             isFocused={true}
-                            onChange={(e) => setData('employee_id', e.target.value)}
+                            onChange={inputHandler}
+                            inputMode='numeric'
 
                         />
                     </div>

@@ -27,6 +27,7 @@ Route::get('/dashboard', function () {
     return Inertia::render('Admin/Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
 Route::get('/employee', function () {
     return Inertia::render('Admin/Employee');
 })->name('employee');
@@ -36,6 +37,7 @@ Route::get('/payroll', function () {
 })->name('payroll');
 
 
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -43,11 +45,10 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::inertia('/admin', 'Admin/Dashboard');
+    Route::inertia('/admin/dashboard', 'Admin/Dashboard')->name('admin.dashboard');
 });
-
 Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::inertia('/user', 'User/Dashboard');
+    Route::inertia('/employee/dashboard', 'Employee/Dashboard');
 });
 
 Route::middleware(['auth', 'role:admin,user'])->group(function () {

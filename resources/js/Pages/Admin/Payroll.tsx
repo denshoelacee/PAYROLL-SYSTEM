@@ -15,17 +15,18 @@ import TextInput from '@/Components/TextInput';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { RiArrowDropDownLine } from "react-icons/ri";
 import Dropdown from '@/Components/Dropdown';
+import { TbCurrencyPeso } from "react-icons/tb";
 export default function Payroll({ auth}: PageProps) {
 
     const columns = [
-        { field: 'id', headerName: 'Employee ID', width: 160, headerAlign: 'center', align: 'center' },
-        { field: 'firstName', headerName: 'First name', width: 170, headerAlign: 'center', align: 'center' },
-        { field: 'lastName', headerName: 'Last name', width: 170, headerAlign: 'center', align: 'center' },
-        { field: 'designation', headerName: 'Designation', width: 170, headerAlign: 'center', align: 'center' },
-        { field: 'department', headerName: 'Department', width: 160, headerAlign: 'center', align: 'center' },
-        { field: 'type' , headerName: 'Type', width: 150, headerAlign: 'center', align: 'center' },
-        { field: 'accesstype' , headerName: 'Access Type', width: 150, headerAlign: 'center', align: 'center' },
-        { field: 'action', headerName: 'Actions', width: 150, headerAlign: 'center', align: 'center' },
+        { field: 'id', headerName: 'ID', flex:1, headerAlign: 'center', align: 'center' },
+        { field: 'firstName', headerName: 'First name', flex:1, headerAlign: 'center', align: 'center' },
+        { field: 'lastName', headerName: 'Last name', flex:1, headerAlign: 'center', align: 'center' },
+        { field: 'designation', headerName: 'Designation', flex:1, headerAlign: 'center', align: 'center' },
+        { field: 'department', headerName: 'Department',flex:1, headerAlign: 'center', align: 'center' },
+        { field: 'type' , headerName: 'Type', flex:1, headerAlign: 'center', align: 'center' },
+        { field: 'accesstype' , headerName: 'Access Type', flex:1, headerAlign: 'center', align: 'center' },
+        { field: 'action', headerName: 'Actions', flex:1, headerAlign: 'center', align: 'center', sortable:false },
     ];
 
 
@@ -82,25 +83,52 @@ export default function Payroll({ auth}: PageProps) {
                 </div>
                 <AdminLayout
                     title="Payroll">
-                    <div className="flex w-full gap-4 flex-wrap">
-                    <Card className='p-4 text-white space-y-1 w-[40%] h-40  lg:w-[24%]'>
-                        <p className='text-2xl font-black'>1,000</p>
-                        <p>Gross salary this month</p>
-                    </Card>                   
-                    <Card className='p-4 text-white space-y-1 w-[56%] lg:w-[24%]'>
-                        <p className='text-2xl font-black'>1,000</p>
-                        <p>Net salary this month</p>
-                    </Card>  
-                    <Card className='p-4 text-white space-y-1 w-[56%] h-40 lg:w-[24%]'>
-                        <p className='text-2xl font-black'>1,000</p>
-                        <p>Total tax this month</p>
-                    </Card>  
-                    <Card className='p-4 text-white space-y-1 w-[40%] lg:w-[24%]'>
-                        <p className='text-2xl font-black'>1,000</p>
-                        <p>Total loan this month</p>
-                    </Card>
-                </div> 
-                <div className="flex flex-col-reverse justify-between md:flex md:flex-row">
+                    <div className="flex flex-wrap gap-4 w-full">
+                        {/* Card 1 */}
+                        <Card className="p-4 text-white space-y-1 w-full md:w-[48%] lg:w-[23.5%] h-40 flex justify-between">
+                            <div>
+                            <p className="text-2xl font-black">1,000</p>
+                            <p>Gross salary this month</p>
+                            </div>
+                            <div className="border border-gray-100 rounded-full h-12 w-12 flex items-center justify-center bg-yellow-100 backdrop-blur-sm">
+                            <TbCurrencyPeso className="text-3xl text-custom-word-color font-black" />
+                            </div>
+                        </Card>
+
+                        {/* Card 2 */}
+                        <Card className="p-4 text-white space-y-1 w-full md:w-[48%] lg:w-[23.5%] h-40 flex justify-between">
+                            <div>
+                            <p className="text-2xl font-black">1,000</p>
+                            <p>Net salary this month</p>
+                            </div>
+                            <div className="border border-gray-100 rounded-full h-12 w-12 flex items-center justify-center bg-blue-100 backdrop-blur-sm">
+                            <TbCurrencyPeso className="text-3xl text-blue-800 font-black" />
+                            </div>
+                        </Card>
+
+                        {/* Card 3 */}
+                        <Card className="p-4 text-white space-y-1 w-full md:w-[48%] lg:w-[23.5%] h-40 flex justify-between">
+                            <div>
+                            <p className="text-2xl font-black">1,000</p>
+                            <p>Total tax this month</p>
+                            </div>
+                            <div className="border border-gray-100 rounded-full h-12 w-12 flex items-center justify-center bg-orange-100 backdrop-blur-sm">
+                            <TbCurrencyPeso className="text-3xl text-orange-800 font-black" />
+                            </div>
+                        </Card>
+
+                        {/* Card 4 */}
+                        <Card className="p-4 text-white space-y-1 w-full md:w-[48%] lg:w-[23.5%] h-40 flex justify-between">
+                            <div>
+                            <p className="text-2xl font-black">1,000</p>
+                            <p>Total loan this month</p>
+                            </div>
+                            <div className="border border-gray-100 rounded-full h-12 w-12 flex items-center justify-center bg-violet-100 backdrop-blur-sm">
+                            <TbCurrencyPeso className="text-3xl text-violet-800 font-black" />
+                            </div>
+                        </Card>
+                    </div>
+                <div className="flex flex-col-reverse justify-between lg:flex lg:flex-row">
                     <div className="flex items-center gap-2 mt-5">
                         <Dropdown>
                             <Dropdown.Trigger>
@@ -145,23 +173,18 @@ export default function Payroll({ auth}: PageProps) {
                             </div>
                     </Modal>
                 </div>
-                <div className="mt-5">
+                <div className="w-full overflow-x-auto scrollbar-hidden">
+                    <div className='my-5 min-w-[900px] h-[450px] sm:h-[450px] md:h-[650px] lg:h[400px] overflow-y-auto scrollbar-hidden '>
                     <Table
                     columns={columns}
                     rows={filteredRows}
-                    pageSize={5}
-                    height={365}
+                    autoHeight
+                    pageSize={10}
+                    height={640}
                     disableColumnResize={false}  // default is false
-                    pageSizeOptions={[5, 10, 20]}
-                    sx={{
-                        '.MuiDataGrid-overlay': {
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent overlay
-                        backdropFilter: 'blur(5px)', // optional: adds a blur effect
-                        height: '260px',
-                    },
-                    }}
                     
                     />
+                    </div>
                 </div>
                 </AdminLayout>
             </div>

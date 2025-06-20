@@ -55,9 +55,7 @@ export default function Table({
                     textAlign: 'center',
                     color: 'white',
                     fontSize: 15,
-
                     },
-
                     '.MuiDataGrid-columnHeader': {
                     backgroundColor: 'rgba(220, 252, 231, 0.1)',
                     color: 'white',
@@ -65,6 +63,11 @@ export default function Table({
 
                     '.MuiDataGrid-columnHeaders': {
                     fontSize: 15,
+                    },
+
+                    '.MuiDataGrid-footerContainer': {
+                    backgroundColor: 'rgba(220, 252, 231, 0.1)',
+                    color: 'white',
                     },
 
                     '.MuiDataGrid-iconButtonContainer': {
@@ -75,11 +78,6 @@ export default function Table({
 
                     '.MuiDataGrid-menuIcon': {
                     display: 'none',
-                    },
-
-                    '.MuiDataGrid-footerContainer': {
-                    backgroundColor: 'rgba(220, 252, 231, 0.1)',
-                    color: 'white',
                     },
 
                     '.MuiDataGrid-row:hover': {
@@ -151,11 +149,6 @@ export default function Table({
                     flexGrow: 120,
                     backgroundColor: 'rgba(220, 252, 231, 0.1)',
                     
-                    },
-                    '.MuiDataGrid-overlay': {
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent overlay
-                    backdropFilter: 'blur(5px)', // optional: adds a blur effect
-                    height: '430px',
                     },
                     ...sx}}
             />

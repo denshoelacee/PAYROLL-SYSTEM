@@ -23,7 +23,7 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                                                 className=" inline-flex items-center px-2 py-1 border-transparent text-md font-medium rounded-md text-white focus:outline-none transition ease-in-out duration-150"
                                             >
                                                 <CtuLogo className='w-15 h-8 pr-3'/>
-                                                {user.name}
+                                                {user.last_name}
                                                 <RiArrowDropDownLine
                                                     className={`text-3xl transition-transform duration-500 ease-in-out`}
                                                 />
@@ -85,9 +85,9 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                     <div className="pt-4 pb-1 border-t border-gray-200">
                         <div className="px-4">
                             <div className="font-medium text-base text-white">
-                                {user.name}
+                                {user.last_name}
                             </div>
-                            <div className="font-medium text-sm text-white">{user.email}</div>
+                            <div className="font-medium text-sm text-white">{user.employee_id}</div>
                         </div>
 
                         <div className="mt-3 space-y-1">

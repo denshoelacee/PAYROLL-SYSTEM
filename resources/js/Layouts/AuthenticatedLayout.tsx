@@ -71,13 +71,13 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                     (showingNavigationDropdown ? 'translate-x-0' : 'translate-x-[-300px]')
                     }>
                     <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
+                        <ResponsiveNavLink href={route('admin.dashboard')} active={route().current('admin.dashboard')}>
                             Dashboard
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('employee')} active={route().current('employee')}>
+                        <ResponsiveNavLink href={route('admin.employee')} active={route().current('admin.employee')}>
                             Employee
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('payroll')} active={route().current('dashboard')}>
+                        <ResponsiveNavLink href={route('admin.payroll')} active={route().current('admin.payroll')}>
                             Payroll
                         </ResponsiveNavLink>
                     </div>

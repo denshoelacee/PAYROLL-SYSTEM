@@ -40,13 +40,13 @@ export default function Sidebar({ user }: PropsWithChildren<{user: User}>) {
                 </Link>
                 
                 <div className="flex flex-col items-center  justify-center gap-5 h-[500px]">
-                    <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                    <NavLink href={route('admin.dashboard')} active={route().current('admin.dashboard')}>
                         <FiGrid className='text-2xl text-white'/>
                     </NavLink>
-                    <NavLink href={route('employee')} active={route().current('employee')} className='text-[#67CFD5] text-lg '>
+                    <NavLink href={route('admin.employee')} active={route().current('admin.employee')} className='text-[#67CFD5] text-lg '>
                         <GoPeople className='font-black text-2xl text-white'/>
                     </NavLink>
-                    <NavLink href={route('payroll')} active={route().current('payroll')} className='text-[#67CFD5] text-lg'>
+                    <NavLink href={route('admin.payroll')} active={route().current('admin.payroll')} className='text-[#67CFD5] text-lg'>
                         <BiCoinStack className='font-black text-2xl text-white'/>
                     </NavLink>
                 </div>

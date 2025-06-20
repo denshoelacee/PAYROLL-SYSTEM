@@ -1,0 +1,30 @@
+.bouncy-button{
+    animation: bouncy infinite 1s;
+}
+
+@keyframes bouncy {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+    
+}
+
+.customHeader {
+  background-color: #003fea !important;
+  color: white !important;
+}
+
+.scrollbar-hidden {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}

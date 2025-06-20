@@ -7,8 +7,16 @@ type CardProps = {
 
 export default function Card({ className = '', children}: CardProps) {
   return (
-    <div className={`bg-green-100 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-button-border-color ${className}`}>
+    <div style={{
+    background: `linear-gradient(
+      105.8deg,
+      rgba(200, 237, 217, 0.22) 3.42%,
+      rgba(177, 198, 186, 0.0484) 101.99%,
+      rgba(115, 210, 159, 0) 134.85%
+    )`,
+  }}className={`border border-button-border-color rounded-lg ${className}`}>
         {children}
     </div>
   )
 }
+

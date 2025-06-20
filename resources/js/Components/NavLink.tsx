@@ -5,7 +5,7 @@ export default function NavLink({ active = false, className = '', children, ...p
         <Link
             {...props}
             className={
-                'inline-flex items-center px-3 py-2 rounded-lg  text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none ' +
+                'inline-flex items-center px-3 py-2 rounded-lg  text-sm font-medium leading-5 transition duration-300 ease-in-out focus:outline-none ' +
                 (active
                     ? 'bg-[#006654] hover:bg-[#006654]'
                     : ' hover:bg-[#006654] hover:border-[#006654]') +

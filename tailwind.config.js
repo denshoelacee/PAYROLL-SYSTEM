@@ -28,10 +28,12 @@ export default {
                 'custom-gradient-test' : "linear-gradient(0deg,rgba(1, 36, 36, 1) 20%, rgba(18, 155, 158, 1) 88%, rgba(18, 155, 158, 1) 86%, rgba(8, 84, 85, 1) 96%, rgba(1, 36, 36, 1) 100%)",
                 'custom-gradient' : "linear-gradient(0deg,rgba(1, 36, 36, 1) 20%, rgba(18, 155, 158, 1) 50%, rgba(18, 155, 158, 1) 54%, rgba(1, 36, 36, 1) 80%)",
                 'border-color' :"linear-gradient(90deg,rgba(113, 211, 213, 1) 0%, rgba(18, 155, 158, 1) 100%)",
-                'card-color' : "linear-gradient(125deg,rgba(18, 155, 158, 1) 100%, rgba(113, 211, 213, 0) 0%)"
+                'card-color' : "linear-gradient(125deg,rgba(18, 155, 158, 1) 100%, rgba(113, 211, 213, 0) 0%)",
+                'soft-green-gradient': `linear-gradient(105.8deg,rgba(200, 237, 217, 0.22) 3.42%, rgba(177, 198, 186, 0.0484) 101.99%,rgba(115, 210, 159, 0) 134.85%)`,
             },
             textColor: {
                 'custom-word-color': '#FFBB33',
+                'mainColor' : "#012424",
             },
             borderRadius:{
                 'custom-radius' : '50px',

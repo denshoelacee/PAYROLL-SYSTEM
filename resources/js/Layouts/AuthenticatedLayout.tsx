@@ -7,7 +7,9 @@ import { CtuLogo } from '@/Components/CtuLogo';
 export default function Authenticated({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     return (
+        
         <div className="min-h-screen bg-mainColor">
+            {/* PC SIZE*/}
             <nav className="bg-mainColor">
                 <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-end h-16">
@@ -64,20 +66,28 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                         </div>
                     </div>
                 </div>
-
-                <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
+                <div  className={
+                    'inset-0 z-50 block fixed w-52 bg-red-500  transform transition-transform ease-in-out duration-300 sm:hidden ' +
+                    (showingNavigationDropdown ? 'translate-x-0' : 'translate-x-[-300px]')
+                    }>
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('employee')} active={route().current('employee')}>
+                            Employee
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('payroll')} active={route().current('dashboard')}>
+                            Payroll
                         </ResponsiveNavLink>
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200">
                         <div className="px-4">
-                            <div className="font-medium text-base text-gray-800">
+                            <div className="font-medium text-base text-white">
                                 {user.name}
                             </div>
-                            <div className="font-medium text-sm text-gray-500">{user.email}</div>
+                            <div className="font-medium text-sm text-white">{user.email}</div>
                         </div>
 
                         <div className="mt-3 space-y-1">

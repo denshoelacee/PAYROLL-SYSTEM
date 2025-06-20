@@ -46,6 +46,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                     <InputLabel className="text-white" htmlFor="employeeID" value="Employee ID" />
                     <div className="bg-white rounded-xl">
                         <TextInput
+<<<<<<< HEAD
                             id="employee_id"
                             type="number"
                             name="employee_id"
@@ -53,6 +54,16 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                             className="bg-white  block w-full"
                             isFocused={true}
                             onChange={(e) => setData('employee_id', e.target.value)}
+=======
+                            id="text"
+                            type="text"
+                            name="text"
+                            value={data.email}
+                            className="bg-white  block w-full"
+                            isFocused={true}
+                            onChange={inputHandler}
+                            pattern='^\d+$'
+>>>>>>> 2fee2648032065294f191e220a637bd41ad04fd2
                         />
                     </div>
 

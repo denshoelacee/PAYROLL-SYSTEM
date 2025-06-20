@@ -25,52 +25,34 @@ export default function Welcome({ auth }: PageProps) {
                 <div className=" sm:fixed sm:top-4 sm:right-0 p-6 text-end">
                     {auth.user ? (
                         <div>
-                            {/* ADMIN*/}
-                            {auth.user.role === 'admin' ? 
-                            (
+                            {auth.user.role === 'admin' && (
                                 <Link
                                     href={route('admin.dashboard')}
                                     className="border-2 border-button-border-color rounded py-2 px-8 text-[#67CFD5]"
                                 >
                                     Dashboard
                                 </Link>
+                            )}
 
-                            ) : (
-                                <Link
-                                        href={route('login')}
-                                        className="border-2 border-button-border-color rounded py-2 px-8 text-[#67CFD5] hover:bg-button-border-color hover:text-mainColor transition-all duration-300">
-                                        Login
-                                </Link>
-                            )
-                            }
-
-                            {/* USER*/}
-                            {auth.user.role === 'user' ? 
-                            (
+                            {auth.user.role === 'user' && (
                                 <Link
                                     href={route('employee.dashboard')}
                                     className="border-2 border-button-border-color rounded py-2 px-8 text-[#67CFD5]"
                                 >
                                     Dashboard
                                 </Link>
-
-                            ) : (
-                                <Link
-                                        href={route('login')}
-                                        className="border-2 border-button-border-color rounded py-2 px-8 text-[#67CFD5] hover:bg-button-border-color hover:text-mainColor transition-all duration-300">
-                                        Login
-                                </Link>
-                            )
-                            }
+                            )}
                         </div>
-                        ) :
+                    ) : (
                         <Link
                             href={route('login')}
-                            className="border-2 border-button-border-color rounded py-2 px-8 text-[#67CFD5] hover:bg-button-border-color hover:text-mainColor transition-all duration-300">
+                            className="border-2 border-button-border-color rounded py-2 px-8 text-[#67CFD5] hover:bg-button-border-color hover:text-mainColor transition-all duration-300"
+                        >
                             Login
                         </Link>
+                        
+                    )}
 
-                    }
                 </div>
 
                 {/* Main Content */}

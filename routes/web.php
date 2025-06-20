@@ -42,4 +42,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::inertia('/admin', 'Admin/Dashboard');
+});
+
+Route::middleware(['auth', 'role:user'])->group(function () {
+    Route::inertia('/user', 'User/Dashboard');
+});
+
+Route::middleware(['auth', 'role:admin,user'])->group(function () {
+    // shared routes or can access admin,user
+});
+
 require __DIR__.'/auth.php';

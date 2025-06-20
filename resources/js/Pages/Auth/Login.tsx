@@ -9,7 +9,7 @@ import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Login({ status, canResetPassword }: { status?: string, canResetPassword: boolean }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        email: '',
+        employee_id: '',
         password: '',
         remember: false,
     });
@@ -26,13 +26,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
         post(route('login'));
     };
 
-    const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {value } = e.target;
-
-        if(/^[0-9]*$/.test(value) ){
-            setData('email', value);
-        }
-    }
+   
 
     return (
         <LoginLayout>
@@ -52,17 +46,17 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                     <InputLabel className="text-white" htmlFor="employeeID" value="Employee ID" />
                     <div className="bg-white rounded-xl">
                         <TextInput
-                            id="text-number"
-                            type="text-number"
-                            name="text-number"
-                            value={data.email}
+                            id="employee_id"
+                            type="number"
+                            name="employee_id"
+                            value={data.employee_id}
                             className="bg-white  block w-full"
                             isFocused={true}
-                            onChange={inputHandler}
+                            onChange={(e) => setData('employee_id', e.target.value)}
                         />
                     </div>
 
-                    <InputError message={errors.email} className="mt-2" />
+                    <InputError message={errors.employee_id} className="mt-2" />
                 </div>
                 
                 <div className="mt-1 sm:mt-2 md:mt-3 lg:mt-4">

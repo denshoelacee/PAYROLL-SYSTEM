@@ -58,8 +58,8 @@ export default function Welcome({ auth }: PageProps) {
                 {/* Main Content */}
                 <div className="flex-grow w-full flex justify-center items-center py-40 px-8 md:px-32 bg-mainColor">
                     <div className="flex justify-center items-center flex-wrap gap-10">
-                        <div className="w-[20em] md:w-[40em]">
-                            <p className="font-bold text-4xl md:text-6xl text-white">
+                        <div className="w-[20em] md:w-[30em]">
+                            <p className="font-bold text-4xl md:text-5xl text-white">
                                 Welcome to <span className="text-custom-word-color">CTU Payroll Management System</span>
                             </p>
                             <div className="pt-5 md:pt-6 w-full md:w-[70%]">

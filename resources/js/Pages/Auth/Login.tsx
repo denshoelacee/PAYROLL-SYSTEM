@@ -38,7 +38,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
             <Head title="Log in" />
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
-            <div className='flex justify-center items-center py-12 sm:py-8 md:py-10 lg:py-16 gap-5'> 
+            <div className='flex justify-center  py-12 sm:py-8 md:py-10 lg:py-14 gap-5'> 
                 <div className="flex sm:hidden md:flex lg:hidden">
                     <Link href="/">
                         <CtuLogo className='w-[50px] h-[50px]'/>
@@ -47,15 +47,15 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                 <div className='text-white font-black tracking-widest text-5xl'>LOGIN</div>
             </div>
             <form onSubmit={submit}>
-                <div className=" mt-1 sm:mt-2 md:mt-3 lg:mt-4 ">
+                <div className=" mt-1 sm:mt-2 lg:mt-2 ">
                     <InputLabel className="text-white" htmlFor="employeeID" value="Employee ID" />
-                    <div className="bg-white rounded-xl">
+                    <div className="bg-gray-300 rounded-xl">
                         <TextInput
                             id="employee_id"
                             type="text"
                             name="employee_id"
                             value={data.employee_id}
-                            className="bg-white  block w-full"
+                            className=" block w-full bg-gray-300"
                             isFocused={true}
                             onChange={inputHandler}
                             inputMode='numeric'
@@ -63,23 +63,23 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                         />
                     </div>
 
-                    <InputError message={errors.employee_id} className="mt-2" />
+                    <InputError message={errors.employee_id} className="mt-1" />
                 </div>
                 
-                <div className="mt-1 sm:mt-2 md:mt-3 lg:mt-4">
+                <div className="mt-1 lg:mt-2">
                     <InputLabel className="text-white" htmlFor="password" value="Password" />
-                    <div className="bg-white rounded-xl">
+                    <div className="bg-gray-300 rounded-xl">
                         <TextInput
                             id="password"
                             type="password"
                             name="password"
                             value={data.password}
-                            className=" block w-full"
+                            className=" block w-full bg-gray-300"
                             autoComplete="current-password"
                             onChange={(e) => setData('password', e.target.value)}
                         />
                     </div>
-                    <InputError message={errors.password} className="mt-2" />
+                    <InputError message={errors.password} className="mt-1" />
                 </div>
 
                 {/*<div className="block mt-4">
@@ -93,7 +93,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                     </label>
                 </div>*/}
 
-                <div className="space-y-5 mb-10 sm:mb-5 md:mb-7 lg:mb-8">
+                <div className="space-y-4 mb-10 sm:mb-5 md:mb-7 lg:mb-8">
                     <div className="flex items-center justify-end mt-5">
                         {canResetPassword && (
                             <Link
@@ -105,8 +105,15 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                         )}
                     </div>
                     <PrimaryButton  disabled={processing}>
-                            <p className="text-lg font-black tracking-widest">SIGN IN</p>
+                            <p className="text-[15px] py-1 font-black tracking-widest">SIGN IN</p>
                     </PrimaryButton>
+                </div>
+                <div className="flex justify-center text-white gap-1">
+                    <span>Don't have an account? </span>
+                    <Link href={route('register')}
+                        className='text-white text-md'>
+                    <span className='underline'>Register</span>
+                </Link> 
                 </div>
 
             </form>

@@ -36,19 +36,20 @@ class AuthenticatedSessionController extends Controller
 
          $user = $request->user();
 
+         if($user->status !== 'verified'){
+             auth()->logout();
+             
+             return redirect()->route('login')->withErrors
+                ([
+                    'statusMessage' => $user->status === 'pending'
+                    ? 'Your account is still pending approval.'
+                    : 'Your account has been rejected.'
+                ]);
+         }
+
             return redirect()->intended(
                 $user->role === 'admin' ? '/admin/dashboard' : '/employee/dashboard'
             );
-
-        /*
-        $user = Auth::user();
-
-        if ($user->access_type === 'admin') {
-            return redirect()->intended('/admin-dashboard');
-        }
-
-        return redirect()->intended('/user-dashboard');
-        */
     }
 
     /**

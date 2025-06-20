@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\EmployeeController;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-class EmployeeController extends Controller
+use App\Http\Controllers\Controller;
+
+class EmployeeDashboardController extends Controller
 {
     public function dashboard (){
 

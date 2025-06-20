@@ -5,15 +5,23 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
+import VerifyMessage from '@/Components/VerifyMessage';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function Login({ status, canResetPassword }: { status?: string, canResetPassword: boolean }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+export default function Login({ status, canResetPassword, }: { status?: string, canResetPassword: boolean, }) {
+  type CustomErrors = {
+        employee_id?: string;
+        password?: string;
+        statusMessage?: string;
+    }
+    
+    const { data, setData, post, processing, errors, reset ,} = useForm({
         employee_id: '',
         password: '',
         remember: false,
     });
-
+        const customErrors = errors as CustomErrors;
+        
     useEffect(() => {
         return () => {
             reset('password');
@@ -61,7 +69,8 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                             inputMode='numeric'
 
                         />
-                    </div>
+                    </div>                 
+                   <VerifyMessage message={customErrors.statusMessage} />
 
                     <InputError message={errors.employee_id} className="mt-1" />
                 </div>

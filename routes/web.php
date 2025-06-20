@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\AdminController\AdminDashboardController;
+use App\Http\Controllers\EmployeeController\EmployeeDashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -26,32 +26,20 @@ Route::get('/', function () {
 });
 
 
-
-Route::get('/employee', function () {
-    return Inertia::render('Admin/Employee');
-})->name('employee');
-
-Route::get('/payroll', function () {
-    return Inertia::render('Admin/Payroll');
-})->name('payroll');
-
-
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function () {  
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/employee', [AdminController::class, 'employee'])->name('admin.employee');
-    Route::get('/admin/payroll', [AdminController::class, 'payroll'])->name('admin.payroll');
-    //Route::inertia('/admin/dashboard', 'Admin/Dashboard')->name('admin.dashboard');
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {  
+    Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/employee', [AdminDashboardController::class, 'employee'])->name('admin.employee');
+    Route::get('/payroll', [AdminDashboardController::class, 'payroll'])->name('admin.payroll');
 });
 
-Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/employee/dashboard', [EmployeeController::class, 'dashboard'])->name('employee.dashboard');
+Route::prefix('user')->middleware(['auth', 'role:user'])->group(function () {
+    Route::get('/dashboard', [EmployeeDashboardController::class, 'dashboard'])->name('employee.dashboard');
 });
 
 Route::middleware(['auth', 'role:admin,user'])->group(function () {

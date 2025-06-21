@@ -38,7 +38,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/payroll', [AdminDashboardController::class, 'payroll'])->name('admin.payroll');
 });
 
-Route::prefix('user')->middleware(['auth', 'role:user'])->group(function () {
+Route::prefix('employee')->middleware(['auth', 'role:user'])->group(function () {
     Route::get('/dashboard', [EmployeeDashboardController::class, 'dashboard'])->name('employee.dashboard');
 });
 

@@ -6,6 +6,11 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 import LoginLayout from '@/Layouts/LoginLayout';
+import Dropdown from '@/Components/Dropdown';
+import SecondaryButton from '@/Components/SecondaryButton';
+import { RiArrowDropDownLine } from 'react-icons/ri';
+
+
 
 
 export default function Register() {
@@ -13,6 +18,9 @@ export default function Register() {
     const [step, setStep] = useState(1);
     const nextStep = () => setStep(prev => prev + 1);
     const prevStep = () => setStep(prev => prev - 1);
+    const [selectedDropdown, setSelectedDropdown] = useState('Select Question');
+
+    const options = ['What is ROBLOX', 'ADIK BA SI RAYJAY UG GROW A GARDEN?'];
     const { data, setData, post, processing, errors, reset } = useForm({
         employee_id: '',
         last_name: '',
@@ -190,19 +198,29 @@ export default function Register() {
                     </div>
                     <div>
                         <InputLabel htmlFor="secret_question" value="Secret Question" className='text-white' />
-                            <div className="bg-gray-300 rounded-xl">
-                                <TextInput
-                                    id="secret_password"
-                                    name="secret_password"
-                                    value={data.secret_password}
-                                    className="block w-full bg-gray-300 text-black"
-                                    onChange={(e) => setData('secret_password', e.target.value)}
-                                />
-                            </div>
+                            <Dropdown>
+                                <Dropdown.Trigger>
+                                    <SecondaryButton className="flex justify-between items-center md:w-full">
+                                        <p className='text-sm'>{selectedDropdown}</p>
+                                        <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
+                                    </SecondaryButton>
+                                </Dropdown.Trigger> 
+                                <Dropdown.Content contentClasses="w-full" align="left" >
+                                    {options.map((option, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => setSelectedDropdown(option)}
+                                        className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                                    >
+                                        {option}
+                                    </button>
+                                    ))}
+                                </Dropdown.Content>
+                            </Dropdown>
                         <InputError message={errors.secret_password} className="mt-1" />
                     </div>
                     <div>
-                        <InputLabel htmlFor="secret_password" value="Secret Password" className='text-white' />
+                        <InputLabel htmlFor="secret_answer" value="Secret Answer" className='text-white' />
                             <div className="bg-gray-300 rounded-xl">
                                 <TextInput
                                     id="secret_password"

@@ -80,7 +80,7 @@ export default function Payroll({ auth}: PageProps) {
             <Head title="Employee" />
             <div className="">
                 <div className="">
-                    <Sidebar user={auth.user}/>
+                    <Sidebar auth={auth}/>
                 </div>
                 <AdminLayout
                     title="Payroll">

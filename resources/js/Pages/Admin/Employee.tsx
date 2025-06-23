@@ -57,12 +57,12 @@ export default function Employees({ auth, employees}: PageProps<{employees:Emplo
                 </div>
             )
         }
-     ];
+    ];
 
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Employee" />
-            <Sidebar user={auth.user} />
+            <Sidebar auth={auth} />
             <AdminLayout title="Employee">
                 <div className="flex justify-between gap-2 sm:justify-end  md:justify-end md:gap-5  ">
                     <Search value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />

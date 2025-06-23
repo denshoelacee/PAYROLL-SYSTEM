@@ -5,7 +5,6 @@ import { FaChevronUp } from "react-icons/fa6";
 import { CtuLogo } from '@/Components/CtuLogo';
 import { Developers } from '@/Components/Developers';
 import Modal from '@/Components/Modal';
-import useAOS from '@/hooks/useAOS';
 import '../../styles/style.css';
 
 export default function Welcome({ auth }: PageProps) {
@@ -15,7 +14,7 @@ export default function Welcome({ auth }: PageProps) {
         setActive(!isActive);
     };
 
-    useAOS();
+    //useAOS();
 
     return (
         <>
@@ -24,7 +23,7 @@ export default function Welcome({ auth }: PageProps) {
                 {/* Header */}
                 <div className=" sm:fixed sm:top-4 sm:right-0 p-6 text-end">
                     {auth.user ? (
-                        <div>
+                        <div>   
                             {auth.user.role === 'admin' && (
                                 <Link
                                     href={route('admin.dashboard')}

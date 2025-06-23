@@ -24,6 +24,8 @@
         "vite": "^6.3.5"
     },
     "dependencies": {
+        "@dicebear/collection": "^9.2.3",
+        "@dicebear/core": "^9.2.3",
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
         "@mui/material": "^7.1.1",

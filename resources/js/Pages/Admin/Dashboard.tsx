@@ -11,7 +11,7 @@ export default function Dashboard({ auth}: PageProps) {
         <AuthenticatedLayout user={auth.user}>
             <Head title="Dashboard" />
             <div className="">
-                    <Sidebar user={auth.user}/>  
+                    <Sidebar auth={auth}/>  
                 <AdminLayout
                     title="Dashboard">
                     <div className="mb-8 bg-green-100 rounded-md bg-clip-padding bg-opacity-10 border border-button-border-color">

@@ -51,7 +51,7 @@ import { IoEyeOutline, IoEyeOffOutline, IoLockClosedOutline } from "react-icons/
             {...props}
             type={isPassword ? (showPassword ? 'text' : 'password') : type}
             className={`
-                w-full py-1 pl-${isPassword ? '3' : '3'} pr-10 
+                w-full py-1.5 pl-${isPassword ? '3' : '3'} pr-10 
                 rounded-xl outline-none border-none shadow-sm 
                 focus:ring-0 focus:border-transparent ${className}
             `}

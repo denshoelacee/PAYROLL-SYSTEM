@@ -1,5 +1,6 @@
 export interface User {
     employee_id: number;
+    first_name: string;
     last_name: string;
     email_verified_at: string;
     role: string;

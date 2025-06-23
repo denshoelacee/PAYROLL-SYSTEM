@@ -4,8 +4,29 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { User } from '@/types';
 import {RiArrowDropDownLine} from 'react-icons/ri';
 import { CtuLogo } from '@/Components/CtuLogo';
+import { createAvatar } from '@dicebear/core';
+import { initials } from '@dicebear/collection';
 export default function Authenticated({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+
+    function getInitals (firstName:string, lastName:string) {
+        const firstInitial = firstName?.[0]?.toUpperCase() ?? '';
+        const lastInitial = lastName?.[0]?.toUpperCase() ?? '';
+        return `${firstInitial}${lastInitial}`;
+    }   
+
+    const finalInitials = getInitals(user.first_name,user.last_name);
+    
+    const avatar = createAvatar(initials, {
+        seed: finalInitials,
+        size: 35,
+        radius: 50,
+        backgroundColor: ['b6e3f4'],
+        textColor: ['black']
+    });
+
+
+    const svg = avatar.toString();
     return (
         
         <div className="min-h-screen bg-mainColor">
@@ -22,7 +43,10 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                                                 type="button"
                                                 className=" inline-flex items-center px-2 py-1 border-transparent text-md font-medium rounded-md text-white focus:outline-none transition ease-in-out duration-150"
                                             >
-                                                <CtuLogo className='w-15 h-8 pr-3'/>
+                                                <div 
+                                                style={{  width: 45, height: 35}}
+                                                dangerouslySetInnerHTML={{ __html: svg }}
+                                                />
                                                 {user.last_name}
                                                 <RiArrowDropDownLine
                                                     className={`text-3xl transition-transform duration-500 ease-in-out`}

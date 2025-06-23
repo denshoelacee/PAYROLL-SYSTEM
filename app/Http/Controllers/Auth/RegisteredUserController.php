@@ -37,7 +37,6 @@ class RegisteredUserController extends Controller
             'first_name'      => 'required|string|lowercase|max:50',
             'designation'     => 'required|string|max:50',
             'department'      => 'required|string|max:50',
-            'basic_pay'       => 'nullable|numeric|between:0,999999.99',
             'password'        => ['required', 'confirmed', Rules\Password::defaults()],
             'secret_password' => 'nullable|string|max:50',
         ]);
@@ -59,11 +58,7 @@ class RegisteredUserController extends Controller
             'secret_password'=> $request->secrete_password,
         ]);
 
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect(RouteServiceProvider::HOME);
+        return redirect()->back()->with('message','Create successfully, Please wait for approval.');
     }
 }
     

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('job_titles', function (Blueprint $table) {
             $table->id();
-            $table->string('department');
-            $table->string('designation');
+            $table->string('department')->nullable();
+            $table->string('designation')->nullable();
             $table->timestamps();
         });
     }

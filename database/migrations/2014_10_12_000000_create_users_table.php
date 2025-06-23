@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('department');
             $table->decimal('basic_pay',10,2)->nullable();
             $table->string('password');
-            $table->string('secret_password')->nullable();
+            $table->string('employment_type');
             $table->enum('status', ['verified', 'rejected', 'pending'])->default('pending');
             $table->enum('role', ['admin','user'])->default('user');
             $table->rememberToken();

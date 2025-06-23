@@ -5,10 +5,12 @@ import Paper from '@mui/material/Paper';
 type TableProps = {
     columns: GridColDef[];
     rows: any[];
-    pageSize?: number;
+    pageSize?: number| string;
     height?: number;
     sx ?: React.CSSProperties;
     pageSizeOptions?: number[];
+    getRowId?: (row:any) => string | number;
+    className?: string;
 };
 
 export default function Table({
@@ -17,19 +19,28 @@ export default function Table({
     pageSize,
     height,
     pageSizeOptions,
-    sx = {}
+    sx = {},
+    getRowId,
+    className
     
 }: TableProps) {
-    const paginationModel = { page: 0, pageSize };
+    const paginationModel = { page: 0};
 
     return (
         <>
         <Paper sx={{ height, width: '100%', backgroundColor: 'transparent'}}>
             <DataGrid
+                className={className}
                 rows={rows}
                 columns={columns}
-                initialState={{ pagination: { paginationModel } }}
-                pageSizeOptions={pageSizeOptions}
+                initialState={{ pagination: { 
+                    paginationModel:
+                        { page: 0, 
+                            pageSize:10
+                        } 
+                    } 
+                }}
+                pageSizeOptions={pageSizeOptions }
                 checkboxSelection={false}
                 disableRowSelectionOnClick
                 disableColumnMenu={true}
@@ -38,8 +49,7 @@ export default function Table({
                     noRowsLabel: 'No records found',
                     noResultsOverlayLabel: 'No matching results',
                 }}
-                pageSize={pageSize}
-                height={height}
+                getRowId={getRowId}
                 sx={{
                     mb: 8,
                     backgroundColor: 'rgba(220, 252, 231, 0.1)',

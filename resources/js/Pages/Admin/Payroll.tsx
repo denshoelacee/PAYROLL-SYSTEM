@@ -16,9 +16,10 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { RiArrowDropDownLine } from "react-icons/ri";
 import Dropdown from '@/Components/Dropdown';
 import { TbCurrencyPeso } from "react-icons/tb";
+import { GridColDef } from '@mui/x-data-grid';
 export default function Payroll({ auth}: PageProps) {
 
-    const columns = [
+    const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', flex:1, headerAlign: 'center', align: 'center' },
         { field: 'firstName', headerName: 'First name', flex:1, headerAlign: 'center', align: 'center' },
         { field: 'lastName', headerName: 'Last name', flex:1, headerAlign: 'center', align: 'center' },
@@ -178,7 +179,6 @@ export default function Payroll({ auth}: PageProps) {
                     <Table
                     columns={columns}
                     rows={filteredRows}
-                    autoHeight
                     pageSize={10}
                     height={640}
                     disableColumnResize={false}  // default is false

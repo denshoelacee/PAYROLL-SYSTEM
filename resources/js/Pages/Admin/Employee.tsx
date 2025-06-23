@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { PageProps } from '@/types';
+import {Employee, PageProps } from '@/types';
 import Sidebar from '@/Components/Sidebar';
 import AdminLayout from '@/Layouts/AdminLayout';
 import Search from '@/Components/Search';
@@ -16,54 +16,32 @@ import InputLabel from '@/Components/InputLabel';
 import Table from '@/Components/Table';
 import { Popover } from '@mui/material';
 import '../../../styles/style.css';
+import searchHooks from '@/hooks/searchHooks';
+import { GridColDef } from '@mui/x-data-grid';
 
-export default function Employee({ auth }: PageProps) {
+
+export default function Employees({ auth, employees}: PageProps<{employees:Employee[]}>) {
     const [addModal, setAddModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
-    const [selectedRow, setSelectedRow] = useState(null);
+    const [selectedRow, setSelectedRow] = useState<Employee | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const filteredRows = searchHooks(searchQuery, employees);
 
-    const employees = [
-        { id: 1, lastName: 'Snow', firstName: 'Jon', designation: 'Software Engineer', department: 'IT', type: 'Regular', accesstype: 'HR' },
-        { id: 2, lastName: 'Lannister', firstName: 'Cersei', designation: 'Project Manager', department: 'Management', type: 'PartTime', accesstype: 'User' },
-        { id: 3, lastName: 'Lannister', firstName: 'Jaime', designation: 'Software Engineer', department: 'IT', type: 'Regular', accesstype: 'User' },
-        { id: 4, lastName: 'Stark', firstName: 'Arya', designation: 'Data Analyst', department: 'Analytics', type: 'PartTime', accesstype: 'User' },
-        { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', designation: 'Product Owner', department: 'Product', type: 'Regular', accesstype: 'User' },
-        { id: 6, lastName: 'Melisandre', firstName: '', designation: 'UX Designer', department: 'Design', type: 'PartTime', accesstype: 'User' },
-        { id: 7, lastName: 'Snow', firstName: 'Jon', designation: 'Software Engineer', department: 'IT', type: 'Regular', accesstype: 'HR' },
-        { id: 8, lastName: 'Lannister', firstName: 'Cersei', designation: 'Project Manager', department: 'Management', type: 'PartTime', accesstype: 'User' },
-        { id: 9, lastName: 'Lannister', firstName: 'Jaime', designation: 'Software Engineer', department: 'IT', type: 'Regular', accesstype: 'User' },
-        { id: 10, lastName: 'Stark', firstName: 'Arya', designation: 'Data Analyst', department: 'Analytics', type: 'PartTime', accesstype: 'User' },
-        { id: 11, lastName: 'Targaryen', firstName: 'Daenerys', designation: 'Product Owner', department: 'Product', type: 'Regular', accesstype: 'User' },
-        { id: 12, lastName: 'Melisandre', firstName: '', designation: 'UX Designer', department: 'Design', type: 'PartTime', accesstype: 'User' },
-    ];
-
-    const [filteredRows, setFilteredRows] = useState(employees);
-
-    useEffect(() => {
-        const lowerQuery = searchQuery.toLowerCase();
-        const result = employees.filter(data =>
-            Object.values(data).some(
-                value => value && value.toString().toLowerCase().includes(lowerQuery)
-            )
-        );
-        setFilteredRows(result);
-    }, [searchQuery]);
-
-    const handleOpenPopover = (event:any, row:any) => {
+    const handleOpenPopover = (event:any, row:Employee) => {
         setAnchorEl(event.currentTarget);
         setSelectedRow(row);
     };
 
-    const columns = [
-        { field: 'id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center' },
-        { field: 'firstName', headerName: 'First name', flex:1, headerAlign: 'center', align: 'center' },
-        { field: 'lastName', headerName: 'Last name',flex:1, headerAlign: 'center', align: 'center' },
+    const columns: GridColDef[] = [
+
+        { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center' },
+        { field: 'first_name', headerName: 'First name', flex:1, headerAlign: 'center', align: 'center' },
+        { field: 'last_name', headerName: 'Last name',flex:1, headerAlign: 'center', align: 'center' },
         { field: 'designation', headerName: 'Designation', flex:1, headerAlign: 'center', align: 'center' },
         { field: 'department', headerName: 'Department', flex:1, headerAlign: 'center', align: 'center' },
-        { field: 'type', headerName: 'Type', flex:1, headerAlign: 'center', align: 'center' },
-        { field: 'accesstype', headerName: 'Access Type', flex:1, headerAlign: 'center', align: 'center' },
+        { field: 'role', headerName: 'Type', flex:1, headerAlign: 'center', align: 'center' },
+        //{ field: 'accesstype', headerName: 'Access Type', flex:1, headerAlign: 'center', align: 'center' },
         {
             field: 'action',
             headerName: 'Actions',
@@ -101,17 +79,9 @@ export default function Employee({ auth }: PageProps) {
                         <Table
                             rows={filteredRows}
                             columns={columns}
-                            autoHeight
-                            pageSize={10}
                             height={650}
-                            sx={{ 
-                                '.MuiDataGrid-overlay': {
-                                backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent overlay
-                                backdropFilter: 'blur(5px)', // optional: adds a blur effect
-                                height: '535px',
-                                },
-                             }}
-                            
+                            getRowId={(row) => row.employee_id}
+                            className="employee-table"
                         />
                     </div>
                 </div>

@@ -12,8 +12,8 @@ class SecretQuestion extends Model
     protected $fillable = [
 
         'user_id',
-        'question',
-        'secret_ans'
+        'secret_question',
+        'secret_answer'
     ];
 
     public function userQuestionAnswer(){

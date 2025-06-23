@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('secret_questions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->unique();
-            $table->string('question');
-            $table->string('secret_ans');
+            $table->string('secret_question');
+            $table->string('secret_answer');
             $table->timestamps();
 
              $table->foreign('user_id')

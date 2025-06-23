@@ -38,7 +38,9 @@ class RegisteredUserController extends Controller
             'designation'     => 'required|string|max:50',
             'department'      => 'required|string|max:50',
             'password'        => ['required', 'confirmed', Rules\Password::defaults()],
-            'secret_password' => 'nullable|string|max:50',
+            'employment_type' => 'required|string|max:50',
+            'secret_question' => 'required|string|max:100',
+            'secret_answer'   => 'required|string|max:50',
         ]);
 
         $request->merge([
@@ -55,7 +57,11 @@ class RegisteredUserController extends Controller
             'department'     => $request->department,
             'basic_pay'      => $request->basic_pay,
             'password'       => Hash::make($request->password),
-            'secret_password'=> $request->secrete_password,
+            'employment_type'=> $request->employment_type,
+        ]);
+        $user->SecretQuestion()->create([
+            'secret_question' => $request->secret_question,
+            'secret_answer'   => $request->secret_answer
         ]);
 
         return redirect()->back()->with('message','Create successfully, Please wait for approval.');

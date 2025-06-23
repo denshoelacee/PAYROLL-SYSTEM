@@ -38,14 +38,12 @@ class AuthenticatedSessionController extends Controller
 
          if($user->status !== 'verified'){
              auth()->logout();
-             
-             /*return redirect()->route('login')->withErrors
-                ([
-                    'error' => $user->status === 'pending'
-                    ? 'Your account is still pending approval.'
-                    : 'Your account has been rejected.'
-                ]);*/
-                return redirect()->route('login')->with('error','testjob');
+
+                if($user->status === 'pending'){
+                    return redirect()->route('login')->with('information','Your account is still pending approval.');
+                }else{
+                    return redirect()->route('login')->with('error','Your account has been rejected.');
+                }         
          }
 
             return redirect()->intended(

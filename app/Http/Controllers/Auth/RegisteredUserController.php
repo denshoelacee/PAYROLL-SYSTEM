@@ -14,6 +14,7 @@ use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 
+
 class RegisteredUserController extends Controller
 {
     /**
@@ -48,23 +49,29 @@ class RegisteredUserController extends Controller
             'first_name' => ucwords(strtolower($request->first_name)),
         ]);
 
-
-        $user = User::create([
-            'employee_id'    => $request->employee_id,
-            'last_name'      => $request->last_name,
-            'first_name'     => $request->first_name,
-            'designation'    => $request->designation,
-            'department'     => $request->department,
-            'basic_pay'      => $request->basic_pay,
-            'password'       => Hash::make($request->password),
-            'employment_type'=> $request->employment_type,
-        ]);
-        $user->answerQuestion()->create([
-            'secret_question' => $request->secret_question,
-            'secret_answer'   => $request->secret_answer
-        ]);
-
-        return redirect()->back()->with('success','Register successfully, Please wait for approval.');
+       try
+        {
+            $user = User::create([
+                'employee_id'    => $request->employee_id,
+                'last_name'      => $request->last_name,
+                'first_name'     => $request->first_name,
+                'designation'    => $request->designation,
+                'department'     => $request->department,
+                'basic_pay'      => $request->basic_pay,
+                'password'       => Hash::make($request->password),
+                'employment_type'=> $request->employment_type,
+            ]);
+            $user->answerQuestion()->create([
+                'secret_question' => $request->secret_question,
+                'secret_answer'   => $request->secret_answer
+            ]);
+            return redirect()->back()->with('success','Register successfully, Please wait for approval.');
+        }
+       catch(\Exception $e)
+       {
+            return redirect()->back()->with('error','Something Wrong.');
+       }
+        
     }
 }
     

@@ -43,7 +43,7 @@ class User extends Authenticatable
 
     public function AnswerQuestion(){
 
-        return $this->hasMany(SecretQuestion::class);
+        return $this->hasMany(SecretQuestion::class,'user_id','user_id');
     }
     /**
      * The attributes that should be hidden for serialization.

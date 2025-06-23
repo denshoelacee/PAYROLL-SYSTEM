@@ -31,7 +31,7 @@ class User extends Authenticatable
         'department',
         'basic_pay',
         'password',
-        'secret_password',
+        'employment_type',
         'status',
         'role'
     ];
@@ -39,6 +39,11 @@ class User extends Authenticatable
     public function payrolls(){
 
         return $this->hasMany(Payroll::class,'user_id','user_id');
+    }
+
+    public function AnswerQuestion(){
+
+        return $this->hasMany(SecretQuestion::class);
     }
     /**
      * The attributes that should be hidden for serialization.

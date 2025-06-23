@@ -20,8 +20,8 @@ export default function LoginLayout({ children }: PropsWithChildren) {
                 rgba(177, 198, 186, 0.0484) 101.99%,
                 rgba(115, 210, 159, 0) 134.85%
                 )`, }}
-                className="border-2 border-button-border-color w-full sm:px-8 sm:h-[80%] sm:w-[70%]  md:px-10 md:w-[70%] md:h-[70%] lg:max-w-lg lg:h-[100%] lg: px-6 rounded-4xl shadow-md
-                            rounded-custom-radius">
+                className="w-full sm:px-8 sm:h-[100%] sm:w-[70%]  md:px-10 md:w-[70%] md:h-[100%] lg:max-w-md lg:h-[100%] lg:px-8 lg:py-10 mt-6 px-6 py-10 rounded-4xl border-2 border-emerald-200 shadow-md
+                rounded-custom-radius">
                     {children}
                 </div>
             </div>

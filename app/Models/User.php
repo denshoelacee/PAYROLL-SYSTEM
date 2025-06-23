@@ -41,7 +41,7 @@ class User extends Authenticatable
         return $this->hasMany(Payroll::class,'user_id','user_id');
     }
 
-    public function AnswerQuestion(){
+    public function answerQuestion(){
 
         return $this->hasMany(SecretQuestion::class,'user_id','user_id');
     }

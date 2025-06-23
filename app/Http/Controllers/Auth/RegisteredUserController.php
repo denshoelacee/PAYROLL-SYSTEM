@@ -59,12 +59,12 @@ class RegisteredUserController extends Controller
             'password'       => Hash::make($request->password),
             'employment_type'=> $request->employment_type,
         ]);
-        $user->SecretQuestion()->create([
+        $user->answerQuestion()->create([
             'secret_question' => $request->secret_question,
             'secret_answer'   => $request->secret_answer
         ]);
 
-        return redirect()->back()->with('message','Create successfully, Please wait for approval.');
+        return redirect()->back()->with('success','Register successfully, Please wait for approval.');
     }
 }
     

@@ -4,11 +4,14 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import LoginLayout from '@/Layouts/LoginLayout';
 import Dropdown from '@/Components/Dropdown';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { RiArrowDropDownLine } from 'react-icons/ri';
+import VerifyMessage from '@/Components/VerifyMessage';
+import { Alert } from '@mui/material';
+import {ErrorMessage, SuccessMessage} from '@/Components/Alert';
 
 
 
@@ -19,25 +22,36 @@ export default function Register() {
     const nextStep = () => setStep(prev => prev + 1);
     const prevStep = () => setStep(prev => prev - 1);
     const [selectedDropdown, setSelectedDropdown] = useState('Select Question');
-
     const options = ['What is ROBLOX', 'ADIK BA SI RAYJAY UG GROW A GARDEN?'];
+
+    const {message}:any = usePage().props;
+
+    
     const { data, setData, post, processing, errors, reset } = useForm({
         employee_id: '',
         last_name: '',
         first_name: '',
         designation: '',
         department: '',
+        employment_type:'',
         basic_pay: '',
         password: '',
         password_confirmation: '',
-        secret_password: '',
+        secret_question: '',
+        secret_answer: '',
     });
 
     useEffect(() => {
+        if (message?.success) {
+        setStep(1);       
+        reset();         
+        setSelectedDropdown('Select Question'); 
+        }
         return () => {
-            reset('password', 'password_confirmation');
+            reset('password', 'password_confirmation'); 
         };
-    }, []);
+        
+    }, [message?.success]);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -52,14 +66,20 @@ export default function Register() {
         }
     }
     return (
-        <LoginLayout>
+        <RegisterLayout>
             <Head title="Register" />
 
-        <div className="my-7 lg:my-16">
+        <div className="my-7 lg:my-6">
             <div className='text-white font-black tracking-normal text-4xl flex justify-center'>REGISTER</div>
             <form onSubmit={submit} className="space-y-1">
                 {step === 1 && (
                     <> 
+                        {message.success && (
+                            <SuccessMessage className="my-2 "success={message.success}/>
+                        )}
+                        {message.error && (
+                            <ErrorMessage className="my-2" error={message.error}/>
+                        )}
                         <div>
                             <InputLabel htmlFor="employee_id" value="Employee ID" className='text-white'/>
                                 <div className="bg-gray-300 rounded-xl">
@@ -104,6 +124,7 @@ export default function Register() {
                                 </div>
                                 <InputError message={errors.last_name} className="mt-1" />
                             </div>
+                            
                         </div>
 
                             <div>
@@ -135,6 +156,20 @@ export default function Register() {
                                 </div>
                             <InputError message={errors.department} className="mt-1" />
                         </div>
+                        <div>
+                                <InputLabel htmlFor="employment_type" value="Employment Type" className='text-white'/>
+                                    <div className="bg-gray-300 rounded-xl">
+                                        <TextInput
+                                        id="employment_type"
+                                        name="employment_type"
+                                        value={data.employment_type}
+                                        className=" block w-full bg-gray-300 text-black"
+                                        onChange={(e) => setData('employment_type', e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <InputError message={errors.last_name} className="mt-1" />
+                            </div>
                         <div className="pt-10">
                             <PrimaryButton className=" py-2" onClick={nextStep}>
                                 Next
@@ -198,7 +233,7 @@ export default function Register() {
                     </div>
                     <div>
                         <InputLabel htmlFor="secret_question" value="Secret Question" className='text-white' />
-                            <Dropdown>
+                            {/*<Dropdown>
                                 <Dropdown.Trigger>
                                     <SecondaryButton className="flex justify-between items-center md:w-full">
                                         <p className='text-sm'>{selectedDropdown}</p>
@@ -209,28 +244,44 @@ export default function Register() {
                                     {options.map((option, index) => (
                                     <button
                                         key={index}
-                                        onClick={() => setSelectedDropdown(option)}
+                                        id='secret_question'
+                                        name='secret_question'
+                                        onClick={() => {
+                                        setSelectedDropdown(option);
+                                        setData('secret_question', option); // <-- this line syncs the data
+                                        }}
                                         className="w-full px-4 py-2 text-left hover:bg-gray-100"
                                     >
                                         {option}
                                     </button>
                                     ))}
                                 </Dropdown.Content>
-                            </Dropdown>
-                        <InputError message={errors.secret_password} className="mt-1" />
+                            </Dropdown>*/}
+                            <div className="bg-gray-300 rounded-xl">
+                                <TextInput
+                                    id="secret_question"
+                                    type="text"
+                                    name="secret_question"
+                                    value={data.secret_question}
+                                    className=" block w-full bg-gray-300 text-black"
+                                    onChange={(e) => setData('secret_question', e.target.value)}
+                                    required
+                                />
+                            </div>
+                        <InputError message={errors.secret_question} className="mt-1" />
                     </div>
                     <div>
                         <InputLabel htmlFor="secret_answer" value="Secret Answer" className='text-white' />
                             <div className="bg-gray-300 rounded-xl">
                                 <TextInput
-                                    id="secret_password"
-                                    name="secret_password"
-                                    value={data.secret_password}
+                                    id="secret_answer"
+                                    name="secret_answer"
+                                    value={data.secret_answer}
                                     className="block w-full bg-gray-300 text-black"
-                                    onChange={(e) => setData('secret_password', e.target.value)}
+                                    onChange={(e) => setData('secret_answer', e.target.value)}
                                 />
                             </div>
-                        <InputError message={errors.secret_password} className="mt-1" />
+                        <InputError message={errors.secret_answer} className="mt-1" />
                     </div>
                     <div className="flex items-center justify-end gap-5 pt-10">
                         <PrimaryButton className=" py-2" onClick={prevStep}>
@@ -252,6 +303,6 @@ export default function Register() {
             </div>
             </form>
         </div>
-        </LoginLayout>
+        </RegisterLayout>
     );
 }

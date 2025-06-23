@@ -5,22 +5,18 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import VerifyMessage from '@/Components/VerifyMessage';
-import { Head, Link, useForm } from '@inertiajs/react';
+import {ErrorMessage, InfoMessage} from '@/Components/Alert';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
+
 
 export default function Login({ status, canResetPassword, }: { status?: string, canResetPassword: boolean, }) {
-  type CustomErrors = {
-        employee_id?: string;
-        password?: string;
-        statusMessage?: string;
-    }
     
     const { data, setData, post, processing, errors, reset ,} = useForm({
         employee_id: '',
         password: '',
         remember: false,
     });
-        const customErrors = errors as CustomErrors;
+    const {message}:any = usePage().props;
         
     useEffect(() => {
         return () => {
@@ -46,7 +42,7 @@ export default function Login({ status, canResetPassword, }: { status?: string, 
             <Head title="Log in" />
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
-            <div className='flex justify-center  py-12 sm:py-8 md:py-10 lg:py-14 gap-5'> 
+            <div className='flex justify-center  pt-12 sm:py-8 md:py-10 lg:pt-14 gap-5'> 
                 <div className="flex sm:hidden md:flex lg:hidden">
                     <Link href="/">
                         <CtuLogo className='w-[50px] h-[50px]'/>
@@ -56,6 +52,9 @@ export default function Login({ status, canResetPassword, }: { status?: string, 
             </div>
             <form onSubmit={submit}>
                 <div className=" mt-1 sm:mt-2 lg:mt-2 ">
+                    {message.error && (
+                        <InfoMessage className="my-2"info={message.error}/>
+                    )}
                     <InputLabel className="text-white" htmlFor="employeeID" value="Employee ID" />
                     <div className="bg-gray-300 rounded-xl">
                         <TextInput
@@ -70,7 +69,7 @@ export default function Login({ status, canResetPassword, }: { status?: string, 
 
                         />
                     </div>                 
-                   <VerifyMessage message={customErrors.statusMessage} />
+                    
 
                     <InputError message={errors.employee_id} className="mt-1" />
                 </div>

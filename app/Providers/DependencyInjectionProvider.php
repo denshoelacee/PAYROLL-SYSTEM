@@ -15,7 +15,7 @@ class DependencyInjectionProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(IJobTitleRepository::class,JobTitleRepository::class);
+        $this->app->bind(IJobTitleRepository::class,JobTitleRepository::class);
         $this->app->singleton(IJobTitleService::class,JobTitleService::class);
     }
 

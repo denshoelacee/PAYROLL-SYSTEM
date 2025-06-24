@@ -9,7 +9,7 @@ class JobTitleRepository implements IJobTitleRepository{
 
     public function getJobTitle(){
         
-        return JobTitle::SELECT('department','designation')->get();
+        return JobTitle::select('department','designation')->get();
     }
 
 }

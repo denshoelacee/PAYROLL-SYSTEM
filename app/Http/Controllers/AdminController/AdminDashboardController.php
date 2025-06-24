@@ -16,7 +16,7 @@ class AdminDashboardController extends Controller
 
     public function employee (){
         
-        $users = User::select('employee_id', 'first_name', 'last_name', 'designation' ,'department','role')->get();
+        $users = User::select('employee_id', 'first_name', 'last_name', 'designation' ,'department','employment_type','role')->get();
         return Inertia::render(
             'Admin/Employee',
             ['employees' => $users]

@@ -33,6 +33,7 @@ export default function Employees({ auth, employees}: PageProps<{employees:Emplo
         setSelectedRow(row);
     };
 
+    const [ActiveTab , setActiveTab] = useState('employees');
     const columns: GridColDef[] = [
 
         { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center' },
@@ -41,7 +42,7 @@ export default function Employees({ auth, employees}: PageProps<{employees:Emplo
         { field: 'designation', headerName: 'Designation', flex:1, headerAlign: 'center', align: 'center' },
         { field: 'department', headerName: 'Department', flex:1, headerAlign: 'center', align: 'center' },
         { field: 'role', headerName: 'Type', flex:1, headerAlign: 'center', align: 'center' },
-        //{ field: 'accesstype', headerName: 'Access Type', flex:1, headerAlign: 'center', align: 'center' },
+        { field: 'employment_type', headerName: 'Access Type', flex:1, headerAlign: 'center', align: 'center' },
         {
             field: 'action',
             headerName: 'Actions',
@@ -64,7 +65,15 @@ export default function Employees({ auth, employees}: PageProps<{employees:Emplo
             <Head title="Employee" />
             <Sidebar auth={auth} />
             <AdminLayout title="Employee">
-                <div className="flex justify-between gap-2 sm:justify-end  md:justify-end md:gap-5  ">
+                <button type="button" onClick={() => setActiveTab('employee')}>
+                    Employee
+                </button>
+                <button type="button" onClick={() => setActiveTab('manageusers')}>
+                    Manage Users
+                </button>
+                {ActiveTab === 'employee' && (
+                    <>
+                    <div className="flex justify-between gap-2 sm:justify-end  md:justify-end md:gap-5  ">
                     <Search value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
                     <SecondaryButton onClick={() => setAddModal(true)}>
                         <div className="flex items-center gap-2">
@@ -158,6 +167,14 @@ export default function Employees({ auth, employees}: PageProps<{employees:Emplo
                         </button>
                     </div>
                 </Popover>
+                </>
+                )}
+
+                {ActiveTab === 'manageusers' && (
+                    <>
+                    <p>haha</p>
+                    </>
+                )}
             </AdminLayout>
         </AuthenticatedLayout>
     );

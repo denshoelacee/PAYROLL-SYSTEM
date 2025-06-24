@@ -21,7 +21,7 @@ export default function Authenticated({ user, header, children }: PropsWithChild
         seed: finalInitials,
         size: 35,
         radius: 50,
-        backgroundColor: ['b6e3f4'],
+         backgroundColor: ["b6e3f4","c0aede","d1d4f9"],
         textColor: ['black']
     });
 

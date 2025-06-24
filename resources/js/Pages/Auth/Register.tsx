@@ -86,6 +86,7 @@ const nextStep = () => {
         secret_answer: '',
     });
     
+
     useEffect(() => {
         if (message?.success) {
         setStep(1);       
@@ -285,41 +286,32 @@ const nextStep = () => {
                     </div>
                     <div>
                         <InputLabel htmlFor="secret_question" value="Secret Question" className='text-white' />
-                            {/*<Dropdown>
+                            <Dropdown>
                                 <Dropdown.Trigger>
-                                    <SecondaryButton className="flex justify-between items-center md:w-full">
+                                    <button type="button" className="bg-gray-300 border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
                                         <p className='text-sm'>{selectedDropdown}</p>
                                         <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
-                                    </SecondaryButton>
+                                    </button>
                                 </Dropdown.Trigger> 
                                 <Dropdown.Content contentClasses="w-full" align="left" >
                                     {options.map((option, index) => (
                                     <button
                                         key={index}
+                                        type="button"
                                         id='secret_question'
                                         name='secret_question'
                                         onClick={() => {
                                         setSelectedDropdown(option);
                                         setData('secret_question', option); // <-- this line syncs the data
                                         }}
-                                        className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                                        className="w-full px-4 py-2 text-left bg-gray-300 text-black"
                                     >
                                         {option}
                                     </button>
                                     ))}
                                 </Dropdown.Content>
-                            </Dropdown>*/}
-                            <div className="bg-gray-300 rounded-xl">
-                                <TextInput
-                                    id="secret_question"
-                                    type="text"
-                                    name="secret_question"
-                                    value={data.secret_question}
-                                    className=" block w-full bg-gray-300 text-black"
-                                    onChange={(e) => setData('secret_question', e.target.value)}
-                                    required
-                                />
-                            </div>
+                            </Dropdown>
+                            
                         <InputError message={errors.secret_question} className="mt-1" />
                     </div>
                     <div>

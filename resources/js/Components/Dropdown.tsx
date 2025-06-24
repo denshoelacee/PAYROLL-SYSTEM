@@ -38,7 +38,7 @@ const Trigger = ({ children }: PropsWithChildren) => {
     );
 };
 
-const Content = ({ align = 'right', className='', contentClasses = '', children }: PropsWithChildren<{ align?: 'left'|'right', className?:'', contentClasses?: string }>) => {
+const Content = ({ align = 'right', className, contentClasses = '', children }: PropsWithChildren<{ align?: 'left'|'right', className?:string, contentClasses?: string }>) => {
     const { open, setOpen } = useContext(DropDownContext);
 
     let alignmentClasses = 'origin-top';
@@ -67,14 +67,14 @@ const Content = ({ align = 'right', className='', contentClasses = '', children 
                     className={`absolute z-50 rounded-md shadow-lg ${alignmentClasses}`}
                     onClick={() => setOpen(false)}
                 >
-                    <div className={`text-white bg-mainColor border border-button-border-color py-1.5 px-2 ` + contentClasses}>{children}</div>
+                    <div className={`text-white bg-mainColor border border-button-border-color  ` + contentClasses + className}>{children}</div>
                 </div>
             </Transition>
         </>
     );
 };
 
-const DropdownLink = ({ className = '', children, ...props }: InertiaLinkProps) => {
+const DropdownLink = ({ className, children, ...props }: InertiaLinkProps) => {
     return (
         <Link
             {...props}

@@ -12,6 +12,7 @@ export interface Employee{
     last_name: string;
     designation: string;
     department: string;
+    employment_type: string;
     role: string;
 }
 

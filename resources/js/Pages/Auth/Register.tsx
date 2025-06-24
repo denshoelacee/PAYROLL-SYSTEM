@@ -18,15 +18,60 @@ import {ErrorMessage, SuccessMessage} from '@/Components/Alert';
 
 export default function Register() {
 
+    
     const [step, setStep] = useState(1);
-    const nextStep = () => setStep(prev => prev + 1);
+    const [validateErrors, setValidationErrors] = useState({
+	employee_id: '',
+        first_name: '',
+        last_name: '',
+        designation: '',
+        department: '',
+        employment_type: '',
+})
+
+const nextStep = () => {
+    const errors = {
+        employee_id: '',
+        first_name: '',
+        last_name: '',
+        designation: '',
+        department: '',
+        employment_type: '',
+    };
+
+    const nameRegex = /^[A-Za-z\s'-]+$/;
+
+    if (!data.employee_id.trim()) errors.employee_id = 'Employee ID is required.';
+    if (!data.first_name.trim()) {
+        errors.first_name = 'First name is required.';
+    } else if (!nameRegex.test(data.first_name)) {
+        errors.first_name = 'First name must contain only letters.';
+    }
+
+    if (!data.last_name.trim()) {
+        errors.last_name = 'Last name is required.';
+    } else if (!nameRegex.test(data.last_name)) {
+        errors.last_name = 'Last name must contain only letters.';
+    }
+
+    if (!data.designation.trim()) errors.designation = 'Designation is required.';
+    if (!data.department.trim()) errors.department = 'Department is required.';
+    if (!data.employment_type.trim()) errors.employment_type = 'Employment Type is required.';
+
+    setValidationErrors(errors);
+
+    // If no errors, go to next step
+    const hasErrors = Object.values(errors).some((msg) => msg !== '');
+    if (!hasErrors) {
+        setStep((prev) => prev + 1);
+    }
+};
     const prevStep = () => setStep(prev => prev - 1);
     const [selectedDropdown, setSelectedDropdown] = useState('Select Question');
     const options = ['What is ROBLOX', 'ADIK BA SI RAYJAY UG GROW A GARDEN?'];
 
     const {message}:any = usePage().props;
 
-    
     const { data, setData, post, processing, errors, reset } = useForm({
         employee_id: '',
         last_name: '',
@@ -40,7 +85,7 @@ export default function Register() {
         secret_question: '',
         secret_answer: '',
     });
-
+    
     useEffect(() => {
         if (message?.success) {
         setStep(1);       
@@ -64,6 +109,10 @@ export default function Register() {
         if(/^[0-9]*$/.test(value) ){
             setData('basic_pay', value);
         }
+
+        if(/^[0-9]*$/.test(value) ){
+            setData('employee_id', value);
+        }
     }
     return (
         <RegisterLayout>
@@ -71,26 +120,29 @@ export default function Register() {
 
         <div className="my-7 lg:my-6">
             <div className='text-white font-black tracking-normal text-4xl flex justify-center'>REGISTER</div>
+            {message.success && (
+                <SuccessMessage className="my-2 "success={message.success}/>
+            )}
+            {message.error && (
+                <ErrorMessage className="my-2" error={message.error}/>
+            )}
             <form onSubmit={submit} className="space-y-1">
                 {step === 1 && (
                     <> 
-                        {message.success && (
-                            <SuccessMessage className="my-2 "success={message.success}/>
-                        )}
-                        {message.error && (
-                            <ErrorMessage className="my-2" error={message.error}/>
-                        )}
+                        
                         <div>
                             <InputLabel htmlFor="employee_id" value="Employee ID" className='text-white'/>
                                 <div className="bg-gray-300 rounded-xl">
                                     <TextInput
-                                    id="employee_id"
-                                    name="employee_id"
-                                    value={data.employee_id}
-                                    className=" block w-full bg-gray-300 text-black"
-                                    onChange={(e) => setData('employee_id', e.target.value)}
-                                    required
-                                />
+                                        id="employee_id"
+                                        type="text"
+                                        name="employee_id"
+                                        value={data.employee_id}
+                                        className=" block w-full bg-gray-300"
+                                        isFocused={true}
+                                        onChange={inputHandler}
+                                        inputMode='numeric'
+                                    />
                                 </div>
                             <InputError message={errors.employee_id} className="mt-1" />
                         </div>
@@ -108,7 +160,7 @@ export default function Register() {
                                     required
                                 />
                                 </div>
-                                <InputError message={errors.first_name} className="mt-1" />
+                                <InputError message={validateErrors.first_name || errors.first_name} className="mt-1" />
                             </div>
                             <div>
                                 <InputLabel htmlFor="last_name" value="Last Name" className='text-white'/>
@@ -122,7 +174,7 @@ export default function Register() {
                                         required
                                     />
                                 </div>
-                                <InputError message={errors.last_name} className="mt-1" />
+                                <InputError message={validateErrors.last_name || errors.last_name} className="mt-1" />
                             </div>
                             
                         </div>
@@ -171,7 +223,7 @@ export default function Register() {
                                 <InputError message={errors.last_name} className="mt-1" />
                             </div>
                         <div className="pt-10">
-                            <PrimaryButton className=" py-2" onClick={nextStep}>
+                            <PrimaryButton className=" py-2" onClick={nextStep} >
                                 Next
                             </PrimaryButton>
                         </div>

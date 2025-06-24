@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
+use App\Contracts\Services\IJobTitleService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,12 +17,22 @@ use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
+    private $jobTitleService;
+
+    public function __construct(IJobTitleService $jobTitleService){
+
+           $this->jobTitleService = $jobTitleService;
+    }
     /**
      * Display the registration view.
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/Register');
+        $data = $this->jobTitleService->getJobTitleService();
+
+        return Inertia::render('Auth/Register',
+              ['Jobtitles' => $data]
+        );
     }
 
     /**
@@ -69,7 +79,7 @@ class RegisteredUserController extends Controller
         }
        catch(\Exception $e)
        {
-            return redirect()->back()->with('error','Something Wrong.');
+            return redirect()->back()->with('error','Employee ID already taken.');
        }
         
     }

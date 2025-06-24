@@ -5,7 +5,7 @@ type CardProps = {
     children?: React.ReactNode;
     }
 
-export default function Card({ className = '', children}: CardProps) {
+export default function CardWrapper({ className = '', children}: CardProps) {
   return (
     <div style={{
     background: `linear-gradient(

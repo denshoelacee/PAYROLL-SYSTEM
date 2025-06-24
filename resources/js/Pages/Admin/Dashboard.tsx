@@ -3,9 +3,23 @@ import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import Sidebar from '@/Components/Sidebar';
 import AdminLayout from '@/Layouts/AdminLayout';
-import Card from '@/Components/Card';
-import { GoPeople } from "react-icons/go";
+import CardWrapper from '@/Components/CardWrapper';
+import { TrendingUp } from "lucide-react"
+import { ChartAreaDefault } from "@/Components/ChartAreaDefault"
+import { usePage } from "@inertiajs/react"
+
+
+type ChartDatum = {
+  month: string
+  Users: number
+}
+
 export default function Dashboard({ auth}: PageProps) {
+     const { chartData, percentChange } = usePage<PageProps<{
+  chartData: ChartDatum[]
+  percentChange: number
+}>>().props
+
     return (
         
         <AuthenticatedLayout user={auth.user}>
@@ -21,28 +35,7 @@ export default function Dashboard({ auth}: PageProps) {
                         </div>
                     </div>
                     <div className="flex w-full gap-4 flex-wrap">
-                        <Card
-                            className='p-4 text-white space-y-1 w-[40%] h-52  lg:w-[23%]'>
-                            <div className="flex justify-between">
-                                <p className='text-4xl pt-2 text-custom-word-color font-black'>150</p>
-                                <div className='w-[3.2rem] h-[3.2rem] rounded-full p-3 bg-green-100 bg-clip-padding bg-opacity-[50%] border border-gray-100'>
-                                    <GoPeople className='font-black text-2xl text-white'/>
-                                </div>
-                            </div>
-                            <p>Total Employee:</p>
-                        </Card>  
-                        <Card
-                            className='p-4 text-white space-y-1 w-[56%] lg:w-[23%]'>
-                            <p>Densho</p>
-                        </Card>  
-                        <Card
-                            className='p-4 text-white space-y-1 w-[56%] h-52 lg:w-[23%]'>
-                            <p>Densho</p>
-                        </Card>  
-                        <Card
-                            className='p-4 text-white space-y-1 w-[40%] lg:w-[23%]'>
-                            <p>Densho</p>
-                        </Card>
+                            <ChartAreaDefault data={chartData} percentChange={percentChange} />
                     </div>  
                     
                 </AdminLayout>

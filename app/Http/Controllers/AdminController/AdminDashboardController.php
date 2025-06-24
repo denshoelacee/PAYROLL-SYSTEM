@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AdminController;
 
+use App\Contracts\Services\IDashboardService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
@@ -9,9 +10,21 @@ use App\Http\Controllers\Controller;
 
 class AdminDashboardController extends Controller
 {
+    private $dashboardService;
+    
+    public function __construct(IDashboardService $dashboardService)
+    {
+        $this->dashboardService = $dashboardService;
+    }
+     
+
     public function dashboard (){
 
-        return Inertia::render('Admin/Dashboard');
+        $userStatsMonthly = $this->dashboardService->getMonthlyUserStatsService();
+        return Inertia::render('Admin/Dashboard',
+               $userStatsMonthly
+        );
+        dd($userStatsMonthly);
     }
 
     public function employee (){

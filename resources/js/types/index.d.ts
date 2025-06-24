@@ -16,6 +16,11 @@ export interface Employee{
     role: string;
 }
 
+export interface JobTitles{
+    designation:string,
+    department:string
+}
+
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {
         user: User;

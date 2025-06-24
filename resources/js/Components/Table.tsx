@@ -25,7 +25,7 @@ export default function Table({
     
 }: TableProps) {
     const paginationModel = { page: 0};
-
+    const tableColor = '#16423C '; // deep teal
     return (
         <>
         <Paper sx={{ height, width: '100%', backgroundColor: 'transparent'}}>
@@ -52,11 +52,10 @@ export default function Table({
                 getRowId={getRowId}
                 sx={{
                     mb: 8,
-                    backgroundColor: 'rgba(220, 252, 231, 0.1)',
+                    backgroundColor: tableColor,
                     borderRadius: '0.375rem',
                     backgroundClip: 'padding-box',
-                    border: '1px solid',
-                    borderColor: 'button.borderColor',
+                    border: 'none',
                     color: 'white',
 
                     '.MuiDataGrid-cell': {
@@ -65,19 +64,24 @@ export default function Table({
                     textAlign: 'center',
                     color: 'white',
                     fontSize: 15,
+                    backgroundColor : tableColor
                     },
                     '.MuiDataGrid-columnHeader': {
-                    backgroundColor: 'rgba(220, 252, 231, 0.1)',
+                    backgroundColor: tableColor,
                     color: 'white',
                     },
 
                     '.MuiDataGrid-columnHeaders': {
                     fontSize: 15,
+                    border: 'none !important',
+                    backgroundColor: tableColor
                     },
 
                     '.MuiDataGrid-footerContainer': {
-                    backgroundColor: 'rgba(220, 252, 231, 0.1)',
+                    backgroundColor: 'tableColor',
                     color: 'white',
+                    border: 'none !important',
+                    borderTop: '1px gray solid !important'
                     },
 
                     '.MuiDataGrid-iconButtonContainer': {
@@ -123,7 +127,6 @@ export default function Table({
                     opacity: '1 !important',
                     },
                     '& .MuiDataGrid-sortIcon': {
-                    opacity: '1 !important',
                     visibility: 'visible !important',
                     display: 'inline-flex !important',
                     }, 
@@ -146,19 +149,30 @@ export default function Table({
                     width: '0 !important',
                     },
                     '& .MuiDataGrid-filler': {
-                    backgroundColor: '#012424 !important',
+                    backgroundColor: 'mainColor !important',
                     height: '0 !important',
                     },
                     '.MuiDataGrid-container--top [role="row"], .MuiDataGrid-container--bottom [role="row"]': {
                     width: '100% !important',      // removes excess width
-                    backgroundColor: '#012424',      // sets background
+                    backgroundColor: tableColor,     // sets background
                     margin: 0,
                     padding: 0,
                     },
                     '.MuiDataGrid-virtualScrollerContent': {
                     flexGrow: 120,
-                    backgroundColor: 'rgba(220, 252, 231, 0.1)',
-                    
+                    backgroundColor: tableColor
+                    },
+                    '& .MuiDataGrid-scrollbarFiller, & .MuiDataGrid-filler': {
+                        width: '0 !important',
+                        height: '0 !important',
+                        backgroundColor: tableColor,
+                    },
+                    '& .MuiDataGrid-columnHeader': {
+                    outline: 'none',
+                    border: 'none !important' ,
+                    borderBottom: '1px solid gray !important' ,
+                    textAlign: 'center',
+                    fontWeight: 'bold',
                     },
                     ...sx}}
             />

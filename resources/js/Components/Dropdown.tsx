@@ -38,7 +38,7 @@ const Trigger = ({ children }: PropsWithChildren) => {
     );
 };
 
-const Content = ({ align = 'right', className, contentClasses = '', children }: PropsWithChildren<{ align?: 'left'|'right', className?:string, contentClasses?: string }>) => {
+const Content = ({ align = 'right', contentClasses, children }: PropsWithChildren<{ align?: 'left'|'right', contentClasses?: string }>) => {
     const { open, setOpen } = useContext(DropDownContext);
 
     let alignmentClasses = 'origin-top';
@@ -67,7 +67,7 @@ const Content = ({ align = 'right', className, contentClasses = '', children }: 
                     className={`absolute z-50 rounded-md shadow-lg ${alignmentClasses}`}
                     onClick={() => setOpen(false)}
                 >
-                    <div className={`text-white bg-mainColor border border-button-border-color  ` + contentClasses + className}>{children}</div>
+                    <div className={`text-white bg-mainColor border border-button-border-color  ` + contentClasses}>{children}</div>
                 </div>
             </Transition>
         </>

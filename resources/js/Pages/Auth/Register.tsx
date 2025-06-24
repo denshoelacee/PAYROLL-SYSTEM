@@ -12,13 +12,20 @@ import { RiArrowDropDownLine } from 'react-icons/ri';
 import VerifyMessage from '@/Components/VerifyMessage';
 import { Alert } from '@mui/material';
 import {ErrorMessage, SuccessMessage} from '@/Components/Alert';
+import { PageProps } from '@/types';
+import { JobTitles } from '@/types';
 
 
-
-
-export default function Register() {
+export default function Register({Jobtitles}: PageProps<{Jobtitles:JobTitles[]}>) {
 
     
+
+    const department = Jobtitles;
+    const designation = Jobtitles;
+
+    useEffect(() => {
+        console.log(department)
+    })
     const [step, setStep] = useState(1);
     const [validateErrors, setValidationErrors] = useState({
 	employee_id: '',
@@ -67,19 +74,21 @@ const nextStep = () => {
     }
 };
     const prevStep = () => setStep(prev => prev - 1);
-    const [selectedDropdown, setSelectedDropdown] = useState('Select Question');
+    const [selectDepartment, setSelectDepartment] = useState('Select Department');
+    const [selectQuestion, setSelectQuestion] = useState('Select Question');
+    const [selectDesignation, setSelectDesignation] = useState('Select Designation');
+
     const options = ['What is ROBLOX', 'ADIK BA SI RAYJAY UG GROW A GARDEN?'];
 
     const {message}:any = usePage().props;
 
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors, reset } = useForm<any>({
         employee_id: '',
         last_name: '',
         first_name: '',
         designation: '',
         department: '',
         employment_type:'',
-        basic_pay: '',
         password: '',
         password_confirmation: '',
         secret_question: '',
@@ -91,7 +100,9 @@ const nextStep = () => {
         if (message?.success) {
         setStep(1);       
         reset();         
-        setSelectedDropdown('Select Question'); 
+        setSelectQuestion('Select Question'); 
+        setSelectDepartment('Select Department')
+        setSelectDesignation('Select Designation')
         }
         return () => {
             reset('password', 'password_confirmation'); 
@@ -108,13 +119,21 @@ const nextStep = () => {
         const {value } = e.target;
 
         if(/^[0-9]*$/.test(value) ){
-            setData('basic_pay', value);
-        }
-
-        if(/^[0-9]*$/.test(value) ){
             setData('employee_id', value);
         }
     }
+
+     const handleDropdownSelect = (value: any, field: string) => {
+        if(field === 'department'){
+            setSelectDepartment(value)
+        }else if (field === 'secret_question'){
+            setSelectQuestion(value)        }
+        else{
+            setSelectDesignation(value)
+        }
+        setData(field, value); 
+    };
+
     return (
         <RegisterLayout>
             <Head title="Register" />
@@ -130,7 +149,6 @@ const nextStep = () => {
             <form onSubmit={submit} className="space-y-1">
                 {step === 1 && (
                     <> 
-                        
                         <div>
                             <InputLabel htmlFor="employee_id" value="Employee ID" className='text-white'/>
                                 <div className="bg-gray-300 rounded-xl">
@@ -179,36 +197,65 @@ const nextStep = () => {
                             </div>
                             
                         </div>
-
+                            <div>
+                                <InputLabel htmlFor="department" value="Department"  className='text-white'/>
+                                <Dropdown>
+                                    <Dropdown.Trigger>
+                                        <button type="button" className="bg-gray-300 w-full border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                            <p className='text-sm'>{selectDepartment}</p>
+                                            <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
+                                        </button>
+                                    </Dropdown.Trigger> 
+                                    <Dropdown.Content contentClasses="w-full max-h-[200px] overflow-y-auto" align="left">
+                                    {department
+                                        .map(dep => dep.department)
+                                        .filter(department => department && department.toUpperCase() !== 'NULL') 
+                                        .map((name, index) => (
+                                        <button
+                                            key={index}
+                                            type="button"
+                                            id="department"
+                                            name="department"
+                                            onClick={() => handleDropdownSelect(name, 'department')}
+                                            className="w-full px-4 py-2 text-left bg-gray-300 text-black"
+                                        >
+                                        {name}
+                                    </button>
+                                    ))}
+                                </Dropdown.Content>
+                            </Dropdown>
+                            </div>
                             <div>
                                 <InputLabel htmlFor="designation" value="Designation"  className='text-white'/>
-                                <div className="bg-gray-300 rounded-xl">
-                                    <TextInput
-                                        id="designation"
-                                        name="designation"
-                                        value={data.designation}
-                                        className=" block w-full bg-gray-300 text-black"
-                                        onChange={(e) => setData('designation', e.target.value)}
-                                        required
-                                    />
-                                </div>
+                                <Dropdown>
+                                    <Dropdown.Trigger>
+                                        <button type="button" className="bg-gray-300 w-full border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                            <p className='text-sm'>{selectDesignation}</p>
+                                            <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
+                                        </button>
+                                    </Dropdown.Trigger> 
+                                    <Dropdown.Content contentClasses="w-full max-h-[200px] overflow-y-auto" align="left">
+                                    {designation
+                                        .map(des => des.designation)
+                                        .filter(designations => designations && designations.toUpperCase() !== 'NULL') 
+                                        .map((name, index) => (
+                                        <button
+                                            key={index}
+                                            type="button"
+                                            id="designation"
+                                            name="designation"
+                                            onClick={() => handleDropdownSelect(name, 'designation')}
+                                            className="w-full px-4 py-2 text-left bg-gray-300 text-black"
+                                        >
+                                        {name}
+                                    </button>
+                                    ))}
+                                </Dropdown.Content>
+                            </Dropdown>
                             <InputError message={errors.designation} className="mt-1" />
                         </div>
 
-                        <div>
-                            <InputLabel htmlFor="department" value="Department"  className='text-white'/>
-                                <div className="bg-gray-300 rounded-xl">
-                                    <TextInput
-                                    id="department"
-                                    name="department"
-                                    value={data.department}
-                                    className=" block w-full bg-gray-300 text-black"
-                                    onChange={(e) => setData('department', e.target.value)}
-                                    required
-                                />
-                                </div>
-                            <InputError message={errors.department} className="mt-1" />
-                        </div>
+                        
                         <div>
                                 <InputLabel htmlFor="employment_type" value="Employment Type" className='text-white'/>
                                     <div className="bg-gray-300 rounded-xl">
@@ -231,23 +278,6 @@ const nextStep = () => {
                     </>
                 )}
                 
-
-                {/*<div>
-                    <InputLabel htmlFor="basic_pay" value="Basic Pay"  className='text-white' />
-                    <div className="bg-gray-300 rounded-xl">
-                        <TextInput
-                            id="basic_pay"
-                            name="basic_pay"
-                            type="text"
-                            step="1.0"
-                            value={data.basic_pay}
-                            className="block w-full bg-gray-300 text-black" 
-                            onChange={inputHandler}
-                            inputMode='numeric'
-                        />
-                    </div>
-                    <InputError message={errors.basic_pay} className="mt-1" />
-                </div>*/}
                 {step === 2 && (
                 <>
                     <div>
@@ -289,7 +319,7 @@ const nextStep = () => {
                             <Dropdown>
                                 <Dropdown.Trigger>
                                     <button type="button" className="bg-gray-300 border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
-                                        <p className='text-sm'>{selectedDropdown}</p>
+                                        <p className='text-sm'>{selectQuestion}</p>
                                         <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                     </button>
                                 </Dropdown.Trigger> 
@@ -301,8 +331,7 @@ const nextStep = () => {
                                         id='secret_question'
                                         name='secret_question'
                                         onClick={() => {
-                                        setSelectedDropdown(option);
-                                        setData('secret_question', option); // <-- this line syncs the data
+                                        handleDropdownSelect(option, 'secret_question');
                                         }}
                                         className="w-full px-4 py-2 text-left bg-gray-300 text-black"
                                     >

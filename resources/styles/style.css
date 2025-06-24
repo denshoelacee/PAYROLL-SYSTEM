@@ -34,3 +34,25 @@
   backdrop-filter: blur(5px) !important;
   height: 535px !important;
 }
+
+element.style {
+  border: none;
+}
+
+.custom-hover{
+  display: inline-block;
+  color:white;
+}
+.custom-hover::after{
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  color:blue;
+  background-color: #ffbb33;
+  transition: all .3s ease-in-out;
+}
+
+.custom-hover:hover::after{
+  width: 100%
+}

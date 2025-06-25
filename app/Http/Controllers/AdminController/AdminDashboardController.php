@@ -24,7 +24,7 @@ class AdminDashboardController extends Controller
         return Inertia::render('Admin/Dashboard',
                $userStatsMonthly
         );
-        dd($userStatsMonthly);
+        //dd($userStatsMonthly);
     }
 
     public function employee (){

@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { IoMdAdd } from "react-icons/io";
 import { HiOutlineDotsVertical } from "react-icons/hi";
-import Card from '@/Components/Card';
+import CardWrapper from '@/Components/CardWrapper';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import Table from '@/Components/Table';
@@ -67,13 +67,13 @@ export default function EmployeePartial({ employees}: PageProps<{employees:Emplo
         <div className="w-full overflow-x-auto scrollbar-hidden">
             <div className='my-5 min-w-[900px] h-[650px] sm:h-[650px] md:h-[750px] lg:h[800px] overflow-y-auto scrollbar-hidden '>
                 <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
-                    <div className="text-white px-10 py-5 text-xl">Employee List</div>
+                    <div className="text-white px-10 py-3 text-xl">Employee List</div>
                     <Table
                     rows={filteredRows}
                     columns={columns}
                     height={650}
                     getRowId={(row) => row.employee_id}
-                    className="employee-table"
+                   
                 />
                 </div>
             </div>
@@ -82,7 +82,7 @@ export default function EmployeePartial({ employees}: PageProps<{employees:Emplo
         <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="lg">
             <div className="p-6">
                 <h2 className="text-lg font-bold mb-4 text-white">Add New Employee</h2>
-                <Card className="flex justify-between p-3 gap-4">
+                <CardWrapper className="flex justify-between p-3 gap-4">
                     <div>
                         <InputLabel className='py-1 text-white'>Employee Name</InputLabel>
                         <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
@@ -91,7 +91,7 @@ export default function EmployeePartial({ employees}: PageProps<{employees:Emplo
                         <InputLabel className='py-1 text-white'>Basic Pay</InputLabel>
                         <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
                     </div>
-                </Card>
+                </CardWrapper>
                 <PrimaryButton className='text-md mt-4' onClick={() => setAddModal(false)}>Save</PrimaryButton>
             </div>
         </Modal>
@@ -99,7 +99,7 @@ export default function EmployeePartial({ employees}: PageProps<{employees:Emplo
         <Modal show={editModal} onClose={() => setEditModal(false)} maxWidth="lg">
             <div className="p-6">
                 <h2 className="text-lg font-bold mb-4 text-white">Edit Employee</h2>
-                <Card className="flex justify-between p-3 gap-4">
+                <CardWrapper className="flex justify-between p-3 gap-4">
                     <div>
                         <InputLabel className='py-1 text-white'>Employee Name</InputLabel>
                         <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
@@ -108,7 +108,7 @@ export default function EmployeePartial({ employees}: PageProps<{employees:Emplo
                         <InputLabel className='py-1 text-white'>Basic Pay</InputLabel>
                         <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
                     </div>
-                </Card>
+                </CardWrapper>
                 <PrimaryButton className='text-md mt-4' onClick={() => setEditModal(false)}>Save</PrimaryButton>
             </div>
         </Modal>

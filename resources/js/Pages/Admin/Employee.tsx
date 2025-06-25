@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { IoMdAdd } from "react-icons/io";
 import { HiOutlineDotsVertical } from "react-icons/hi";
-import Card from '@/Components/Card';
+import CardWrapper from '@/Components/CardWrapper';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import Table from '@/Components/Table';

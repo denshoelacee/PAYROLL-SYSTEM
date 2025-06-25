@@ -60,7 +60,7 @@ export default function ManageUserPartial({ employees}: PageProps<{employees:Emp
         <div className="w-full overflow-x-auto scrollbar-hidden">
             <div className='my-5 min-w-[900px] h-[650px] sm:h-[650px] md:h-[750px] lg:h[800px] overflow-y-auto scrollbar-hidden '>
                 <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
-                    <div className="text-white px-10 py-5 text-xl">Pending Approval</div>
+                    <div className="text-white px-10 py-3 text-xl">Pending Approval</div>
                     <Table
                     rows={filteredRows}
                     columns={columns}

@@ -67,13 +67,13 @@ export default function EmployeePartial({ employees}: PageProps<{employees:Emplo
         <div className="w-full overflow-x-auto scrollbar-hidden">
             <div className='my-5 min-w-[900px] h-[650px] sm:h-[650px] md:h-[750px] lg:h[800px] overflow-y-auto scrollbar-hidden '>
                 <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
-                    <div className="text-white px-10 py-5 text-xl">Employee List</div>
+                    <div className="text-white px-10 py-3 text-xl">Employee List</div>
                     <Table
                     rows={filteredRows}
                     columns={columns}
                     height={650}
                     getRowId={(row) => row.employee_id}
-                    className="employee-table"
+                   
                 />
                 </div>
             </div>

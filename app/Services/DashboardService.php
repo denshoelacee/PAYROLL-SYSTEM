@@ -27,7 +27,7 @@ class DashboardService implements IDashboardService{
 
         $chartData = collect(range(1, 12))->map(fn($m) => [
             'month' => Carbon::create()->month($m)->format('F'),
-            'Users' => $monthlyCounts[$m] ?? 0,
+            'Employees' => $monthlyCounts[$m] ?? 0,
         ]);
 
         return [

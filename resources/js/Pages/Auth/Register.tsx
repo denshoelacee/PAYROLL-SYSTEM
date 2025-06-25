@@ -128,7 +128,7 @@ const nextStep = () => {
             setSelectDepartment(value)
         }else if (field === 'secret_question'){
             setSelectQuestion(value)        }
-        else{
+        else if(field === 'designation'){
             setSelectDesignation(value)
         }
         setData(field, value); 

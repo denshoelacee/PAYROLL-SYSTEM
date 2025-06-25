@@ -58,68 +58,58 @@ export default function Table({
                     border: 'none',
                     color: 'white',
 
-                    '.MuiDataGrid-cell': {
+                    '& .MuiDataGrid-cell': {
                     outline: 'none',
                     border: 'none',
                     textAlign: 'center',
                     color: 'white',
                     fontSize: 15,
-                    backgroundColor : tableColor
                     },
-                    '.MuiDataGrid-columnHeader': {
+                    ' .MuiDataGrid-columnHeader': {
                     backgroundColor: tableColor,
                     color: 'white',
                     },
 
-                    '.MuiDataGrid-columnHeaders': {
+                    '& .MuiDataGrid-columnHeaders': {
                     fontSize: 15,
                     border: 'none !important',
                     backgroundColor: tableColor
                     },
 
-                    '.MuiDataGrid-footerContainer': {
-                    backgroundColor: 'tableColor',
+                    '& .MuiDataGrid-footerContainer': {
+                    backgroundColor: tableColor,
                     color: 'white',
                     border: 'none !important',
                     borderTop: '1px gray solid !important'
                     },
 
-                    '.MuiDataGrid-iconButtonContainer': {
+                    '& .MuiDataGrid-iconButtonContainer': {
                     visibility: 'visible',
                     width: 'auto',
                     opacity: 1,
                     },
 
-                    '.MuiDataGrid-menuIcon': {
+                    '& .MuiDataGrid-menuIcon': {
                     display: 'none',
                     },
-
-                    '.MuiDataGrid-row:hover': {
-                    backgroundColor: 'rgba(74, 222, 128, 0.2)',
-                    },
-
-                    '.MuiDataGrid-cell:focus, .MuiDataGrid-cell:focus-within': {
+                    '& .MuiDataGrid-cell:focus, .MuiDataGrid-cell:focus-within': {
                     outline: 'none',
                     border: 'none',
                     },
 
-                    '.MuiDataGrid-columnHeader:focus': {
+                    '& .MuiDataGrid-columnHeader:focus': {
                     outline: 'none',
                     },
 
-                    '.MuiDataGrid-row.Mui-selected': {
-                    outline: 'none',
+                    '& .MuiDataGrid-row:hover': {
+                    backgroundColor: '#5A827E',
                     },
 
-                    '.MuiDataGrid-row.Mui-selected:hover': {
-                    backgroundColor: 'rgba(74, 222, 128, 0.2)',
-                    },
-
-                    '.MuiTablePagination-root, .MuiTablePagination-selectLabel, .MuiSelect-select, .MuiSvgIcon-root': {
+                    '& .MuiTablePagination-root, .MuiTablePagination-selectLabel, .MuiSelect-select, .MuiSvgIcon-root': {
                     color: 'white',
                     },
 
-                    '.MuiDataGrid-columnSeparator': {
+                    '& .MuiDataGrid-columnSeparator': {
                     display: 'none',
                     },
 
@@ -152,13 +142,13 @@ export default function Table({
                     backgroundColor: 'mainColor !important',
                     height: '0 !important',
                     },
-                    '.MuiDataGrid-container--top [role="row"], .MuiDataGrid-container--bottom [role="row"]': {
+                    '& .MuiDataGrid-container--top [role="row"], .MuiDataGrid-container--bottom [role="row"]': {
                     width: '100% !important',      // removes excess width
                     backgroundColor: tableColor,     // sets background
                     margin: 0,
                     padding: 0,
                     },
-                    '.MuiDataGrid-virtualScrollerContent': {
+                    '& .MuiDataGrid-virtualScrollerContent': {
                     flexGrow: 120,
                     backgroundColor: tableColor
                     },
@@ -174,6 +164,7 @@ export default function Table({
                     textAlign: 'center',
                     fontWeight: 'bold',
                     },
+                    
                     ...sx}}
             />
         </Paper>

@@ -11,7 +11,7 @@ import { usePage } from "@inertiajs/react"
 
 type ChartDatum = {
   month: string
-  Users: number
+  user: number
 }
 
 export default function Dashboard({ auth}: PageProps) {

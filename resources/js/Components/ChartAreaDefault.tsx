@@ -1,4 +1,3 @@
-"use client"
 import { Area, AreaChart, CartesianGrid, Tooltip, XAxis, ResponsiveContainer } from "recharts"
 import {
   Card,

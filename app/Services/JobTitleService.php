@@ -8,11 +8,9 @@ use App\Contracts\Services\IJobTitleService;
 
 class JobTitleService implements IJobTitleService{
 
-      private $jobTitleRepo;
+      
 
-      public function __construct(IJobTitleRepository $jobTitleRepo){
-            $this->jobTitleRepo = $jobTitleRepo;
-      }
+      public function __construct(protected IJobTitleRepository $jobTitleRepo){}
 
       public function getJobTitleService(){
            

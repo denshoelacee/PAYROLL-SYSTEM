@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { IoMdAdd } from "react-icons/io";
 import { HiOutlineDotsVertical } from "react-icons/hi";
-import Card from '@/Components/Card';
+import CardWrapper from '@/Components/CardWrapper';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import Table from '@/Components/Table';
@@ -75,7 +75,7 @@ export default function ManageUserPartial({ employees}: PageProps<{employees:Emp
         <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="lg">
             <div className="p-6">
                 <h2 className="text-lg font-bold mb-4 text-white">Add New Employee</h2>
-                <Card className="flex justify-between p-3 gap-4">
+                <CardWrapper className="flex justify-between p-3 gap-4">
                     <div>
                         <InputLabel className='py-1 text-white'>Employee Name</InputLabel>
                         <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
@@ -84,7 +84,7 @@ export default function ManageUserPartial({ employees}: PageProps<{employees:Emp
                         <InputLabel className='py-1 text-white'>Basic Pay</InputLabel>
                         <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
                     </div>
-                </Card>
+                </CardWrapper>
                 <PrimaryButton className='text-md mt-4' onClick={() => setAddModal(false)}>Save</PrimaryButton>
             </div>
         </Modal>
@@ -92,7 +92,7 @@ export default function ManageUserPartial({ employees}: PageProps<{employees:Emp
         <Modal show={editModal} onClose={() => setEditModal(false)} maxWidth="lg">
             <div className="p-6">
                 <h2 className="text-lg font-bold mb-4 text-white">Edit Employee</h2>
-                <Card className="flex justify-between p-3 gap-4">
+                <CardWrapper className="flex justify-between p-3 gap-4">
                     <div>
                         <InputLabel className='py-1 text-white'>Employee Name</InputLabel>
                         <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
@@ -101,7 +101,7 @@ export default function ManageUserPartial({ employees}: PageProps<{employees:Emp
                         <InputLabel className='py-1 text-white'>Basic Pay</InputLabel>
                         <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
                     </div>
-                </Card>
+                </CardWrapper>
                 <PrimaryButton className='text-md mt-4' onClick={() => setEditModal(false)}>Save</PrimaryButton>
             </div>
         </Modal>

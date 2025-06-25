@@ -35,4 +35,9 @@ class DashboardService implements IDashboardService{
             'percentChange' => $percentChange,
         ];
     }
+
+    public function getTotalNetpay()
+    {
+        
+    }
 }

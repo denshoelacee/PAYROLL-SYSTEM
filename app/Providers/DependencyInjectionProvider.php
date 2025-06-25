@@ -9,8 +9,10 @@ use App\Repository\JobTitleRepository;
 use App\Services\JobTitleService;
 use App\Contracts\Repository\IUserRepository;
 use App\Contracts\Services\IDashboardService;
+use App\Contracts\Services\IEmployeeService;
 use App\Repository\UserRepository;
 use App\Services\DashboardService;
+use App\Services\EmployeeService;
 
 class DependencyInjectionProvider extends ServiceProvider
 {
@@ -24,6 +26,8 @@ class DependencyInjectionProvider extends ServiceProvider
 
         $this->app->bind(IUserRepository::class, UserRepository::class);
         $this->app->bind(IDashboardService::class, DashboardService::class);
+        $this->app->singleton(IEmployeeService::class, EmployeeService::class);
+
     }
 
     /**

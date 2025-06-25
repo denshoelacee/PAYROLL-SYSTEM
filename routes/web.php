@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\AdminController\AdminDashboardController;
+use App\Http\Controllers\AdminController\AdminEmployeeController;
 use App\Http\Controllers\EmployeeController\EmployeeDashboardController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -34,7 +34,7 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {  
     Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/employee', [AdminDashboardController::class, 'employee'])->name('admin.employee');
+    Route::get('/employee', [AdminEmployeeController::class, 'employee'])->name('admin.employee');
     Route::get('/payroll', [AdminDashboardController::class, 'payroll'])->name('admin.payroll');
 });
 

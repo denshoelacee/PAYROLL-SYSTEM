@@ -2,7 +2,7 @@ import {Employee, PageProps } from '@/types';
 import Search from '@/Components/Search';
 import PrimaryButton  from '@/Components/PrimaryButton';
 import Modal from '@/Components/Modal';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { IoMdAdd } from "react-icons/io";
 import { HiOutlineDotsVertical } from "react-icons/hi";
@@ -13,6 +13,8 @@ import Table from '@/Components/Table';
 import { Popover } from '@mui/material';
 import searchHooks from '@/hooks/searchHooks';
 import { GridColDef } from '@mui/x-data-grid';
+
+
 import style from '../../../styles/style.css';
 
 type Props = PageProps<{
@@ -25,24 +27,31 @@ export default function EmployeePartial({ userList}: Props) {
         const [anchorEl, setAnchorEl] = useState(null);
         const [selectedRow, setSelectedRow] = useState<Employee | null>(null);
         const [searchQuery, setSearchQuery] = useState('');
-        const filteredRows = searchHooks(searchQuery, userList);
     
         const handleOpenPopover = (event:any, row:Employee) => {
             setAnchorEl(event.currentTarget);
             setSelectedRow(row);
         };
 
-        
-    
+        const processedData = useMemo(() => {
+            return userList.map((e) => ({
+                ...e,
+                full_name: `${e.last_name} ${e.first_name}`,
+            }));
+        }, [userList]);
+
+        const filteredRows = searchHooks(searchQuery, processedData);
+
+
         const columns: GridColDef[] = [
     
             { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center' },
-            { field: 'first_name', headerName: 'First name', flex:1, headerAlign: 'center', align: 'center' },
-            { field: 'last_name', headerName: 'Last name',flex:1, headerAlign: 'center', align: 'center' },
+            { field: 'full_name', headerName: 'Full Name', flex:1, headerAlign: 'center', align: 'center' },
             { field: 'designation', headerName: 'Designation', flex:1, headerAlign: 'center', align: 'center' },
             { field: 'department', headerName: 'Department', flex:1, headerAlign: 'center', align: 'center' },
-            { field: 'role', headerName: 'Type', flex:1, headerAlign: 'center', align: 'center' },
-            { field: 'employment_type', headerName: 'Access Type', flex:1, headerAlign: 'center', align: 'center' },
+            { field: 'basic_pay', headerName: 'Basic Pay', flex:1, headerAlign: 'center', align: 'center' },
+            { field: 'role', headerName: 'Role Type', flex:1, headerAlign: 'center', align: 'center' },
+            { field: 'employment_type', headerName: 'Employment', flex:1, headerAlign: 'center', align: 'center' },
             {
                 field: 'action',
                 headerName: 'Actions',

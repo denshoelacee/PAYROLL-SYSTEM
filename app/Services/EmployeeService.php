@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\Repository\IUserRepository;
 use App\Contracts\Services\IEmployeeService;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class EmployeeService implements IEmployeeService{
 
@@ -17,7 +18,7 @@ class EmployeeService implements IEmployeeService{
          if($verified){
             return[
                 'success' => true,
-                'message' => 'Account Approved'
+                'message' => 'Account Approved successfully'
             ];
          }
        }
@@ -38,7 +39,7 @@ class EmployeeService implements IEmployeeService{
             if($reject){
                 return [
                     'success' =>true,
-                    'message' => 'Account rejected.'
+                    'message' => 'Account rejected successfully.'
                 ];
             }
 
@@ -50,5 +51,10 @@ class EmployeeService implements IEmployeeService{
                 'message' => 'Something Wrong' . $e->getMessage(),
             ];
         }
+    }
+
+    public function paginateUsers($perPage)
+    {
+        return $this->userRepo->getPaginateUsers($perPage);
     }
 }

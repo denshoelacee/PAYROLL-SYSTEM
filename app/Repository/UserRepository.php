@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Contracts\Repository\IUserRepository;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
@@ -33,4 +34,13 @@ class UserRepository implements IUserRepository{
         $user->status = 'rejected';
         return $user->save();
      }
+
+     public function getPaginateUsers($perPage)
+     {
+         return User::SELECT('users.*')
+                   ->orderBy('created_at','desc')
+                   ->paginate($perPage)
+                   ->withQueryString();
+     }
+
 }

@@ -41,6 +41,12 @@ class UserRepository implements IUserRepository{
                     ->WHERE('status','pending')
                     ->orderBy('created_at','desc')
                     ->get(10);
-        }
+    }
+
+    public function getEmployeeList()
+    {
+        return User::SELECT('user_id','employee_id','last_name','first_name','designation','department','basic_pay','employment_type','status','role')
+                   ->get(10);
+    }
 
 }

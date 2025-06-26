@@ -13,9 +13,11 @@ import Table from '@/Components/Table';
 import { Popover } from '@mui/material';
 import searchHooks from '@/hooks/searchHooks';
 import { GridColDef } from '@mui/x-data-grid';
+import style from '../../../styles/style.css';
+
 
 export default function EmployeePartial({ employees}: PageProps<{employees:Employee[]}>) {
-    const [addModal, setAddModal] = useState(false);
+        const [addModal, setAddModal] = useState(false);
         const [editModal, setEditModal] = useState(false);
         const [anchorEl, setAnchorEl] = useState(null);
         const [selectedRow, setSelectedRow] = useState<Employee | null>(null);
@@ -73,7 +75,7 @@ export default function EmployeePartial({ employees}: PageProps<{employees:Emplo
                     columns={columns}
                     height={650}
                     getRowId={(row) => row.employee_id}
-                   
+                    className="employee-table"
                 />
                 </div>
             </div>

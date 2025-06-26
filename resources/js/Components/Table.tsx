@@ -11,6 +11,7 @@ type TableProps = {
     pageSizeOptions?: number[];
     getRowId?: (row:any) => string | number;
     className?: string;
+    checkboxSelection?:boolean;
 };
 
 export default function Table({
@@ -21,7 +22,8 @@ export default function Table({
     pageSizeOptions,
     sx = {},
     getRowId,
-    className
+    className,
+    checkboxSelection,
     
 }: TableProps) {
     const paginationModel = { page: 0};
@@ -30,6 +32,7 @@ export default function Table({
         <>
         <Paper sx={{ height, width: '100%', backgroundColor: 'transparent'}}>
             <DataGrid
+                checkboxSelection={checkboxSelection}
                 className={className}
                 rows={rows}
                 columns={columns}
@@ -41,7 +44,6 @@ export default function Table({
                     } 
                 }}
                 pageSizeOptions={pageSizeOptions }
-                checkboxSelection={false}
                 disableRowSelectionOnClick
                 disableColumnMenu={true}
                 disableColumnResize
@@ -164,7 +166,9 @@ export default function Table({
                     textAlign: 'center',
                     fontWeight: 'bold',
                     },
-                    
+                    '& .MuiDataGrid-row.Mui-selected , & .MuiDataGrid-row.Mui-selected:hover' :{
+                    backgroundColor: tableColor
+                    },
                     ...sx}}
             />
         </Paper>

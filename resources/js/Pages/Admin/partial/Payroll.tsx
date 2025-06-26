@@ -13,6 +13,7 @@ export default function PayrollPartial ({/* {payroll}:PageProps<{payroll:Employe
     
     const [searchQuery, setSearchQuery] = useState('');
     //const filteredRows = searchHooks(searchQuery, payroll);
+    
     const columns: GridColDef[] = [        
         { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center' },
         { field: 'first_name', headerName: 'First name', flex:1, headerAlign: 'center', align: 'center' },
@@ -39,37 +40,10 @@ export default function PayrollPartial ({/* {payroll}:PageProps<{payroll:Employe
     ];
             
     const rows = [
-  {
-    id: 1,
-    employee_id: 'EMP001',
-    first_name: 'Alice',
-    last_name: 'Johnson',
-    designation: 'Software Engineer',
-    department: 'Engineering',
-    role: 'Admin',
-    employment_type: 'Full-Time',
-  },
-  {
-    id: 2,
-    employee_id: 'EMP002',
-    first_name: 'Bob',
-    last_name: 'Smith',
-    designation: 'Product Manager',
-    department: 'Product',
-    role: 'User',
-    employment_type: 'Contract',
-  },
-  {
-    id: 3,
-    employee_id: 'EMP003',
-    first_name: 'Charlie',
-    last_name: 'Lee',
-    designation: 'UX Designer',
-    department: 'Design',
-    role: 'Editor',
-    employment_type: 'Part-Time',
-  },
-];
+    {id: 1,employee_id: 'EMP001',first_name: 'Alice',last_name: 'Johnson',designation: 'Software Engineer',department: 'Engineering',role: 'Admin',employment_type: 'Full-Time',},
+    {id: 2,employee_id: 'EMP002',first_name: 'Bob',last_name: 'Smith',designation: 'Product Manager',department: 'Product',role: 'User',employment_type: 'Contract',},
+    {id: 3,employee_id: 'EMP003',first_name: 'Charlie',last_name: 'Lee',designation: 'UX Designer',department: 'Design',role: 'Editor',employment_type: 'Part-Time',},
+    ];
 
     return (
         <>

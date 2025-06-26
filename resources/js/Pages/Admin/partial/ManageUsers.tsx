@@ -118,18 +118,18 @@ export default function ManageUserPartial({ employees}: PageProps<{employees:Emp
         <div className="flex justify-between gap-2 sm:justify-end  md:justify-end md:gap-5  ">
         <Search value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
         </div>
-         {message.success && (
-                                <SuccessMessage className='my-2 ' success={message.success}/>
-        
-                            )}
-                            {message.error && (
-                                <ErrorMessage className="my-2" error={message.error}/>
-                            )}
+        {message.success && (
+        <SuccessMessage className='my-2 ' success={message.success}/>
+        )}
+        {message.error && (
+            <ErrorMessage className="my-2" error={message.error}/>
+        )}
         <div className="w-full overflow-x-auto scrollbar-hidden">
             <div className='my-5 min-w-[900px] h-[650px] sm:h-[650px] md:h-[750px] lg:h[800px] overflow-y-auto scrollbar-hidden '>
                 <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
                     <div className="text-white px-10 py-3 text-xl">Pending Approval</div>
                     <Table
+                    checkboxSelection
                     rows={filteredRows}
                     columns={columns}
                     height={650}
@@ -149,8 +149,8 @@ export default function ManageUserPartial({ employees}: PageProps<{employees:Emp
                     Are you sure you want to {actionType} this user?    
                 </p>
                     <div className="flex justify-evenly gap-3 py-3">
-                        <PrimaryButton className="py-0" onClick={handleSubmitAction}>
-                        Confirm {actionType === 'approve' ? 'Approval' : 'Rejection'}
+                        <PrimaryButton className="py-2"onClick={handleSubmitAction}>
+                        Confirm
                     </PrimaryButton>
                     <PrimaryButton onClick={handleClose}>
                         Close

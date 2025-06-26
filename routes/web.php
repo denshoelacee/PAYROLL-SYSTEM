@@ -38,8 +38,10 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/payroll', [AdminDashboardController::class, 'payroll'])->name('admin.payroll');
     Route::post('/approve/{id}', [AdminEmployeeController::class, 'approve'])->name('admin.approve');
     Route::post('/reject/{id}', [AdminEmployeeController::class, 'reject'])->name('admin.reject');
+    Route::get('/payroll/Payslip', function () {
+        return Inertia::render('Admin/ViewPayslip');
+    });
 
-    
 });
 
 Route::prefix('employee')->middleware(['auth', 'role:user'])->group(function () {

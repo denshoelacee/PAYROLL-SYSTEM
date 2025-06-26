@@ -1,3 +1,9 @@
+
+html {
+  overflow: auto !important;
+  padding-right: 0px !important;
+}
+
 .bouncy-button{
     animation: bouncy infinite 1s;
 }
@@ -35,9 +41,7 @@
   height: 535px !important;
 }
 
-element.style {
-  border: none;
-}
+
 
 .custom-hover{
   display: inline-block;

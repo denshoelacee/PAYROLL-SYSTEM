@@ -102,7 +102,7 @@ export default function Table({
                     },
 
                     '& .MuiDataGrid-row:hover': {
-                    backgroundColor: '#5A827E',
+                    backgroundColor: tableColor,
                     },
 
                     '& .MuiTablePagination-root, .MuiTablePagination-selectLabel, .MuiSelect-select, .MuiSvgIcon-root': {

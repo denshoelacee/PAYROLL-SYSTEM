@@ -58,7 +58,8 @@ export function ChartAreaDefault({ data, percentChange }: Props) {
               fill="oklch(87.1%.15 154.449"
               fillOpacity={0.4}
               stroke="green"
-              
+              animationBegin={500}
+              animationDuration={2000}
             />
           </AreaChart>
         </ResponsiveContainer>

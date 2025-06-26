@@ -38,7 +38,12 @@ export default function Sidebar({auth }: PageProps) {
                 </Link>
                 
                 <div className="flex flex-col items-center  justify-center gap-5 h-[500px]">
-                    
+                        <NavLink href={route('employee.dashboard')} active={route().current('employee.dashboard')}>
+                            <FiGrid className='text-2xl text-white'/>
+                        </NavLink>
+                        {/*<NavLink href={route('employee.payslip')} active={route().current('employee.payslip')} className='text-[#67CFD5] text-lg'>
+                            <BiCoinStack className='font-black text-2xl text-white'/>
+                        </NavLink>*/}
                 </div>
             </div>
             )}

@@ -7,6 +7,7 @@ export interface User {
 }
 
 export interface Employee{
+    user_id:number;
     employee_id: number;
     first_name:string;
     last_name: string;

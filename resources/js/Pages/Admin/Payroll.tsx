@@ -18,26 +18,8 @@ import Dropdown from '@/Components/Dropdown';
 import { TbCurrencyPeso } from "react-icons/tb";
 import { GridColDef } from '@mui/x-data-grid';
 import PayrollPartial from './partial/Payroll';
-export default function Payroll({ auth,employees}: PageProps<{employees:Employee[]}>) {
+export default function Payroll({ auth,payroll}: PageProps<{payroll:Employee[]}>) {
 
-    const [isOpen, setisOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [filteredRows, setFilteredRows] = useState(employees);
-    
-        useEffect(() => {
-            const lowerQuery = searchQuery.toLowerCase();
-            const result = employees.filter(data =>
-                Object.values(data).some(
-                    value =>
-                        value &&
-                        value
-                            .toString()
-                            .toLowerCase()
-                            .includes(lowerQuery)
-                )
-            );
-            setFilteredRows(result);
-        }, [searchQuery]);
     return (
         
         <AuthenticatedLayout
@@ -51,7 +33,9 @@ export default function Payroll({ auth,employees}: PageProps<{employees:Employee
                 <AdminLayout
                     title="Payroll">
                 
-                <PayrollPartial employees={employees} auth={auth}/>
+                <div className="">
+                    <PayrollPartial/>
+                </div>
                 </AdminLayout>
             </div>
         </AuthenticatedLayout>

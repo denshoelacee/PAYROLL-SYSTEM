@@ -25,7 +25,7 @@ import ManageUserPartial from './partial/ManageUsers';
 
 export default function Employees({ auth, employees}: PageProps<{employees:Employee[]}>) {
     
-    const [ActiveTab , setActiveTab] = useState('employee');
+    const [ActiveTab , setActiveTab] = useState('manageusers');
    
     return (
         <AuthenticatedLayout user={auth.user}>
@@ -33,15 +33,16 @@ export default function Employees({ auth, employees}: PageProps<{employees:Emplo
             <Sidebar auth={auth} />
             <AdminLayout title="Employee Management">
                 <div className="gap-5 flex py-7 sm:py-10 md:py-5 lg:py-2 ">
-                    <button type="button" className={`custom-hover text-white ${ActiveTab === 'employee' && (
-                        "border-b-2 border-yellow-500 "
-                    )}`} onClick={() => setActiveTab('employee')}>
-                    Employee
-                    </button>
+
                     <button type="button" className={`custom-hover text-white ${ActiveTab === 'manageusers' && (
                         "border-b-2 border-yellow-500 "
                     )}`}onClick={() => setActiveTab('manageusers')}>
-                        Manage Users
+                       User Verification
+                    </button>
+                     <button type="button" className={`custom-hover text-white ${ActiveTab === 'employee' && (
+                        "border-b-2 border-yellow-500 "
+                    )}`} onClick={() => setActiveTab('employee')}>
+                    Manage Employees
                     </button>
                 </div>
                 {ActiveTab === 'employee' && (

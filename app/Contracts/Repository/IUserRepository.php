@@ -13,6 +13,6 @@ interface IUserRepository{
 
     public function setRejectAccount($id);
 
-    public function getPaginateUsers($perPage);
+    public function getPendingUsers();
 
 }

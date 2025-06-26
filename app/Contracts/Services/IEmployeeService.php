@@ -10,5 +10,5 @@ interface IEmployeeService{
 
     public function rejectAccount($id);
 
-    public function paginateUsers($perPage);
+    public function pendingUsers();
 }

@@ -19,12 +19,10 @@ class AdminEmployeeController extends Controller
      */
     public function employee(Request $request)
     {
-             $users = User::select('user_id','employee_id', 'first_name', 'last_name', 'designation' ,'department','employment_type','role')->get(5);
-             //$perPage = $request->input('per_page',10);
-             //$perPage = 10;
-            // $users = $this->employeeService->paginateUsers($perPage);
+            
+             $pendings = $this->employeeService->pendingUsers();
              return Inertia::render('Admin/Employee',
-                ['employees' => $users]
+                ['employees' => $pendings]
         );
     }
 

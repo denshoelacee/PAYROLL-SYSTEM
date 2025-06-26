@@ -53,8 +53,8 @@ class EmployeeService implements IEmployeeService{
         }
     }
 
-    public function paginateUsers($perPage)
+    public function pendingUsers()
     {
-        return $this->userRepo->getPaginateUsers($perPage);
+        return $this->userRepo->getPendingUsers();
     }
 }

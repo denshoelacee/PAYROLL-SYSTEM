@@ -35,12 +35,12 @@ class UserRepository implements IUserRepository{
         return $user->save();
      }
 
-     public function getPaginateUsers($perPage)
+     public function getPendingUsers()
      {
-         return User::SELECT('users.*')
-                   ->orderBy('created_at','desc')
-                   ->paginate($perPage)
-                   ->withQueryString();
-     }
+         return User::SELECT('user_id','employee_id','last_name','first_name','designation','department','employment_type')
+                    ->WHERE('status','pending')
+                    ->orderBy('created_at','desc')
+                    ->get(10);
+        }
 
 }

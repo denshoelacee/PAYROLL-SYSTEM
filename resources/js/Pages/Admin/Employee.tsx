@@ -23,10 +23,10 @@ import ManageUserPartial from './partial/ManageUsers';
 
 
 
-export default function Employees({ auth, employees}: PageProps<{employees:Employee[]}>) {
+export default function Employees({ auth, userList,employees}: PageProps<{userList:Employee[]}>) {
     
     const [ActiveTab , setActiveTab] = useState('manageusers');
-   
+    
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Employee " />
@@ -47,7 +47,7 @@ export default function Employees({ auth, employees}: PageProps<{employees:Emplo
                 </div>
                 {ActiveTab === 'employee' && (
                     <>
-                    <EmployeePartial employees={employees} auth={auth}/>
+                    <EmployeePartial userList={userList} auth={auth}/>
                     </>
                 )}
                 {ActiveTab === 'manageusers' && (

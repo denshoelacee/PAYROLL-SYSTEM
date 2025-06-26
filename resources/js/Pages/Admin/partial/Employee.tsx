@@ -16,18 +16,21 @@ import { GridColDef } from '@mui/x-data-grid';
 import style from '../../../styles/style.css';
 
 
-export default function EmployeePartial({ employees}: PageProps<{employees:Employee[]}>) {
-        const [addModal, setAddModal] = useState(false);
+export default function EmployeePartial({ userList}: PageProps<{userList:Employee[]}>) {
+
+    const [addModal, setAddModal] = useState(false);
         const [editModal, setEditModal] = useState(false);
         const [anchorEl, setAnchorEl] = useState(null);
         const [selectedRow, setSelectedRow] = useState<Employee | null>(null);
         const [searchQuery, setSearchQuery] = useState('');
-        const filteredRows = searchHooks(searchQuery, employees);
+        const filteredRows = searchHooks(searchQuery, userList);
     
         const handleOpenPopover = (event:any, row:Employee) => {
             setAnchorEl(event.currentTarget);
             setSelectedRow(row);
         };
+
+        
     
         const columns: GridColDef[] = [
     

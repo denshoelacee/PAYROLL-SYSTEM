@@ -11,4 +11,6 @@ interface IEmployeeService{
     public function rejectAccount($id);
 
     public function pendingUsers();
+
+    public function employeeList();
 }

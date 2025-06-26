@@ -57,4 +57,9 @@ class EmployeeService implements IEmployeeService{
     {
         return $this->userRepo->getPendingUsers();
     }
+
+    public function employeeList()
+    {
+        return $this->userRepo->getEmployeeList();
+    }
 }

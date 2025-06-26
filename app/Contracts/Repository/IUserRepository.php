@@ -15,4 +15,5 @@ interface IUserRepository{
 
     public function getPendingUsers();
 
+    public function getEmployeeList();
 }

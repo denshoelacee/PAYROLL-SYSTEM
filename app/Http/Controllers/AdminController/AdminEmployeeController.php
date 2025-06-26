@@ -21,8 +21,13 @@ class AdminEmployeeController extends Controller
     {
             
              $pendings = $this->employeeService->pendingUsers();
+           //  $users    = $this->employeeService->employeeList();
+                 $users =    User::SELECT('user_id','employee_id','last_name','first_name','designation','department','basic_pay','employment_type','status','role')
+                   ->get();
              return Inertia::render('Admin/Employee',
-                ['employees' => $pendings]
+                ['employees' => $pendings,
+                 'userList'  => $users
+                ]
         );
     }
 

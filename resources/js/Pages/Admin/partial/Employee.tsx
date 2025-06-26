@@ -15,8 +15,10 @@ import searchHooks from '@/hooks/searchHooks';
 import { GridColDef } from '@mui/x-data-grid';
 import style from '../../../styles/style.css';
 
-
-export default function EmployeePartial({ userList}: PageProps<{userList:Employee[]}>) {
+type Props = PageProps<{
+    userList: Employee[];
+}>;
+export default function EmployeePartial({ userList}: Props) {
 
     const [addModal, setAddModal] = useState(false);
         const [editModal, setEditModal] = useState(false);

@@ -17,16 +17,14 @@ class AdminEmployeeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function employee(Request $request)
+    public function employee()
     {
             
-             $pendings = $this->employeeService->pendingUsers();
-           //  $users    = $this->employeeService->employeeList();
-                 $users =    User::SELECT('user_id','employee_id','last_name','first_name','designation','department','basic_pay','employment_type','status','role')
-                   ->get();
+            $pendings = $this->employeeService->pendingUsers();
+            $employeelist    = $this->employeeService->employeeList();
              return Inertia::render('Admin/Employee',
-                ['employees' => $pendings,
-                 'userList'  => $users
+                ['pendingUsers' => $pendings,
+                 'employeeList'  => $employeelist
                 ]
         );
     }

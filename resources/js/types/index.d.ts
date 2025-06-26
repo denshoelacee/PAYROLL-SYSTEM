@@ -1,8 +1,14 @@
+
+/**
+ * 
+ * @User -- for Login Verification
+ * @Employee - for Displaying Data 
+ * @JobTitles -- for Registration of Users
+ */
 export interface User {
     employee_id: number;
     first_name: string;
     last_name: string;
-    email_verified_at: string;
     role: string;
 }
 
@@ -11,10 +17,12 @@ export interface Employee{
     employee_id: number;
     first_name:string;
     last_name: string;
+    basic_pay:number;
     designation: string;
     department: string;
     employment_type: string;
     role: string;
+    status: string;
 }
 
 export interface JobTitles{

@@ -8,9 +8,11 @@ import '../../../styles/style.css';
 import EmployeePartial from './partial/Employee';
 import ManageUserPartial from './partial/ManageUsers';
 
-
-
-export default function Employees({ auth, employees,userList}: PageProps<{employees:Employee[]}>) {
+type Props = PageProps<{
+    pendingUsers: Employee[];
+    employeeList: Employee[];
+}>;
+export default function Employees({ auth, pendingUsers,employeeList}:Props) {
     
     const [ActiveTab , setActiveTab] = useState('manageusers');
    
@@ -34,12 +36,12 @@ export default function Employees({ auth, employees,userList}: PageProps<{employ
                 </div>
                 {ActiveTab === 'employee' && (
                     <>
-                    <EmployeePartial userList={userList} auth={auth}/>
+                    <EmployeePartial userList={employeeList} auth={auth}/>
                     </>
                 )}
                 {ActiveTab === 'manageusers' && (
                     <>
-                    <ManageUserPartial employees={employees} auth={auth}/> 
+                    <ManageUserPartial employees={pendingUsers} auth={auth}/> 
                     </>
                 )}
             </AdminLayout>

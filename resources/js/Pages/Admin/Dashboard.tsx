@@ -16,10 +16,8 @@ type ChartDatum = {
 }
 
 export default function Dashboard({ auth}: PageProps) {
-    const {dataCount,chartData, percentChange } = usePage<PageProps<{chartData: ChartDatum[],percentChange: number}>>().props
-    useEffect(()=> {
-        console.log(chartData);
-    })
+    const {chartData, percentChange } = usePage<PageProps<{chartData: ChartDatum[],percentChange: number}>>().props
+
     return (
         
         <AuthenticatedLayout user={auth.user}>

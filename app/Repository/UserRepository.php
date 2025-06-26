@@ -46,7 +46,7 @@ class UserRepository implements IUserRepository{
     public function getEmployeeList()
     {
         return User::SELECT('user_id','employee_id','last_name','first_name','designation','department','basic_pay','employment_type','status','role')
-                   ->get(10);
+                   ->get();
     }
 
 }

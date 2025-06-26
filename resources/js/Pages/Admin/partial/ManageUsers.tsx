@@ -19,9 +19,11 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { SuccessMessage,ErrorMessage } from '@/Components/Alert';
 
 
+type Props = PageProps <{
+    employees: Employee[];
+}>
 
-
-export default function ManageUserPartial({ employees}: PageProps<{employees:Employee[]}>) {
+export default function ManageUserPartial({ employees}: Props) {
         const [actionType, setActionType] = useState<'approve' | 'reject' | null>(null);
 
         const [approveModal, setApproveModal] = useState(false);

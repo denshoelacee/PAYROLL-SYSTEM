@@ -3,30 +3,17 @@ import { Head } from '@inertiajs/react';
 import {Employee, PageProps } from '@/types';
 import Sidebar from '@/Components/Sidebar';
 import AdminLayout from '@/Layouts/AdminLayout';
-import Search from '@/Components/Search';
-import PrimaryButton  from '@/Components/PrimaryButton';
-import Modal from '@/Components/Modal';
 import { useState, useEffect } from 'react';
-import SecondaryButton from '@/Components/SecondaryButton';
-import { IoMdAdd } from "react-icons/io";
-import { HiOutlineDotsVertical } from "react-icons/hi";
-import CardWrapper from '@/Components/CardWrapper';
-import TextInput from '@/Components/TextInput';
-import InputLabel from '@/Components/InputLabel';
-import Table from '@/Components/Table';
-import { Popover } from '@mui/material';
 import '../../../styles/style.css';
-import searchHooks from '@/hooks/searchHooks';
-import { GridColDef } from '@mui/x-data-grid';
 import EmployeePartial from './partial/Employee';
 import ManageUserPartial from './partial/ManageUsers';
 
 
 
-export default function Employees({ auth, userList,employees}: PageProps<{userList:Employee[]}>) {
+export default function Employees({ auth, employees,userList}: PageProps<{employees:Employee[]}>) {
     
     const [ActiveTab , setActiveTab] = useState('manageusers');
-    
+   
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Employee " />

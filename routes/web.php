@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController\AdminEmployeeController;
 use App\Http\Controllers\EmployeeController\EmployeeDashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 /*
@@ -25,6 +26,17 @@ Route::get('/', function () {
     ]);
 });
 
+Route::fallback(function () {
+    return Inertia::render('Errors/Error404');
+});
+
+Route::get('/dashboard', function () {
+    $user = Auth::user();
+
+    return redirect()->intended(
+                $user->role === 'admin' ? '/admin/dashboard' : '/employee/dashboard'
+            );
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -15,10 +15,19 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        if(! in_array($request->user()?->role, $roles)){
-            abort(403,'Unauthorized');
+        $user = $request->user();
 
+    if (!in_array($user?->role, $roles)) {
+        // Redirect based on role if not authorized
+        switch ($user?->role) {
+            case 'admin':
+                return redirect()->route('admin.dashboard');
+            case 'employee':
+                return redirect()->route('employee.dashboard');
+            default:
+                return redirect()->route('login'); 
         }
+    }
         return $next($request);
     }
 }

@@ -58,9 +58,15 @@ class AdminEmployeeController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function index(Request $reject)
     {
-        //
+         $pendings = $this->employeeService->pendingUsers();
+         $employeelist = $this->employeeService->employeeList();
+
+          return response()->json([
+  
+            'userList' => $employeelist,
+        ]);
     }
 
     /**
@@ -76,7 +82,7 @@ class AdminEmployeeController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
     }
 
     /**

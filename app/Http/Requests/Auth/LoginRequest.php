@@ -27,7 +27,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'employee_id' => ['required', 'integer', 'exists:users,employee_id'],
+            'employee_id' => ['required', 'integer'],
             'password' => ['required', 'string'],
         ];
     }

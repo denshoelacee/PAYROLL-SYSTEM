@@ -21,4 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::get('/employees', [AdminEmployeeController::class, 'index']);
 
-Route::post('/testing',[PasswordResetLinkController::class,'store']);
+//Route::post('/testing',[PasswordResetLinkController::class,'store']);

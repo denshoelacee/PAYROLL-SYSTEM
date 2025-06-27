@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Contracts\Services\IJobTitleService;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
@@ -73,7 +71,7 @@ class RegisteredUserController extends Controller
             ]);
             $user->answerQuestion()->create([
                 'secret_question' => $request->secret_question,
-                'secret_answer'   => $request->secret_answer
+                'secret_answer'   => Hash::make($request->secret_answer)
             ]);
             return redirect()->back()->with('success','Register successfully, Please wait for approval.');
         }

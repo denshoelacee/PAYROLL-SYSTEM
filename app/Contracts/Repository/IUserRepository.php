@@ -16,4 +16,6 @@ interface IUserRepository{
     public function getPendingUsers();
 
     public function getEmployeeList();
+
+    public function getResetPassword($validateReset);
 }

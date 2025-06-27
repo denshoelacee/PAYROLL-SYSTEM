@@ -13,12 +13,13 @@ class PasswordResetService implements IPasswordResetService{
 
     public function resetPassword($validateReset)
     {
-        $validate = $this->userRepo->getResetPassword($validateReset);
+        $match = $this->userRepo->getResetPassword($validateReset);
 
       
-          if($validate || Hash::check($validate->secret_answer, $validate->secret_answer)){
-             
-          }
-        return $validate;
+          if (!Hash::check($validateReset['secret_answer'], $match->secret_answer)) {
+        throw new \Exception("Incorrect secret answer.");
+    }   
+
+        return $match;
     }
 }

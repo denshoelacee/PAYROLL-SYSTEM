@@ -18,7 +18,7 @@ use Inertia\Response;
 
 class PasswordResetLinkController extends Controller
 {
-         public function __construct(protected IPasswordResetService $passResetService){}
+    public function __construct(protected IPasswordResetService $passResetService){}
 
     /**
      * Display the password reset link request view.
@@ -35,23 +35,32 @@ class PasswordResetLinkController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
-    {
+    public function reset(Request $request)
+{
+   // dd($request->all());
+    $request->validate([
+        'employee_id' => 'required|integer',
+        'secret_question' => 'required|string',
+        'secret_answer' => 'required|string',
+    ]);
 
-        $validateReset = $request->validate([
-                'employee_id' => 'required|integer',
-                'secret_question' => 'required|string',
-                'secret_answer' => 'required|string',
-            ]);
-        try
-        {
-            $this->passResetService->resetPassword($validateReset);
-            return redirect()->back()->with('success','Proceed Now.');
-        }
-        catch(\Exception $e)
-        {
-           return redirect()->back()->with('error','The provided credentials do not match our records.');
-        }
+    try {
+         //dd($request->all());
+
+        $user = $this->passResetService->resetPassword($request->only([
+            'employee_id',
+            'secret_question',
+            'secret_answer',
             
+        ]));
+
+        //dd($user);
+        // Store user in session or redirect to password reset form
+        return redirect()->route('password.reset.form', ['employee_id' => $user->employee_id])
+                         ->with('success', 'Security question verified.');
+
+    } catch (\Exception $e) {
+       return back()->with('error', 'The provided credentials are incorrect.');
     }
+}
 }

@@ -36,7 +36,7 @@ export default function EmployeePartial({ userList}: Props) {
         const processedData = useMemo(() => {
             return userList.map((e) => ({
                 ...e,
-                full_name: `${e.last_name} ${e.first_name}`,
+                full_name: `${e.last_name}, ${e.first_name}`,
             }));
         }, [userList]);
 
@@ -46,8 +46,8 @@ export default function EmployeePartial({ userList}: Props) {
         const columns: GridColDef[] = [
     
             { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center' },
-            { field: 'full_name', headerName: 'Full Name', flex:1, headerAlign: 'center', align: 'center' },
-            { field: 'designation', headerName: 'Designation', flex:1, headerAlign: 'center', align: 'center' },
+            { field: 'full_name', headerName: 'Full Name', width:180, headerAlign: 'center', align: 'center' },
+            { field: 'designation', headerName: 'Designation', width:130, headerAlign: 'center', align: 'center' },
             { field: 'department', headerName: 'Department', flex:1, headerAlign: 'center', align: 'center' },
             { field: 'basic_pay', headerName: 'Basic Pay', flex:1, headerAlign: 'center', align: 'center' },
             { field: 'role', headerName: 'Role Type', flex:1, headerAlign: 'center', align: 'center' },

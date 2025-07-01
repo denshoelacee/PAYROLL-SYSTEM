@@ -12,14 +12,20 @@ class PasswordResetService implements IPasswordResetService{
 
 
     public function resetPassword($validateReset)
-    {
-        $match = $this->userRepo->getResetPassword($validateReset);
+    { 
+        
+        $user = $this->userRepo->getResetPassword($validateReset);
 
-      
-          if (!Hash::check($validateReset['secret_answer'], $match->secret_answer)) {
-        throw new \Exception("Incorrect secret answer.");
-    }   
+        if (!$user) {
+            throw new \Exception("User not found.");
+        }
 
-        return $match;
+        $answer = $user->answerQuestion->firstWhere('secret_question', $validateReset['secret_question']);
+
+        if (!$answer || !Hash::check($validateReset['secret_answer'], $answer->secret_answer)) {
+            throw new \Exception("Incorrect secret answer.");
+        }
+
+        return $user;
     }
 }

@@ -36,31 +36,27 @@ class PasswordResetLinkController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function reset(Request $request)
-{
-   // dd($request->all());
-    $request->validate([
-        'employee_id' => 'required|integer',
-        'secret_question' => 'required|string',
-        'secret_answer' => 'required|string',
-    ]);
-
-    try {
-         //dd($request->all());
-
-        $user = $this->passResetService->resetPassword($request->only([
+    
+    {
+        $request->validate([
+            'employee_id' => 'required|integer',
+            'secret_question' => 'required|string',
+            'secret_answer' => 'required|string',
+        ]);
+            
+        try {
+            $user = $this->passResetService->resetPassword($request->only([
             'employee_id',
             'secret_question',
             'secret_answer',
-            
-        ]));
-
-        //dd($user);
-        // Store user in session or redirect to password reset form
+        ]));            
         return redirect()->route('password.reset.form', ['employee_id' => $user->employee_id])
-                         ->with('success', 'Security question verified.');
+        ->with('success','Correct Secret Answer!');   
+        //return redirect()->back()->with('success','Correct Secret Answer!');     
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error','Pisti error!');        
+        }
 
-    } catch (\Exception $e) {
-       return back()->with('error', 'The provided credentials are incorrect.');
     }
-}
+
 }

@@ -33,13 +33,15 @@ export default function ForgotPassword({ status }: { status?: string }) {
     const submit: FormEventHandler = (e) => {
     e.preventDefault();
     post(route('reset.password'), data); 
-};
+    };
 
     
 
-    useEffect( () => {
-        console.log(data)
-    })
+    useEffect(() => {
+        if(message.success){
+            router.visit(`/reset-password/${data.employee_id}`)}
+    },[message])
+
     return (
         <GuestLayout>
             <Head title="Forgot Password" />
@@ -56,12 +58,12 @@ export default function ForgotPassword({ status }: { status?: string }) {
             </div>
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
-            <InputLabel className="text-white" htmlFor="employeeID" value="Email Address" />
+            <InputLabel className="text-white" htmlFor="employee_id" value="Employee Id" />
             <form onSubmit={submit}>
                 <TextInput
-                    id="email"
-                    type="text-number"
-                    name="email"
+                    id="employee_id"
+                    type="text"
+                    name="employee_id"
                     value={data.employee_id}
                     className="mt-1 block w-full bg-transparent text-white"
                     isFocused={true}

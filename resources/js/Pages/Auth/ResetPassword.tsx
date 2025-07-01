@@ -6,10 +6,9 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, useForm } from '@inertiajs/react';
 
-export default function ResetPassword({ token, email }: { token: string, email: string }) {
+export default function ResetPassword({ employee_id, }: { employee_id:number }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        token: token,
-        email: email,
+        employee_id : employee_id,
         password: '',
         password_confirmation: '',
     });
@@ -32,50 +31,52 @@ export default function ResetPassword({ token, email }: { token: string, email: 
 
             <form onSubmit={submit}>
                 <div>
-                    <InputLabel htmlFor="email" value="Email" />
+                    <InputLabel htmlFor="employee_id" value="Employee ID" className='text-white' />
 
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
+                    <div className='bg-gray-300 rounded-xl'>
+                        <TextInput
+                        id="employee_id"
+                        type="number"
+                        name="employee_id"
+                        value={data.employee_id}
+                        className="mt-1 block w-full bg-gray-300"
                         autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
+                        disabled
                     />
+                    </div>
 
-                    <InputError message={errors.email} className="mt-2" />
+                    {/*<InputError message={errors.email} className="mt-2" />*/}
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
+                    <InputLabel htmlFor="password" value="Password" className='text-white' />
+                    <div className='bg-gray-300 rounded-xl'>
                     <TextInput
                         id="password"
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full text-black bg-gray-300"
                         autoComplete="new-password"
                         isFocused={true}
                         onChange={(e) => setData('password', e.target.value)}
                     />
-
+                    </div>
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
-
+                    <InputLabel htmlFor="password_confirmation" value="Confirm Password"  className='text-white'/>
+                    <div className='bg-gray-300 rounded-xl'>
                     <TextInput
                         type="password"
                         name="password_confirmation"
                         value={data.password_confirmation}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full bg-gray-300"
                         autoComplete="new-password"
                         onChange={(e) => setData('password_confirmation', e.target.value)}
                     />
-
+                    </div>
                     <InputError message={errors.password_confirmation} className="mt-2" />
                 </div>
 

@@ -51,16 +51,12 @@ class UserRepository implements IUserRepository{
 
     public function getResetPassword($validateReset)
     {
-       $user = User::where('employee_id', $validateReset['employee_id'])->first();
+        $user = User::with('answerQuestion')->where('employee_id', $validateReset['employee_id'])->first();
 
         if (!$user) {
             return null;
         }
 
-        $match = $user->answerQuestion()
-                    ->where('secret_question', $validateReset['secret_question'])
-                    ->first();
-
-        return $match;
+        return $user;
     }
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import denshodeveloper from '/resources/images/chatgepetee.png';
-import tayonsdeveloper from '/resources/images/tayonsss.png';
+import tayonsdeveloper from '/resources/images/tayons.png';
 import laniedeveloper from '/resources/images/lanie.png';
 import { FaFacebook,FaLinkedin} from "react-icons/fa";
 

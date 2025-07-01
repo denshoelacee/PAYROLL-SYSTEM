@@ -30,8 +30,8 @@ export function Developers() {
             </div>
         </div>
     </div>*/}
-    <div className=' md:flex pb-12 gap-14'>
-        <div className="relative group w-[250px] h-[300px]">
+    <div className=' md:flex pb-12 gap-10 w-full  flex flex-col overflow-y-auto md:flex-row justify-evenly items-center'>
+        <div className="relative group w-[260px] h-[300px]">
             <img
                 src={denshodeveloper}
                 alt="densho"
@@ -54,7 +54,7 @@ export function Developers() {
                 </div>
             </div>
         </div>
-        <div className=' relative group w-[250px] h-[300px]'>
+        <div className=' relative group w-[260px] h-[300px]'>
             <img src={laniedeveloper}alt="lanie" className="w-[300px] h-[300px] grayscale hover:grayscale-0 transition duration-500"/>
             <div className="w-full opacity-0 group-hover:opacity-100 transition duration-500 absolute top-52 h-24 text-center bg-[#16423C] z-10 text-white">
                 <p className="pt-2">Lanie P. Payot</p>
@@ -73,7 +73,7 @@ export function Developers() {
                 </div>
             </div>
         </div>
-        <div className='relative group w-[250px] h-[300px]'>
+        <div className='relative group w-[260px] h-[300px]'>
             <img src={tayonsdeveloper} alt="tayons" className="w-[250px] h-[300px] grayscale hover:grayscale-0 transition duration-500"/>
             <div className="w-full opacity-0 group-hover:opacity-100 transition duration-500 absolute top-52 h-24 text-center bg-[#16423C] z-10 text-white">
                 <p className="pt-2">John Mark G. Tayone</p>

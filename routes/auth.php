@@ -34,6 +34,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/reset-password/{employee_id}', function ($employee_id) {
     return Inertia::render('Auth/ResetPassword', ['employee_id' => $employee_id]);
     })->name('password.reset.form');
+
+    Route::post('reset-password', [PasswordController::class, 'update'])
+    ->name('reset-password');
 });
 
 Route::middleware('auth')->group(function () {

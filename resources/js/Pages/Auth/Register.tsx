@@ -20,12 +20,9 @@ export default function Register({Jobtitles}: PageProps<{Jobtitles:JobTitles[]}>
 
     
 
-    const department = Jobtitles;
-    const designation = Jobtitles;
+    const jobtitles = Jobtitles;
+    //const designation = Jobtitles;
 
-    useEffect(() => {
-        console.log(department)
-    })
     const [step, setStep] = useState(1);
     const [validateErrors, setValidationErrors] = useState({
 	employee_id: '',
@@ -207,7 +204,7 @@ const nextStep = () => {
                                         </button>
                                     </Dropdown.Trigger> 
                                     <Dropdown.Content contentClasses="w-full max-h-[200px] overflow-y-auto" align="left">
-                                    {department
+                                    {jobtitles
                                         .map(dep => dep.department)
                                         .filter(department => department && department.toUpperCase() !== 'NULL') 
                                         .map((name, index) => (
@@ -224,6 +221,8 @@ const nextStep = () => {
                                     ))}
                                 </Dropdown.Content>
                             </Dropdown>
+                            <InputError message={errors.department} className="mt-1" />
+
                             </div>
                             <div>
                                 <InputLabel htmlFor="designation" value="Designation"  className='text-white'/>
@@ -235,7 +234,7 @@ const nextStep = () => {
                                         </button>
                                     </Dropdown.Trigger> 
                                     <Dropdown.Content contentClasses="w-full max-h-[200px] overflow-y-auto" align="left">
-                                    {designation
+                                    {jobtitles
                                         .map(des => des.designation)
                                         .filter(designations => designations && designations.toUpperCase() !== 'NULL') 
                                         .map((name, index) => (

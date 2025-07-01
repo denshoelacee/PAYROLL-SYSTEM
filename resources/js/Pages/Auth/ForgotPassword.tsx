@@ -53,23 +53,24 @@ export default function ForgotPassword({ status }: { status?: string }) {
                         <ErrorMessage className="my-2" error={message.error}/>
                     )}
             <div className="mb-4 mt-10 text-sm text-white ">
-                Forgot your password? No problem. Just let us know your email address and we will email you a password
-                reset link that will allow you to choose a new one.
+                Forgot your password? No problem. Just enter your Employee ID and input your Secret Question and Secret Password to Reset your password
             </div>
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
             <InputLabel className="text-white" htmlFor="employee_id" value="Employee Id" />
             <form onSubmit={submit}>
-                <TextInput
+                <div className="bg-gray-300 rounded-xl">
+                    <TextInput
                     id="employee_id"
                     type="text"
                     name="employee_id"
                     value={data.employee_id}
-                    className="mt-1 block w-full bg-transparent text-white"
+                    className=" block w-full bg-transparent text-black"
                     isFocused={true}
                     onChange={(e) => setData('employee_id', e.target.value)}
                 />
 
+                </div>
                 <InputError message={errors.employee_id} className="mt-2" />
                 <div>
                     <InputLabel htmlFor="secret_question" value="Secret Question" className='text-white' />
@@ -101,21 +102,21 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     <InputError message={errors.secret_question} className="mt-1" />
                 </div>
                 <div>
-                                        <InputLabel htmlFor="secret_answer" value="Secret Answer" className='text-white' />
-                                            <div className="bg-gray-300 rounded-xl">
-                                                <TextInput
-                                                    id="secret_answer"
-                                                    name="secret_answer"
-                                                    value={data.secret_answer}
-                                                    className="block w-full bg-gray-300 text-black"
-                                                    onChange={(e) => setData('secret_answer', e.target.value)}
-                                                />
-                                            </div>
-                                        <InputError message={errors.secret_answer} className="mt-1" />
-                                    </div>
+                    <InputLabel htmlFor="secret_answer" value="Secret Answer" className='text-white' />
+                        <div className="bg-gray-300 rounded-xl">
+                            <TextInput
+                                id="secret_answer"
+                                name="secret_answer"
+                                value={data.secret_answer}
+                                className="block w-full bg-gray-300 text-black"
+                                onChange={(e) => setData('secret_answer', e.target.value)}
+                            />
+                        </div>
+                    <InputError message={errors.secret_answer} className="mt-1" />
+                </div>
 
                 <div className="flex items-center justify-end mt-4">
-                    <PrimaryButton className="" disabled={processing}>
+                    <PrimaryButton className="py-2" disabled={processing}>
                         NEXT
                     </PrimaryButton>
                 </div>

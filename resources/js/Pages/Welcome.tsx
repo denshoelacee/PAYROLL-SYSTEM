@@ -56,7 +56,7 @@ export default function Welcome({ auth }: PageProps) {
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-grow w-full flex flex-col justify-center items-center px-8 py-32 md:px-20 bg-mainColor">
+                <div className="flex-grow w-full flex flex-col justify-center items-center px-8 py-21 md:px-20 bg-mainColor">
                     <div className="flex justify-center items-center flex-wrap gap-10">
                         <div className="w-[20em] md:w-[40em]">
                             <p className="font-bold text-4xl md:text-5xl text-white">
@@ -72,21 +72,27 @@ export default function Welcome({ auth }: PageProps) {
                             <CtuLogo className='w-[25em] h-[25em]'/>
                         </div>
                     </div>
-                    <FaChevronDown className={`mt-14 bouncy-button text-3xl text-white`}/>
+                    {/*<FaChevronDown className={`mt-14 bouncy-button text-3xl text-white`}/>*/}
+                    <button onClick={toggleActive} className="text-white bouncy-button mt-20 md:mt-22">
+                        <FaChevronUp
+                            className={`text-3xl transition-transform duration-500 ease-in-out ${isActive ? 'rotate-180 opacity-0' : ''}`}
+                        />
+                    </button>
                 </div>
-                {/* Footer Slide 
-                <div className="relative h-13">
+                {/* Footer Slide  */}
+                
+                <div className="relative h-5">
                     <div
                         className={`
-                            w-full h-[550px] py-4 rounded-t-3xl bg-[#012424] transition-all duration-500 ease-in-out
+                            w-full h-[400px] py-4 rounded-t-3xl bg-[#012424] transition-all duration-500 ease-in-out
                             overflow-hidden
-                            ${isActive ? 'bg-mainColor -translate-y-[205px] opacity-100 max-h-[500px]' : 'translate-y-0 max-h-14'}
+                            ${isActive ? 'bg-mainColor -translate-y-[405px] opacity-100 max-h-[400px]' : 'translate-y-0 max-h-14'}
                         `}
                     >
                         <div className="w-full flex justify-center items-center">
                             <button onClick={toggleActive} className="text-white bouncy-button">
                                 <FaChevronUp
-                                    className={`text-3xl transition-transform duration-500 ease-in-out ${isActive ? 'rotate-180' : ''}`}
+                                    className={`text-3xl transition-transform duration-500 ease-in-out ${isActive ? 'rotate-180' : 'opacity-0'}`}
                                 />
                             </button>
                         </div>
@@ -95,7 +101,7 @@ export default function Welcome({ auth }: PageProps) {
                         </div>
                         
                         <div className={`w-full flex justify-center items-center transition-opacity duration-500 ${isActive ? 'opacity-100' : 'opacity-0'}`}>
-                            <div className="pt-5 py-5 max-h-[450px] overflow-y-auto w-[100%] md:w-[60%]">
+                            <div className="pt-5 py-5 h-[350px] overflow-y-auto w-[100%] md:w-[70%] md:h-[450px]">
                                 <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                                     <Developers />
                                 </div>
@@ -104,13 +110,15 @@ export default function Welcome({ auth }: PageProps) {
                         
                     </div>
                 </div>
-                 */}
+                
+                 {/*
                  <div className=' h-auto w-full'>
                     <div className="text-2xl py-2 text-white flex justify-center">Meet the Team</div>
                     <div className='flex w-full justify-evenly pt-5'>
                         <Developers/>
                     </div>
                  </div>
+                  */}
             </div>
         </>
     );

@@ -19,10 +19,13 @@ export default function ResetPassword({ employee_id, }: { employee_id:number }) 
         };
     }, []);
 
+    useEffect(() =>{
+        console.log(data);
+    })
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('password.store'));
+        post(route('reset-password'));
     };
 
     return (

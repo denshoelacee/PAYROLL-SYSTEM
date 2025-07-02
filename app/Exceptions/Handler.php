@@ -34,7 +34,7 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
 {
     if ($exception instanceof NotFoundHttpException && $request->expectsJson() === false) {
-        return Inertia::render('Errors/Error419')->toResponse($request)->setStatusCode(404);
+        return Inertia::render('Errors/Error404')->toResponse($request)->setStatusCode(404);
     }
 
      if ($exception instanceof HttpException && $exception->getStatusCode() === 419) {

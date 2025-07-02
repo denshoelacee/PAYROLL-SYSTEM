@@ -4,20 +4,20 @@ return [
     'team_name' => 'Development Team',
     'members' => [
         [
-            'name' => 'Mark Dela Cruz',
-            'role' => 'Lead Developer',
+            'name' => 'Deniel D. Ybañez',
+            'role' => 'Front-End Developer',
             'email' => 'mark@example.com',
             'github' => 'https://github.com/markdev',
         ],
         [
-            'name' => 'Jane Santiago',
-            'role' => 'UI/UX Designer',
-            'email' => 'jane@example.com',
+            'name' => 'Tayone, John Mark G.',
+            'role' => 'Back-End Developer',
+            'email' => 'tayonejohnmark1@gmail.com',
             'github' => 'https://github.com/janesantiago',
         ],
         [
-            'name' => 'Carlos Reyes',
-            'role' => 'Backend Engineer',
+            'name' => 'Payot Lanie P.',
+            'role' => 'Documentation',
             'email' => 'carlos@example.com',
             'github' => null,
         ],

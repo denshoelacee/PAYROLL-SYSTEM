@@ -57,7 +57,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
             </div>
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
-            <InputLabel className="text-white" htmlFor="employee_id" value="Employee Id" />
+            <InputLabel className="text-white" htmlFor="employee_id" value="Employee ID" />
             <form onSubmit={submit}>
                 <div className="bg-gray-300 rounded-xl">
                     <TextInput

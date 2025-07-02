@@ -49,12 +49,13 @@ class PasswordResetLinkController extends Controller
             'employee_id',
             'secret_question',
             'secret_answer',
-        ]));            
+        ]));    
+           session(['resetPasswordSession' => $user->employee_id]);        
         return redirect()->route('password.reset.form', ['employee_id' => $user->employee_id])
         ->with('success','Correct Secret Answer!');   
         //return redirect()->back()->with('success','Correct Secret Answer!');     
         } catch (\Exception $e) {
-            return redirect()->back()->with('error','Pisti error!');        
+            return redirect()->back()->with('error','Thes credentials do not match our records!');        
         }
 
     }

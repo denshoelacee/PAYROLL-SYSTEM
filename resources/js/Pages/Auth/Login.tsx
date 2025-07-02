@@ -7,9 +7,6 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import {ErrorMessage, InfoMessage,SuccessMessage} from '@/Components/Alert';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import { Alert } from '@mui/material';
-
-
 
 export default function Login({ status, canResetPassword, }: { status?: string, canResetPassword: boolean, }) {
     
@@ -61,6 +58,9 @@ export default function Login({ status, canResetPassword, }: { status?: string, 
                     )}
                     {message.error && (
                         <ErrorMessage className="my-2" error={message.error}/>
+                    )}
+                     {message.success && (
+                        <SuccessMessage className="my-2" success={message.success}/>
                     )}
                                         
                     <InputLabel className="text-white" htmlFor="employeeID" value="Employee ID" />
@@ -114,7 +114,7 @@ export default function Login({ status, canResetPassword, }: { status?: string, 
                         {canResetPassword && (
                             <Link
                                 href={route('password.request')}
-                                className=" text-sm text-white rounded-md focus:outline-none"
+                                className=" text-sm text-white rounded-md focus:outline-none hover:underline"
                             >
                                 Forgot your password?
                             </Link>

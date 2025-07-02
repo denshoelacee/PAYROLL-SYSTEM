@@ -41,7 +41,7 @@ export default function Login({ status, canResetPassword, }: { status?: string, 
             <Head title="Log in" />
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
-            <div className='flex justify-center  pt-12 sm:py-8 md:py-10 lg:pt-14 gap-5'> 
+            <div className='flex justify-center pt-12 sm:py-8 md:py-10 lg:pt-9 gap-5'> 
                 <div className="flex sm:hidden md:flex lg:hidden">
                     <Link href="/">
                         <CtuLogo className='w-[50px] h-[50px]'/>
@@ -129,7 +129,7 @@ export default function Login({ status, canResetPassword, }: { status?: string, 
                     <Link href={route('register')}
                         className='text-white text-md'>
                     <span className='underline'>Register</span>
-                </Link> 
+                    </Link> 
                 </div>
 
             </form>

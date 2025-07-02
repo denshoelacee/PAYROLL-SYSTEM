@@ -19,7 +19,7 @@ import { IoEyeOutline, IoEyeOffOutline, IoLockClosedOutline } from "react-icons/
     ref
     ) {
         const isPassword = type === "password";
-        const isNumber = type === "text";
+        const showUserIcon = props.name === 'employee_id';
         const [showPassword, setShowPassword] = useState(false);
         const localRef = useRef<HTMLInputElement>(null);
 
@@ -35,11 +35,12 @@ import { IoEyeOutline, IoEyeOffOutline, IoLockClosedOutline } from "react-icons/
 
         return (
         <div className=" w-full flex items-center rounded-xl pl-3 pr-3 border border-button-border-color focus:border-gray-100">
-            {isNumber && (
+            {showUserIcon  ?  (
             <div className="text-emerald-700">
                 <CiUser size={20} />
             </div>
-            )}
+            ) :
+            (null)}
     
             {isPassword && (
             <div className=" text-emerald-700">

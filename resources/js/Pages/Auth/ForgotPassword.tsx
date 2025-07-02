@@ -2,12 +2,13 @@ import GuestLayout from '@/Layouts/LoginLayout';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import { Head, useForm, usePage,router} from '@inertiajs/react';
+import { Head, useForm, usePage,router, Link} from '@inertiajs/react';
 import { FormEventHandler,useState,useEffect} from 'react';
 import InputLabel from '@/Components/InputLabel';
 import Dropdown from '@/Components/Dropdown';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import { SuccessMessage,ErrorMessage } from '@/Components/Alert';
+
 
 
 
@@ -35,6 +36,13 @@ export default function ForgotPassword({ status }: { status?: string }) {
     post(route('reset.password'), data); 
     };
 
+    const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const {value } = e.target;
+
+        if(/^[0-9]*$/.test(value) ){
+            setData('employee_id', value);
+        }
+    }
     
 
     useEffect(() => {
@@ -46,11 +54,11 @@ export default function ForgotPassword({ status }: { status?: string }) {
         <GuestLayout>
             <Head title="Forgot Password" />
                     {message.success && (
-                        <SuccessMessage className='my-2' success={message.success}/>
+                        <SuccessMessage success={message.success}/>
 
                     )}
                     {message.error && (
-                        <ErrorMessage className="my-2" error={message.error}/>
+                        <ErrorMessage error={message.error}/>
                     )}
             <div className="mb-4 mt-10 text-sm text-white ">
                 Forgot your password? No problem. Just enter your Employee ID and input your Secret Question and Secret Password to Reset your password
@@ -67,7 +75,8 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     value={data.employee_id}
                     className=" block w-full bg-transparent text-black"
                     isFocused={true}
-                    onChange={(e) => setData('employee_id', e.target.value)}
+                    onChange={inputHandler}
+                    inputMode='numeric'
                 />
 
                 </div>
@@ -76,7 +85,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     <InputLabel htmlFor="secret_question" value="Secret Question" className='text-white' />
                         <Dropdown>
                             <Dropdown.Trigger>
-                                <button type="button" className="bg-gray-300 border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                <button type="button" className="w-full bg-gray-300 border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
                                     <p className='text-sm'>{selectQuestion}</p>
                                     <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
@@ -115,8 +124,11 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     <InputError message={errors.secret_answer} className="mt-1" />
                 </div>
 
-                <div className="flex items-center justify-end mt-4">
-                    <PrimaryButton className="py-2" disabled={processing}>
+                <div className="flex items-center justify-end mt-12 gap-5">
+                    <Link href={route('login')} className='w-full text-white text-md'>
+                        <PrimaryButton className='py-2'>Back</PrimaryButton>
+                    </Link> 
+                    <PrimaryButton className="py-2 px-1" disabled={processing}>
                         NEXT
                     </PrimaryButton>
                 </div>

@@ -55,7 +55,7 @@ class PasswordResetLinkController extends Controller
 
          session()->put([
                         'resetPasswordSession' => $user->employee_id,
-                        'resetPasswordExpireAt' => now()->addMinutes(1),
+                        'resetPasswordExpireAt' => now()->addMinutes(15),
                         ]);
 
         return redirect()->route('password.reset.form', ['employee_id' => $user->employee_id]);

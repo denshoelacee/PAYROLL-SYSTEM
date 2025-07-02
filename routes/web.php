@@ -35,6 +35,9 @@ Route::fallback(function () {
     return Inertia::render('Errors/Error404');
 });
 
+Route::get('/session-expired', function () {
+    return Inertia::render('Errors/Error419');})->name('error.419');
+
 Route::get('/dashboard', function () {
     $user = Auth::user();
 

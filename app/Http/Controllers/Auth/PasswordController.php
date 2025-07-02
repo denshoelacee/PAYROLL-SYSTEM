@@ -25,7 +25,6 @@ class PasswordController extends Controller
 
         $user->password = Hash::make($validated['password']);
         $user->save();
-
         session()->forget('resetPasswordSession');
         return redirect()->route('login')->with('success','Password has been reset.');
     }

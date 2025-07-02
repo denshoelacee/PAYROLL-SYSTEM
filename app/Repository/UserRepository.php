@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Contracts\Repository\IUserRepository;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 

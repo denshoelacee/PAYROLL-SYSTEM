@@ -7,6 +7,7 @@ use App\Contracts\Services\IPasswordReset;
 use App\Contracts\Services\IPasswordResetService;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
@@ -15,6 +16,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
+
 
 class PasswordResetLinkController extends Controller
 {
@@ -36,28 +38,32 @@ class PasswordResetLinkController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function reset(Request $request)
-    
-    {
-        $request->validate([
-            'employee_id' => 'required|integer',
-            'secret_question' => 'required|string',
-            'secret_answer' => 'required|string',
-        ]);
-            
-        try {
-            $user = $this->passResetService->resetPassword($request->only([
-            'employee_id',
-            'secret_question',
-            'secret_answer',
-        ]));    
-           session(['resetPasswordSession' => $user->employee_id]);        
-        return redirect()->route('password.reset.form', ['employee_id' => $user->employee_id])
-        ->with('success','Correct Secret Answer!');   
-        //return redirect()->back()->with('success','Correct Secret Answer!');     
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error','Thes credentials do not match our records!');        
-        }
+{
+    $request->validate([
+        'employee_id' => 'required|integer',
+        'secret_question' => 'required|string',
+        'secret_answer' => 'required|string',
+    ]);
 
+    try {
+        
+        $validated = $request->only(['employee_id', 'secret_question', 'secret_answer']);
+        $validated['secret_question'] = strtolower(trim($validated['secret_question']));
+        $validated['secret_answer'] = strtolower(trim($validated['secret_answer']));
+
+        $user = $this->passResetService->resetPassword($validated);
+
+         session()->put([
+                        'resetPasswordSession' => $user->employee_id,
+                        'resetPasswordExpireAt' => now()->addMinutes(1),
+                        ]);
+
+        return redirect()->route('password.reset.form', ['employee_id' => $user->employee_id]);
+
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'The secret question and answer do not match our records.');
     }
+}
+
 
 }

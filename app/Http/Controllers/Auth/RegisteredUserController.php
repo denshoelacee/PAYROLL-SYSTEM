@@ -71,7 +71,7 @@ class RegisteredUserController extends Controller
             ]);
             $user->answerQuestion()->create([
                 'secret_question' => $request->secret_question,
-                'secret_answer'   => Hash::make($request->secret_answer)
+                'secret_answer'   => Hash::make(strtolower(trim($request->secret_answer)))
             ]);
             return redirect()->back()->with('success','Register successfully, Please wait for approval.');
         }

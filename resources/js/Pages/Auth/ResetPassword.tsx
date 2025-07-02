@@ -30,8 +30,9 @@ export default function ResetPassword({ employee_id, expires_at }: ResetPassword
 
         if (remaining <= 0) {
             clearInterval(interval);
-            router.visit('/session-expired', { replace: true });
-        }
+             window.location.reload(); 
+         }
+        
         }, 1000);
 
         return () => clearInterval(interval);

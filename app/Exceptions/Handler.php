@@ -6,6 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Inertia\Inertia;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -33,7 +34,11 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
 {
     if ($exception instanceof NotFoundHttpException && $request->expectsJson() === false) {
-        return Inertia::render('Errors/Error404')->toResponse($request)->setStatusCode(404);
+        return Inertia::render('Errors/Error419')->toResponse($request)->setStatusCode(404);
+    }
+
+     if ($exception instanceof HttpException && $exception->getStatusCode() === 419) {
+        return Inertia::render('Errors/419')->toResponse($request)->setStatusCode(419);
     }
 
     return parent::render($request, $exception);

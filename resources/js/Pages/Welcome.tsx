@@ -1,4 +1,4 @@
-import { Link, Head } from '@inertiajs/react';
+import { Link, Head, usePage } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import { useState } from 'react';
 import { FaChevronUp } from "react-icons/fa6";
@@ -10,6 +10,8 @@ import { FaChevronDown } from 'react-icons/fa';
 
 export default function Welcome({ auth }: PageProps) {
     const [isActive, setActive] = useState(false);
+    const { app_credit } = usePage().props;
+
 
     const toggleActive = () => {
         setActive(!isActive);

@@ -18,5 +18,8 @@
     </head>
     <body class="font-sans antialiased">
         @inertia
+        <div id="sig" style="display:none">
+           {{ base64_encode('App by Deniel D. Ybañez, John Mark G. Tayone, Lanie P. Payot') }}
+        </div>
     </body>
 </html>

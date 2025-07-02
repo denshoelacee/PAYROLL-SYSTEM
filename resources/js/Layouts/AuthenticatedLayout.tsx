@@ -8,6 +8,7 @@ import { createAvatar } from '@dicebear/core';
 import { initials } from '@dicebear/collection';
 export default function Authenticated({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+    
 
     function getInitals (firstName:string, lastName:string) {
         const firstInitial = firstName?.[0]?.toUpperCase() ?? '';

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController\AdminDashboardController;
 use App\Http\Controllers\AdminController\AdminEmployeeController;
+use App\Http\Controllers\Auth\PasswordResetConfirmControlller;
 use App\Http\Controllers\EmployeeController\EmployeeDashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,10 @@ Route::get('/', function () {
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
     ]);
+});
+
+Route::fallback(function () {
+    return Inertia::render('Errors/Error419');
 });
 
 Route::fallback(function () {

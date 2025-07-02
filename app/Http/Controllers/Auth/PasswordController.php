@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use App\Models\User;
 
 class PasswordController extends Controller
 {
@@ -15,15 +16,17 @@ class PasswordController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'current_password' => ['required', 'current_password'],
-            'password' => ['required', Password::defaults(), 'confirmed'],
+         $validated = $request->validate([
+            'employee_id' => 'required|numeric|exists:users,employee_id',
+            'password' => 'required|min:8|confirmed',
         ]);
 
-        $request->user()->update([
-            'password' => Hash::make($validated['password']),
-        ]);
+        $user = User::where('employee_id', $validated['employee_id'])->first();
 
-        return back();
+        $user->password = Hash::make($validated['password']);
+        $user->save();
+
+        session()->forget('resetPasswordSession');
+        return redirect()->route('login')->with('success','Password has been reset.');
     }
 }

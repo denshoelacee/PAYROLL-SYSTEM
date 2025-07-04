@@ -11,7 +11,7 @@ import SecondaryButton from '@/Components/SecondaryButton';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import VerifyMessage from '@/Components/VerifyMessage';
 import { Alert } from '@mui/material';
-import {ErrorMessage, SuccessMessage} from '@/Components/Alert';
+import {InfoMessage} from '@/Components/Alert';
 import { PageProps } from '@/types';
 import { JobTitles } from '@/types';
 
@@ -137,17 +137,11 @@ const nextStep = () => {
 
         <div className="my-7 lg:my-6">
             <div className='text-white font-black tracking-normal text-4xl flex justify-center'>REGISTER</div>
-            {message.success && (
-                <SuccessMessage className="my-2 "success={message.success}/>
-            )}
-            {message.error && (
-                <ErrorMessage className="my-2" error={message.error}/>
-            )}
             <form onSubmit={submit} className="space-y-1">
                 {step === 1 && (
                     <> 
                         <div>
-                            <InputLabel htmlFor="employee_id" value="Employee ID" className='text-white'/>
+                            <InputLabel htmlFor="employee_id" value="Employee ID *" className='text-white'/>
                                 <div className="bg-gray-300 rounded-xl">
                                     <TextInput
                                         id="employee_id"
@@ -165,7 +159,7 @@ const nextStep = () => {
 
                         <div className="flex justify-between gap-5">
                             <div>
-                                <InputLabel htmlFor="first_name" value="First Name" className='text-white' />
+                                <InputLabel htmlFor="first_name" value="First Name *" className='text-white' />
                                 <div className='bg-gray-300 rounded-xl'>
                                     <TextInput
                                     id="first_name"
@@ -179,7 +173,7 @@ const nextStep = () => {
                                 <InputError message={validateErrors.first_name || errors.first_name} className="mt-1" />
                             </div>
                             <div>
-                                <InputLabel htmlFor="last_name" value="Last Name" className='text-white'/>
+                                <InputLabel htmlFor="last_name" value="Last Name *" className='text-white'/>
                                     <div className="bg-gray-300 rounded-xl">
                                         <TextInput
                                         id="last_name"
@@ -195,7 +189,7 @@ const nextStep = () => {
                             
                         </div>
                             <div>
-                                <InputLabel htmlFor="department" value="Department"  className='text-white'/>
+                                <InputLabel htmlFor="department" value="Department *"  className='text-white'/>
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <button type="button" className="bg-gray-300 w-full border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
@@ -203,7 +197,7 @@ const nextStep = () => {
                                             <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                         </button>
                                     </Dropdown.Trigger> 
-                                    <Dropdown.Content contentClasses="w-full max-h-[200px] overflow-y-auto" align="left">
+                                    <Dropdown.Content contentClasses="w-full max-h-[200px] overflow-y-auto p-0" align="left">
                                     {jobtitles
                                         .map(dep => dep.department)
                                         .filter(department => department && department.toUpperCase() !== 'NULL') 
@@ -214,7 +208,7 @@ const nextStep = () => {
                                             id="department"
                                             name="department"
                                             onClick={() => handleDropdownSelect(name, 'department')}
-                                            className="w-full px-4 py-2 text-left bg-gray-300 text-black"
+                                            className="w-full px-4 py-2 text-left bg-gray-300 hover:bg-[#145858] text-black hover:text-white"
                                         >
                                         {name}
                                     </button>
@@ -225,7 +219,7 @@ const nextStep = () => {
 
                             </div>
                             <div>
-                                <InputLabel htmlFor="designation" value="Designation"  className='text-white'/>
+                                <InputLabel htmlFor="designation" value="Designation *"  className='text-white'/>
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <button type="button" className="bg-gray-300 w-full border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
@@ -233,7 +227,7 @@ const nextStep = () => {
                                             <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                         </button>
                                     </Dropdown.Trigger> 
-                                    <Dropdown.Content contentClasses="w-full max-h-[200px] overflow-y-auto" align="left">
+                                    <Dropdown.Content contentClasses=" p-0 w-full max-h-[200px] overflow-y-auto" align="left">
                                     {jobtitles
                                         .map(des => des.designation)
                                         .filter(designations => designations && designations.toUpperCase() !== 'NULL') 
@@ -244,7 +238,7 @@ const nextStep = () => {
                                             id="designation"
                                             name="designation"
                                             onClick={() => handleDropdownSelect(name, 'designation')}
-                                            className="w-full px-4 py-2 text-left bg-gray-300 text-black"
+                                            className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
                                         >
                                         {name}
                                     </button>
@@ -256,7 +250,7 @@ const nextStep = () => {
 
                         
                         <div>
-                                <InputLabel htmlFor="employment_type" value="Employment Type" className='text-white'/>
+                                <InputLabel htmlFor="employment_type" value="Employment Type *" className='text-white'/>
                                     <div className="bg-gray-300 rounded-xl">
                                         <TextInput
                                         id="employment_type"
@@ -280,7 +274,7 @@ const nextStep = () => {
                 {step === 2 && (
                 <>
                     <div>
-                        <InputLabel htmlFor="password" value="Password"  className='text-white'/>
+                        <InputLabel htmlFor="password" value="Password *"  className='text-white'/>
                         <div className="bg-gray-300 rounded-xl">
                             <TextInput
                                 id="password"
@@ -298,7 +292,7 @@ const nextStep = () => {
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="password_confirmation" value="Confirm Password" className='text-white' />
+                        <InputLabel htmlFor="password_confirmation *" value="Confirm Password" className='text-white' />
                             <div className="bg-gray-300 rounded-xl">
                                 <TextInput
                                     id="password_confirmation"
@@ -314,7 +308,7 @@ const nextStep = () => {
                         <InputError message={errors.password_confirmation} className="mt-1" />
                     </div>
                     <div>
-                        <InputLabel htmlFor="secret_question" value="Secret Question" className='text-white' />
+                        <InputLabel htmlFor="secret_question" value="Secret Question *" className='text-white' />
                             <Dropdown>
                                 <Dropdown.Trigger>
                                     <button type="button" className="bg-gray-300 border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
@@ -343,7 +337,7 @@ const nextStep = () => {
                         <InputError message={errors.secret_question} className="mt-1" />
                     </div>
                     <div>
-                        <InputLabel htmlFor="secret_answer" value="Secret Answer" className='text-white' />
+                        <InputLabel htmlFor="secret_answer" value="Secret Answer *" className='text-white' />
                             <div className="bg-gray-300 rounded-xl">
                                 <TextInput
                                     id="secret_answer"

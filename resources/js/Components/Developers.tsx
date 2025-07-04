@@ -31,7 +31,7 @@ export function Developers() {
   }, [dev, team_hash]);
 
   return (
-    <div className='flex flex-col md:flex-row justify-evenly items-center gap-10 py-12'>
+    <div className='flex flex-col md:flex-row justify-evenly items-center gap-12 py-12 w-full'>
       {dev.members.map((member, index) => {
         const image = [denshodeveloper, tayonsdeveloper ,laniedeveloper,][index];
 

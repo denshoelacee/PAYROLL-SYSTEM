@@ -95,17 +95,60 @@ export default function EmployeePartial({ userList}: Props) {
             </div>
         </div>
         {/* Add Modal */}
-        <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="lg">
-            <div className="p-6">
+        <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="2xl" >
+            <div className="p-6 space-y-4 border rounded-lg">
                 <h2 className="text-lg font-bold mb-4 text-white">Add New Employee</h2>
-                <CardWrapper className="flex justify-between p-3 gap-4">
+                <CardWrapper className="justify-between p-3 gap-4">
                     <div>
-                        <InputLabel className='py-1 text-white'>Employee Name</InputLabel>
+                        <InputLabel className='py-1 text-white'>Employee ID *</InputLabel>
+                        <TextInput 
+                         id="employee_id"
+                            type="text"
+                            name="employee_id"
+                            className=" block w-full bg-transparent text-white"
+                            isFocused={true}
+                            inputMode='numeric'
+                        />
+                    </div>
+                    <div className='flex justify-between gap-4 w-full'>
+                        <div className='w-full'>
+                            <InputLabel className='py-1 text-white'>First Name *</InputLabel>
+                            <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
+                        </div>
+                        <div className='w-full'>
+                            <InputLabel className='py-1 text-white'>Last Name *</InputLabel>
+                            <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
+                        </div>
+                    </div>
+                </CardWrapper>
+                <CardWrapper className="p-3">
+                    <div className='flex justify-between gap-4 w-full'>
+                        <div className='w-full'>
+                            <InputLabel className='py-1 text-white'>Designation *</InputLabel>
+                            <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
+                        </div>
+                        <div className='w-full'>
+                            <InputLabel className='py-1 text-white'>Department *</InputLabel>
+                            <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
+                        </div>
+                    </div>
+                </CardWrapper>
+                <CardWrapper className="flex justify-between p-3 gap-4 w-full">
+                    <div className='w-full'>
+                        <InputLabel className='py-1 text-white'>Basic Pay *</InputLabel>
                         <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
                     </div>
-                    <div>
-                        <InputLabel className='py-1 text-white'>Basic Pay</InputLabel>
-                        <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
+                </CardWrapper>
+                <CardWrapper className=" p-3 gap-4">
+                   <div className='flex justify-between gap-4 w-full'>
+                        <div className='w-full'>
+                            <InputLabel className='py-1 text-white'>Employment Type *</InputLabel>
+                            <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
+                        </div>
+                        <div className='w-full'>
+                            <InputLabel className='py-1 text-white'>Role *</InputLabel>
+                            <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
+                        </div>
                     </div>
                 </CardWrapper>
                 <PrimaryButton className='text-md mt-4' onClick={() => setAddModal(false)}>Save</PrimaryButton>

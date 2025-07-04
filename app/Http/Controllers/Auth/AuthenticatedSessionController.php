@@ -41,7 +41,7 @@ class AuthenticatedSessionController extends Controller
              
                     return redirect()->route('login')->with(
                         $user->status ==='pending'
-                           ? ['information' => 'Your account is still pending approval.']
+                           ? ['information' => 'Thanks for signing up! Your account is currently under review, and we`re working hard to get you set up. We appreciate your patience and will notify you as soon as your account is approved and ready to go']
                            : ['error' => 'Account is not approved or something went wrong.']
                     );
          }

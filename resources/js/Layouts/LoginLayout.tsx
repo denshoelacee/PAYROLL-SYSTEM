@@ -1,9 +1,41 @@
-import { Link } from '@inertiajs/react';
-import { PropsWithChildren } from 'react';
+import { Link,usePage } from '@inertiajs/react';
+import { PropsWithChildren,useEffect,useState } from 'react';
 import {CtuLogo} from '@/Components/CtuLogo';
+import {InfoMessage,} from '@/Components/Alert';
+
 
 export default function LoginLayout({ children }: PropsWithChildren) {
+    const {message}:any = usePage().props;
+
+    const [dismissed, setDismissed] = useState(true);
+
+    useEffect(()=>{
+        setDismissed(true);
+    },[message])
+
+    const hasMessages = message?.information || message?.error || message?.success
     return (
+    <>
+    {hasMessages && dismissed &&
+        <div className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center z-50">
+            {message.information && (
+                <InfoMessage title="Your Account is Almost Ready!" severity="info" info={message.information} onClose={() => {
+                    setDismissed(false)
+                }}/>
+            )}
+            {message.error && (
+                <InfoMessage title="Your Account is being Rejected!" severity="error" info={message.error} onClose={() => {
+                    setDismissed(false)
+                }}/>
+            )}
+            {message.success && (
+                <InfoMessage severity="success" info={message.success} onClose={() => {
+                    setDismissed(false)
+                }}/>
+            )}
+        </div>
+    }
+    
         <div className="h-screen flex justify-center  bg-mainColor">
             <div className='px-5 w-full my-auto lg:my-5 sm:flex justify-evenly items-center '>
                 <div className="hidden sm:hidden md:hidden lg:flex">
@@ -27,5 +59,7 @@ export default function LoginLayout({ children }: PropsWithChildren) {
             </div>
             
         </div>
+    </>
+
     );
 }

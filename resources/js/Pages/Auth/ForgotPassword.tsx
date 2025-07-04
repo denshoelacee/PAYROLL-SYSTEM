@@ -7,7 +7,7 @@ import { FormEventHandler,useState,useEffect} from 'react';
 import InputLabel from '@/Components/InputLabel';
 import Dropdown from '@/Components/Dropdown';
 import { RiArrowDropDownLine } from 'react-icons/ri';
-import { SuccessMessage,ErrorMessage } from '@/Components/Alert';
+import { InfoMessage} from '@/Components/Alert';
 
 
 
@@ -54,11 +54,11 @@ export default function ForgotPassword({ status }: { status?: string }) {
         <GuestLayout>
             <Head title="Forgot Password" />
                     {message.success && (
-                        <SuccessMessage success={message.success}/>
+                        <InfoMessage  severity="success" info={message.success}/>
 
                     )}
                     {message.error && (
-                        <ErrorMessage error={message.error}/>
+                        <InfoMessage severity="error" info={message.error}/>
                     )}
             <div className="mb-4 mt-10 text-sm text-white ">
                 Forgot your password? No problem. Just enter your Employee ID and input your Secret Question and Secret Password to Reset your password
@@ -90,7 +90,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
                             </Dropdown.Trigger> 
-                            <Dropdown.Content contentClasses="w-full" align="left" >
+                            <Dropdown.Content contentClasses="w-full p-0" align="left" >
                                 {options.map((option, index) => (
                                 <button
                                     key={index}
@@ -100,7 +100,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     onClick={() => {
                                     handleDropdownSelect(option, 'secret_question');
                                     }}
-                                    className="w-full px-4 py-2 text-left bg-gray-300 text-black"
+                                    className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:text-white hover:bg-[#145858]"
                                 >
                                     {option}
                                 </button>

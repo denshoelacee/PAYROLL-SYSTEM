@@ -16,7 +16,7 @@ import { GridColDef } from '@mui/x-data-grid';
 import { useForm, usePage } from '@inertiajs/react';
 import { LiaCheckSolid } from 'react-icons/lia';
 import { FaRegTrashCan } from "react-icons/fa6";
-import { SuccessMessage,ErrorMessage } from '@/Components/Alert';
+import { InfoMessage } from '@/Components/Alert';
 
 
 type Props = PageProps <{
@@ -27,8 +27,6 @@ export default function ManageUserPartial({ employees}: Props) {
         const [actionType, setActionType] = useState<'approve' | 'reject' | null>(null);
 
         const [approveModal, setApproveModal] = useState(false);
-        const [rejectModal, setRejectModal] = useState(false);
-        const [anchorEl, setAnchorEl] = useState(null);
         const [selectedRow, setSelectedRow] = useState<Employee | null>(null);
         const [searchQuery, setSearchQuery] = useState('');
         const filteredRows = searchHooks(searchQuery, employees);
@@ -67,7 +65,6 @@ export default function ManageUserPartial({ employees}: Props) {
             setApproveModal(false)
         }
 
-        const {message}:any = usePage().props;
         const columns: GridColDef[] = [
             { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center' },
             { field: 'first_name', headerName: 'First name', flex:1, headerAlign: 'center', align: 'center' },
@@ -120,12 +117,6 @@ export default function ManageUserPartial({ employees}: Props) {
         <div className="flex justify-between gap-2 sm:justify-end  md:justify-end md:gap-5  ">
         <Search value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
         </div>
-        {message.success && (
-        <SuccessMessage className='my-2 ' success={message.success}/>
-        )}
-        {message.error && (
-            <ErrorMessage className="my-2" error={message.error}/>
-        )}
         <div className="w-full overflow-x-auto scrollbar-hidden">
             <div className='my-5 min-w-[900px] h-[650px] sm:h-[650px] md:h-[750px] lg:h[800px] overflow-y-auto scrollbar-hidden '>
                 <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
@@ -161,59 +152,6 @@ export default function ManageUserPartial({ employees}: Props) {
                 </div>
             )}
             </Modal>
-
-        {/* Edit Modal */}
-        <Modal show={rejectModal} onClose={() => setRejectModal(false)} maxWidth="lg">
-            <div className="p-6">
-                <h2 className="text-lg font-bold mb-4 text-white">Edit Employee</h2>
-                <CardWrapper className="flex justify-between p-3 gap-4">
-                    <div>
-                        <InputLabel className='py-1 text-white'>Employee Name</InputLabel>
-                        <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
-                    </div>
-                    <div>
-                        <InputLabel className='py-1 text-white'>Basic Pay</InputLabel>
-                        <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
-                    </div>
-                </CardWrapper>
-                <PrimaryButton className='text-md mt-4' onClick={() => setRejectModal(false)}>Save</PrimaryButton>
-            </div>
-        </Modal>
-        <Popover
-            open={Boolean(anchorEl)}
-            anchorEl={anchorEl}
-            onClose={() => setAnchorEl(null)}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-            transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-            className='w-32'
-        >
-            <div className=" w-48 bg-mainColor shadow-md text-sm text-white">
-                <button
-                    className="w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100"
-                    onClick={() => {
-                        if(selectedRow){
-                            setData({user_id: selectedRow.user_id})
-                            post(route('admin.approve', selectedRow.user_id));
-                        }
-                        setAnchorEl(null);
-                    }}
->
-                    Approve
-                </button>
-                <button
-                    className="w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100 "
-                    onClick={() => {
-                        if(selectedRow){
-                            setData({user_id: selectedRow.user_id})
-                            post(route('admin.reject', selectedRow.user_id));
-                        }
-                        setAnchorEl(null);
-                    }}
-                >
-                    Reject
-                </button>
-            </div>
-        </Popover>
     </>
     )
 }

@@ -5,7 +5,7 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import {ErrorMessage, InfoMessage,SuccessMessage} from '@/Components/Alert';
+import { InfoMessage,} from '@/Components/Alert';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 
 export default function Login({ status, canResetPassword, }: { status?: string, canResetPassword: boolean, }) {
@@ -39,7 +39,6 @@ export default function Login({ status, canResetPassword, }: { status?: string, 
     return (
         <LoginLayout>
             <Head title="Log in" />
-
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
             <div className='flex justify-center pt-12 sm:py-8 md:py-10 lg:pt-9 gap-5'> 
                 <div className="flex sm:hidden md:flex lg:hidden">
@@ -51,17 +50,6 @@ export default function Login({ status, canResetPassword, }: { status?: string, 
             </div>
             <form onSubmit={submit}>
                 <div className=" mt-1 sm:mt-2 lg:mt-2 ">
-                    
-                    {message.information && (
-                        <InfoMessage className='my-2' info={message.information}/>
-
-                    )}
-                    {message.error && (
-                        <ErrorMessage className="my-2" error={message.error}/>
-                    )}
-                     {message.success && (
-                        <SuccessMessage className="my-2" success={message.success}/>
-                    )}
                                         
                     <InputLabel className="text-white" htmlFor="employeeID" value="Employee ID" />
                     <div className="bg-gray-300 rounded-xl">

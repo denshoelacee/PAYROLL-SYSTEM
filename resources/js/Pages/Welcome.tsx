@@ -58,7 +58,7 @@ export default function Welcome({ auth }: PageProps) {
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-grow w-full flex flex-col justify-center items-center px-8 py-21 md:px-20 bg-mainColor">
+                <div className="flex-grow w-full flex flex-col justify-center items-center px-8 py-21 md:px-20 md:py-32 bg-mainColor">
                     <div className="flex justify-center items-center flex-wrap gap-10">
                         <div className="w-[20em] md:w-[40em]">
                             <p className="font-bold text-4xl md:text-5xl text-white">
@@ -86,9 +86,9 @@ export default function Welcome({ auth }: PageProps) {
                 <div className="relative h-5">
                     <div
                         className={`
-                            w-full h-[400px] py-4 rounded-t-3xl bg-[#012424] transition-all duration-500 ease-in-out
+                            w-full h-[500px] py-4 rounded-t-3xl bg-[#012424] transition-all duration-500 ease-in-out
                             overflow-hidden
-                            ${isActive ? 'bg-mainColor -translate-y-[405px] opacity-100 max-h-[400px]' : 'translate-y-0 max-h-14'}
+                            ${isActive ? 'bg-mainColor -translate-y-[505px] opacity-100 max-h-[450px]' : 'translate-y-0 max-h-14'}
                         `}
                     >
                         <div className="w-full flex justify-center items-center">

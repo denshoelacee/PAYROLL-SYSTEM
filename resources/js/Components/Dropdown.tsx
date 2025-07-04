@@ -109,7 +109,7 @@ const DropdownLink = ({
     return (
        <Link
         {...props}
-        className={`flex items-center gap-2 block w-full px-4 py-2 rounded-lg text-md leading-5 text-white 
+        className={`flex items-center gap-2  w-full px-4 py-2 rounded-lg text-md leading-5 text-white 
             transition-all duration-150 ease-in-out hover:bg-[#012424] ${className}`}
         >
          {children}

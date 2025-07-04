@@ -1,3 +1,4 @@
+
 import {Employee, PageProps } from '@/types';
 import Search from '@/Components/Search';
 import PrimaryButton  from '@/Components/PrimaryButton';
@@ -38,7 +39,7 @@ export default function ManageUserPartial({ employees}: Props) {
             ) => {
             setSelectedRow(row);
             setActionType(action); // set whether it's approve or reject
-            setApproveModal(true); // or `setRejectModal(true)` if you want different modals
+            setApproveModal(true); // or setRejectModal(true) if you want different modals
         };
 
         const { data, setData, post } = useForm<{}>({

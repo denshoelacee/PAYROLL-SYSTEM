@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController\AdminEmployeeController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\BatchProcessingController\BatchApproveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +19,8 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/employees', [AdminEmployeeController::class, 'index']);
+
 
 //Route::post('/testing',[PasswordResetLinkController::class,'store']);
+
+Route::post('/admin/users/batch-approve', [BatchApproveController::class, 'batchApprove'])->name('admin.users.batch-approve');

@@ -58,4 +58,22 @@ class UserRepository implements IUserRepository{
 
         return $user;
     }
+
+    public function findById(int $id): ?User
+    {
+       return User::find($id);
+    }
+
+    public function batchApproveAccount(array $user_ids):int
+    {
+       
+       if(empty($user_ids)){
+            return 0;
+        }
+        
+        return User::whereIn('user_id',$user_ids)
+                    ->update([
+                        'status' => 'verified'
+                    ]);
+    }
 }

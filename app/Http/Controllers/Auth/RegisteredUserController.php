@@ -15,12 +15,9 @@ use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
-    private $jobTitleService;
+    
+    public function __construct(protected IJobTitleService $jobTitleService){}
 
-    public function __construct(IJobTitleService $jobTitleService){
-
-           $this->jobTitleService = $jobTitleService;
-    }
     /**
      * Display the registration view.
      */

@@ -3,7 +3,6 @@
 namespace App\Contracts\Repository;
 
 use Illuminate\Support\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 interface IUserRepository{
 
@@ -18,4 +17,6 @@ interface IUserRepository{
     public function getEmployeeList();
 
     public function getResetPassword($validateReset);
+
+    public function batchApproveAccount(array $user_ids):int;
 }

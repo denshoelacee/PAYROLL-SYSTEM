@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\AdminController\AdminDashboardController;
 use App\Http\Controllers\AdminController\AdminEmployeeController;
-use App\Http\Controllers\Auth\PasswordResetConfirmControlller;
+use App\Http\Controllers\BatchProcessingController\BatchApproveController;
 use App\Http\Controllers\EmployeeController\EmployeeDashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use App\Models\User;
+use App\Http\Middleware\VerifyCsrfToken;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +28,13 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
     ]);
 });
+
+Route::get('/test', function () {
+    $user = User::where('user_id', Auth::user_id())->first();
+    return response()->json($user);
+});
+
+Route::post('/admin/users/batch-approve', [BatchApproveController::class, 'batchApprove'])->name('admin.users.batch-approve');
 
 Route::get('/dashboard', function () {
     $user = Auth::user();

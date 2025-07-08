@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Contracts\Repository\IPayrollRepository;
+use App\Models\DeductionType;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll;
 
@@ -18,4 +19,9 @@ class PayrollRepository implements IPayrollRepository{
             ->value('total_net_pay') ?? 0;
     }
 
+  
+    public function setMonthlyPayroll()
+    {
+        return DeductionType::SELECT('');
+    }
 }

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Models\User;
 use App\Http\Middleware\VerifyCsrfToken;
+use App\Services\Auth\CreateNewAccountService;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +55,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/employee', [AdminEmployeeController::class, 'employee'])->name('admin.employee');
     Route::get('/payroll', [AdminDashboardController::class, 'payroll'])->name('admin.payroll');
+    Route::post('/added-user',[CreateNewAccountService::class,'store'])->name('add.new.account');
     Route::post('/approve/{id}', [AdminEmployeeController::class, 'approve'])->name('admin.approve');
     Route::post('/reject/{id}', [AdminEmployeeController::class, 'reject'])->name('admin.reject');
     Route::get('/payroll/Payslip', function () {

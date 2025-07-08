@@ -4,15 +4,19 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Contracts\Repository\IJobTitleRepository;
+use App\Contracts\Repository\ISecretQuestionRepository;
 use App\Contracts\Services\IJobTitleService;
 use App\Repository\JobTitleRepository;
 use App\Services\JobTitleService;
 use App\Contracts\Repository\IUserRepository;
+use App\Contracts\Services\Auth\ICreateNewAccountService;
 use App\Contracts\Services\IBatchApproveAccountService;
 use App\Contracts\Services\IDashboardService;
 use App\Contracts\Services\IEmployeeService;
 use App\Contracts\Services\IPasswordResetService;
+use App\Repository\SecretQuestionRepository;
 use App\Repository\UserRepository;
+use App\Services\Auth\CreateNewAccountService;
 use App\Services\BatchApproveAccountService;
 use App\Services\DashboardService;
 use App\Services\EmployeeService;
@@ -33,7 +37,8 @@ class DependencyInjectionProvider extends ServiceProvider
         $this->app->singleton(IEmployeeService::class, EmployeeService::class);
         $this->app->singleton(IPasswordResetService::class, PasswordResetService::class);
         $this->app->bind(IBatchApproveAccountService::class, BatchApproveAccountService::class);
-
+        $this->app->bind(ISecretQuestionRepository::class, SecretQuestionRepository::class);
+        $this->app->bind(ICreateNewAccountService::class, CreateNewAccountService::class);
     }
 
     /**

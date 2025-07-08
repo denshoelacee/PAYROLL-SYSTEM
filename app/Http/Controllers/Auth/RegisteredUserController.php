@@ -43,6 +43,7 @@ class RegisteredUserController extends Controller
             'first_name'      => 'required|string|lowercase|max:50',
             'designation'     => 'required|string|max:50',
             'department'      => 'required|string|max:50',
+            'basic_pay'       => 'nullable|numeric',
             'password'        => ['required', 'confirmed', Rules\Password::defaults()],
             'employment_type' => 'required|string|max:50',
             'secret_question' => 'required|string|max:100',
@@ -69,8 +70,10 @@ class RegisteredUserController extends Controller
             $user->answerQuestion()->create([
                 'secret_question' => $request->secret_question,
                 'secret_answer'   => Hash::make(strtolower(trim($request->secret_answer)))
-            ]);
-            return redirect()->back()->with('success','Register successfully, Please wait for approval.');
+            ]);      
+            
+            return redirect()->back()->with('success','Register successfully, Please wait for approval.');     
+            
         }
        catch(\Exception $e)
        {

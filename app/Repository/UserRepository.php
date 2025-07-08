@@ -76,4 +76,9 @@ class UserRepository implements IUserRepository{
                         'status' => 'verified'
                     ]);
     }
+
+    public function create(array $data):User
+    {
+       return User::create($data);
+    }
 }

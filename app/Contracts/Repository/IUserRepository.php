@@ -2,6 +2,7 @@
 
 namespace App\Contracts\Repository;
 
+use App\Models\User;
 use Illuminate\Support\Collection;
 
 interface IUserRepository{
@@ -19,4 +20,6 @@ interface IUserRepository{
     public function getResetPassword($validateReset);
 
     public function batchApproveAccount(array $user_ids):int;
+
+    public function create(array $data):User;
 }

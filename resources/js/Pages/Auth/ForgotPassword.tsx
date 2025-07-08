@@ -1,4 +1,4 @@
-import GuestLayout from '@/Layouts/LoginLayout';
+import ForgotPasswordLayout from '@/Layouts/ForgotPasswordLayout';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
@@ -7,7 +7,6 @@ import { FormEventHandler,useState,useEffect} from 'react';
 import InputLabel from '@/Components/InputLabel';
 import Dropdown from '@/Components/Dropdown';
 import { RiArrowDropDownLine } from 'react-icons/ri';
-import { InfoMessage} from '@/Components/Alert';
 
 
 
@@ -51,15 +50,9 @@ export default function ForgotPassword({ status }: { status?: string }) {
     },[message])
 
     return (
-        <GuestLayout>
+        <ForgotPasswordLayout>
             <Head title="Forgot Password" />
-                    {message.success && (
-                        <InfoMessage  severity="success" info={message.success}/>
-
-                    )}
-                    {message.error && (
-                        <InfoMessage severity="error" info={message.error}/>
-                    )}
+                   
             <div className="mb-4 mt-10 text-sm text-white ">
                 Forgot your password? No problem. Just enter your Employee ID and input your Secret Question and Secret Password to Reset your password
             </div>
@@ -133,6 +126,6 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     </PrimaryButton>
                 </div>
             </form>
-        </GuestLayout>
+        </ForgotPasswordLayout>
     );
 }

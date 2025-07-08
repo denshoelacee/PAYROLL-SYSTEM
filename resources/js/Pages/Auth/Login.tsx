@@ -1,12 +1,11 @@
-import { useEffect, FormEventHandler } from 'react';
+import { useEffect, FormEventHandler,useState } from 'react';
 import {CtuLogo} from '@/Components/CtuLogo';
 import LoginLayout from '@/Layouts/LoginLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import { InfoMessage,} from '@/Components/Alert';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Login({ status, canResetPassword, }: { status?: string, canResetPassword: boolean, }) {
     
@@ -15,19 +14,51 @@ export default function Login({ status, canResetPassword, }: { status?: string, 
         password: '',
         remember: false,
     });
-    const {message}:any = usePage().props;
         
+
     useEffect(() => {
         return () => {
             reset('password');
         };
     }, []);
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+    const [lockoutTime, setLockoutTime] = useState<number | null>(null)
+    const [isLockedOut, setIsLockedOut] = useState(false)
+    const [remainingTime, setRemainingTime] = useState<number>(0)
 
-        post(route('login'));
-    };
+    const submit: FormEventHandler = (e) => {
+    e.preventDefault();
+
+    post(route('login'), {
+        onError: (err) => {
+            const tooManyAttempts = err?.throttle?.includes('Too many login attempts');
+            if (tooManyAttempts) {
+                const seconds = parseInt(err.throttle.match(/\d+/)?.[0] || '60', 10);
+                const timeoutUntil = Date.now() + seconds * 1000;
+                setLockoutTime(timeoutUntil);
+                setIsLockedOut(true);
+            }
+        },
+    });
+};
+
+    useEffect(() => {
+    if (!lockoutTime) return;
+
+    const interval = setInterval(() => {
+        const now = Date.now();
+        if (now >= lockoutTime) {
+            setLockoutTime(null);
+            setIsLockedOut(false);
+            setRemainingTime(0);
+            clearInterval(interval);
+        } else {
+            setRemainingTime(Math.ceil((lockoutTime - now) / 1000));
+        }
+    }, 1000);
+
+    return () => clearInterval(interval);
+}, [lockoutTime]);
 
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {value } = e.target;
@@ -108,9 +139,12 @@ export default function Login({ status, canResetPassword, }: { status?: string, 
                             </Link>
                         )}
                     </div>
-                    <PrimaryButton  disabled={processing}>
-                            <p className="text-[15px] py-1 font-black tracking-widest">SIGN IN</p>
+                    <PrimaryButton disabled={isLockedOut || processing}>
+                        <p className="text-[15px] py-1 font-black tracking-widest">
+                            {isLockedOut ? `Try again in ${remainingTime}s` : "SIGN IN"}
+                        </p>
                     </PrimaryButton>
+
                 </div>
                 <div className="flex justify-center text-white gap-1">
                     <span>Don't have an account? </span>

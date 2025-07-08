@@ -6,12 +6,9 @@ import { PropsWithChildren } from 'react';
 
 
 export default function AdminLayout({title, children}:PropsWithChildren ){
-  const {message}:any = usePage().props;
-  
+      const {message}:any = usePage().props;
       const [dismissed, setDismissed] = useState(true);
-  
       const hasMessages = message?.information || message?.error || message?.success;
-
       useEffect(() => {
         if (hasMessages) {
           setDismissed(true);
@@ -21,6 +18,7 @@ export default function AdminLayout({title, children}:PropsWithChildren ){
           return () => clearTimeout(timer);
         }
       }, [message]);
+      
   return (
     <>
     {hasMessages && dismissed &&
@@ -41,7 +39,7 @@ export default function AdminLayout({title, children}:PropsWithChildren ){
                     }}/>
                 )}
             </div>
-        }
+    }
     <div className="w-full mx-auto px-3 sm:px-5 md:pl-[150px] md:pr-[50px] lg:pl-[170px] lg:pr-[70px]">
         <p className='pb-3 text-3xl text-white font-black'>{title}</p>
             {children}           

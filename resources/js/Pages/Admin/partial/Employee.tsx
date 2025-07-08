@@ -50,12 +50,11 @@ export default function EmployeePartial({ userList}: Props) {
             { field: 'designation', headerName: 'Designation', flex:1, headerAlign: 'center', align: 'center' },
             { field: 'department', headerName: 'Department', flex:1, headerAlign: 'center', align: 'center' },
             { field: 'basic_pay', headerName: 'Basic Pay', flex:1, headerAlign: 'center', align: 'center' },
-            { field: 'role', headerName: 'Role Type', flex:1, headerAlign: 'center', align: 'center' },
+            { field: 'role', headerName: 'Role Type', headerAlign: 'center', align: 'center' },
             { field: 'employment_type', headerName: 'Employment', flex:1, headerAlign: 'center', align: 'center' },
             {
                 field: 'action',
                 headerName: 'Actions',
-                flex:1,
                 headerAlign: 'center',
                 align: 'center',
                 sortable: false,
@@ -81,15 +80,17 @@ export default function EmployeePartial({ userList}: Props) {
         </SecondaryButton>
         </div>
         <div className="w-full overflow-x-auto scrollbar-hidden">
-            <div className='my-5 min-w-[900px] h-[650px] sm:h-[650px] md:h-[750px] lg:h[800px] overflow-y-auto scrollbar-hidden '>
+            <div className='my-5 min-w-[900px] h-[650px] sm:h-[650px] md:h-[710px] lg:h[800px] overflow-y-auto scrollbar-hidden '>
                 <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
                     <div className="text-white px-10 py-3 text-xl">Employee List</div>
                     <Table
                     rows={filteredRows}
                     columns={columns}
-                    height={650}
+                    height={630}
                     getRowId={(row) => row.employee_id}
                     className="employee-table"
+                    pageSize={10}     
+                    pageSizeOptions={[10]}     
                 />
                 </div>
             </div>

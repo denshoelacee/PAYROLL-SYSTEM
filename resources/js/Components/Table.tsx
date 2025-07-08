@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef,GridRowSelectionModel } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 
 type TableProps = {
@@ -12,6 +12,8 @@ type TableProps = {
     getRowId?: (row:any) => string | number;
     className?: string;
     checkboxSelection?:boolean;
+    onRowSelectionModelChange?: (selection: GridRowSelectionModel) => void; // Updated type
+
 };
 
 export default function Table({
@@ -24,6 +26,7 @@ export default function Table({
     getRowId,
     className,
     checkboxSelection,
+    onRowSelectionModelChange
     
 }: TableProps) {
     const paginationModel = { page: 0};
@@ -32,6 +35,7 @@ export default function Table({
         <>
         <Paper sx={{ height, width: '100%', backgroundColor: 'transparent'}}>
             <DataGrid
+                onRowSelectionModelChange={onRowSelectionModelChange}
                 checkboxSelection={checkboxSelection}
                 className={className}
                 rows={rows}
@@ -59,13 +63,13 @@ export default function Table({
                     backgroundClip: 'padding-box',
                     border: 'none',
                     color: 'white',
-
                     '& .MuiDataGrid-cell': {
                     outline: 'none',
                     border: 'none',
                     textAlign: 'center',
                     color: 'white',
-                    fontSize: 15,
+                    fontSize: 13,
+                    padding:0
                     },
                     ' .MuiDataGrid-columnHeader': {
                     backgroundColor: tableColor,
@@ -73,7 +77,7 @@ export default function Table({
                     },
 
                     '& .MuiDataGrid-columnHeaders': {
-                    fontSize: 15,
+                    fontSize: 13,
                     border: 'none !important',
                     backgroundColor: tableColor
                     },
@@ -102,9 +106,8 @@ export default function Table({
                     '& .MuiDataGrid-columnHeader:focus': {
                     outline: 'none',
                     },
-
                     '& .MuiDataGrid-row:hover': {
-                    backgroundColor: tableColor,
+                    backgroundColor: '#2F5249',
                     },
 
                     '& .MuiTablePagination-root, .MuiTablePagination-selectLabel, .MuiSelect-select, .MuiSvgIcon-root': {
@@ -149,6 +152,8 @@ export default function Table({
                     backgroundColor: tableColor,     // sets background
                     margin: 0,
                     padding: 0,
+                    border: 0,
+                    outline: 0,
                     },
                     '& .MuiDataGrid-virtualScrollerContent': {
                     flexGrow: 120,
@@ -167,8 +172,9 @@ export default function Table({
                     fontWeight: 'bold',
                     },
                     '& .MuiDataGrid-row.Mui-selected , & .MuiDataGrid-row.Mui-selected:hover' :{
-                    backgroundColor: tableColor
+                    backgroundColor: tableColor,
                     },
+                    
                     ...sx}}
             />
         </Paper>

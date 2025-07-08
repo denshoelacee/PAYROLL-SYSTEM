@@ -14,7 +14,7 @@ export default function Search({onChange, value}: SearchProps) {
                 placeholder="Quick Search..."
                 value={value}
                 onChange={onChange}
-                className="px-4 py-1.5 text-md bg-mainColor text-white border-none focus:outline-none focus:ring-0 focus:border-none focus:shadow-none w-full"
+                className="px-4 py-1 text-md bg-mainColor text-white border-none focus:outline-none focus:ring-0 focus:border-none focus:shadow-none w-full"
             />
         </div>
     );

@@ -13,7 +13,7 @@ import InputLabel from '@/Components/InputLabel';
 import Table from '@/Components/Table';
 import { Popover } from '@mui/material';
 import searchHooks from '@/hooks/searchHooks';
-import { GridColDef } from '@mui/x-data-grid';
+import { GridColDef,GridRowSelectionModel } from '@mui/x-data-grid';
 import { useForm, usePage } from '@inertiajs/react';
 import { LiaCheckSolid } from 'react-icons/lia';
 import { FaRegTrashCan } from "react-icons/fa6";
@@ -25,42 +25,73 @@ type Props = PageProps <{
 }>
 
 export default function ManageUserPartial({ employees}: Props) {
-        const [actionType, setActionType] = useState<'approve' | 'reject' | null>(null);
+        const [actionType, setActionType] = useState<'approve' | 'reject' | 'batch-approve' | 'batch-reject' | null>(null);
+    const [approveModal, setApproveModal] = useState(false);
+    const [selectedRow, setSelectedRow] = useState<Employee | null>(null);
+    const [selectedRows, setSelectedRows] = useState<Employee[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const filteredRows = searchHooks(searchQuery, employees);
 
-        const [approveModal, setApproveModal] = useState(false);
-        const [selectedRow, setSelectedRow] = useState<Employee | null>(null);
-        const [searchQuery, setSearchQuery] = useState('');
-        const filteredRows = searchHooks(searchQuery, employees);
-    
-        const handleOpenPopover = (
-            event: any,
-            row: Employee,
-            action: 'approve' | 'reject'
-            ) => {
-            setSelectedRow(row);
-            setActionType(action); // set whether it's approve or reject
-            setApproveModal(true); // or setRejectModal(true) if you want different modals
+
+    // Handle batch action opening
+    const handleOpenBatchAction = (action: 'batch-approve' | 'batch-reject') => {
+        if (selectedRows.length === 0) {
+            // Show error or alert that no rows are selected
+            return;
+        }
+        setActionType(action);
+        setApproveModal(true);
+    };
+
+    // Handle single row action opening (existing)
+    const handleOpenPopover = (
+        event: any,
+        row: Employee,
+        action: 'approve' | 'reject'
+    ) => {
+        setSelectedRow(row);
+        setActionType(action);
+        setApproveModal(true);
+    };
+
+    // Form handling
+    const { data, setData, post, processing } = useForm<{
+        user_id?: number;
+        user_ids?: number[];
+    }>({
+        user_id: undefined,
+        user_ids: [],
+    });
+
+    // Submit handler for both single and batch actions
+    const handleSubmitAction = () => {
+        if (!actionType) return;
+
+        if (actionType === 'approve' || actionType === 'reject') {
+            if (!selectedRow) return;
+            setData({ user_id: selectedRow.user_id });
+        } else if (actionType === 'batch-approve' || actionType === 'batch-reject') {
+            if (selectedRows.length === 0) return;
+            setData({ user_ids: selectedRows.map(row => row.user_id) });
+        }
+
+        const routeMap = {
+            'approve': 'admin.approve',
+            'reject': 'admin.reject',
+            'batch-approve': 'admin.users.batch-approve',
+            'batch-reject': 'admin.batch-reject'
         };
 
-        const { data, setData, post } = useForm<{}>({
-        user_id: '',
+        post(route(routeMap[actionType], selectedRow?.user_id), {
+            onSuccess: () => {
+                setSelectedRows([]);
+            }
         });
-
-        const handleSubmitAction = () => {
-        if (!selectedRow || !actionType) return;
-
-        setData({ user_id: selectedRow.user_id });
-
-        if (actionType === 'approve') {
-            post(route('admin.approve',selectedRow.user_id));
-        } else if (actionType === 'reject') {
-            post(route('admin.reject',selectedRow.user_id));
-        }
 
         setApproveModal(false);
         setSelectedRow(null);
         setActionType(null);
-        };
+    };
 
         const handleClose = () => {
             setApproveModal(false)
@@ -115,8 +146,24 @@ export default function ManageUserPartial({ employees}: Props) {
         
     return(
     <>
-        <div className="flex justify-between gap-2 sm:justify-end  md:justify-end md:gap-5  ">
+        <div className="flex justify-between gap-2 sm:justify-end  md:justify-end md:gap-5 ">
         <Search value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+            <div className="flex gap-2 w-72">
+                <PrimaryButton 
+                    onClick={() => handleOpenBatchAction('batch-approve')}
+                    disabled={selectedRows.length === 0}
+                    className= {selectedRows.length === 0 ? 'opacity-50 cursor-not-allowed ' : ''}
+                >
+                    <p className='text-[10px]'>Approve ({selectedRows.length})</p>
+                </PrimaryButton>
+                <PrimaryButton 
+                    onClick={() => handleOpenBatchAction('batch-reject')}
+                    disabled={selectedRows.length === 0}
+                    className={selectedRows.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}
+                >
+                    <p className='text-[10px]'>Reject ({selectedRows.length})</p>
+                </PrimaryButton>
+            </div>
         </div>
         <div className="w-full overflow-x-auto scrollbar-hidden">
             <div className='my-5 min-w-[900px] h-[650px] sm:h-[650px] md:h-[750px] lg:h[800px] overflow-y-auto scrollbar-hidden '>
@@ -127,9 +174,11 @@ export default function ManageUserPartial({ employees}: Props) {
                     rows={filteredRows}
                     columns={columns}
                     height={650}
-                    getRowId={(row) => row.employee_id}
+                    getRowId={(row) => String(row.user_id)} // Ensure consistent string IDs
                     className="employee-table"
-                />
+                    pageSize={10}     
+                    pageSizeOptions={[10]}           
+                    />
                 </div>
             </div>
         </div>

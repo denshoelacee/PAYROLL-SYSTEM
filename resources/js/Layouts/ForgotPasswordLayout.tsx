@@ -4,7 +4,7 @@ import {CtuLogo} from '@/Components/CtuLogo';
 import {InfoMessage,} from '@/Components/Alert';
 
 
-export default function LoginLayout({ children }: PropsWithChildren) {
+export default function ForgotPasswordLayout({ children }: PropsWithChildren) {
     const {message}:any = usePage().props;
     const [dismissed, setDismissed] = useState(true);
     const hasMessages = message?.information || message?.error || message?.success;
@@ -28,7 +28,7 @@ export default function LoginLayout({ children }: PropsWithChildren) {
                 }}/>
             )}
             {message.error && (
-                <InfoMessage title="Your Account is being Rejected!" severity="error" info={message.error} onClose={() => {
+                <InfoMessage title="Ooops!" severity="error" info={message.error} onClose={() => {
                     setDismissed(false)
                 }}/>
             )}

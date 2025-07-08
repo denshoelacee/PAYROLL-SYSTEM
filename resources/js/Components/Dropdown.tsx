@@ -92,7 +92,7 @@ const Content = ({
                 onClick={() => setOpen(false)}
             >
                 <div
-                    className={`text-white bg-[#145858] p-2 rounded-md border border-button-border-color ${contentClasses}`}
+                    className={`text-white bg-[#1b544c] p-2 rounded-md border border-button-border-color ${contentClasses}`}
                 >
                     {children}
                 </div>

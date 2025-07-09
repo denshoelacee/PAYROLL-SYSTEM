@@ -42,6 +42,7 @@ class Payroll extends Model
         'coop',
         'landbank',
         'ucpb',
+        'publish_type'
         
     ];
 

@@ -14,12 +14,12 @@ class CreateNewAccountController extends Controller
     public function store(Request $request):RedirectResponse
     {
        $request->validate([
-            'empoloyee_id' => 'required|integer',
+            'employee_id' => 'required|integer',
             'last_name' => 'required|string|max:50',
             'first_name' => 'required|string|max:50',
             'department' => 'required|string|max:50',
             'designation' => 'required|string|max:50',
-            'employee_type' => 'required|string|max:50',
+            'employment_type' => 'required|string|max:50',
             'basic_pay' => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'role' => 'required|string|max:50',
        ]);

@@ -10,6 +10,6 @@ class SecretQuestionRepository implements ISecretQuestionRepository
 
     public function registerSecretQuestion(User $user,array $data):void
     {
-       $user->secretQuestion()->create($data);
+       $user->answerQuestion()->create($data);
     }
 }

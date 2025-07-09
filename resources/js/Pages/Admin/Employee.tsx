@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import {Employee, PageProps } from '@/types';
+import {Employee, JobTitles, PageProps } from '@/types';
 import Sidebar from '@/Components/Sidebar';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { useState, useEffect } from 'react';
@@ -11,11 +11,13 @@ import ManageUserPartial from './partial/ManageUsers';
 type Props = PageProps<{
     pendingUsers: Employee[];
     employeeList: Employee[];
+    jobtitles : JobTitles[];
 }>;
-export default function Employees({ auth, pendingUsers,employeeList}:Props) {
+export default function Employees({ auth, pendingUsers,employeeList,jobtitles}:Props) {
     
     const [ActiveTab , setActiveTab] = useState('manageusers');
    
+    console.log(jobtitles)
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Employee " />
@@ -36,7 +38,7 @@ export default function Employees({ auth, pendingUsers,employeeList}:Props) {
                 </div>
                 {ActiveTab === 'employee' && (
                     <>
-                    <EmployeePartial userList={employeeList} auth={auth}/>
+                    <EmployeePartial userList={employeeList} auth={auth} jobtitles={jobtitles}/>
                     </>
                 )}
                 {ActiveTab === 'manageusers' && (

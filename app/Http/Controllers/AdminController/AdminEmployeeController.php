@@ -3,28 +3,31 @@
 namespace App\Http\Controllers\AdminController;
 
 use App\Contracts\Services\IEmployeeService;
+use App\Contracts\Services\IJobTitleService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use App\Models\User;
 
+
 class AdminEmployeeController extends Controller
 {
 
-    public function __construct(protected IEmployeeService $employeeService){}
+    public function __construct(protected IEmployeeService $employeeService,protected IJobTitleService $jobTitleService){}
    
     /**
      * Display a listing of the resource.
      */
     public function employee()
     {
-            
+            $jobtitles = $this->jobTitleService->getJobTitleService();
             $pendings = $this->employeeService->pendingUsers();
             $employeelist    = $this->employeeService->employeeList();
              return Inertia::render('Admin/Employee',
                 ['pendingUsers' => $pendings,
-                 'employeeList'  => $employeelist
+                 'employeeList'  => $employeelist,
+                 'jobtitles' => $jobtitles
                 ]
         );
     }

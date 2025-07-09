@@ -28,7 +28,7 @@ class CreateNewAccountService implements ICreateNewAccountService
               'employment_type' => $request->employment_type,
               'basic_pay' => $request->basic_pay,
               'password'  => Hash::make($request['employee_id']),
-              'status' => ($request['verified']),
+              'status' => 'verified',
               'role'   => $request->role 
           ]);
 
@@ -37,9 +37,9 @@ class CreateNewAccountService implements ICreateNewAccountService
               'first_name' => ucwords(strtolower($request->first_name))
           ]);
 
-          $user->secretQuestionRepo->registerSecretQuestion($user,[
-              'secret_question' => ($request['default']),
-              'secret_answer'   => Hash::make(strtolower(trim($request['employee_id'])))
-          ]);
+          /*$user->secretQuestionRepo->registerSecretQuestion($user,[
+              'secret_question' => 'default',
+              'secret_answer'   => Hash::make('asda')
+          ]);*/
       }
 }

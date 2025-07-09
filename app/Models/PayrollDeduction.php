@@ -12,17 +12,15 @@ class PayrollDeduction extends Model
     protected $fillable = [
 
         'payroll_deduction',
-        'deduction_type_id',
+        'payroll_id',
+        'total_accrued_period',
         'total_deduction',
+        'net_pay'
     ];
 
-    public function payrollDeduction(){
+    //Belongs to Payroll Model
+    public function payroll(){
         
-        return $this->belongsTo(Payroll::class, 'payroll_id', 'payroll_id');
-    }
-
-    public function deductionType(){
-
-        return $this->belongsToMany(DeductionType::class,'deduction_type_id','deduction_type_id');
+        return $this->belongsTo(Payroll::class,'payroll_id');
     }
 }

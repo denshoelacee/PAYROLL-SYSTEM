@@ -13,24 +13,47 @@ class Payroll extends Model
     protected $fillable = [
 
         'user_id',
-        'basic_pay',
+        'basic_salary',
         'pera',
-        'total_accrued_period',
-        'net_pay',
+        'absent',
+        'late',
+        'holding_tax',
+        'tax_bal_due',
+        'rlip',
+        'policy_loan',
+        'consol_loan',
+        'emerg_loan',
+        'gel',
+        'gfal',
+        'mpl',
+        'mpl_lite',
+        'contribution',
+        'loans',
+        'housing_loan',
+        'philhealth',
+        'cfi',
+        'tipid',
+        'city_savings_bank',
+        'fea',
+        'canteen',
+        'disallowance',
+        'unliquidated_ca',
+        'disallowance_honoraria',
+        'coop',
+        'landbank',
+        'ucpb',
+        
     ];
 
+    //Belongs to User Model
     public function users(){
 
         return $this->belongsTo(User::class,'user_id','user_id');
     }
 
-    public function periods(){
-
-        return $this->hasMany(PayrollPeriod::class,'payroll_id','payroll_id');
-    }
-  
+    //Has one to PayrollDeduction Model
     public function deductions(){
 
-        return $this->hasMany(PayrollDeduction::class, 'payroll_id', 'payroll_id');
+        return $this->hasOne(PayrollDeduction::class, 'payroll_id');
     }
 }

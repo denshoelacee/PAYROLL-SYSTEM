@@ -13,21 +13,16 @@ return new class extends Migration
     {
         Schema::create('payroll_deductions', function (Blueprint $table) {
             $table->bigIncrements('payroll_deduction_id');
-            $table->unsignedBigInteger('payroll_id');
-            $table->unsignedBigInteger('deduction_type_id');
+            $table->unsignedBigInteger('payroll_id')->nullable();
+            $table->decimal('total_accrued_period',10,2);
             $table->decimal('total_deduction',10,2);
+            $table->decimal('net_pay',10,2);
             $table->timestamps();
 
             $table->foreign('payroll_id')
                   ->references('payroll_id')
                   ->on('payrolls')
-                  ->onDelete('cascade');
-
-            $table->foreign('deduction_type_id')
-                  ->references('deduction_type_id')
-                  ->on('deduction_types')
-                  ->onDelete('cascade');
-
+                  ->nullOnDelete();
         });
     }
 

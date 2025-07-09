@@ -43,6 +43,7 @@ return new class extends Migration
             $table->decimal('coop', 10, 2)->nullable();
             $table->decimal('landbank', 10, 2)->nullable();
             $table->decimal('ucpb', 10, 2)->nullable();
+            $table->enum('publish_status', ['publish','partial','none'])->default('none');
             $table->timestamps();
 
             $table->foreign('user_id')

@@ -48,6 +48,11 @@ class UserRepository implements IUserRepository{
                    ->get();
     }
 
+    public function getUsersToGeneratePayroll()
+    {
+        return User::select();
+    }
+
     public function getResetPassword($validateReset)
     {
         $user = User::with('answerQuestion')->where('employee_id', $validateReset['employee_id'])->first();
@@ -79,7 +84,6 @@ class UserRepository implements IUserRepository{
 
     public function create(array $data):User
     {
-       //dd($data);
        return User::create($data);
     }
 }

@@ -19,9 +19,13 @@ class PayrollRepository implements IPayrollRepository{
             ->value('total_net_pay') ?? 0;
     }
 
-  
-    public function setMonthlyPayroll()
+    public function getPayrollModel(array $data):Payroll
     {
-        return DeductionType::SELECT('');
+        return Payroll::create($data);
+    }
+
+    public function getPayrollSummaries()
+    {
+       return Payroll::Where('created');
     }
 }

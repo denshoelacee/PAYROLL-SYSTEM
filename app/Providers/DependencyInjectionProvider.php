@@ -14,6 +14,7 @@ use App\Contracts\Services\IBatchApproveAccountService;
 use App\Contracts\Services\IDashboardService;
 use App\Contracts\Services\IEmployeeService;
 use App\Contracts\Services\IPasswordResetService;
+use App\Contracts\Services\IPayrollService\IGeneratePayrollService;
 use App\Repository\SecretQuestionRepository;
 use App\Repository\UserRepository;
 use App\Services\Auth\CreateNewAccountService;
@@ -21,6 +22,7 @@ use App\Services\BatchApproveAccountService;
 use App\Services\DashboardService;
 use App\Services\EmployeeService;
 use App\Services\PasswordResetService;
+use App\Services\PayrollService\GeneratePayrollService;
 
 class DependencyInjectionProvider extends ServiceProvider
 {
@@ -39,6 +41,7 @@ class DependencyInjectionProvider extends ServiceProvider
         $this->app->bind(IBatchApproveAccountService::class, BatchApproveAccountService::class);
         $this->app->bind(ISecretQuestionRepository::class, SecretQuestionRepository::class);
         $this->app->bind(ICreateNewAccountService::class, CreateNewAccountService::class);
+        $this->app->bind(IGeneratePayrollService::class,GeneratePayrollService::class);
     }
 
     /**

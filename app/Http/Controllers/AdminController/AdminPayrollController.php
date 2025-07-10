@@ -53,9 +53,10 @@ class AdminPayrollController extends Controller
     {
       $thisMonth = $this->payrollService->payrollThisMonth();
 
-      return Inertia::render(
+      dd($thisMonth);
+      /*return Inertia::render(
                            'Admin/Payroll',
                            ['thisMonth' => $thisMonth]
-      );
+      );*/
     }
 }

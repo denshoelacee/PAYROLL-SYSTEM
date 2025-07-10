@@ -19,14 +19,13 @@ import TextInputGroup from "@/Components/TextInputGroup";
 
 
 
-
-export default function PayrollPartial ({/* {payroll}:PageProps<{payroll:Employee[]}>)x */}) {
+export default function PayrollPartial ({ thisMonth/* {payroll}:PageProps<{payroll:Employee[]}>)x */}) {
     
     const [addModal, setAddModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     //const filteredRows = searchHooks(searchQuery, payroll);
 
-
+    
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedRow, setSelectedRow] = useState<Employee | null>(null);
 
@@ -58,12 +57,7 @@ export default function PayrollPartial ({/* {payroll}:PageProps<{payroll:Employe
         )
         }
     ];
-            
-    const rows = [
-    {id: 1,employee_id: 'EMP001',first_name: 'Alice',last_name: 'Johnson',designation: 'Software Engineer',department: 'Engineering',role: 'Admin',employment_type: 'Full-Time',},
-    {id: 2,employee_id: 'EMP002',first_name: 'Bob',last_name: 'Smith',designation: 'Product Manager',department: 'Product',role: 'User',employment_type: 'Contract',},
-    {id: 3,employee_id: 'EMP003',first_name: 'Charlie',last_name: 'Lee',designation: 'UX Designer',department: 'Design',role: 'Editor',employment_type: 'Part-Time',},
-    ];
+
 
     return (
         <>
@@ -101,7 +95,7 @@ export default function PayrollPartial ({/* {payroll}:PageProps<{payroll:Employe
                             <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
                                 <div className="text-white px-10 py-3 text-xl">Payroll Summary</div>
                                 <Table
-                                rows={rows}
+                                rows={thisMonth}
                                 columns={columns}
                                 height={650}
                                 getRowId={(row) => row.employee_id}

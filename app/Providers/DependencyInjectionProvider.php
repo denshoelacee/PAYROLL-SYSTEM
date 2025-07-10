@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Contracts\Services\IPayrollService;
 use Illuminate\Support\ServiceProvider;
 use App\Contracts\Repository\IJobTitleRepository;
+use App\Contracts\Repository\IPayrollRepository;
 use App\Contracts\Repository\ISecretQuestionRepository;
 use App\Contracts\Services\IJobTitleService;
 use App\Repository\JobTitleRepository;
@@ -15,6 +17,7 @@ use App\Contracts\Services\IDashboardService;
 use App\Contracts\Services\IEmployeeService;
 use App\Contracts\Services\IPasswordResetService;
 use App\Contracts\Services\IPayrollService\IGeneratePayrollService;
+use App\Repository\PayrollRepository;
 use App\Repository\SecretQuestionRepository;
 use App\Repository\UserRepository;
 use App\Services\Auth\CreateNewAccountService;
@@ -22,6 +25,7 @@ use App\Services\BatchApproveAccountService;
 use App\Services\DashboardService;
 use App\Services\EmployeeService;
 use App\Services\PasswordResetService;
+use App\Services\PayrollService;
 use App\Services\PayrollService\GeneratePayrollService;
 
 class DependencyInjectionProvider extends ServiceProvider
@@ -42,6 +46,8 @@ class DependencyInjectionProvider extends ServiceProvider
         $this->app->bind(ISecretQuestionRepository::class, SecretQuestionRepository::class);
         $this->app->bind(ICreateNewAccountService::class, CreateNewAccountService::class);
         $this->app->bind(IGeneratePayrollService::class,GeneratePayrollService::class);
+        $this->app->bind(IPayrollService::class,PayrollService::class);
+        $this->app->bind(IPayrollRepository::class,PayrollRepository::class);
     }
 
     /**

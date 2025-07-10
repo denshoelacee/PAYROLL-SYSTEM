@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\AdminController;
 
+use App\Contracts\Services\IPayrollService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class AdminPayrollController extends Controller
 {
 
+       public function __construct(protected IPayrollService $payrollService){}
       
     public function storePayroll(Request $request)
     {
@@ -43,6 +46,16 @@ class AdminPayrollController extends Controller
           ]);
 
           
+     
+    }
 
+    public function payrollThisDay()
+    {
+      $thisMonth = $this->payrollService->payrollThisMonth();
+
+      return Inertia::render(
+                           'Admin/Payroll',
+                           ['thisMonth' => $thisMonth]
+      );
     }
 }

@@ -8,5 +8,7 @@ interface IPayrollRepository{
     
       public function getTotalNetpayMonth();
 
-      public function getPayrollModel(array $data):Payroll;
+      public function setPayrollModel(array $data):Payroll;
+
+      public function getPayrollThisMonth();
 }

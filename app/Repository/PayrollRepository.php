@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Contracts\Repository\IPayrollRepository;
-use App\Models\DeductionType;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll;
 
@@ -19,13 +18,18 @@ class PayrollRepository implements IPayrollRepository{
             ->value('total_net_pay') ?? 0;
     }
 
-    public function getPayrollModel(array $data):Payroll
+    public function setPayrollModel(array $data):Payroll
     {
         return Payroll::create($data);
     }
 
-    public function getPayrollSummaries()
+    public function getPayrollThisMonth()
     {
-       return Payroll::Where('created');
+        
+       return Payroll::with(['user', 'previousPayroll'])
+                    ->whereIn('publish_status', ['none', 'partial'])
+                    ->whereMonth('created_at', now()->month)
+                    ->whereYear('created_at', now()->year)
+                    ->get();
     }
 }

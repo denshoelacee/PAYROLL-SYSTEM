@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Carbon\Carbon;
 
 class Payroll extends Model
 {
@@ -42,19 +43,27 @@ class Payroll extends Model
         'coop',
         'landbank',
         'ucpb',
-        'publish_type'
+        'publish_status'
         
     ];
 
     //Belongs to User Model
-    public function users(){
+    public function user(){
 
         return $this->belongsTo(User::class,'user_id','user_id');
     }
 
     //Has one to PayrollDeduction Model
-    public function deductions(){
+    public function deduction(){
 
         return $this->hasOne(PayrollDeduction::class, 'payroll_id');
+    }
+
+    public function previousPayroll()
+    {
+    return $this->hasOne(self::class, 'user_id', 'user_id')
+        ->whereMonth('created_at', Carbon::now()->subMonth()->month)
+        ->whereYear('created_at', Carbon::now()->subMonth()->year)
+        ->latest('created_at');
     }
 }

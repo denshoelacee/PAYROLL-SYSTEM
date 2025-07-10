@@ -22,10 +22,4 @@ class AdminDashboardController extends Controller
         );
         //dd($userStatsMonthly);
     }
-
-    
-    public function payroll (){
-
-        return Inertia::render('Admin/Payroll');
-    }
 }

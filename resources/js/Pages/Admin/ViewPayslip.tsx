@@ -104,10 +104,8 @@ export default function Payslip({ auth}: PageProps) {
                                     <p className=''>Absences w/o pay</p>
                                     <p className=''>W/holding Tax</p>
                                     <p className=''>Late/Undertime</p>
-                                    <p className=''>Absent</p>
                                 </div>
                                 <div className=" text-right">
-                                    <p className=''>123123</p>
                                     <p className=''>123123</p>
                                     <p className=''>123123</p>
                                     <p className=''>123123</p>

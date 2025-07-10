@@ -197,7 +197,7 @@ const nextStep = () => {
                                             <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                         </button>
                                     </Dropdown.Trigger> 
-                                    <Dropdown.Content contentClasses="w-full max-h-[200px] overflow-y-auto p-0" align="left">
+                                    <Dropdown.Content contentClasses="w-full max-h-[200px]  bg-gray-300 overflow-y-auto p-0 " align="left">
                                     {jobtitles
                                         .map(dep => dep.department)
                                         .filter(department => department && department.toUpperCase() !== 'NULL') 
@@ -227,7 +227,7 @@ const nextStep = () => {
                                             <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                         </button>
                                     </Dropdown.Trigger> 
-                                    <Dropdown.Content contentClasses=" p-0 w-full max-h-[200px] overflow-y-auto" align="left">
+                                    <Dropdown.Content contentClasses=" bg-gray-300 p-0 w-full max-h-[200px] overflow-y-auto" align="left">
                                     {jobtitles
                                         .map(des => des.designation)
                                         .filter(designations => designations && designations.toUpperCase() !== 'NULL') 

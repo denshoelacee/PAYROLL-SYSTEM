@@ -7,22 +7,26 @@ import { PageProps } from '@/types';
 import NavLink from '@/Components/NavLink';
 import { BiLeftArrow } from 'react-icons/bi';
 import { FaLessThan } from 'react-icons/fa6';
+import Sidebar from '@/Components/Sidebar';
+
 
 export default function Edit({ auth, mustVerifyEmail, status }: PageProps<{ mustVerifyEmail: boolean, status?: string }>) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={
-            <h2 className="font-semibold text-xl text-white">Profile</h2>}
-        >
+           >
+            <Sidebar auth={auth}/>  
             <Head title="Profile" />
-            <div className="">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <div className="p-2 md:pl-20">
+
+            <h2 className="font-semibold text-xl my-2 md:mx-20 md:my-5 text-white">Profile</h2>
+      
+                <div className="max-w-6xl mx-auto  sm:px-6 lg:px-8 space-y-6">
                     <div className="p-4 sm:p-8 bg-green-100 rounded-md bg-clip-padding bg-opacity-10 border border-button-border-color sm:rounded-lg">
                         <UpdateProfileInformationForm
                             mustVerifyEmail={mustVerifyEmail}
                             status={status}
-                            className="max-w-xl"
+                            className="w-full"
                         />
                     </div>
 

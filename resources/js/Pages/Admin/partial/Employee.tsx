@@ -73,8 +73,8 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
 
             post(route('add.new.account'), {
                 onSuccess: () => {
-                    reset(); 
                     setAddModal(false);
+                    reset(); 
                     setSelectDepartment('Select Department')
                     setSelectDesignation('Select Designation')
                 },
@@ -106,6 +106,22 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
             }
         ];
 
+        const handleEmployeeId = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const {value } = e.target;
+
+        if(/^[0-9]*$/.test(value) ){
+            setData('employee_id', value);
+        }
+        }
+
+        const handleBasicPayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+
+        if (/^\d*\.?\d*$/.test(value)) {
+            setData('basic_pay', value);
+        }
+        };
+
     return(
     <>
         <div className="flex justify-between gap-2 sm:justify-end  md:justify-end md:gap-5  ">
@@ -136,7 +152,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
         {/* Add Modal */}
         <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="2xl" >
             <form onSubmit={submit} >
-            <div className="p-6 space-y-4 border rounded-lg">
+            <div className="p-6 space-y-4 rounded-lg">
                 <h2 className="text-lg font-bold mb-4 text-white">Add New Employee</h2>
                 
                     <CardWrapper className="justify-between p-3 gap-4">
@@ -150,7 +166,9 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                             isFocused={true}
                             inputMode='numeric'
                             value={data.employee_id}
-                            onChange={(e) => setData('employee_id', e.target.value)}
+                            onChange={handleEmployeeId}
+
+                           //onChange={(e) => setData('employee_id', e.target.value)}
 
                         />
                     </div>
@@ -242,12 +260,15 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                         <InputLabel  className='py-1 text-white'>Basic Pay *</InputLabel>
                         <TextInput 
                             id="basic_pay"
-                            type="number"
+                            type="text"
                             name="basic_pay"
                             isFocused={true}
                             value={data.basic_pay}
-                            onChange={(e) => setData('basic_pay', e.target.value)}
-                            className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
+                            step="0.01"
+                            onChange={handleBasicPayChange}
+                            //onChange={(e) => setData('basic_pay', e.target.value)}
+                            className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1"
+                             />
                     </div>
                 </CardWrapper>
                 <CardWrapper className=" p-3 gap-4">

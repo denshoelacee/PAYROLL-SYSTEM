@@ -1,11 +1,15 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { PageProps,Employee} from '@/types';
+import { PageProps,Employee,UserPayroll} from '@/types';
 import Sidebar from '@/Components/Sidebar';
 import AdminLayout from '@/Layouts/AdminLayout';
 import PayrollPartial from './partial/Payroll';
 
-export default function Payroll({ auth,payroll}: PageProps<{payroll:Employee[]}>) {
+
+type Props = PageProps<{
+    thisMonth : UserPayroll[];
+}>;
+export default function Payroll({ auth,thisMonth}:Props) {
 
     return (
         
@@ -21,7 +25,7 @@ export default function Payroll({ auth,payroll}: PageProps<{payroll:Employee[]}>
                     title="Payroll">
                 
                 <div className="">
-                    <PayrollPartial/>
+                    <PayrollPartial payroll={thisMonth}/>
                 </div>
                 </AdminLayout>
             </div>

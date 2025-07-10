@@ -1,12 +1,12 @@
 import SecondaryButton from "@/Components/SecondaryButton";
-import { PageProps,Employee } from "@/types"
+import { PageProps,Employee,UserPayroll } from "@/types"
 import { GridColDef } from "@mui/x-data-grid";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import Dropdown from "@/Components/Dropdown";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import Table from "@/Components/Table";
 import searchHooks from "@/hooks/searchHooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Search from "@/Components/Search";
 import Modal from "@/Components/Modal";
 import CardWrapper from "@/Components/CardWrapper";
@@ -17,31 +17,59 @@ import { IoMdAdd } from "react-icons/io";
 import { Popover } from "@mui/material";
 import TextInputGroup from "@/Components/TextInputGroup";
 
-
-
-export default function PayrollPartial ({ thisMonth/* {payroll}:PageProps<{payroll:Employee[]}>)x */}) {
+type Props = {
+    payroll : UserPayroll[];
+}
+export default function PayrollPartial ({ payroll}:Props) {
     
     const [addModal, setAddModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     //const filteredRows = searchHooks(searchQuery, payroll);
-
-    
     const [anchorEl, setAnchorEl] = useState(null);
-    const [selectedRow, setSelectedRow] = useState<Employee | null>(null);
+    const [selectedRow, setSelectedRow] = useState<UserPayroll | null>(null);
 
-    const handleOpenPopover = (event:any, row:Employee) => {
+    const handleOpenPopover = (event:any, row:UserPayroll) => {
             setAnchorEl(event.currentTarget);
             setSelectedRow(row);
         };
     
     const columns: GridColDef[] = [        
-        { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center' },
-        { field: 'first_name', headerName: 'First name', flex:1, headerAlign: 'center', align: 'center' },
-        { field: 'last_name', headerName: 'Last name',flex:1, headerAlign: 'center', align: 'center' },
-        { field: 'designation', headerName: 'Designation', flex:1, headerAlign: 'center', align: 'center' },
-        { field: 'department', headerName: 'Department', flex:1, headerAlign: 'center', align: 'center' },
-        { field: 'employment_type', headerName: 'Type', flex:1, headerAlign: 'center', align: 'center' },
-        { field: 'status', headerName: 'Status', flex:1, headerAlign: 'center', align: 'center' },
+        { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center',
+            renderCell: (params) => `${params.row.user?.employee_id || ''}`,
+        },
+        { field: 'first_name', headerName: 'First name', flex:1, headerAlign: 'center', align: 'center',
+            renderCell: (params) => `${params.row.user?.first_name || ''}`,
+        },
+        { field: 'last_name', headerName: 'Last name',flex:1, headerAlign: 'center', align: 'center',
+            renderCell: (params) => `${params.row.user?.last_name || ''}`,
+        },
+        { field: 'designation', headerName: 'Designation', flex:1, headerAlign: 'center', align: 'center',
+            renderCell: (params) => `${params.row.user?.designation || ''}`,
+        },
+        { field: 'department', headerName: 'Department', flex:1, headerAlign: 'center', align: 'center',
+            renderCell: (params) => `${params.row.user?.department || ''}`,
+        },
+        { field: 'employment_type', headerName: 'Type', flex:1, headerAlign: 'center', align: 'center',
+            renderCell: (params) => `${params.row.user?.employment_type || ''}`,
+        },
+        { field: 'role', headerName: 'Role', flex:1, headerAlign: 'center', align: 'center',
+            renderCell: (params) => `${params.row.user?.role || ''}`,
+        },
+        {
+        field: 'publish_status',
+        headerName: 'Status',
+        flex: 1,
+        headerAlign: 'center',
+        align: 'center',
+        renderCell: (params) => (
+            params?.row.publish_status === 'none' ? (
+            ""
+            ) : (
+            <p className="text-green-500">{params.row.publish_status}</p>
+            )
+        ),
+        }
+        ,
         {
         field: 'action',
         headerName: 'Actions',
@@ -95,10 +123,10 @@ export default function PayrollPartial ({ thisMonth/* {payroll}:PageProps<{payro
                             <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
                                 <div className="text-white px-10 py-3 text-xl">Payroll Summary</div>
                                 <Table
-                                rows={thisMonth}
+                                rows={payroll}
                                 columns={columns}
                                 height={650}
-                                getRowId={(row) => row.employee_id}
+                                getRowId={(row) => row.user_id}
                                 className="employee-table"
                             />
                             </div>
@@ -109,13 +137,13 @@ export default function PayrollPartial ({ thisMonth/* {payroll}:PageProps<{payro
                             <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="5xl" >
                                 <form >
                                 <div className="p-6 space-y-4 border rounded-lg">
-                                    <h2 className="text-lg font-bold mb-4 text-white">{[selectedRow?.employee_id+" - ", selectedRow?.last_name + ", " ,selectedRow?.first_name]}</h2>
+                                    <h2 className="text-lg font-bold mb-4 text-white">{[selectedRow?.user?.employee_id+" - ", selectedRow?.user?.last_name + ", " ,selectedRow?.user?.first_name]}</h2>
                                         <CardWrapper className="justify-between p-3 gap-4 text-white">
                                             {/*EARNINGS*/}
                                             <p>Earning</p>
                                                 <div className="flex gap-4">
                                                     {/*BASIC SALARY*/}
-                                                    <TextInputGroup label="Basic Salary" id="basic_salary"/>
+                                                    <TextInputGroup label="Basic Salary" id="basic_salary" value={selectedRow?.basic_salary} disabled/>
                                                     {/*PERA*/}
                                                     <TextInputGroup label="PERA" id="PERA"/>
                                                 </div>

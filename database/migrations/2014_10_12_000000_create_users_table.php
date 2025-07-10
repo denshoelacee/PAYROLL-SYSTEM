@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('employment_type');
             $table->enum('status', ['verified', 'rejected', 'pending'])->default('pending');
-            $table->enum('role', ['admin','user'])->default('user');
+            $table->enum('role', ['Admin','User'])->default('User');
             $table->rememberToken();
             $table->timestamps();
         });

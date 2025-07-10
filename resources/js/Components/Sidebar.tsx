@@ -13,7 +13,7 @@ export default function Sidebar({auth }: PageProps) {
   return (
     <div className="hidden md:block">
         <div className='fixed top-0 left-2 rounded-2xl w-[5em] max-h-screen h-[93%] mx-5 my-6 bg-green-100 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-50 flex flex-col justify-between '>
-            {auth.user.role === 'admin' ? (
+            {auth.user.role === 'Admin' ? (
                 <div className="p-2">
                     <Link href='/' className='flex items-center justify-center'>
                         <CtuLogo className='p-1 w-20 h-15'/>

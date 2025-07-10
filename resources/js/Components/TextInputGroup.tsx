@@ -1,5 +1,5 @@
 import InputLabel from "@/Components/InputLabel";
-import TextInput from "@/Components/TextInput"; // your custom input
+import TextInput from "@/Components/TextInput"; 
 
 interface TextInputGroupProps {
   label: string;
@@ -7,7 +7,9 @@ interface TextInputGroupProps {
   name?: string;
   type?: string;
   disabled?: boolean;
-  className?: string
+  value?: any;
+  inputMode?: any;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function TextInputGroup({
@@ -16,7 +18,10 @@ export default function TextInputGroup({
   name,
   type = "text",
   disabled = false,
-  className
+  value,
+  inputMode,
+  onChange= () =>{}
+  
 }: TextInputGroupProps) {
   return (
     <div className="w-full">
@@ -28,7 +33,10 @@ export default function TextInputGroup({
         name={name || id}
         type={type}
         disabled={disabled}
-        className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1"
+        value={value}
+        inputMode={inputMode}
+        onChange={onChange}
+        className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1 "
       />
     </div>
   );

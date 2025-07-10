@@ -47,7 +47,7 @@ class AuthenticatedSessionController extends Controller
          }
 
             return redirect()->intended(
-                $user->role === 'admin' ? '/admin/dashboard' : '/employee/dashboard'
+                $user->role === 'Admin' ? '/admin/dashboard' : '/employee/dashboard'
             );
     }
 

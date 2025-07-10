@@ -20,9 +20,9 @@ class RoleMiddleware
     if (!in_array($user?->role, $roles)) {
         // Redirect based on role if not authorized
         switch ($user?->role) {
-            case 'admin':
+            case 'Admin':
                 return redirect()->route('admin.dashboard');
-            case 'employee':
+            case 'User':
                 return redirect()->route('employee.dashboard');
             default:
                 return redirect()->route('login'); 

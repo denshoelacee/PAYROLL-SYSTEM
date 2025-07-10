@@ -115,7 +115,7 @@ export default function PayrollPartial ({/* {payroll}:PageProps<{payroll:Employe
                             <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="5xl" >
                                 <form >
                                 <div className="p-6 space-y-4 border rounded-lg">
-                                    <h2 className="text-lg font-bold mb-4 text-white">3221838 - Aaron Gabriel Fulgar</h2>
+                                    <h2 className="text-lg font-bold mb-4 text-white">{[selectedRow?.employee_id+" - ", selectedRow?.last_name + ", " ,selectedRow?.first_name]}</h2>
                                         <CardWrapper className="justify-between p-3 gap-4 text-white">
                                             {/*EARNINGS*/}
                                             <p>Earning</p>

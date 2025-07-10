@@ -17,6 +17,10 @@ import style from '../../../styles/style.css';
 import { useForm } from '@inertiajs/react';
 import Dropdown from '@/Components/Dropdown';
 import { RiArrowDropDownLine } from 'react-icons/ri';
+import TextInputGroup from '@/Components/TextInputGroup';
+import InputError from '@/Components/InputError';
+
+
 
 
 type Props = PageProps<{
@@ -32,8 +36,12 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
         const [searchQuery, setSearchQuery] = useState('');
         const [selectDepartment, setSelectDepartment] = useState('Select Department');
         const [selectDesignation, setSelectDesignation] = useState('Select Designation');
+        const [selectRole, setSelectRole] = useState('Select Role');
+        const [selectEmploymentType, setSelectEmploymentType] = useState('Select Employment Type');
         
-    
+        const role = ['Admin','User'];
+        const employmenttype = ['Regular', 'Part-Time']
+
         const handleOpenPopover = (event:any, row:Employee) => {
             setAnchorEl(event.currentTarget);
             setSelectedRow(row);
@@ -46,6 +54,12 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
         else if(field === 'designation'){
             setSelectDesignation(value)
         }
+        else if(field === 'role'){
+            setSelectRole(value)
+        }
+        else if(field === 'employment_type'){
+            setSelectEmploymentType(value)
+        } 
         setData(field, value); 
     };
 
@@ -58,7 +72,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
 
         const filteredRows = searchHooks(searchQuery, processedData);
 
-        const { data, setData, post,reset} = useForm<any>({
+        const { data, setData, post,reset,errors} = useForm<any>({
                 employee_id: '',
                 last_name: '',
                 first_name: '',
@@ -66,6 +80,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                 department: '',
                 employment_type:'',
                 basic_pay:'',
+                role:''
             });
 
          const submit: FormEventHandler = (e) => {
@@ -78,6 +93,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                     setSelectDepartment('Select Department')
                     setSelectDesignation('Select Designation')
                 },
+
             });
         };
 
@@ -156,45 +172,30 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                 <h2 className="text-lg font-bold mb-4 text-white">Add New Employee</h2>
                 
                     <CardWrapper className="justify-between p-3 gap-4">
-                    <div>
-                        <InputLabel className='py-1 text-white'>Employee ID *</InputLabel>
-                        <TextInput 
-                            id="employee_id"
-                            type="text"
-                            name="employee_id"
-                            className=" block w-full bg-transparent text-white"
-                            isFocused={true}
-                            inputMode='numeric'
+                        <TextInputGroup 
+                            label='Employee ID*' 
+                            id='employee_id' 
+                            type='text' 
                             value={data.employee_id}
                             onChange={handleEmployeeId}
-
-                           //onChange={(e) => setData('employee_id', e.target.value)}
-
+                            inputMode="numeric"
                         />
-                    </div>
+                        
                     <div className='flex justify-between gap-4 w-full'>
-                        <div className='w-full'>
-                            <InputLabel className='py-1 text-white'>First Name *</InputLabel>
-                            <TextInput
-                            id="first_name"
-                            type="text"
-                            name="first_name"
-                            isFocused={true}
+                        <TextInputGroup 
+                            label='First Name*' 
+                            id='first_name' 
+                            type='text' 
                             value={data.first_name}
                             onChange={(e) => setData('first_name', e.target.value)}
-                            className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
-                        </div>
-                        <div className='w-full'>
-                            <InputLabel className='py-1 text-white'>Last Name *</InputLabel>
-                            <TextInput 
-                            id="last_name"
-                            type="text"
-                            name="last_name"
-                            isFocused={true}
+                        />
+                        <TextInputGroup 
+                            label='Last Name*' 
+                            id='last_name' 
+                            type='text' 
                             value={data.last_name}
                             onChange={(e) => setData('last_name', e.target.value)}
-                            className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
-                        </div>
+                        />
                     </div>
                 </CardWrapper>
                 <CardWrapper className="p-3 flex gap-4">
@@ -207,7 +208,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                                     <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
                             </Dropdown.Trigger> 
-                            <Dropdown.Content contentClasses="w-full max-h-[200px] overflow-y-auto p-0" align="left">
+                            <Dropdown.Content contentClasses="bg-gray-300 w-full max-h-[200px] overflow-y-auto p-0" align="left">
                             {jobtitles
                                 .map(dep => dep.department)
                                 .filter(department => department && department.toUpperCase() !== 'NULL') 
@@ -235,7 +236,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                                     <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
                             </Dropdown.Trigger> 
-                            <Dropdown.Content contentClasses=" p-0 w-full max-h-[200px] overflow-y-auto" align="left">
+                            <Dropdown.Content contentClasses=" bg-gray-300 p-0 w-full max-h-[200px] overflow-y-auto" align="left">
                             {jobtitles
                                 .map(des => des.designation)
                                 .filter(designations => designations && designations.toUpperCase() !== 'NULL') 
@@ -256,49 +257,71 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                     </div>
                 </CardWrapper>
                 <CardWrapper className="flex justify-between p-3 gap-4 w-full">
-                    <div className='w-full'>
-                        <InputLabel  className='py-1 text-white'>Basic Pay *</InputLabel>
-                        <TextInput 
-                            id="basic_pay"
-                            type="text"
-                            name="basic_pay"
-                            isFocused={true}
-                            value={data.basic_pay}
-                            step="0.01"
-                            onChange={handleBasicPayChange}
-                            //onChange={(e) => setData('basic_pay', e.target.value)}
-                            className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1"
-                             />
-                    </div>
+                    <TextInputGroup 
+                        label='Basic Pay*' 
+                        id='basic_pay' 
+                        type='text' 
+                        value={data.basic_pay}
+                        onChange={handleBasicPayChange}
+                    />
                 </CardWrapper>
-                <CardWrapper className=" p-3 gap-4">
-                   <div className='flex justify-between gap-4 w-full'>
-                        <div className='w-full'>
-                            <InputLabel className='py-1 text-white'>Employment Type *</InputLabel>
-                            <TextInput 
-                            id="employment_type"
-                            type="text"
-                            name="employment_type"
-                            isFocused={true}
-                            value={data.employment_type}
-                            onChange={(e) => setData('employment_type', e.target.value)}
-                            className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
-                        </div>
-                        <div className='w-full'>
-                            <InputLabel className='py-1 text-white'>Role *</InputLabel>
-                            <TextInput 
-                             id="role"
-                            type="text"
-                            name="role"
-                            isFocused={true}
-                            value={data.role}
-                            onChange={(e) => setData('role', e.target.value)}className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
-
-                        </div>
+                <CardWrapper className=" p-3 gap-4 flex">
+                    <div className="w-full">
+                        <InputLabel htmlFor="role" value="Role *" className='text-white' />
+                        <Dropdown>
+                            <Dropdown.Trigger>
+                                <button type="button" className="bg-transparent border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                    <p className='text-sm'>{selectRole}</p>
+                                    <RiArrowDropDownLine className={` text-2xl transition-transform duration-500 ease-in-out`}/>
+                                </button>
+                            </Dropdown.Trigger> 
+                            <Dropdown.Content contentClasses="w-full bg-gray-300" align="left" >
+                                {role.map((option, index) => (
+                                <button
+                                    key={index}
+                                    type="button"
+                                    id='role'
+                                    name='role'
+                                    onClick={() => {
+                                    handleDropdownSelect(option, 'role');
+                                    }}
+                                    className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
+                                >
+                                    {option}
+                                </button>
+                                ))}
+                            </Dropdown.Content>
+                        </Dropdown>
+                    </div>
+                    <div className="w-full">
+                        <InputLabel htmlFor="employment_type" value="Employment Type *" className='text-white' />
+                        <Dropdown>
+                            <Dropdown.Trigger>
+                                <button type="button" className="bg-transparent border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                    <p className='text-sm'>{selectEmploymentType}</p>
+                                    <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
+                                </button>
+                            </Dropdown.Trigger> 
+                            <Dropdown.Content contentClasses="bg-gray-300 w-full" align="left" >
+                                {employmenttype.map((option, index) => (
+                                <button
+                                    key={index}
+                                    type="button"
+                                    id='role'
+                                    name='role'
+                                    onClick={() => {
+                                    handleDropdownSelect(option, 'employment_type');
+                                    }}
+                                    className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
+                                >
+                                    {option}
+                                </button>
+                                ))}
+                            </Dropdown.Content>
+                        </Dropdown>
                     </div>
                 </CardWrapper>
                 <PrimaryButton className='text-md mt-4'>Save</PrimaryButton>
-                
             </div>
             </form>
         </Modal>

@@ -27,7 +27,7 @@ export default function Welcome({ auth }: PageProps) {
                 <div className=" sm:fixed sm:top-2 sm:right-0 p-6 text-end h-full">
                     {auth.user ? (
                         <div>   
-                            {auth.user.role === 'admin' && (
+                            {auth.user.role === 'Admin' && (
                                 <Link
                                     href={route('admin.dashboard')}
                                     className="border-2 border-button-border-color rounded py-2 px-8 text-[#67CFD5]"
@@ -36,7 +36,7 @@ export default function Welcome({ auth }: PageProps) {
                                 </Link>
                             )}
 
-                            {auth.user.role === 'user' && (
+                            {auth.user.role === 'User' && (
                                 <Link
                                     href={route('employee.dashboard')}
                                     className="border-2 border-button-border-color rounded py-2 px-8 text-[#67CFD5]"

@@ -43,7 +43,7 @@ Route::get('/dashboard', function () {
     $user = Auth::user();
 
     return redirect()->intended(
-                $user->role === 'admin' ? '/admin/dashboard' : '/employee/dashboard'
+                $user->role === 'Admin' ? '/admin/dashboard' : '/employee/dashboard'
             );
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {  
+Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {  
     Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/employee', [AdminEmployeeController::class, 'employee'])->name('admin.employee');
     Route::get('/payroll', [AdminDashboardController::class, 'payroll'])->name('admin.payroll');
@@ -66,12 +66,12 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
 });
 
-Route::prefix('employee')->middleware(['auth', 'role:user'])->group(function () {
+Route::prefix('employee')->middleware(['auth', 'role:User'])->group(function () {
     Route::get('/dashboard', [EmployeeDashboardController::class, 'dashboard'])->name('employee.dashboard');
     
 });
 
-Route::middleware(['auth', 'role:admin,user'])->group(function () {
+Route::middleware(['auth', 'role:Admin,User'])->group(function () {
     // shared routes or can access admin,user
 });
 

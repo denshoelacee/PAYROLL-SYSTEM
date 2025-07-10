@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController\AdminDashboardController;
 use App\Http\Controllers\AdminController\AdminEmployeeController;
+use App\Http\Controllers\AdminController\AdminPayrollController;
 use App\Http\Controllers\Auth\CreateNewAccountController;
 use App\Http\Controllers\BatchProcessingController\BatchApproveController;
 use App\Http\Controllers\EmployeeController\EmployeeDashboardController;
@@ -56,7 +57,7 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {  
     Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/employee', [AdminEmployeeController::class, 'employee'])->name('admin.employee');
-    Route::get('/payroll', [AdminDashboardController::class, 'payroll'])->name('admin.payroll');
+    Route::get('/payroll', [AdminPayrollController::class, 'payrollThisDay'])->name('admin.payroll');
     Route::post('/added-user',[CreateNewAccountController::class,'store'])->name('add.new.account');
     Route::post('/approve/{id}', [AdminEmployeeController::class, 'approve'])->name('admin.approve');
     Route::post('/reject/{id}', [AdminEmployeeController::class, 'reject'])->name('admin.reject');

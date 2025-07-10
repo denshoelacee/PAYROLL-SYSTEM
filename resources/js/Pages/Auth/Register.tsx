@@ -264,7 +264,7 @@ const nextStep = () => {
                                 <InputError message={errors.last_name} className="mt-1" />
                             </div>
                         <div className="pt-10">
-                            <PrimaryButton className=" py-2" onClick={nextStep} >
+                            <PrimaryButton className=" py-2 hover:bg-yellow-600" onClick={nextStep} >
                                 Next
                             </PrimaryButton>
                         </div>
@@ -350,10 +350,10 @@ const nextStep = () => {
                         <InputError message={errors.secret_answer} className="mt-1" />
                     </div>
                     <div className="flex items-center justify-end gap-5 pt-10">
-                        <PrimaryButton className=" py-2" onClick={prevStep}>
+                        <PrimaryButton className=" py-2 hover:bg-yellow-600" onClick={prevStep}>
                             Back
                         </PrimaryButton>
-                        <PrimaryButton className=" py-2" disabled={processing}>
+                        <PrimaryButton className=" py-2 hover:bg-yellow-600" disabled={processing}>
                             Register
                         </PrimaryButton>
                     </div>

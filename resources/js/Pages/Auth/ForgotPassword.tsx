@@ -83,7 +83,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
                             </Dropdown.Trigger> 
-                            <Dropdown.Content contentClasses="w-full p-0" align="left" >
+                            <Dropdown.Content contentClasses="bg-gray-300 w-full p-0" align="left" >
                                 {options.map((option, index) => (
                                 <button
                                     key={index}
@@ -119,9 +119,9 @@ export default function ForgotPassword({ status }: { status?: string }) {
 
                 <div className="flex items-center justify-end mt-12 gap-5">
                     <Link href={route('login')} className='w-full text-white text-md'>
-                        <PrimaryButton className='py-2'>Back</PrimaryButton>
+                        <PrimaryButton className='py-2 hover:bg-yellow-600'>Back</PrimaryButton>
                     </Link> 
-                    <PrimaryButton className="py-2 px-1" disabled={processing}>
+                    <PrimaryButton className="py-2 px-1 hover:bg-yellow-600" disabled={processing}>
                         NEXT
                     </PrimaryButton>
                 </div>

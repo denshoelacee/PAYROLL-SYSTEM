@@ -2,7 +2,7 @@ import {Employee, PageProps,JobTitles} from '@/types';
 import Search from '@/Components/Search';
 import PrimaryButton  from '@/Components/PrimaryButton';
 import Modal from '@/Components/Modal';
-import { useState, useEffect, useMemo,FormEventHandler} from 'react';
+import { useState, useMemo,FormEventHandler} from 'react';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { IoMdAdd } from "react-icons/io";
 import { HiOutlineDotsVertical } from "react-icons/hi";
@@ -18,9 +18,7 @@ import { useForm } from '@inertiajs/react';
 import Dropdown from '@/Components/Dropdown';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import TextInputGroup from '@/Components/TextInputGroup';
-import InputError from '@/Components/InputError';
-
-
+import { position } from 'html2canvas/dist/types/css/property-descriptors/position';
 
 
 type Props = PageProps<{
@@ -342,6 +340,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                 <PrimaryButton className='text-md mt-4' onClick={() => setEditModal(false)}>Save</PrimaryButton>
             </div>
         </Modal>
+        
         <Popover
             open={Boolean(anchorEl)}
             anchorEl={anchorEl}
@@ -349,8 +348,10 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             transformOrigin={{ vertical: 'top', horizontal: 'left' }}
             className='w-32'
+            disableScrollLock={true}
+
         >
-            <div className=" w-48 bg-mainColor shadow-md text-sm text-white">
+            <div className=" w-48 bg-mainColor shadow-md text-sm text-white ">
                 <button
                     className="w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100"
                     onClick={() => {
@@ -382,3 +383,4 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
     </>
     )
 }
+

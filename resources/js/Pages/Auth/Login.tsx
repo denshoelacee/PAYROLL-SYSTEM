@@ -140,7 +140,7 @@ export default function Login({ status, canResetPassword, }: { status?: string, 
                             </Link>
                         )}
                     </div>
-                    <PrimaryButton disabled={isLockedOut || processing}>
+                    <PrimaryButton className="hover:bg-yellow-600"disabled={isLockedOut || processing}>
                         <p className="text-[15px] py-1 font-black tracking-widest">
                             {isLockedOut ? `Try again in ${remainingTime}s` : "SIGN IN"}
                         </p>

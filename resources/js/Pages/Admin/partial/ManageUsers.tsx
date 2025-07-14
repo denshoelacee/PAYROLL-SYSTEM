@@ -4,20 +4,12 @@ import Search from '@/Components/Search';
 import PrimaryButton  from '@/Components/PrimaryButton';
 import Modal from '@/Components/Modal';
 import { useState, useEffect, FormEventHandler } from 'react';
-import SecondaryButton from '@/Components/SecondaryButton';
-import { IoMdAdd } from "react-icons/io";
-import { HiOutlineDotsVertical } from "react-icons/hi";
-import CardWrapper from '@/Components/CardWrapper';
-import TextInput from '@/Components/TextInput';
-import InputLabel from '@/Components/InputLabel';
 import Table from '@/Components/Table';
-import { Popover } from '@mui/material';
 import searchHooks from '@/hooks/searchHooks';
-import { GridColDef,GridRowSelectionModel } from '@mui/x-data-grid';
-import { useForm, usePage } from '@inertiajs/react';
+import { GridColDef } from '@mui/x-data-grid';
+import { useForm } from '@inertiajs/react';
 import { LiaCheckSolid } from 'react-icons/lia';
 import { FaRegTrashCan } from "react-icons/fa6";
-import { InfoMessage } from '@/Components/Alert';
 
 
 type Props = PageProps <{

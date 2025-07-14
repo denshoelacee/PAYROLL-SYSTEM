@@ -7,14 +7,13 @@ import SecondaryButton from '@/Components/SecondaryButton';
 import { IoMdAdd } from "react-icons/io";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import CardWrapper from '@/Components/CardWrapper';
-import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import Table from '@/Components/Table';
 import { Popover } from '@mui/material';
 import searchHooks from '@/hooks/searchHooks';
 import { GridColDef } from '@mui/x-data-grid';
 import style from '../../../styles/style.css';
-import { useForm } from '@inertiajs/react';
+import { router, useForm } from '@inertiajs/react';
 import Dropdown from '@/Components/Dropdown';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import TextInputGroup from '@/Components/TextInputGroup';
@@ -22,11 +21,12 @@ import TextInputGroup from '@/Components/TextInputGroup';
 type Props = PageProps<{
     userList: Employee[];
     jobtitles: JobTitles[];
+    auth?: PageProps['auth'];
 }>;
 export default function EmployeePartial({ userList,jobtitles}: Props) {
-
         const [addModal, setAddModal] = useState(false);
         const [editModal, setEditModal] = useState(false);
+        const [deleteModal, setDeleteModal] = useState(false);
         const [anchorEl, setAnchorEl] = useState(null);
         const [selectedRow, setSelectedRow] = useState<Employee | null>(null);
         const [searchQuery, setSearchQuery] = useState('');
@@ -69,6 +69,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
         const filteredRows = searchHooks(searchQuery, processedData);
 
         const { data, setData, post,reset} = useForm<any>({
+                user_id:'',
                 employee_id: '',
                 last_name: '',
                 first_name: '',
@@ -114,7 +115,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
             }
         }, [editModal, selectedRow]);
 
-        const submit: FormEventHandler = (e) => {
+        const addSubmit: FormEventHandler = (e) => {
             e.preventDefault();
             post(route('add.new.account'), {
                 onSuccess: () => {
@@ -125,6 +126,19 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                 },
             });
         };
+        
+        const deleteSubmit = () => {
+            if (!selectedRow?.user_id) return;      
+
+            router.delete(route('delete.account', selectedRow.user_id), {
+                onSuccess: () =>{
+                    setDeleteModal(false)
+                }
+            });
+        setAnchorEl(null);  
+
+        };
+
 
         const columns: GridColDef[] = [
             { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center' },
@@ -150,17 +164,19 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
             }
         ];
 
-        const handleEmployeeId = (e: React.ChangeEvent<HTMLInputElement>) => {
-            const {value } = e.target;
-            if(/^[0-9]*$/.test(value) ){
-                setData('employee_id', value);
-            }
+        const handleDelete = () => {
+            setAnchorEl(null)
+            setDeleteModal(true);
         }
 
-        const handleBasicPayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            const { value } = e.target;
-            if (/^\d*\.?\d*$/.test(value)) {
-                setData('basic_pay', value);
+        const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const { name, value } = e.target;
+
+            if (
+                (name === 'employee_id' && /^[0-9]*$/.test(value)) ||
+                (name === 'basic_pay' && /^\d*\.?\d*$/.test(value))
+            ) {
+                setData(name, value);
             }
         };
 
@@ -193,7 +209,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
         </div>
         {/* Add Modal */}
         <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="2xl" className='h-[600px]' >
-            <form onSubmit={submit} >
+            <form onSubmit={addSubmit} >
             <div className="p-6 space-y-4 rounded-lg">
                 <h2 className="text-lg font-bold mb-4 text-white">Add New Employee</h2>
                     <CardWrapper className="justify-between p-3 gap-4">
@@ -202,7 +218,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                             id='employee_id' 
                             type='text' 
                             value={data.employee_id}
-                            onChange={handleEmployeeId}
+                            onChange={handleInputChange}
                             inputMode="numeric"
                         />
                         
@@ -233,7 +249,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                                     <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
                             </Dropdown.Trigger> 
-                            <Dropdown.Content contentClasses="bg-gray-300 w-full max-h-[200px] overflow-y-auto p-0" align="left">
+                            <Dropdown.Content ableSearch={true} contentClasses="bg-gray-300 w-full max-h-[200px] overflow-y-auto p-0" align="left">
                             {jobtitles
                                 .map(dep => dep.department)
                                 .filter(department => department && department.toUpperCase() !== 'NULL') 
@@ -261,7 +277,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                                     <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
                             </Dropdown.Trigger> 
-                            <Dropdown.Content contentClasses=" bg-gray-300 p-0 w-full max-h-[200px] overflow-y-auto" align="left">
+                            <Dropdown.Content ableSearch={true} contentClasses=" bg-gray-300 p-0 w-full max-h-[200px] overflow-y-auto" align="left">
                             {jobtitles
                                 .map(des => des.designation)
                                 .filter(designations => designations && designations.toUpperCase() !== 'NULL') 
@@ -287,7 +303,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                         id='basic_pay' 
                         type='text' 
                         value={data.basic_pay}
-                        onChange={handleBasicPayChange}
+                        onChange={handleInputChange}
                     />
                 </CardWrapper>
                 <CardWrapper className=" p-3 gap-4 flex">
@@ -295,7 +311,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                         <InputLabel htmlFor="role" value="Role *" className='text-white' />
                         <Dropdown>
                             <Dropdown.Trigger>
-                                <button type="button" className="bg-transparent border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                <button type="button" className="bg-transparent border       text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
                                     <p className='text-sm'>{selectRole}</p>
                                     <RiArrowDropDownLine className={` text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
@@ -361,7 +377,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                             id='employee_id' 
                             type='text' 
                             value={data?.employee_id|| ""}
-                            onChange={handleEmployeeId}
+                            onChange={handleInputChange}
                             inputMode="numeric"
                             disabled
                             
@@ -447,7 +463,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                         id='basic_pay' 
                         type='text' 
                         value={data.basic_pay}
-                        onChange={handleBasicPayChange}
+                        onChange={handleInputChange}
                     />
                 </CardWrapper>
                 <CardWrapper className=" p-3 gap-4 flex">
@@ -532,10 +548,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                 </button>
                 <button
                     className="w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100 "
-                    onClick={() => {
-                        console.log("Delete employee:", selectedRow);
-                        setAnchorEl(null);
-                    }}
+                    onClick={handleDelete}
                 >
                     Delete
                 </button>
@@ -549,6 +562,26 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                 </button>
             </div>
         </Popover>
+        <Modal show={deleteModal} onClose={() => setDeleteModal(false)} maxWidth='sm' >
+                <div className="p-6">
+                <h2 className="text-lg font-bold mb-4 text-white">
+                    Delete User {selectedRow?.user_id + " - " + selectedRow?.first_name + " " + selectedRow?.last_name}
+                </h2>
+                <p className="text-white mb-4">
+                    Are you sure you want to this user?    
+                </p>
+                    <div className="flex justify-evenly gap-3 py-3">
+                        <PrimaryButton className="py-2"onClick={deleteSubmit}>
+                        Confirm
+                        </PrimaryButton>
+                        <PrimaryButton className="py-2"onClick={() => {
+                            setDeleteModal(false)}}>
+                        Close
+                        </PrimaryButton>
+                    
+                    </div>
+                </div>
+        </Modal>
     </>
     )
 }

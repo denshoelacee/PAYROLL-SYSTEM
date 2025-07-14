@@ -143,7 +143,7 @@ export default function PayrollPartial ({ payroll}:Props) {
                     </div>   
 
             {/*Modal*/}
-                <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="5xl" >
+                <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="5xl" className="h-full">
                     <form >
                         <div className="p-6 space-y-4 border rounded-lg">
                             <div className="flex justify-between">

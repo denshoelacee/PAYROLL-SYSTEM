@@ -9,9 +9,14 @@ import {
     Dispatch,
     SetStateAction,
     ReactNode,
+    useMemo,
+    Children,
+    cloneElement,
+    isValidElement
 } from 'react';
 import { Link, InertiaLinkProps } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
+
 
 const DropDownContext = createContext<{
     open: boolean;
@@ -63,11 +68,14 @@ const Content = ({
     align = 'right',
     contentClasses,
     children,
+    ableSearch,
 }: PropsWithChildren<{
     align?: 'left' | 'right';
     contentClasses?: string;
+    ableSearch?: boolean;
 }>) => {
     const { open, setOpen } = useContext(DropDownContext);
+    const [search, setSearch] = useState('');
 
     let alignmentClasses = 'origin-top';
     if (align === 'left') {
@@ -75,6 +83,35 @@ const Content = ({
     } else if (align === 'right') {
         alignmentClasses = 'ltr:origin-top-right rtl:origin-top-left end-0';
     }
+
+    const filteredChildren = useMemo(() => {
+    const processChild = (child: ReactNode) => {
+        if (!isValidElement(child)) return child;
+
+            const shouldInclude =
+                !search.trim() ||
+                (typeof child.props.children === 'string' &&
+                    child.props.children
+                        .toLowerCase()
+                        .includes(search.toLowerCase()));
+
+            if (!shouldInclude) return null;
+
+            // Clone the child to inject onClick
+            return cloneElement(child, {
+                ...child.props,
+                onClick: (e: any) => {
+                    if (typeof child.props.onClick === 'function') {
+                        child.props.onClick(e);
+                    }
+                    setOpen(false); 
+                },
+            });
+        };
+
+        return Children.map(children, processChild);
+    }, [children, search, setOpen]);
+
 
     return (
         <Transition
@@ -89,12 +126,28 @@ const Content = ({
         >
             <div
                 className={`absolute z-50 rounded-md shadow-lg ${alignmentClasses}`}
-                onClick={() => setOpen(false)}
+                onClick={(e) => e.stopPropagation()}
             >
                 <div
                     className={`text-white bg-[#1b544c] p-2 rounded-md border border-button-border-color ${contentClasses}`}
                 >
-                    {children}
+                    {ableSearch && (
+                    <>
+                    {/* 🔍 Search Input */}
+                    <input
+                        type="text"
+                        className="w-full px-3 py-1 mb-2 text-black rounded"
+                        placeholder="Search..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                    
+                    {/* 🎯 Filtered Children */}
+                    </>
+                    )}
+                    <div className="max-h-30 overflow-auto">
+                        {filteredChildren}
+                    </div>
                 </div>
             </div>
         </Transition>
@@ -107,15 +160,16 @@ const DropdownLink = ({
     ...props
 }: InertiaLinkProps & { children: ReactNode }) => {
     return (
-       <Link
-        {...props}
-        className={`flex items-center gap-2  w-full px-4 py-2 rounded-lg text-md leading-5 text-white 
-            transition-all duration-150 ease-in-out hover:bg-[#A6CCB8] ${className}`}
+        <Link
+            {...props}
+            className={`flex items-center gap-2 w-full px-4 py-2 rounded-lg text-md leading-5 text-white 
+                transition-all duration-150 ease-in-out hover:bg-[#A6CCB8] ${className}`}
         >
-         {children}
+            {children}
         </Link>
     );
 };
+
 
 Dropdown.Trigger = Trigger;
 Dropdown.Content = Content;

@@ -17,7 +17,6 @@ export default function Employees({ auth, pendingUsers,employeeList,jobtitles}:P
     
     const [ActiveTab , setActiveTab] = useState('manageusers');
    
-    console.log(jobtitles)
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Employee " />
@@ -38,7 +37,7 @@ export default function Employees({ auth, pendingUsers,employeeList,jobtitles}:P
                 </div>
                 {ActiveTab === 'employee' && (
                     <>
-                    <EmployeePartial userList={employeeList} auth={auth} jobtitles={jobtitles}/>
+                    <EmployeePartial userList={employeeList} jobtitles={jobtitles} auth={auth}/>
                     </>
                 )}
                 {ActiveTab === 'manageusers' && (

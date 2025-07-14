@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController\AdminDashboardController;
 use App\Http\Controllers\AdminController\AdminEmployeeController;
 use App\Http\Controllers\AdminController\AdminPayrollController;
 use App\Http\Controllers\Auth\CreateNewAccountController;
+use App\Http\Controllers\Auth\EditDeleteAccountController;
 use App\Http\Controllers\BatchProcessingController\BatchApproveController;
 use App\Http\Controllers\EmployeeController\EmployeeDashboardController;
 use App\Http\Controllers\ProfileController;
@@ -52,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::delete('/account/delete/{id}',[EditDeleteAccountController::class, 'deleteAccount'])->name('delete.account');
 });
 
 Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {  

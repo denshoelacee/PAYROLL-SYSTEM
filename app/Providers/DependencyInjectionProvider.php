@@ -12,6 +12,7 @@ use App\Repository\JobTitleRepository;
 use App\Services\JobTitleService;
 use App\Contracts\Repository\IUserRepository;
 use App\Contracts\Services\Auth\ICreateNewAccountService;
+use App\Contracts\Services\Auth\IEditDeleteAccountService;
 use App\Contracts\Services\IBatchApproveAccountService;
 use App\Contracts\Services\IDashboardService;
 use App\Contracts\Services\IEmployeeService;
@@ -21,6 +22,7 @@ use App\Repository\PayrollRepository;
 use App\Repository\SecretQuestionRepository;
 use App\Repository\UserRepository;
 use App\Services\Auth\CreateNewAccountService;
+use App\Services\Auth\EditDeleteAccountService;
 use App\Services\BatchApproveAccountService;
 use App\Services\DashboardService;
 use App\Services\EmployeeService;
@@ -48,6 +50,7 @@ class DependencyInjectionProvider extends ServiceProvider
         $this->app->bind(IGeneratePayrollService::class,GeneratePayrollService::class);
         $this->app->bind(IPayrollService::class,PayrollService::class);
         $this->app->bind(IPayrollRepository::class,PayrollRepository::class);
+        $this->app->bind(IEditDeleteAccountService::class, EditDeleteAccountService::class);
     }
 
     /**

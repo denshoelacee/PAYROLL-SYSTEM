@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Contracts\Services\Auth\IEditDeleteAccountService;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class EditDeleteAccountController extends Controller
 {
@@ -18,7 +19,30 @@ class EditDeleteAccountController extends Controller
           return redirect()->back()->with('success','Account delete successfully.');
       }
       catch(\Exception $e){
-          return redirect()->back()->with('error','You cant delete your account.');
+          return redirect()->back()->with('error','You can\'t delete your account.');
       }
+    }
+
+    public function editAccount(Request $request,$id)
+    {
+        $commonRule = ['sometimes','string','max:50'];
+      
+        $validated = $request->validate([
+            'first_name' => $commonRule,
+            'last_name'  => $commonRule,
+            'department' => $commonRule,
+            'designation'=> $commonRule,
+            'basic_pay'  => ['sometimes', 'numeric'],
+            'role'       => ['sometimes', 'string', 'in:Admin,User'],
+            'employment_type' => ['sometimes', 'string', 'in:Regular,Part-Time']
+        ]);
+        
+        try{
+             $this->editDeleteAccountService->editAccount($id,$validated);
+             return redirect()->back()->with('success','Update user successfully.');
+        }
+        catch(\Exception $e){
+             return redirect()->back()->with('error', 'You can\'t update user.');
+        }
     }
 }

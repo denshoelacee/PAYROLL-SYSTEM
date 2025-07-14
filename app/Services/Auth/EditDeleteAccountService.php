@@ -6,10 +6,11 @@ use App\Contracts\Services\Auth\IEditDeleteAccountService;
 use App\Repository\UserRepository;
 use Illuminate\Support\Facades\Auth;
 
+
 class EditDeleteAccountService implements IEditDeleteAccountService
 {
     
-    public function __construct(protected UserRepository $useRepo){}
+    public function __construct(protected UserRepository $userRepo){}
 
     public function deleteAccount(int $user_id): bool
     {
@@ -19,7 +20,7 @@ class EditDeleteAccountService implements IEditDeleteAccountService
            return false;
          }
 
-         $find= $this->useRepo->findById($user_id);
+         $find= $this->userRepo->findById($user_id);
 
          if(!$find)
          {
@@ -27,7 +28,14 @@ class EditDeleteAccountService implements IEditDeleteAccountService
          }  
 
           $find->delete();
-          
+
           return true;
+    }
+
+    public function editAccount($id,array $data)
+    {
+      $user = $this->userRepo->findById($id);
+      
+      $user->update($data);
     }
 }

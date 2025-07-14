@@ -66,7 +66,7 @@ class UserRepository implements IUserRepository{
 
     public function findById(int $id): ?User
     {
-       return User::find($id);
+       return User::findOrFail($id);
     }
 
     public function batchApproveAccount(array $user_ids):int

@@ -2,7 +2,7 @@ import {Employee, PageProps,JobTitles} from '@/types';
 import Search from '@/Components/Search';
 import PrimaryButton  from '@/Components/PrimaryButton';
 import Modal from '@/Components/Modal';
-import { useState, useMemo,FormEventHandler} from 'react';
+import { useState, useMemo,FormEventHandler, useEffect} from 'react';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { IoMdAdd } from "react-icons/io";
 import { HiOutlineDotsVertical } from "react-icons/hi";
@@ -18,8 +18,6 @@ import { useForm } from '@inertiajs/react';
 import Dropdown from '@/Components/Dropdown';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import TextInputGroup from '@/Components/TextInputGroup';
-import { position } from 'html2canvas/dist/types/css/property-descriptors/position';
-
 
 type Props = PageProps<{
     userList: Employee[];
@@ -45,7 +43,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
             setSelectedRow(row);
         };
 
-         const handleDropdownSelect = (value: any, field: string) => {
+        const handleDropdownSelect = (value: any, field: string) => {
         if(field === 'department'){
             setSelectDepartment(value)
         } 
@@ -70,7 +68,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
 
         const filteredRows = searchHooks(searchQuery, processedData);
 
-        const { data, setData, post,reset,errors} = useForm<any>({
+        const { data, setData, post,reset} = useForm<any>({
                 employee_id: '',
                 last_name: '',
                 first_name: '',
@@ -81,9 +79,43 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                 role:''
             });
 
-         const submit: FormEventHandler = (e) => {
-            e.preventDefault();
 
+        useEffect(() => {
+        if (editModal && selectedRow) {
+                setData({
+                    employee_id: selectedRow.employee_id || '',
+                    first_name: selectedRow.first_name || '',
+                    last_name: selectedRow.last_name || '',
+                    designation: selectedRow.designation || '',
+                    department: selectedRow.department || '',
+                    employment_type: selectedRow.employment_type || '',
+                    basic_pay: selectedRow.basic_pay || '',
+                    role: selectedRow.role || '',
+                });
+                setSelectDepartment(selectedRow.department || 'Select Department');
+                setSelectDesignation(selectedRow.designation || 'Select Designation');
+                setSelectRole(selectedRow.role || 'Select Role');
+                setSelectEmploymentType(selectedRow.employment_type || 'Select Employment Type');
+            }else{
+                setData({
+                    employee_id: '',
+                    last_name: '',
+                    first_name: '',
+                    designation: '',
+                    department: '',
+                    employment_type:'',
+                    basic_pay:'',
+                    role:''
+                })
+                setSelectDepartment('Select Department');
+                setSelectDesignation('Select Designation');
+                setSelectRole('Select Role');
+                setSelectEmploymentType('Select Employment Type');
+            }
+        }, [editModal, selectedRow]);
+
+        const submit: FormEventHandler = (e) => {
+            e.preventDefault();
             post(route('add.new.account'), {
                 onSuccess: () => {
                     setAddModal(false);
@@ -91,12 +123,10 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                     setSelectDepartment('Select Department')
                     setSelectDesignation('Select Designation')
                 },
-
             });
         };
 
         const columns: GridColDef[] = [
-    
             { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center' },
             { field: 'full_name', headerName: 'Full Name', flex:1, headerAlign: 'center', align: 'center' },
             { field: 'designation', headerName: 'Designation', flex:1, headerAlign: 'center', align: 'center' },
@@ -121,19 +151,17 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
         ];
 
         const handleEmployeeId = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {value } = e.target;
-
-        if(/^[0-9]*$/.test(value) ){
-            setData('employee_id', value);
-        }
+            const {value } = e.target;
+            if(/^[0-9]*$/.test(value) ){
+                setData('employee_id', value);
+            }
         }
 
         const handleBasicPayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target;
-
-        if (/^\d*\.?\d*$/.test(value)) {
-            setData('basic_pay', value);
-        }
+            const { value } = e.target;
+            if (/^\d*\.?\d*$/.test(value)) {
+                setData('basic_pay', value);
+            }
         };
 
     return(
@@ -164,11 +192,10 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
             </div>
         </div>
         {/* Add Modal */}
-        <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="2xl" >
+        <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="2xl" className='h-[600px]' >
             <form onSubmit={submit} >
             <div className="p-6 space-y-4 rounded-lg">
                 <h2 className="text-lg font-bold mb-4 text-white">Add New Employee</h2>
-                
                     <CardWrapper className="justify-between p-3 gap-4">
                         <TextInputGroup 
                             label='Employee ID*' 
@@ -324,17 +351,159 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
             </form>
         </Modal>
         {/* Edit Modal */}
-        <Modal show={editModal} onClose={() => setEditModal(false)} maxWidth="lg">
-            <div className="p-6">
-                <h2 className="text-lg font-bold mb-4 text-white">Edit Employee</h2>
-                <CardWrapper className="flex justify-between p-3 gap-4">
-                    <div>
-                        <InputLabel className='py-1 text-white'>Employee Name</InputLabel>
-                        <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
+        <Modal show={editModal} onClose={() => setEditModal(false)} maxWidth="2xl">
+            <div className="p-6 space-y-4">
+                <h2 className="text-lg font-bold mb-4 text-white">Edit: {[selectedRow?.employee_id+" - ", selectedRow?.last_name + ", " ,selectedRow?.first_name]}</h2>
+                {/*<h2 className="text-lg font-bold mb-4 text-white">Edit Employee</h2>*/}
+                <CardWrapper className="justify-between p-3 gap-4">
+                        <TextInputGroup 
+                            label='Employee ID*' 
+                            id='employee_id' 
+                            type='text' 
+                            value={data?.employee_id|| ""}
+                            onChange={handleEmployeeId}
+                            inputMode="numeric"
+                            disabled
+                            
+                        />
+                    <div className='flex justify-between gap-4 w-full'>
+                        <TextInputGroup 
+                            label='First Name*'     
+                            id='first_name' 
+                            type='text' 
+                            value={data.first_name}
+                            onChange={(e) => setData('first_name', e.target.value)}
+                        />
+                        <TextInputGroup 
+                            label='Last Name*' 
+                            id='last_name' 
+                            type='text' 
+                            value={data.last_name}
+                            onChange={(e) => setData('last_name', e.target.value)}
+                        />
                     </div>
-                    <div>
-                        <InputLabel className='py-1 text-white'>Basic Pay</InputLabel>
-                        <TextInput className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1" />
+                </CardWrapper>
+                <CardWrapper className="p-3 flex gap-4">
+                    <div className='w-full'>
+                        <InputLabel htmlFor="department" value="Department *"  className='text-white'/>
+                        <Dropdown>
+                            <Dropdown.Trigger>
+                                <button type="button" className="bg-transparent w-full border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                    <p className='text-sm'>{selectDepartment}</p>
+                                    <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
+                                </button>
+                            </Dropdown.Trigger> 
+                            <Dropdown.Content contentClasses="bg-gray-300 w-full max-h-[200px] overflow-y-auto p-0" align="left">
+                            {jobtitles
+                                .map(dep => dep.department)
+                                .filter(department => department && department.toUpperCase() !== 'NULL') 
+                                .map((name, index) => (
+                                <button
+                                    key={index}
+                                    type="button"
+                                    id="department"
+                                    name="department"
+                                    onClick={() => handleDropdownSelect(name, 'department')}
+                                    className="w-full px-4 py-2 text-left bg-gray-300 hover:bg-[#145858] text-black hover:text-white"
+                                >
+                                {name}
+                                </button>
+                            ))}
+                            </Dropdown.Content>
+                        </Dropdown>
+                    </div>
+                    <div className='w-full'>
+                        <InputLabel htmlFor="designation" value="Designation *"  className='text-white'/>
+                        <Dropdown>
+                            <Dropdown.Trigger>
+                                <button type="button" className="bg-transparent w-full border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                    <p className='text-sm'>{selectDesignation}</p>
+                                    <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
+                                </button>
+                            </Dropdown.Trigger> 
+                            <Dropdown.Content contentClasses=" bg-gray-300 p-0 w-full max-h-[200px] overflow-y-auto" align="left">
+                            {jobtitles
+                                .map(des => des.designation)
+                                .filter(designations => designations && designations.toUpperCase() !== 'NULL') 
+                                .map((name, index) => (
+                                <button
+                                    key={index}
+                                    type="button"
+                                    id="designation"
+                                    name="designation"
+                                    onClick={() => handleDropdownSelect(name, 'designation')}
+                                    className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
+                                >
+                                {name}
+                                </button>
+                            ))}
+                            </Dropdown.Content>
+                        </Dropdown>
+                    </div>
+                </CardWrapper>
+                <CardWrapper className="flex justify-between p-3 gap-4 w-full">
+                    <TextInputGroup 
+                        label='Basic Pay*' 
+                        id='basic_pay' 
+                        type='text' 
+                        value={data.basic_pay}
+                        onChange={handleBasicPayChange}
+                    />
+                </CardWrapper>
+                <CardWrapper className=" p-3 gap-4 flex">
+                    <div className="w-full">
+                        <InputLabel htmlFor="role" value="Role *" className='text-white' />
+                        <Dropdown>
+                            <Dropdown.Trigger>
+                                <button type="button" className="bg-transparent border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                    <p className='text-sm'>{selectRole}</p>
+                                    <RiArrowDropDownLine className={` text-2xl transition-transform duration-500 ease-in-out`}/>
+                                </button>
+                            </Dropdown.Trigger> 
+                            <Dropdown.Content contentClasses="w-full bg-gray-300" align="left" >
+                                {role.map((option, index) => (
+                                <button
+                                    key={index}
+                                    type="button"
+                                    id='role'
+                                    name='role'
+                                    onClick={() => {
+                                    handleDropdownSelect(option, 'role');
+                                    }}
+                                    className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
+                                >
+                                    {option}
+                                </button>
+                                ))}
+                            </Dropdown.Content>
+                        </Dropdown>
+                    </div>
+                    <div className="w-full">
+                        <InputLabel htmlFor="employment_type" value="Employment Type *" className='text-white' />
+                        <Dropdown>
+                            <Dropdown.Trigger>
+                                <button type="button" className="bg-transparent border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                    <p className='text-sm'>{selectEmploymentType}</p>
+                                    <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
+                                </button>
+                            </Dropdown.Trigger> 
+                            <Dropdown.Content contentClasses="bg-gray-300 w-full" align="left" >
+                                {employmenttype.map((option, index) => (
+                                <button
+                                    key={index}
+                                    type="button"
+                                    id='role'
+                                    name='role'
+                                    onClick={() => {
+                                    handleDropdownSelect(option, 'employment_type');
+                                    }}
+                                    className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
+                                >
+                                    {option}
+                                </button>
+                                ))}
+                            </Dropdown.Content>
+                        </Dropdown>
                     </div>
                 </CardWrapper>
                 <PrimaryButton className='text-md mt-4' onClick={() => setEditModal(false)}>Save</PrimaryButton>

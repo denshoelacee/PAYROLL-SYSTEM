@@ -117,7 +117,15 @@ export default function PayrollPartial ({ payroll}:Props) {
                                 </Dropdown.Content>
                             </Dropdown>
                         </div>
+                        <div className="flex gap-4">
+                            <SecondaryButton onClick={() => setAddModal(true)}>
+                            <div className="flex items-center gap-2">
+                                <IoMdAdd className='text-custom-word-color font-black text-1xl' />
+                                <span className="text-sm">New Payroll</span>
+                            </div>
+                        </SecondaryButton>
                         <Search value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                        </div>
                     </div>
                     <div className="w-full overflow-x-auto scrollbar-hidden">
                         <div className='my-5 min-w-[900px] h-[650px] sm:h-[650px] md:h-[750px] lg:h[800px] overflow-y-auto scrollbar-hidden '>
@@ -139,7 +147,8 @@ export default function PayrollPartial ({ payroll}:Props) {
                     <form >
                         <div className="p-6 space-y-4 border rounded-lg">
                             <div className="flex justify-between">
-                                <h2 className="text-lg font-bold mb-4 text-white">{[selectedRow?.user?.employee_id+" - ", selectedRow?.user?.last_name + ", " ,selectedRow?.user?.first_name]}</h2>
+                                <h2 className="text-lg text-white">New Payroll</h2>
+                                {/*<h2 className="text-lg font-bold mb-4 text-white">{[selectedRow?.user?.employee_id+" - ", selectedRow?.user?.last_name + ", " ,selectedRow?.user?.first_name]}</h2>*/}
                                 <span onClick={() => setAddModal(false)}>
                                     <IoMdClose color="white" className="cursor-pointer text-2xl"/>
                                 </span>

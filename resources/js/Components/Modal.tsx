@@ -7,11 +7,13 @@ export default function Modal({
     maxWidth = '2xl',
     closeable = true,
     onClose = () => {},
+    className
 }: PropsWithChildren<{
     show: boolean;
     maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl'| '6xl';
     closeable?: boolean;
     onClose: CallableFunction;
+    className?: string;
 }>) {
     const close = () => {
         if (closeable) {
@@ -61,7 +63,7 @@ export default function Modal({
                     leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
                     <Dialog.Panel
-                        className={`mb-6 bg-mainColor rounded-lg border overflow-auto h-full shadow-xl transform transition-all sm:w-full sm:mx-auto ${maxWidthClass}`}
+                        className={`mb-6 bg-mainColor rounded-lg border overflow-auto h-full shadow-xl transform transition-all sm:w-full sm:mx-auto ${maxWidthClass} ${className}`}
                     >
                         {children}
                     </Dialog.Panel>

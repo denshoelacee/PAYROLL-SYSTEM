@@ -24,12 +24,12 @@ export default function AdminLayout({title, children}:PropsWithChildren ){
     {hasMessages && dismissed &&
             <div className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center z-50">
                 {message.information && (
-                    <InfoMessage title="Your Account is Almost Ready!" severity="info" info={message.information} onClose={() => {
+                    <InfoMessage severity="info" info={message.information} onClose={() => {
                         setDismissed(false)
                     }}/>
                 )}
                 {message.error && (
-                    <InfoMessage title="Your Account is Almost Ready!" severity="error" info={message.error} onClose={() => {
+                    <InfoMessage severity="error" info={message.error} onClose={() => {
                         setDismissed(false)
                     }}/>
                 )}

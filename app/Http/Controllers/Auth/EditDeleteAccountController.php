@@ -13,14 +13,17 @@ class EditDeleteAccountController extends Controller
 
     public function deleteAccount($id)
     {
+        try {
+            $deleted = $this->editDeleteAccountService->deleteAccount($id);
 
-      try{
-          $this->editDeleteAccountService->deleteAccount($id);
-          return redirect()->back()->with('success','Account delete successfully.');
-      }
-      catch(\Exception $e){
-          return redirect()->back()->with('error','You can\'t delete your account.');
-      }
+        if (!$deleted) {
+            return redirect()->back()->with('error', 'You can’t delete your own account.');
+        }
+
+        return redirect()->back()->with('success', 'Account deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred while deleting the account.');
+        }
     }
 
     public function editAccount(Request $request,$id)

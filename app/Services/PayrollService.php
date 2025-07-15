@@ -14,4 +14,11 @@ class PayrollService implements IPayrollService
     {
         return $this->payrollRepo->getPayrollThisMonth();
     }
+
+    public function usersWithoutPayrollForCurrentMonth()
+    {
+        return $this->payrollRepo->getUsersWithoutPayrollForCurrentMonth();
+    }
+
+
 }

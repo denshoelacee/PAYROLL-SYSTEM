@@ -5,7 +5,8 @@ namespace App\Repository;
 use App\Contracts\Repository\IPayrollRepository;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll;
-
+use App\Models\User;
+use Carbon\Carbon;
 
 class PayrollRepository implements IPayrollRepository{
 
@@ -30,6 +31,17 @@ class PayrollRepository implements IPayrollRepository{
                     ->whereMonth('created_at', now()->month)
                     ->whereYear('created_at', now()->year)
                     ->get();
+    }
+
+    public function getUsersWithoutPayrollForCurrentMonth()
+    {
+         $startOfMonth = Carbon::now()->startOfMonth();
+         $endOfMonth = Carbon::now()->endOfMonth();
+
+        return User::whereDoesntHave('payrolls', function ($query) use ($startOfMonth, $endOfMonth) {
+                        $query->whereBetween('created_at', [$startOfMonth, $endOfMonth]);})
+                        ->with(['latestPayroll'])
+                        ->get();
     }
     
 }

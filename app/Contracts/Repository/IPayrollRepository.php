@@ -11,4 +11,6 @@ interface IPayrollRepository{
       public function setPayrollModel(array $data):Payroll;
 
       public function getPayrollThisMonth();
+
+      public function getUsersWithoutPayrollForCurrentMonth();
 }

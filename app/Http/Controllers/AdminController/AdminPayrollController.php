@@ -57,13 +57,15 @@ class AdminPayrollController extends Controller
     {
       $thisMonth = $this->payrollService->payrollThisMonth();
 
+      $newPayroll = $this->payrollService->usersWithoutPayrollForCurrentMonth();
+
       /* $startOfMonth = Carbon::now()->startOfMonth();
        $endOfMonth = Carbon::now()->endOfMonth();
 
          $newPayroll = User::whereDoesntHave('payrolls', function ($query) use ($startOfMonth, $endOfMonth) {
                 $query->whereBetween('created_at', [$startOfMonth, $endOfMonth]);
                 })->get();
-      */
+      
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
 
@@ -72,6 +74,7 @@ class AdminPayrollController extends Controller
         })
         ->with(['latestPayroll']) // custom relation below
         ->get();
+        */
       dd($newPayroll);
       return Inertia::render(
                            'Admin/Payroll',

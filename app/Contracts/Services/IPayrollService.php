@@ -5,4 +5,6 @@ namespace App\Contracts\Services;
 interface IPayrollService
 {
     public function payrollThisMonth();
+
+    public function usersWithoutPayrollForCurrentMonth();
 }

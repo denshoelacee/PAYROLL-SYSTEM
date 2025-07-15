@@ -9,6 +9,7 @@ use Inertia\Inertia;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Payroll;
 
 class AdminPayrollController extends Controller
 {
@@ -56,14 +57,22 @@ class AdminPayrollController extends Controller
     {
       $thisMonth = $this->payrollService->payrollThisMonth();
 
-       $startOfMonth = Carbon::now()->startOfMonth();
+      /* $startOfMonth = Carbon::now()->startOfMonth();
        $endOfMonth = Carbon::now()->endOfMonth();
 
          $newPayroll = User::whereDoesntHave('payrolls', function ($query) use ($startOfMonth, $endOfMonth) {
                 $query->whereBetween('created_at', [$startOfMonth, $endOfMonth]);
                 })->get();
+      */
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
 
-      //dd($thisMonth);
+        $newPayroll = User::whereDoesntHave('payrolls', function ($query) use ($startOfMonth, $endOfMonth) {
+               $query->whereBetween('created_at', [$startOfMonth, $endOfMonth]);
+        })
+        ->with(['latestPayroll']) // custom relation below
+        ->get();
+      dd($newPayroll);
       return Inertia::render(
                            'Admin/Payroll',
                            ['thisMonth' => $thisMonth,

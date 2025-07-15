@@ -45,6 +45,12 @@ class User extends Authenticatable
 
         return $this->hasOne(SecretQuestion::class,'user_id','user_id');
     }
+
+    public function latestPayroll()
+{
+    return $this->hasOne(Payroll::class, 'user_id', 'user_id')
+        ->latest('created_at');
+}
     /**
      * The attributes that should be hidden for serialization.
      *

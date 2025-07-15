@@ -27,7 +27,6 @@ class PayrollRepository implements IPayrollRepository{
     {
         
        return Payroll::with(['user', 'previousPayroll'])
-                    ->whereIn('publish_status', ['none', 'partial'])
                     ->whereMonth('created_at', now()->month)
                     ->whereYear('created_at', now()->year)
                     ->get();

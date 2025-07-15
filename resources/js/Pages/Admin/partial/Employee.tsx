@@ -62,7 +62,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
         const processedData = useMemo(() => {
             return userList.map((e) => ({
                 ...e,
-                full_name: `${e.last_name} ${e.first_name}`,
+                full_name: `${e.last_name}, ${e.first_name}`,
             }));
         }, [userList]);
 
@@ -138,6 +138,18 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
         setAnchorEl(null);  
 
         };
+
+        const updateSubmit: FormEventHandler = (e) => {
+            e.preventDefault();
+            if (!selectedRow?.user_id) return;
+
+            router.patch(route('update.account', selectedRow.user_id), data, {
+                onSuccess: () => {
+                setEditModal(false);
+                },
+            });
+        };
+
 
 
         const columns: GridColDef[] = [
@@ -368,9 +380,11 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
         </Modal>
         {/* Edit Modal */}
         <Modal show={editModal} onClose={() => setEditModal(false)} maxWidth="2xl">
+            <form onSubmit={updateSubmit}>
             <div className="p-6 space-y-4">
                 <h2 className="text-lg font-bold mb-4 text-white">Edit: {[selectedRow?.employee_id+" - ", selectedRow?.last_name + ", " ,selectedRow?.first_name]}</h2>
-                {/*<h2 className="text-lg font-bold mb-4 text-white">Edit Employee</h2>*/}
+                {/*<h2 className="text-lg font-bold mb-4 text-white">Edit Employee</h2>*/}   
+                
                 <CardWrapper className="justify-between p-3 gap-4">
                         <TextInputGroup 
                             label='Employee ID*' 
@@ -522,8 +536,10 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                         </Dropdown>
                     </div>
                 </CardWrapper>
-                <PrimaryButton className='text-md mt-4' onClick={() => setEditModal(false)}>Save</PrimaryButton>
+                <PrimaryButton className='text-md mt-4'>Save</PrimaryButton>
+                
             </div>
+            </form>
         </Modal>
         
         <Popover
@@ -565,7 +581,7 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
         <Modal show={deleteModal} onClose={() => setDeleteModal(false)} maxWidth='sm' >
                 <div className="p-6">
                 <h2 className="text-lg font-bold mb-4 text-white">
-                    Delete User {selectedRow?.user_id + " - " + selectedRow?.first_name + " " + selectedRow?.last_name}
+                    Delete User {selectedRow?.employee_id + " - " + selectedRow?.first_name + " " + selectedRow?.last_name}
                 </h2>
                 <p className="text-white mb-4">
                     Are you sure you want to this user?    

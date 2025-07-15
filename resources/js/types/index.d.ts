@@ -23,6 +23,8 @@ export interface User {
         employment_type: string;
         role: string;
         status: string;
+
+        latest_payroll?: UserPayroll
     }
 
 

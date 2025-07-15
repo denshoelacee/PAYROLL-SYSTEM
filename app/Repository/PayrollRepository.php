@@ -32,4 +32,5 @@ class PayrollRepository implements IPayrollRepository{
                     ->whereYear('created_at', now()->year)
                     ->get();
     }
+    
 }

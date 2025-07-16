@@ -7,4 +7,5 @@ interface IPayrollService
     public function payrollThisMonth();
 
     public function usersWithoutPayrollForCurrentMonth();
+    public function storePartial(array $data);
 }

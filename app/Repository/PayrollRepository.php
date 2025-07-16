@@ -42,6 +42,5 @@ class PayrollRepository implements IPayrollRepository{
                         $query->whereBetween('created_at', [$startOfMonth, $endOfMonth]);})
                         ->with(['latestPayroll'])
                         ->get();
-    }
-    
+    }  
 }

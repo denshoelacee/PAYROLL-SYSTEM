@@ -21,4 +21,11 @@ class PayrollService implements IPayrollService
     }
 
 
+    public function storePartial(array $data)
+    {
+    
+       $data['publish_status'] = 'partial';
+       $this->payrollRepo->setPayrollModel($data);
+
+    }
 }

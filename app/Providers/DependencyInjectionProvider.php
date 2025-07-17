@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Contracts\Repository\IContributionTypeRepository;
+use App\Contracts\Repository\IPayrollDeductionRepository;
 use App\Contracts\Services\IPayrollService;
 use App\Repository\ContributionTypeRepository;
 use Illuminate\Support\ServiceProvider;
@@ -21,6 +22,7 @@ use App\Contracts\Services\IEmployeeService;
 use App\Contracts\Services\Auth\IPasswordResetService;
 use App\Contracts\Services\IPayrollService\IGeneratePayrollService;
 use App\Models\ContributionType;
+use App\Repository\PayrollDeductionRepository;
 use App\Repository\PayrollRepository;
 use App\Repository\SecretQuestionRepository;
 use App\Repository\UserRepository;
@@ -55,6 +57,7 @@ class DependencyInjectionProvider extends ServiceProvider
         $this->app->bind(IPayrollRepository::class,PayrollRepository::class);
         $this->app->bind(IEditDeleteAccountService::class, EditDeleteAccountService::class);
         $this->app->bind(IContributionTypeRepository::class, ContributionTypeRepository::class);
+        $this->app->bind(IPayrollDeductionRepository::class, PayrollDeductionRepository::class);
     }
 
     /**

@@ -21,7 +21,7 @@ class PayrollRepository implements IPayrollRepository{
 
     public function setPayrollModel(array $data):Payroll
     {
-        return Payroll::create($data);
+        return $payroll = Payroll::create($data);
     }
 
     public function getPayrollThisMonth()

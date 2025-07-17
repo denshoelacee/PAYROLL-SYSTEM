@@ -6,6 +6,7 @@ use App\Contracts\Repository\IContributionTypeRepository;
 use App\Contracts\Repository\IPayrollRepository;
 use App\Contracts\Services\IPayrollService;
 use App\Contracts\Repository\IUserRepository;
+use App\Contracts\Repository\IPayrollDeductionRepository;
 
 class PayrollService implements IPayrollService
 {
@@ -13,7 +14,8 @@ class PayrollService implements IPayrollService
     public function __construct(
                    protected IPayrollRepository $payrollRepo,
                    protected IUserRepository $userRepository,
-                   protected IContributionTypeRepository $contributionTypeRepo
+                   protected IContributionTypeRepository $contributionTypeRepo,
+                   protected IPayrollDeductionRepository $payrollDeductionRepo
     ){}
 
     public function payrollThisMonth()
@@ -42,14 +44,18 @@ class PayrollService implements IPayrollService
 
     }
 
-    public function publish(array $data)
+    public function publish(array $data):void
     {
          $user = $this->userRepository->findById($data['user_id']);
          $salary = $user->basic_pay;
 
          $rlipContribution = $this->contributionTypeRepo->rlipDeduction($salary);
          $philContribution = $this->contributionTypeRepo->philDeduction($salary);
+         
+         $totalAccruedPeriod = $this->payrollDeductionRepo->calculateTotalAccruedPeriod($data);
+         $totalDeduction = $this->payrollDeductionRepo->calculateTotalDeduction($data);
 
+         $netPay = $totalAccruedPeriod - $totalDeduction;
 
            if (!$user){
             throw new \Exception('User not found');
@@ -60,7 +66,12 @@ class PayrollService implements IPayrollService
        $data['basic_salary'] = $salary;
        $data['publish_status'] = 'publish';
 
-       return $this->payrollRepo->setPayrollModel($data);
 
+       $payroll = $this->payrollRepo->setPayrollModel($data);
+       $payroll->deduction()->create([
+            'total_accrued_period' => $totalAccruedPeriod,
+            'total_deduction' => $totalDeduction,
+            'net_pay' => $netPay
+       ]);
     }
 }

@@ -34,6 +34,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedRow, setSelectedRow] = useState<UserPayroll | null>(null);
     const [selectName, setSelectName] = useState('Select Employee')
+    const [disableInput, setDisableInput] = useState(true);
     const { data, setData, post,reset} = useForm<any>({
         user_id:'',
         basic_pay:'',
@@ -75,45 +76,84 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
     const handleDropdownSelect = (value: Employee, field: string) => {
         if (field === 'employee') {
             setSelectName(`${value.employee_id} - ${value.first_name} ${value.last_name}`);
+            setDisableInput(true);
             setData({
-                user_id:value.latest_payroll?.user_id || '',
-                basic_pay: value.basic_pay||'',
-                basic_salary:value.latest_payroll?.basic_salary || '',
-                pera:value.latest_payroll?.pera || '',
-                absent:value.latest_payroll?.absent || '',
-                late:value.latest_payroll?.late||'',
-                holding_tax:value.latest_payroll?.holding_tax ||'',
-                tax_bal_due:value.latest_payroll?.tax_bal_due||'',
-                rlip: value.latest_payroll?.rlip||'',
-                policy_loan: value.latest_payroll?.policy_loan||'',
-                consol_loan: value.latest_payroll?.consol_loan||'',
-                emerg_loan: value.latest_payroll?.emerg_loan||'',
-                gel: value.latest_payroll?.gel||'',
-                gfal: value.latest_payroll?.gfal||'',
-                mpl: value.latest_payroll?.mpl||'',
-                mpl_lite: value.latest_payroll?.mpl_lite||'',
-                contributions: value.latest_payroll?.contributions||'',
-                loans:value.latest_payroll?.loans||'',
-                housing_loan: value.latest_payroll?.housing_loan||'',
-                philhealth: value.latest_payroll?.philhealth||'',
-                cfi: value.latest_payroll?.cfi||'',
-                tipid: value.latest_payroll?.tipid||'',
-                city_savings_bank: value.latest_payroll?.city_savings_bank||'',
-                fea: value.latest_payroll?.fea||'',
-                canteen: value.latest_payroll?.canteen||'',
-                disallowance: value.latest_payroll?.disallowance||'',
-                unliquidated_ca: value.latest_payroll?.unliquidated_ca||'',
-                disallowance_honoraria: value.latest_payroll?.disallowance_honoraria||'',
-                coop: value.latest_payroll?.coop||'',
-                landbank: value.latest_payroll?.landbank||'',
-                ucpb: value.latest_payroll?.ucpb||'',
+                user_id:value.user_id ?? '',
+                basic_pay: value?.basic_pay??'',
+                basic_salary:value?.latest_payroll?.basic_salary ?? '',
+                pera:value?.latest_payroll?.pera ?? '',
+                absent:value?.latest_payroll?.absent ?? '',
+                late:value?.latest_payroll?.late??'',
+                holding_tax:value?.latest_payroll?.holding_tax ??'',
+                tax_bal_due:value?.latest_payroll?.tax_bal_due??'',
+                rlip: value?.latest_payroll?.rlip??'',
+                policy_loan: value?.latest_payroll?.policy_loan??'',
+                consol_loan: value?.latest_payroll?.consol_loan??'',
+                emerg_loan: value?.latest_payroll?.emerg_loan??'',
+                gel: value?.latest_payroll?.gel??'',
+                gfal: value?.latest_payroll?.gfal??'',
+                mpl: value?.latest_payroll?.mpl??'',
+                mpl_lite: value?.latest_payroll?.mpl_lite??'',
+                contributions: value?.latest_payroll?.contributions??'',
+                loans:value?.latest_payroll?.loans??'',
+                housing_loan: value?.latest_payroll?.housing_loan??'',
+                philhealth: value?.latest_payroll?.philhealth??'',
+                cfi: value?.latest_payroll?.cfi??'',
+                tipid: value?.latest_payroll?.tipid??'',
+                city_savings_bank: value?.latest_payroll?.city_savings_bank??'',
+                fea: value?.latest_payroll?.fea??'',
+                canteen: value?.latest_payroll?.canteen??'',
+                disallowance: value?.latest_payroll?.disallowance??'',
+                unliquidated_ca: value?.latest_payroll?.unliquidated_ca??'',
+                disallowance_honoraria: value?.latest_payroll?.disallowance_honoraria??'',
+                coop: value?.latest_payroll?.coop??'',
+                landbank: value?.latest_payroll?.landbank??'',
+                ucpb: value?.latest_payroll?.ucpb??'',
             })
             
-        }
+        }setDisableInput(false);
+        
     };
 
+    useEffect(() => {
+        if (editModal && selectedRow) {
+            setData({
+                user_id: selectedRow.user_id,
+                basic_pay: selectedRow?.user.basic_pay??'',
+                pera:selectedRow?.pera ?? '',
+                absent:selectedRow?.absent ?? '',
+                late:selectedRow?.late??'',
+                holding_tax:selectedRow?.holding_tax ??'',
+                tax_bal_due:selectedRow?.tax_bal_due??'',
+                rlip: selectedRow?.rlip??'',
+                policy_loan: selectedRow?.policy_loan??'',
+                consol_loan: selectedRow?.consol_loan??'',
+                emerg_loan: selectedRow?.emerg_loan??'',
+                gel: selectedRow?.gel??'',
+                gfal: selectedRow?.gfal??'',
+                mpl: selectedRow?.mpl??'',
+                mpl_lite: selectedRow?.mpl_lite??'',
+                contributions: selectedRow?.contributions??'',
+                loans:selectedRow?.loans??'',
+                housing_loan: selectedRow?.housing_loan??'',
+                philhealth: selectedRow?.philhealth??'',
+                cfi: selectedRow?.cfi??'',
+                tipid: selectedRow?.tipid??'',
+                city_savings_bank: selectedRow?.city_savings_bank??'',
+                fea: selectedRow?.fea??'',
+                canteen: selectedRow?.canteen??'',
+                disallowance: selectedRow?.disallowance??'',
+                unliquidated_ca: selectedRow?.unliquidated_ca??'',
+                disallowance_honoraria: selectedRow?.disallowance_honoraria??'',
+                coop: selectedRow?.coop??'',
+                landbank: selectedRow?.landbank??'',
+                ucpb: selectedRow?.ucpb??'',
+            })
+        }
+    }, [editModal, selectedRow]);
+
     const addPayrollPublishHandler: FormEventHandler = (e) => {
-        e.preventDefault();
+        e.preventDefault(); 
         post(route('admin.store.publish'), {
             onSuccess: () => {
                 setAddModal(false);
@@ -166,7 +206,14 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
             params?.row.publish_status === 'none' ? (
             ""
             ) : (
-            <p className="text-green-500">{params.row.publish_status}</p>
+            <span className={`text-center p-2 rounded-full
+                ${params.row.publish_status === 'publish'
+                ? 'text-green-500 border border-emerald-500 '
+                : 'text-yellow-500 border border-yellow-500'
+                }`}
+            >       
+            {params.row.publish_status === 'publish' ? 'Published' : 'Partial'}
+            </span>
             )
         ),
         }
@@ -289,8 +336,10 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                                                 </Dropdown>
                                             </div>
                                             {/*BASIC SALARY*/}
-                                            <TextInputGroup label="Basic Salary" id="basic_salary" value={data.basic_pay} disabled/>
-                                            <TextInputGroup label="PERA" id="PERA" value={data.pera} onChange={(e) => {setData('pera', e.target.value)}} />
+                                            <TextInputGroup label="Basic Salary" id="basic_pay" value={data.basic_pay} disabled/>
+                                            <TextInputGroup label="PERA" id="PERA" value={data.pera} 
+                                            onChange={(e) => {setData('pera', e.target.value)}} 
+                                            disabled={disableInput}/>
                                         </div>
                                 </CardWrapper>
                                 {/* DEDUCTIONS */}
@@ -298,7 +347,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                                     <p>Deductions</p>
                                         <div className="flex gap-4 ">
                                             {/*Absences w/o pay*/}
-                                            <TextInputGroup label="Absences w/o pay" id="Absences w/o pay" value={data.absent}
+                                            <TextInputGroup label="Absences w/o pay" id="Absences w/o pay" value={data.absent }
                                             onChange={(e) =>{setData('absent', e.target.value)}}/>
                                             {/*W/holding Tax*/}
                                             <TextInputGroup label="W/holding Tax" id="W/holding Tax" value={data.holding_tax}
@@ -313,7 +362,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                                         <div className="flex justify-between gap-4">
                                             {/*RLIP*/}
                                             <TextInputGroup label="RLIP" id="RLIP" value={data.rlip}
-                                            disabled/>
+                                            onChange={(e) =>{setData('rlip', e.target.value)}} disabled/>
                                             {/*Policy Loan*/}
                                             <TextInputGroup label="Policy Loan" id="Policy Loan" value={data.policy_loan}
                                             onChange={(e) =>{setData('policy_loan', e.target.value)}}/>
@@ -345,7 +394,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                                     <p>HDMF</p>
                                     <div className="flex gap-4 ">
                                         {/*Contribution*/}
-                                        <TextInputGroup label="Contribution" id="Contribution" value={data.contributions}
+                                        <TextInputGroup label="Contributions" id="contributions" value={data.contributions}
                                         onChange={(e) =>{setData('contributions', e.target.value)}}/>
                                         {/*Loans*/}
                                         <TextInputGroup label="Loans" id="Loans" value={data.loans}
@@ -360,7 +409,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                                     <div className="flex gap-4">
                                         {/*Philhealht*/}
                                         <TextInputGroup label="Philhealth" id="philhealth" value={data.philhealth}
-                                        disabled/>
+                                        onChange={(e) =>{setData('philhealth', e.target.value)}}disabled />
                                         {/*CFI*/}
                                         <TextInputGroup label="CFI" id="cfi" value={data.cfi}
                                         onChange={(e) =>{setData('cfi', e.target.value)}}/>
@@ -428,96 +477,122 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                                     <p>Earning</p>
                                         <div className="flex gap-4">
                                             {/*BASIC SALARY*/}
-                                            <TextInputGroup label="Basic Salary" id="basic_salary" value={selectedRow?.user.basic_pay} disabled/>
-                                            <TextInputGroup label="PERA" id="PERA" value={selectedRow?.pera} />
+                                            <TextInputGroup label="Basic Salary" id="basic_salary" value={data.basic_pay} disabled/>
+                                            <TextInputGroup label="PERA" id="PERA" value={data.pera}
+                                            onChange={(e) =>{setData('pera', e.target.value)}}/>
                                         </div>
                                 </CardWrapper>
-                                {/* DEDUCTIONS */}
                                 <CardWrapper className="justify-between p-3 w-full text-white">
                                     <p>Deductions</p>
                                         <div className="flex gap-4 ">
                                             {/*Absences w/o pay*/}
-                                            <TextInputGroup label="Absences w/o pay" id="Absences w/o pay" value={selectedRow?.absent}/>
+                                            <TextInputGroup label="Absences w/o pay" id="Absences w/o pay" value={data.absent}
+                                            onChange={(e) =>{setData('absent', e.target.value)}}/>
                                             {/*W/holding Tax*/}
-                                            <TextInputGroup label="W/holding Tax" id="W/holding Tax" value={selectedRow?.holding_tax}/>
+                                            <TextInputGroup label="W/holding Tax" id="W/holding Tax" value={data.holding_tax}
+                                            onChange={(e) =>{setData('holding_tax', e.target.value)}}/>
                                             {/*Late/Undertime*/}
-                                            <TextInputGroup label="Late/Undertime" id="Late/Undertime" value={selectedRow?.late}/>
+                                            <TextInputGroup label="Late/Undertime" id="Late/Undertime" value={data.late}
+                                            onChange={(e) =>{setData('late', e.target.value)}}/>
                                         </div>
                                 </CardWrapper>  
                                 <CardWrapper className=" p-3 gap-4 text-white">
                                         <p>GSIS</p>
                                         <div className="flex justify-between gap-4">
                                             {/*RLIP*/}
-                                            <TextInputGroup label="RLIP" id="RLIP" value={selectedRow?.rlip}/>
+                                            <TextInputGroup label="RLIP" id="RLIP" value={data.rlip}
+                                            onChange={(e) =>{setData('rlip', e.target.value)}} disabled/>
                                             {/*Policy Loan*/}
-                                            <TextInputGroup label="Policy Loan" id="Policy Loan" value={selectedRow?.policy_loan}/>
+                                            <TextInputGroup label="Policy Loan" id="Policy Loan" value={data.policy_loan}
+                                            onChange={(e) =>{setData('policy_loan', e.target.value)}}/>
                                             {/*Consol Loan*/}
-                                            <TextInputGroup label="Consol Loan" id="Consol Loan" value={selectedRow?.consol_loan}/>                                                    
+                                            <TextInputGroup label="Consol Loan" id="Consol Loan" value={data.consol_loan}
+                                            onChange={(e) =>{setData('consol_loan', e.target.value)}}/>                                                    
                                         </div>
                                         <div className="flex justify-between gap-4">
                                             {/*Emergency Loan*/}
-                                            <TextInputGroup label="Emergency Loan" id="Emergency Loan" value={selectedRow?.emerg_loan}/>
+                                            <TextInputGroup label="Emergency Loan" id="Emergency Loan" value={data.emerg_loan}
+                                            onChange={(e) =>{setData('emerg_loan', e.target.value)}}/>
                                             {/*GEL*/}
-                                            <TextInputGroup label="GEL" id="GEL" value={selectedRow?.gel}/>
+                                            <TextInputGroup label="GEL" id="GEL" value={data.gel}
+                                            onChange={(e) =>{setData('gel', e.target.value)}}/>
                                             {/*GFAL*/}
-                                            <TextInputGroup label="GFAL" id="GFAL" value={selectedRow?.gfal}/>
+                                            <TextInputGroup label="GFAL" id="GFAL" value={data.gfal}
+                                            onChange={(e) =>{setData('gfal', e.target.value)}}/>
                                         </div>
                                         <div className="flex justify-between gap-4">
                                             {/*MPL*/}
-                                            <TextInputGroup label="MPL" id="MPL" value={selectedRow?.mpl}/>
+                                            <TextInputGroup label="MPL" id="MPL" value={data.mpl}
+                                            onChange={(e) =>{setData('mpl', e.target.value)}}/>
                                             {/*MPL LITE*/}
-                                            <TextInputGroup label="MPL LITE" id="MPL" value={selectedRow?.mpl_lite}/>
+                                            <TextInputGroup label="MPL LITE" id="MPL" value={data.mpl_lite}
+                                            onChange={(e) =>{setData('mpl_lite', e.target.value)}}/>
                                         </div>
                                 </CardWrapper>
                                 <CardWrapper className="justify-between p-3 w-full text-white">
                                     <p>HDMF</p>
                                     <div className="flex gap-4 ">
                                         {/*Contribution*/}
-                                        <TextInputGroup label="Contribution" id="Contribution" value={selectedRow?.contributions}/>
+                                        <TextInputGroup label="Contribution" id="Contribution" value={data.contributions}
+                                        onChange={(e) =>{setData('contributions', e.target.value)}}/>
                                         {/*Loans*/}
-                                        <TextInputGroup label="Loans" id="Loans" value={selectedRow?.loans}/>
+                                        <TextInputGroup label="Loans" id="Loans" value={data.loans}
+                                        onChange={(e) =>{setData('loans', e.target.value)}}/>
                                         {/*Housing Loans*/}
-                                        <TextInputGroup label="Housing Loans" id="Housing Loans" value={selectedRow?.housing_loan}/>
+                                        <TextInputGroup label="Housing Loans" id="Housing Loans" value={data.housing_loan}
+                                        onChange={(e) =>{setData('housing_loan', e.target.value)}}/>
                                     </div>
                                 </CardWrapper>
                                 <CardWrapper className="justify-between p-3 w-full text-white">
                                     <p>OTHER DEDUCTIONS</p>
                                     <div className="flex gap-4">
                                         {/*Philhealht*/}
-                                        <TextInputGroup label="Philhealth" id="philhealth" value={selectedRow?.philhealth} />
+                                        <TextInputGroup label="Philhealth" id="philhealth" value={data.philhealth}
+                                        onChange={(e) =>{setData('philhealth', e.target.value)}} disabled />
                                         {/*CFI*/}
-                                        <TextInputGroup label="CFI" id="cfi" value={selectedRow?.cfi}/>
+                                        <TextInputGroup label="CFI" id="cfi" value={data.cfi}
+                                        onChange={(e) =>{setData('cfi', e.target.value)}}/>
                                         {/*TIPID*/}
-                                        <TextInputGroup label="TIPID" id="tipid" value={selectedRow?.tipid} />
+                                        <TextInputGroup label="TIPID" id="tipid" value={data.tipid}
+                                        onChange={(e) =>{setData('tipid', e.target.value)}}/>
                                     </div>
                                     <div className="flex gap-4">
                                         {/*CITY BANKS SAVING*/}
-                                        <TextInputGroup label="CITY BANK SAVINGS" id="city_bank_savings" value={selectedRow?.city_savings_bank}/>
+                                        <TextInputGroup label="CITY BANK SAVINGS" id="city_bank_savings" value={data.city_savings_bank}
+                                        onChange={(e) =>{setData('city_savings_bank', e.target.value)}}/>
                                         {/*FEA*/}
-                                        <TextInputGroup label="FEA" id="fea" value={selectedRow?.fea} />
+                                        <TextInputGroup label="FEA" id="fea" value={data.fea}
+                                        onChange={(e) =>{setData('fea', e.target.value)}}/>
                                         {/*CANTEEN*/}
-                                        <TextInputGroup label="CANTEEN" id="canteen" value={selectedRow?.canteen}/>
+                                        <TextInputGroup label="CANTEEN" id="canteen" value={data.canteen}
+                                        onChange={(e) =>{setData('canteen', e.target.value)}}/>
                                     </div>
                                     <div className="flex gap-4">
                                         {/*Disallowance*/}
-                                        <TextInputGroup label="Disallowance" id="disallowance1" value={selectedRow?.disallowance} />
+                                        <TextInputGroup label="Disallowance" id="disallowance1" value={data.disallowance}
+                                        onChange={(e) =>{setData('disallowance', e.target.value)}}/>
                                         {/*Unliquidated Cash Advances*/}
-                                        <TextInputGroup label="Unliquidated Cash Advances" id="unliquidated_cash_advances" value={selectedRow?.unliquidated_ca}/>
+                                        <TextInputGroup label="Unliquidated Cash Advances" id="unliquidated_cash_advances" value={data.unliquidated_ca}
+                                        onChange={(e) =>{setData('unliquidated_ca', e.target.value)}}/>
                                         {/*Honoraria*/}
-                                        <TextInputGroup label="Disallowance(Honoraria)" id="Honoraria" value={selectedRow?.disallowance_honoraria}/>
+                                        <TextInputGroup label="Disallowance(Honoraria)" id="Honoraria" value={data.disallowance_honoraria}
+                                        onChange={(e) =>{setData('disallowance_honoraria', e.target.value)}}/>
                                     </div>
                                     <div className="flex gap-4">
                                         {/*COOP*/}
-                                        <TextInputGroup label="COOP" id="coop" value={selectedRow?.coop} />
+                                        <TextInputGroup label="COOP" id="coop" value={data.coop}
+                                        onChange={(e) =>{setData('coop', e.target.value)}}/>
                                         {/*LANDBANK*/}
-                                        <TextInputGroup label="LANDBANK" id="landbank" value={selectedRow?.landbank}/>
+                                        <TextInputGroup label="LANDBANK" id="landbank" value={data.landbank}
+                                        onChange={(e) =>{setData('landbank', e.target.value)}}/>
                                         {/*UCPB*/}
-                                        <TextInputGroup label="UCPB" id="ucpb" value={selectedRow?.ucpb} />
+                                        <TextInputGroup label="UCPB" id="ucpb" value={data.ucpb}
+                                        onChange={(e) =>{setData('ucpb', e.target.value)}}/>
                                     </div>
-                            </CardWrapper>
+                            </CardWrapper>  
                             <div className="flex gap-4">
-                            <PrimaryButton className='text-md mt-4 py-2 hover:bg-yellow-600'>Publish</PrimaryButton>
-                            <PrimaryButton className='text-md mt-4 hover:bg-yellow-600'>Partial</PrimaryButton>
+                            <PrimaryButton onClick={addPayrollPublishHandler}className='text-md mt-4 py-2 hover:bg-yellow-600'>Publish</PrimaryButton>
+                            <PrimaryButton onClick={addPayrollPartialHandler}className='text-md mt-4 hover:bg-yellow-600'>Partial</PrimaryButton>
                             <PrimaryButton className='text-md mt-4 hover:bg-yellow-600'>Cancel</PrimaryButton>
                             </div>
                             
@@ -536,11 +611,13 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                 >
                 <div className=" w-48 bg-mainColor shadow-md text-sm text-white">
                     <button
-                        className="w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100"
+                        disabled={selectedRow?.publish_status === 'publish'}
+                        className={`${selectedRow?.publish_status === 'publish' ? 'cursor-not-allowed opacity-50' : ''} w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100`}
                         onClick={() => {
                             setAnchorEl(null);
-                            setEditModal(true)
+                            setEditModal(true);
                         }}
+
                     >
                         Edit
                     </button>

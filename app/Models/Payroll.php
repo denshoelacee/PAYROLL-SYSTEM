@@ -28,7 +28,7 @@ class Payroll extends Model
         'gfal',
         'mpl',
         'mpl_lite',
-        'contribution',
+        'contributions',
         'loans',
         'housing_loan',
         'philhealth',

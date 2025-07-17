@@ -10,6 +10,6 @@ interface IPayrollDeductionRepository
 
      public function calculateTotalAccruedPeriod(array $data):float;
 
-     public function calculateTotalDeduction(array $data):float;
+     public function calculateTotalDeduction(array $data,float $totalContribution):float;
 
 }

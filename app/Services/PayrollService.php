@@ -52,8 +52,9 @@ class PayrollService implements IPayrollService
          $rlipContribution = $this->contributionTypeRepo->rlipDeduction($salary);
          $philContribution = $this->contributionTypeRepo->philDeduction($salary);
          
-         $totalAccruedPeriod = $this->payrollDeductionRepo->calculateTotalAccruedPeriod($data);
-         $totalDeduction = $this->payrollDeductionRepo->calculateTotalDeduction($data);
+         $totalContribution = $rlipContribution + $philContribution;
+         $totalAccruedPeriod = $user->basic_pay + ($data['pera'] ?? 0);
+         $totalDeduction = $this->payrollDeductionRepo->calculateTotalDeduction($data,$totalContribution);
 
          $netPay = $totalAccruedPeriod - $totalDeduction;
 

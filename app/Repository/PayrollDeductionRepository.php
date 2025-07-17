@@ -21,14 +21,13 @@ class PayrollDeductionRepository implements IPayrollDeductionRepository
          return round($basic + $pera, 2);
     }
 
-    public function calculateTotalDeduction(array $data):float
+    public function calculateTotalDeduction(array $data, float $totalContribution):float
     {
          $deductionFields = [
         'absent',
         'late',
         'holding_tax',
         'tax_bal_due',
-        'rlip',
         'policy_loan',
         'consol_loan',
         'emerg_loan',
@@ -36,10 +35,9 @@ class PayrollDeductionRepository implements IPayrollDeductionRepository
         'gfal',
         'mpl',
         'mpl_lite',
-        'contribution',
+        'contributions',
         'loans',
         'housing_loan',
-        'philhealth',
         'cfi',
         'tipid',
         'city_savings_bank',
@@ -59,6 +57,8 @@ class PayrollDeductionRepository implements IPayrollDeductionRepository
         $value = isset($data[$field]) ? floatval($data[$field]) : 0;
         $total += $value;
     }
+
+    $total += $totalContribution;
 
     return round($total, 2);
     }

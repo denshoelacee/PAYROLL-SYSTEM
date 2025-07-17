@@ -568,14 +568,6 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                 >
                     Delete
                 </button>
-                <button
-                    className="w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100 "
-                    onClick={() => {
-                        setAnchorEl(null);
-                    }}
-                >
-                    View
-                </button>
             </div>
         </Popover>
         <Modal show={deleteModal} onClose={() => setDeleteModal(false)} maxWidth='sm' >

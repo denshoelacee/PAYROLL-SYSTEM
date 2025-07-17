@@ -15,7 +15,7 @@ class ContributionTypeRepository implements IContributionTypeRepository
 
     public function rlipDeduction($salary)
     {
-        $contribution = $this->getContribution()->rlip();
+        $contribution = $this->getContribution()->rlip;
 
         $rlipDeduc =$salary * $contribution / 100;
 
@@ -24,7 +24,7 @@ class ContributionTypeRepository implements IContributionTypeRepository
 
     public function philDeduction($salary)
     {
-       $contribution = $this->getContribution()->phil();
+       $contribution = $this->getContribution()->philhealth;
 
        $philDeduc = $salary * $contribution / 100;
         

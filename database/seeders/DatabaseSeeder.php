@@ -21,11 +21,12 @@ class DatabaseSeeder extends Seeder
         'designation' => 'System Admin',
         'department' => 'IT',
         'basic_pay' => 50000,
+        'employment_type' => 'Full-time',
         'password' => Hash::make('admin123'),
         'status' => 'verified',
-        'role' => 'admin',
+        'role' => 'Admin',
     ]);
 
-        User::factory(5)->create();
+        User::factory(100)->create();
     }
 }

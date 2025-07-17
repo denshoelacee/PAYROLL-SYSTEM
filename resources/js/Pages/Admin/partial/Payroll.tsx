@@ -6,7 +6,7 @@ import Dropdown from "@/Components/Dropdown";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import Table from "@/Components/Table";
 import searchHooks from "@/hooks/searchHooks";
-import { useEffect, useState } from "react";
+import { useEffect, useState,FormEventHandler } from "react";
 import Search from "@/Components/Search";
 import Modal from "@/Components/Modal";
 import CardWrapper from "@/Components/CardWrapper";
@@ -17,7 +17,8 @@ import { IoMdAdd, IoMdClose } from "react-icons/io";
 import { Popover } from "@mui/material";
 import TextInputGroup from "@/Components/TextInputGroup";
 import { useForm } from "@inertiajs/react";
-useForm
+import { Link } from "lucide-react";
+
 
 type Props = {
     payrollthisMonth : UserPayroll[];
@@ -27,6 +28,7 @@ type Props = {
 export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
     
     const [addModal, setAddModal] = useState(false);
+    const [editModal, setEditModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const filteredRows = searchHooks(searchQuery, payrollthisMonth);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -35,7 +37,6 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
     const { data, setData, post,reset} = useForm<any>({
         user_id:'',
         basic_pay:'',
-        basic_salary:'',
         pera:'',
         absent:'',
         late:'',
@@ -110,6 +111,28 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
             
         }
     };
+
+    const addPayrollPublishHandler: FormEventHandler = (e) => {
+        e.preventDefault();
+        post(route('admin.store.publish'), {
+            onSuccess: () => {
+                setAddModal(false);
+                reset(); 
+                setSelectName('Select Employee');
+            },
+        });
+    };
+
+    const addPayrollPartialHandler: FormEventHandler = (e) => {
+        e.preventDefault();
+                post(route('admin.store.partial'), {
+                    onSuccess: () => {
+                        setAddModal(false);
+                        reset(); 
+                        setSelectName('Select Employee');
+                    },
+                });
+    }
 
     const columns: GridColDef[] = [        
         { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center',
@@ -196,7 +219,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                         <div className="flex gap-4">
                             <SecondaryButton onClick={() => setAddModal(true)}>
                             <div className="flex items-center gap-2">
-                                <IoMdAdd className='text-custom-word-color font-black text-1xl' />
+                                <IoMdAdd className='text-custom-word-color font-black text-lg' />
                                 <span className="text-sm">New Payroll</span>
                             </div>
                         </SecondaryButton>
@@ -233,7 +256,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                                     {/*EARNINGS*/}
                                     <p>Earning</p>
                                         <div className="flex gap-4">
-                                            <div className='w-full'>
+                                            <div className='w-full my-2'>
                                                 <InputLabel htmlFor="department" value="Employee *"  className='text-white'/>
                                                 <Dropdown>
                                                     <Dropdown.Trigger>
@@ -267,7 +290,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                                             </div>
                                             {/*BASIC SALARY*/}
                                             <TextInputGroup label="Basic Salary" id="basic_salary" value={data.basic_pay} disabled/>
-                                            <TextInputGroup label="PERA" id="PERA" value={data.pera} />
+                                            <TextInputGroup label="PERA" id="PERA" value={data.pera} onChange={(e) => {setData('pera', e.target.value)}} />
                                         </div>
                                 </CardWrapper>
                                 {/* DEDUCTIONS */}
@@ -275,82 +298,221 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                                     <p>Deductions</p>
                                         <div className="flex gap-4 ">
                                             {/*Absences w/o pay*/}
-                                            <TextInputGroup label="Absences w/o pay" id="Absences w/o pay" value={data.absent}/>
+                                            <TextInputGroup label="Absences w/o pay" id="Absences w/o pay" value={data.absent}
+                                            onChange={(e) =>{setData('absent', e.target.value)}}/>
                                             {/*W/holding Tax*/}
-                                            <TextInputGroup label="W/holding Tax" id="W/holding Tax" value={data.holding_tax}/>
+                                            <TextInputGroup label="W/holding Tax" id="W/holding Tax" value={data.holding_tax}
+                                            onChange={(e) =>{setData('holding_tax', e.target.value)}}/>
                                             {/*Late/Undertime*/}
-                                            <TextInputGroup label="Late/Undertime" id="Late/Undertime" value={data.late}/>
+                                            <TextInputGroup label="Late/Undertime" id="Late/Undertime" value={data.late}
+                                            onChange={(e) =>{setData('late', e.target.value)}}/>
                                         </div>
                                 </CardWrapper>  
                                 <CardWrapper className=" p-3 gap-4 text-white">
                                         <p>GSIS</p>
                                         <div className="flex justify-between gap-4">
                                             {/*RLIP*/}
-                                            <TextInputGroup label="RLIP" id="RLIP" value={data.rlip}/>
+                                            <TextInputGroup label="RLIP" id="RLIP" value={data.rlip}
+                                            disabled/>
                                             {/*Policy Loan*/}
-                                            <TextInputGroup label="Policy Loan" id="Policy Loan" value={data.policy_loan}/>
+                                            <TextInputGroup label="Policy Loan" id="Policy Loan" value={data.policy_loan}
+                                            onChange={(e) =>{setData('policy_loan', e.target.value)}}/>
                                             {/*Consol Loan*/}
-                                            <TextInputGroup label="Consol Loan" id="Consol Loan" value={data.consol_loan}/>                                                    
+                                            <TextInputGroup label="Consol Loan" id="Consol Loan" value={data.consol_loan}
+                                            onChange={(e) =>{setData('consol_loan', e.target.value)}}/>                                                    
                                         </div>
                                         <div className="flex justify-between gap-4">
                                             {/*Emergency Loan*/}
-                                            <TextInputGroup label="Emergency Loan" id="Emergency Loan" value={data.emerg_loan}/>
+                                            <TextInputGroup label="Emergency Loan" id="Emergency Loan" value={data.emerg_loan}
+                                            onChange={(e) =>{setData('emerg_loan', e.target.value)}}/>
                                             {/*GEL*/}
-                                            <TextInputGroup label="GEL" id="GEL" value={data.gel}/>
+                                            <TextInputGroup label="GEL" id="GEL" value={data.gel}
+                                            onChange={(e) =>{setData('gel', e.target.value)}}/>
                                             {/*GFAL*/}
-                                            <TextInputGroup label="GFAL" id="GFAL" value={data.gfal}/>
+                                            <TextInputGroup label="GFAL" id="GFAL" value={data.gfal}
+                                            onChange={(e) =>{setData('gfal', e.target.value)}}/>
                                         </div>
                                         <div className="flex justify-between gap-4">
                                             {/*MPL*/}
-                                            <TextInputGroup label="MPL" id="MPL" value={data.mpl}/>
+                                            <TextInputGroup label="MPL" id="MPL" value={data.mpl}
+                                            onChange={(e) =>{setData('mpl', e.target.value)}}/>
                                             {/*MPL LITE*/}
-                                            <TextInputGroup label="MPL LITE" id="MPL" value={data.mpl_lite}/>
+                                            <TextInputGroup label="MPL LITE" id="MPL" value={data.mpl_lite}
+                                            onChange={(e) =>{setData('mpl_lite', e.target.value)}}/>
                                         </div>
                                 </CardWrapper>
                                 <CardWrapper className="justify-between p-3 w-full text-white">
                                     <p>HDMF</p>
                                     <div className="flex gap-4 ">
                                         {/*Contribution*/}
-                                        <TextInputGroup label="Contribution" id="Contribution" value={data.contributions}/>
+                                        <TextInputGroup label="Contribution" id="Contribution" value={data.contributions}
+                                        onChange={(e) =>{setData('contributions', e.target.value)}}/>
                                         {/*Loans*/}
-                                        <TextInputGroup label="Loans" id="Loans" value={data.loans}/>
+                                        <TextInputGroup label="Loans" id="Loans" value={data.loans}
+                                        onChange={(e) =>{setData('loans', e.target.value)}}/>
                                         {/*Housing Loans*/}
-                                        <TextInputGroup label="Housing Loans" id="Housing Loans" value={data.housing_loan}/>
+                                        <TextInputGroup label="Housing Loans" id="Housing Loans" value={data.housing_loan}
+                                        onChange={(e) =>{setData('housing_loan', e.target.value)}}/>
                                     </div>
                                 </CardWrapper>
                                 <CardWrapper className="justify-between p-3 w-full text-white">
                                     <p>OTHER DEDUCTIONS</p>
                                     <div className="flex gap-4">
                                         {/*Philhealht*/}
-                                        <TextInputGroup label="Philhealth" id="philhealth" value={data.philhealth} />
+                                        <TextInputGroup label="Philhealth" id="philhealth" value={data.philhealth}
+                                        disabled/>
                                         {/*CFI*/}
-                                        <TextInputGroup label="CFI" id="cfi" value={data.cfi}/>
+                                        <TextInputGroup label="CFI" id="cfi" value={data.cfi}
+                                        onChange={(e) =>{setData('cfi', e.target.value)}}/>
                                         {/*TIPID*/}
-                                        <TextInputGroup label="TIPID" id="tipid" value={data.tipid} />
+                                        <TextInputGroup label="TIPID" id="tipid" value={data.tipid}
+                                        onChange={(e) =>{setData('tipid', e.target.value)}}/>
                                     </div>
                                     <div className="flex gap-4">
                                         {/*CITY BANKS SAVING*/}
-                                        <TextInputGroup label="CITY BANK SAVINGS" id="city_bank_savings" value={data.city_savings_bank}/>
+                                        <TextInputGroup label="CITY BANK SAVINGS" id="city_bank_savings" value={data.city_savings_bank}
+                                        onChange={(e) =>{setData('city_savings_bank', e.target.value)}}/>
                                         {/*FEA*/}
-                                        <TextInputGroup label="FEA" id="fea" value={data.fea} />
+                                        <TextInputGroup label="FEA" id="fea" value={data.fea}
+                                        onChange={(e) =>{setData('fea', e.target.value)}}/>
                                         {/*CANTEEN*/}
-                                        <TextInputGroup label="CANTEEN" id="canteen" value={data.canteen}/>
+                                        <TextInputGroup label="CANTEEN" id="canteen" value={data.canteen}
+                                        onChange={(e) =>{setData('canteen', e.target.value)}}/>
                                     </div>
                                     <div className="flex gap-4">
                                         {/*Disallowance*/}
-                                        <TextInputGroup label="Disallowance" id="disallowance1" value={data.disallowance} />
+                                        <TextInputGroup label="Disallowance" id="disallowance1" value={data.disallowance}
+                                        onChange={(e) =>{setData('disallowance', e.target.value)}}/>
                                         {/*Unliquidated Cash Advances*/}
-                                        <TextInputGroup label="Unliquidated Cash Advances" id="unliquidated_cash_advances" value={data.unliquidated_ca}/>
+                                        <TextInputGroup label="Unliquidated Cash Advances" id="unliquidated_cash_advances" value={data.unliquidated_ca}
+                                        onChange={(e) =>{setData('unliquidated_ca', e.target.value)}}/>
                                         {/*Honoraria*/}
-                                        <TextInputGroup label="Disallowance(Honoraria)" id="Honoraria" value={data.disallowance_honoraria}/>
+                                        <TextInputGroup label="Disallowance(Honoraria)" id="Honoraria" value={data.disallowance_honoraria}
+                                        onChange={(e) =>{setData('disallowance_honoraria', e.target.value)}}/>
                                     </div>
                                     <div className="flex gap-4">
                                         {/*COOP*/}
-                                        <TextInputGroup label="COOP" id="coop" value={data.coop} />
+                                        <TextInputGroup label="COOP" id="coop" value={data.coop}
+                                        onChange={(e) =>{setData('coop', e.target.value)}}/>
                                         {/*LANDBANK*/}
-                                        <TextInputGroup label="LANDBANK" id="landbank" value={data.landbank}/>
+                                        <TextInputGroup label="LANDBANK" id="landbank" value={data.landbank}
+                                        onChange={(e) =>{setData('landbank', e.target.value)}}/>
                                         {/*UCPB*/}
-                                        <TextInputGroup label="UCPB" id="ucpb" value={data.ucpb} />
+                                        <TextInputGroup label="UCPB" id="ucpb" value={data.ucpb}
+                                        onChange={(e) =>{setData('ucpb', e.target.value)}}/>
+                                    </div>
+                            </CardWrapper>  
+                            <div className="flex gap-4">
+                            <PrimaryButton onClick={addPayrollPublishHandler}className='text-md mt-4 py-2 hover:bg-yellow-600'>Publish</PrimaryButton>
+                            <PrimaryButton onClick={addPayrollPartialHandler}className='text-md mt-4 hover:bg-yellow-600'>Partial</PrimaryButton>
+                            <PrimaryButton className='text-md mt-4 hover:bg-yellow-600'>Cancel</PrimaryButton>
+                            </div>
+                            
+                        </div>
+                    </form>
+                </Modal>
+
+                {/*EDIT*/}
+                <Modal show={editModal} onClose={() => setEditModal(false)} maxWidth="5xl" className="h-full">
+                    <form >
+                        <div className="p-6 space-y-4 border rounded-lg">
+                            <div className="flex justify-between">
+                                {/*<h2 className="text-lg text-white">Edit Payroll</h2>*/}
+                                <h2 className="text-lg font-bold mb-4 text-white">Edit Employee's Payroll - {[selectedRow?.user?.employee_id+" - ", selectedRow?.user?.last_name + ", " ,selectedRow?.user?.first_name]}</h2>
+                                <span onClick={() => setAddModal(false)}>
+                                    <IoMdClose color="white" className="cursor-pointer text-2xl"/>
+                                </span>
+                            </div>
+                                <CardWrapper className="justify-between p-3 gap-4 text-white">
+                                    {/*EARNINGS*/}
+                                    <p>Earning</p>
+                                        <div className="flex gap-4">
+                                            {/*BASIC SALARY*/}
+                                            <TextInputGroup label="Basic Salary" id="basic_salary" value={selectedRow?.user.basic_pay} disabled/>
+                                            <TextInputGroup label="PERA" id="PERA" value={selectedRow?.pera} />
+                                        </div>
+                                </CardWrapper>
+                                {/* DEDUCTIONS */}
+                                <CardWrapper className="justify-between p-3 w-full text-white">
+                                    <p>Deductions</p>
+                                        <div className="flex gap-4 ">
+                                            {/*Absences w/o pay*/}
+                                            <TextInputGroup label="Absences w/o pay" id="Absences w/o pay" value={selectedRow?.absent}/>
+                                            {/*W/holding Tax*/}
+                                            <TextInputGroup label="W/holding Tax" id="W/holding Tax" value={selectedRow?.holding_tax}/>
+                                            {/*Late/Undertime*/}
+                                            <TextInputGroup label="Late/Undertime" id="Late/Undertime" value={selectedRow?.late}/>
+                                        </div>
+                                </CardWrapper>  
+                                <CardWrapper className=" p-3 gap-4 text-white">
+                                        <p>GSIS</p>
+                                        <div className="flex justify-between gap-4">
+                                            {/*RLIP*/}
+                                            <TextInputGroup label="RLIP" id="RLIP" value={selectedRow?.rlip}/>
+                                            {/*Policy Loan*/}
+                                            <TextInputGroup label="Policy Loan" id="Policy Loan" value={selectedRow?.policy_loan}/>
+                                            {/*Consol Loan*/}
+                                            <TextInputGroup label="Consol Loan" id="Consol Loan" value={selectedRow?.consol_loan}/>                                                    
+                                        </div>
+                                        <div className="flex justify-between gap-4">
+                                            {/*Emergency Loan*/}
+                                            <TextInputGroup label="Emergency Loan" id="Emergency Loan" value={selectedRow?.emerg_loan}/>
+                                            {/*GEL*/}
+                                            <TextInputGroup label="GEL" id="GEL" value={selectedRow?.gel}/>
+                                            {/*GFAL*/}
+                                            <TextInputGroup label="GFAL" id="GFAL" value={selectedRow?.gfal}/>
+                                        </div>
+                                        <div className="flex justify-between gap-4">
+                                            {/*MPL*/}
+                                            <TextInputGroup label="MPL" id="MPL" value={selectedRow?.mpl}/>
+                                            {/*MPL LITE*/}
+                                            <TextInputGroup label="MPL LITE" id="MPL" value={selectedRow?.mpl_lite}/>
+                                        </div>
+                                </CardWrapper>
+                                <CardWrapper className="justify-between p-3 w-full text-white">
+                                    <p>HDMF</p>
+                                    <div className="flex gap-4 ">
+                                        {/*Contribution*/}
+                                        <TextInputGroup label="Contribution" id="Contribution" value={selectedRow?.contributions}/>
+                                        {/*Loans*/}
+                                        <TextInputGroup label="Loans" id="Loans" value={selectedRow?.loans}/>
+                                        {/*Housing Loans*/}
+                                        <TextInputGroup label="Housing Loans" id="Housing Loans" value={selectedRow?.housing_loan}/>
+                                    </div>
+                                </CardWrapper>
+                                <CardWrapper className="justify-between p-3 w-full text-white">
+                                    <p>OTHER DEDUCTIONS</p>
+                                    <div className="flex gap-4">
+                                        {/*Philhealht*/}
+                                        <TextInputGroup label="Philhealth" id="philhealth" value={selectedRow?.philhealth} />
+                                        {/*CFI*/}
+                                        <TextInputGroup label="CFI" id="cfi" value={selectedRow?.cfi}/>
+                                        {/*TIPID*/}
+                                        <TextInputGroup label="TIPID" id="tipid" value={selectedRow?.tipid} />
+                                    </div>
+                                    <div className="flex gap-4">
+                                        {/*CITY BANKS SAVING*/}
+                                        <TextInputGroup label="CITY BANK SAVINGS" id="city_bank_savings" value={selectedRow?.city_savings_bank}/>
+                                        {/*FEA*/}
+                                        <TextInputGroup label="FEA" id="fea" value={selectedRow?.fea} />
+                                        {/*CANTEEN*/}
+                                        <TextInputGroup label="CANTEEN" id="canteen" value={selectedRow?.canteen}/>
+                                    </div>
+                                    <div className="flex gap-4">
+                                        {/*Disallowance*/}
+                                        <TextInputGroup label="Disallowance" id="disallowance1" value={selectedRow?.disallowance} />
+                                        {/*Unliquidated Cash Advances*/}
+                                        <TextInputGroup label="Unliquidated Cash Advances" id="unliquidated_cash_advances" value={selectedRow?.unliquidated_ca}/>
+                                        {/*Honoraria*/}
+                                        <TextInputGroup label="Disallowance(Honoraria)" id="Honoraria" value={selectedRow?.disallowance_honoraria}/>
+                                    </div>
+                                    <div className="flex gap-4">
+                                        {/*COOP*/}
+                                        <TextInputGroup label="COOP" id="coop" value={selectedRow?.coop} />
+                                        {/*LANDBANK*/}
+                                        <TextInputGroup label="LANDBANK" id="landbank" value={selectedRow?.landbank}/>
+                                        {/*UCPB*/}
+                                        <TextInputGroup label="UCPB" id="ucpb" value={selectedRow?.ucpb} />
                                     </div>
                             </CardWrapper>
                             <div className="flex gap-4">
@@ -361,7 +523,8 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                             
                         </div>
                     </form>
-                </Modal>     
+                </Modal>  
+                   
                 <Popover
                 open={Boolean(anchorEl)}
                 anchorEl={anchorEl}
@@ -376,6 +539,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                         className="w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100"
                         onClick={() => {
                             setAnchorEl(null);
+                            setEditModal(true)
                         }}
                     >
                         Edit
@@ -393,6 +557,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                         className="w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100 "
                         onClick={() => {
                             setAnchorEl(null);
+                            
                         }}
                     >
                         View

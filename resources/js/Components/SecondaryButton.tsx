@@ -6,7 +6,7 @@ export default function SecondaryButton({ type = 'button', className = '', disab
             {...props}
             type={type}
             className={
-                ` rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-button-border-color py-1.5 px-2 text-white ${
+                ` rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-button-border-color py-1 px-2 text-white ${
                     disabled && 'opacity-25'
                 } ` + className
             }

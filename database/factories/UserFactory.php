@@ -30,9 +30,10 @@ class UserFactory extends Factory
             'designation' => 'Staff',
             'department' => 'HR',
             'basic_pay' => fake()->randomFloat(2, 10000, 30000),
+            'employment_type' => 'Full-time',
             'password' => bcrypt('password'),
             'status' => 'verified',
-            'role' => 'user',
+            'role' => 'User',
         ];
     }
 

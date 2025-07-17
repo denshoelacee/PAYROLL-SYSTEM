@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Auth;
 
 use App\Contracts\Repository\IUserRepository;
-use App\Contracts\Services\IPasswordResetService;
+use App\Contracts\Services\Auth\IPasswordResetService;
 use Illuminate\Support\Facades\Hash;
 
 class PasswordResetService implements IPasswordResetService

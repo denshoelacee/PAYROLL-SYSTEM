@@ -65,6 +65,7 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/approve/{id}', [AdminEmployeeController::class, 'approve'])->name('admin.approve');
     Route::post('/reject/{id}', [AdminEmployeeController::class, 'reject'])->name('admin.reject');
     Route::post('/payroll/store', [AdminEmployeeController::class, 'storePartial'])->name('admin.store.partial');
+    Route::post('/payroll/publish', [AdminEmployeeController::class, 'publish'])->name('admin.store.publish');
     
     Route::get('/payroll/Payslip', function () {
         return Inertia::render('Admin/ViewPayslip');

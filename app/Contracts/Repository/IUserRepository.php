@@ -22,4 +22,6 @@ interface IUserRepository{
     public function batchApproveAccount(array $user_ids):int;
 
     public function create(array $data):User;
+
+    public function findById(int $id): ?User;
 }

@@ -3,14 +3,14 @@
 namespace App\Services\Auth;
 
 use App\Contracts\Services\Auth\IEditDeleteAccountService;
-use App\Repository\UserRepository;
+use App\Contracts\Repository\IUserRepository;
 use Illuminate\Support\Facades\Auth;
 
 
 class EditDeleteAccountService implements IEditDeleteAccountService
 {
     
-    public function __construct(protected UserRepository $userRepo){}
+    public function __construct(protected IUserRepository $userRepo){}
 
     public function deleteAccount(int $user_id): bool
     {

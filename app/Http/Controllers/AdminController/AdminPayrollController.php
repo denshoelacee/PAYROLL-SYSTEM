@@ -5,8 +5,7 @@ namespace App\Http\Controllers\AdminController;
 use App\Contracts\Services\IPayrollService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditPublishRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
+
 use Inertia\Inertia;
 
 class AdminPayrollController extends Controller
@@ -50,9 +49,10 @@ class AdminPayrollController extends Controller
     public function editedPartialPublish(EditPublishRequest $request,$id)
     {
        $validated = $request->validated();
-       $validated['publish_status'] = $request->get('publish_status', 'partial'); 
-       $this->payrollService->editedPartialPublishPayroll($validated,$id);
+       $validated['publish_status'] = $request->input('publish_status'); 
       
+       $this->payrollService->editedPartialPublishPayroll($validated,$id);
+        //return dd($validated['publish_status']);
        redirect()->back()->with("success","Payroll Updated Successfully!");
     }
 }

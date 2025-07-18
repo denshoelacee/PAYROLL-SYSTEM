@@ -79,7 +79,6 @@ class PayrollRepository implements IPayrollRepository{
            $data['rlip'] = $rlipContribution;
            $data['philhealth'] = $philContribution;
            $data['basic_salary'] = $salary;
-           $data['publish_status'] = 'publish';
 
         $payroll = $this->payrollModel($id);
         $payroll->deduction()->create([

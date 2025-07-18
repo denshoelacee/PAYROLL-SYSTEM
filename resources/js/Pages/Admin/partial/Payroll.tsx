@@ -16,9 +16,8 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import { IoMdAdd, IoMdClose } from "react-icons/io";
 import { Popover } from "@mui/material";
 import TextInputGroup from "@/Components/TextInputGroup";
-import { useForm } from "@inertiajs/react";
-import { Link } from "lucide-react";
-
+import { router, useForm } from "@inertiajs/react";
+import style from '@/../styles/style.css'
 
 type Props = {
     payrollthisMonth : UserPayroll[];
@@ -26,7 +25,7 @@ type Props = {
     
 }
 export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
-    
+    const [submitTrigger, setSubmitTrigger] = useState<'partial' | 'publish' | null>(null);
     const [addModal, setAddModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -35,7 +34,19 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
     const [selectedRow, setSelectedRow] = useState<UserPayroll | null>(null);
     const [selectName, setSelectName] = useState('Select Employee')
     const [disableInput, setDisableInput] = useState(true);
+
+    const flattenedRows = filteredRows.map((row) => ({
+        ...row,
+        employee_id: row.user?.employee_id || '',
+        first_name: row.user?.first_name || '',
+        last_name: row.user?.last_name || '',
+        designation: row.user?.designation || '',
+        department: row.user?.department || '',
+        employment_type: row.user?.employment_type || '',
+    }));
+
     const { data, setData, post,reset} = useForm<any>({
+        payroll_id:'',
         user_id:'',
         basic_pay:'',
         pera:'',
@@ -119,6 +130,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
     useEffect(() => {
         if (editModal && selectedRow) {
             setData({
+                payroll_id: selectedRow.payroll_id,
                 user_id: selectedRow.user_id,
                 basic_pay: selectedRow?.user.basic_pay??'',
                 pera:selectedRow?.pera ?? '',
@@ -149,6 +161,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                 coop: selectedRow?.coop??'',
                 landbank: selectedRow?.landbank??'',
                 ucpb: selectedRow?.ucpb??'',
+                publish_status: selectedRow?.publish_status,
             })
         }else{
             setDisableInput(true);
@@ -211,40 +224,37 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
             }
         }
     }
-
-    const handleEdit = (actionType: 'publish' | 'partial') : FormEventHandler => {
-        return (e)=> {
+    const handleEdit = (actionType: 'partial' | 'publish'): FormEventHandler => {
+        return (e) => {
             e.preventDefault();
             setData('publish_status', actionType);
-            post(route('admin.payroll.update', [selectedRow?.payroll_id, data.publish_status]),{
+            setSubmitTrigger(actionType); // trigger post in useEffect
+        };
+    };
+    useEffect(() => {
+        if (submitTrigger && data.publish_status === submitTrigger) {
+            post(route('admin.payroll.update', data.payroll_id), {
                 onSuccess: () => {
                     setEditModal(false);
+                    setSubmitTrigger(null); // reset trigger
                 }
-            })
+            });
         }
-    }
+    }, [data.publish_status, submitTrigger]);
+
 
     const columns: GridColDef[] = [        
         { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center',
-            renderCell: (params) => `${params.row.user?.employee_id || ''}`,
         },
         { field: 'first_name', headerName: 'First name', flex:1, headerAlign: 'center', align: 'center',
-            renderCell: (params) => `${params.row.user?.first_name || ''}`,
         },
         { field: 'last_name', headerName: 'Last name',flex:1, headerAlign: 'center', align: 'center',
-            renderCell: (params) => `${params.row.user?.last_name || ''}`,
         },
         { field: 'designation', headerName: 'Designation', flex:1, headerAlign: 'center', align: 'center',
-            renderCell: (params) => `${params.row.user?.designation || ''}`,
         },
         { field: 'department', headerName: 'Department', flex:1, headerAlign: 'center', align: 'center',
-            renderCell: (params) => `${params.row.user?.department || ''}`,
         },
         { field: 'employment_type', headerName: 'Type', flex:1, headerAlign: 'center', align: 'center',
-            renderCell: (params) => `${params.row.user?.employment_type || ''}`,
-        },
-        { field: 'role', headerName: 'Role', flex:1, headerAlign: 'center', align: 'center',
-            renderCell: (params) => `${params.row.user?.role || ''}`,
         },
         {
         field: 'publish_status',
@@ -328,7 +338,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                             <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
                                 <div className="text-white px-10 py-3 text-xl">Payroll Summary</div>
                                 <Table
-                                rows={filteredRows}
+                                rows={flattenedRows}
                                 columns={columns}
                                 height={650}
                                 getRowId={(row) => row.user_id}
@@ -526,9 +536,10 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                                     </div>
                             </CardWrapper>  
                             <div className="flex gap-4">
-                            <PrimaryButton onClick={handleSubmit('publish')}className='text-md mt-4 py-2 hover:bg-yellow-600'>Publish</PrimaryButton>
-                            <PrimaryButton onClick={handleSubmit('partial')}className='text-md mt-4 hover:bg-yellow-600'>Partial</PrimaryButton>
-                            <PrimaryButton className='text-md mt-4 hover:bg-yellow-600'>Cancel</PrimaryButton>
+                            <PrimaryButton disabled={disableInput} onClick={handleSubmit('publish')}className='text-md mt-4 py-2 hover:bg-yellow-600'>Publish</PrimaryButton>
+                            <PrimaryButton disabled={disableInput} onClick={handleSubmit('partial')}className='text-md mt-4 hover:bg-yellow-600'>Partial</PrimaryButton>
+                            <PrimaryButton onClick={
+                                () => {setAddModal(false)}}className='text-md mt-4 hover:bg-yellow-600'>Cancel</PrimaryButton>
                             </div>
                             
                         </div>

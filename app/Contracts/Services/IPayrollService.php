@@ -10,4 +10,6 @@ interface IPayrollService
     public function storePartial(array $data);
 
     public function publish(array $data):void;
+
+     public function editedPartialPublishPayroll(array $data,$id):void;
 }

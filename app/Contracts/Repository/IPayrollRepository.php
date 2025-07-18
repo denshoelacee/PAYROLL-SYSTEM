@@ -13,4 +13,9 @@ interface IPayrollRepository{
       public function getPayrollThisMonth();
 
       public function getUsersWithoutPayrollForCurrentMonth();
+
+      public function updatePartial(array $data,$id): void;
+
+      public function updatePublish(array $data,$id): void;
+      
 }

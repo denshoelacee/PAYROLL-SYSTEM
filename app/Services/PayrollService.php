@@ -53,7 +53,7 @@ class PayrollService implements IPayrollService
          $philContribution = $this->contributionTypeRepo->philDeduction($salary);
          
          $totalContribution = $rlipContribution + $philContribution;
-         $totalAccruedPeriod = $user->basic_pay + ($data['pera'] ?? 0);
+         $totalAccruedPeriod = $salary + ($data['pera'] ?? 0);
          $totalDeduction = $this->payrollDeductionRepo->calculateTotalDeduction($data,$totalContribution);
 
          $netPay = $totalAccruedPeriod - $totalDeduction;
@@ -74,5 +74,17 @@ class PayrollService implements IPayrollService
             'total_deduction' => $totalDeduction,
             'net_pay' => $netPay
        ]);
+    }
+
+    public function editedPartialPublishPayroll(array $data,$id):void
+    {
+         if($data['publish_status'] === 'publish'){
+            $this->payrollRepo->updatePublish($data,$id);
+         }
+         if($data['publish_status'] === 'partial')
+         {
+           $this->payrollRepo->updatePartial($data,$id);
+         }
+
     }
 }

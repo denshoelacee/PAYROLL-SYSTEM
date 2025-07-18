@@ -4,7 +4,9 @@ namespace App\Http\Controllers\AdminController;
 
 use App\Contracts\Services\IPayrollService;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EditPublishRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class AdminPayrollController extends Controller
@@ -13,80 +15,22 @@ class AdminPayrollController extends Controller
     public function __construct(protected IPayrollService $payrollService){}
      
     
-    public function savePartial(Request $request)
+    public function savePartial(EditPublishRequest $request)
     {
-       $monetaryRule = ['sometimes', 'nullable', 'numeric', 'regex:/^\d+(\.\d{1,2})?$/'];
-       
-       $validated = $request->validate([
-              'user_id' => ['required','exists:users,user_id'],
-              'pera' => $monetaryRule,
-              'absent' => $monetaryRule,
-              'late' => $monetaryRule,
-              'holding_tax' => $monetaryRule,
-              'tax_bal_due' => $monetaryRule,
-              'policy_loan' => $monetaryRule,
-              'consol_loan' => $monetaryRule,
-              'emerg_loan' => $monetaryRule,
-              'gel' => $monetaryRule,
-              'gfal' => $monetaryRule,
-              'mpl' => $monetaryRule,
-              'mpl_lite' => $monetaryRule,
-              'contributions' => $monetaryRule,
-              'loans' => $monetaryRule,
-              'housing_loan' => $monetaryRule,
-              'cfi' => $monetaryRule,
-              'tipid' => $monetaryRule,
-              'city_savings_bank' => $monetaryRule,
-              'fea' => $monetaryRule,
-              'canteen' => $monetaryRule,
-              'disallowance' => $monetaryRule,
-              'unliquidated_ca' => $monetaryRule,
-              'disallowance_honoraria' => $monetaryRule,
-              'coop' => $monetaryRule,
-              'landbank' => $monetaryRule,
-              'ucpb' => $monetaryRule,
-       ]);
-
-       $this->payrollService->storePartial($validated);
+      
+       $this->payrollService->storePartial($request->validated());
       
     }
 
-     public function publish(Request $request)
-    {
-       $monetaryRule = ['sometimes', 'nullable', 'numeric', 'regex:/^\d+(\.\d{1,2})?$/'];
-       
-       $validated = $request->validate([
-              'user_id' => ['required','exists:users,user_id'],
-              'pera' => $monetaryRule,
-              'absent' => $monetaryRule,
-              'late' => $monetaryRule,
-              'holding_tax' => $monetaryRule,
-              'tax_bal_due' => $monetaryRule,
-              'policy_loan' => $monetaryRule,
-              'consol_loan' => $monetaryRule,
-              'emerg_loan' => $monetaryRule,
-              'gel' => $monetaryRule,
-              'gfal' => $monetaryRule,
-              'mpl' => $monetaryRule,
-              'mpl_lite' => $monetaryRule,
-              'contributions' => $monetaryRule,
-              'loans' => $monetaryRule,
-              'housing_loan' => $monetaryRule,
-              'cfi' => $monetaryRule,
-              'tipid' => $monetaryRule,
-              'city_savings_bank' => $monetaryRule,
-              'fea' => $monetaryRule,
-              'canteen' => $monetaryRule,
-              'disallowance' => $monetaryRule,
-              'unliquidated_ca' => $monetaryRule,
-              'disallowance_honoraria' => $monetaryRule,
-              'coop' => $monetaryRule,
-              'landbank' => $monetaryRule,
-              'ucpb' => $monetaryRule,
-       ]);
-
-       $this->payrollService->publish($validated);
+     public function publish(EditPublishRequest $request)
+    {  
       
+       try{
+         $this->payrollService->publish($request->validated());
+         return Redirect()->back()->with("success","Payroll Publish Successfully!");
+       }catch(\Exception $e){
+         return redirect()->back()->with("error", $e->getMessage());
+       }
     }
 
     public function payrollThisDay()
@@ -101,5 +45,12 @@ class AdminPayrollController extends Controller
                             'newPayroll' => $newPayroll
                            ]
       );
+    }
+
+    public function editedPartialPublish(EditPublishRequest $request,$id)
+    {
+       $validated = $request->validated();
+       
+       $this->payrollService->editedPartialPublishPayroll($validated,$id);
     }
 }

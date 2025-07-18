@@ -17,7 +17,7 @@ class ContributionTypeRepository implements IContributionTypeRepository
     {
         $contribution = $this->getContribution()->rlip;
 
-        $rlipDeduc =$salary * $contribution / 100;
+        $rlipDeduc = $salary * $contribution / 100;
 
         return $rlipDeduc;
     }

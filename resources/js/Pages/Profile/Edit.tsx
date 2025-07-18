@@ -20,8 +20,9 @@ export default function Edit({ auth, mustVerifyEmail, status }: PageProps<{ must
             <Head title="Profile" />
             <Sidebar auth={auth}/>  
             <AdminLayout>
-                <h2 className="font-semibold text-xl my-2 md:mx-20 md:my-5 text-white">Profile</h2>
-                <div className="mx-auto  sm:px-6 lg:px-20 space-y-6">
+               
+                <div className="mx-auto  sm:px-6 lg:px-15 w-full space-y-6">
+                     <h2 className="font-semibold text-xl my-2 lg:px-15 mx-auto md:my-5 text-white">Profile</h2>
                     <div className="p-4 sm:p-8 bg-green-100 rounded-md bg-clip-padding bg-opacity-10 border border-button-border-color sm:rounded-lg">
                         <UpdateProfileInformationForm
                             mustVerifyEmail={mustVerifyEmail}

@@ -50,7 +50,9 @@ class AdminPayrollController extends Controller
     public function editedPartialPublish(EditPublishRequest $request,$id)
     {
        $validated = $request->validated();
-       
+       $validated['publish_status'] = $request->get('publish_status', 'partial'); 
        $this->payrollService->editedPartialPublishPayroll($validated,$id);
+      
+       redirect()->back()->with("success","Payroll Updated Successfully!");
     }
 }

@@ -56,7 +56,8 @@ class PayrollRepository implements IPayrollRepository{
 
     public function payrollModel(int $id): ?Payroll
     {
-        return Payroll::findOrFail($id);
+        return Payroll::where('payroll_id', $id)->firstOrFail();
+
     }
 
     public function updatePartial(array $data,$id): void
@@ -82,6 +83,7 @@ class PayrollRepository implements IPayrollRepository{
            $data['rlip'] = $rlipContribution;
            $data['philhealth'] = $philContribution;
            $data['basic_salary'] = $salary;
+           $data['publish_status'] = 'publish';
 
         $payroll = $this->payrollModel($id);
         $payroll->deduction()->create([

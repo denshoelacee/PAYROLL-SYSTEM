@@ -11,6 +11,10 @@ class Payroll extends Model
 {
     use HasFactory,Notifiable;
 
+    protected $primaryKey = 'payroll_id';
+    public $incrementing = true; // only if payroll_id is an auto-incrementing int
+    protected $keyType = 'int'; // or 'string' if payroll_id is a string
+    
     protected $fillable = [
 
         'user_id',

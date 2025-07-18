@@ -33,7 +33,7 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
     ]);
 });
-
+Route::get('/payslips', [AdminDashboardController::class, 'index'])->name('payslip.index');
 Route::get('/test', function () {
     $user = User::where('user_id', Auth::user_id())->first();
     return response()->json($user);
@@ -66,7 +66,7 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/reject/{id}', [AdminEmployeeController::class, 'reject'])->name('admin.reject');
     Route::post('/payroll/store', [AdminPayrollController::class, 'savePartial'])->name('admin.store.partial');
     Route::post('/payroll/publish', [AdminPayrollController::class, 'publish'])->name('admin.store.publish');
-    Route::post('/payroll/updatePartialPublish/{id}', [AdminPayrollController::class, 'editedPartialPublish'])->name('admin.payroll.update');
+        
     
     Route::get('/payroll/Payslip', function () {
         return Inertia::render('Admin/ViewPayslip');

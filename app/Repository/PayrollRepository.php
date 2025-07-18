@@ -20,13 +20,9 @@ class PayrollRepository implements IPayrollRepository{
 
     ){}
 
-    public function getTotalNetpayMonth()
+    public function getAllPayslip()
     {
-         $totalNetPay = DB::table('payrolls')
-            ->selectRaw('SUM(net_pay) as total_net_pay')
-            ->whereYear('created_at', now()->year)
-            ->whereMonth('created_at', now()->month)
-            ->value('total_net_pay') ?? 0;
+        
     }
 
     public function setPayrollModel(array $data):Payroll

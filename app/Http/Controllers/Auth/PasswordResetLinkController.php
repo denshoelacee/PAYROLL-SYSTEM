@@ -2,18 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Contracts\Repository\IUserRepository;
-use App\Contracts\Services\IPasswordReset;
-use App\Contracts\Services\IPasswordResetService;
+
+use App\Contracts\Services\Auth\IPasswordResetService;
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Exception;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
 

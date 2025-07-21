@@ -1,12 +1,13 @@
+
 import SecondaryButton from "@/Components/SecondaryButton";
-import { PageProps,Employee,UserPayroll } from "@/types"
+import { PageProps,Employee,UserPayroll, User } from "@/types"
 import { GridColDef } from "@mui/x-data-grid";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import Dropdown from "@/Components/Dropdown";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import Table from "@/Components/Table";
 import searchHooks from "@/hooks/searchHooks";
-import { useEffect, useState,FormEventHandler } from "react";
+import { useEffect, useState,FormEventHandler, useMemo } from "react";
 import Search from "@/Components/Search";
 import Modal from "@/Components/Modal";
 import CardWrapper from "@/Components/CardWrapper";
@@ -19,36 +20,59 @@ import TextInputGroup from "@/Components/TextInputGroup";
 import { router, useForm } from "@inertiajs/react";
 import style from '@/../styles/style.css'
 
+
+type MonthOption = {
+  number: string;
+  name: string;
+};
+
 type Props = {
     payrollthisMonth : UserPayroll[];
     newPayroll: Employee[];
+    payslips: UserPayroll[];
+      availableYears: number[];
+      availableMonths: MonthOption[];
+      selectedYear: string;
+      selectedMonth: string;
     
 }
-export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
+export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
+  availableYears,
+  availableMonths,
+  selectedYear,
+  selectedMonth}:Props) {
     const [submitTrigger, setSubmitTrigger] = useState<'partial' | 'publish' | null>(null);
     const [addModal, setAddModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const filteredRows = searchHooks(searchQuery, payrollthisMonth);
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedRow, setSelectedRow] = useState<UserPayroll | null>(null);
     const [selectName, setSelectName] = useState('Select Employee')
     const [disableInput, setDisableInput] = useState(true);
-
-    const flattenedRows = filteredRows.map((row) => ({
+    
+    const filteredRows = useMemo(() => {
+    return payslips
+        .filter((row) => {
+        const date = new Date(row?.pay_date);
+        const yearMatch = date.getFullYear().toString() === selectedYear;
+        const monthMatch = (date.getMonth() + 1).toString().padStart(2, '0') === selectedMonth;
+        return yearMatch && monthMatch;
+        })
+        .filter((row) => {
+        const fullName = `${row.users?.first_name ?? ''} ${row.users?.last_name ?? ''}`.toLowerCase();
+        return fullName.includes(searchQuery.toLowerCase());
+        })
+        .map((row, idx) => ({
         ...row,
-        employee_id: row.user?.employee_id || '',
-        first_name: row.user?.first_name || '',
-        last_name: row.user?.last_name || '',
-        designation: row.user?.designation || '',
-        department: row.user?.department || '',
-        employment_type: row.user?.employment_type || '',
-    }));
+        id: idx,
+        }));
+    }, [payslips, selectedYear, selectedMonth, searchQuery]);
+
 
     const { data, setData, post,reset} = useForm<any>({
         payroll_id:'',
         user_id:'',
-        basic_pay:'',
+        basic_salary:'',
         pera:'',
         absent:'',
         late:'',
@@ -127,12 +151,13 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
         
     };
 
+    console.log(selectedRow?.users?.first_name)
     useEffect(() => {
         if (editModal && selectedRow) {
             setData({
-                payroll_id: selectedRow.payroll_id,
+                payroll_id: selectedRow?.payroll_id ?? '',
                 user_id: selectedRow.user_id,
-                basic_pay: selectedRow?.user.basic_pay??'',
+                basic_salary: selectedRow?.basic_pay ?? '',
                 pera:selectedRow?.pera ?? '',
                 absent:selectedRow?.absent ?? '',
                 late:selectedRow?.late??'',
@@ -167,7 +192,6 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
             setDisableInput(true);
             setData({
                 user_id: '',
-                basic_pay:'',
                 basic_salary: '',
                 pera:'',
                 absent:'',
@@ -233,7 +257,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
     };
     useEffect(() => {
         if (submitTrigger && data.publish_status === submitTrigger) {
-            post(route('admin.payroll.update', data.payroll_id), {
+            post(route('admin.payroll.update-partial-publish', data.payroll_id ), {
                 onSuccess: () => {
                     setEditModal(false);
                     setSubmitTrigger(null); // reset trigger
@@ -241,6 +265,10 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
             });
         }
     }, [data.publish_status, submitTrigger]);
+
+    const handleChange = (year: number, month: string) => {
+        router.get(route("admin.payroll"), { year, month }, { preserveState: true });
+    };
 
 
     const columns: GridColDef[] = [        
@@ -298,30 +326,54 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
         <>
             <div className="flex gap-5 flex-col-reverse md:justify-between md:flex-row">
                         <div className="flex gap-3 justify-between">
+                            <div className="flex gap-4">
+                            {/* Year Dropdown */}
                             <Dropdown>
                                 <Dropdown.Trigger>
-                                    <SecondaryButton className="flex w-full justify-between items-center md:w-[200px]">
-                                        <p className='text-sm'>Select Year</p>
-                                            <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
-                                    </SecondaryButton>
+                                <SecondaryButton className="flex w-full justify-between items-center md:w-[200px]">
+                                    <p className="text-sm">{selectedYear || "Select Year"}</p>
+                                    <RiArrowDropDownLine className="text-2xl transition-transform duration-500 ease-in-out" />
+                                </SecondaryButton>
                                 </Dropdown.Trigger>
-                                <Dropdown.Content contentClasses="w-[200px]" align="left" >
-                                    <option value="Regular">COT</option>
-                                    <option value="Regular">Part-Time</option>
+                                <Dropdown.Content contentClasses="w-[200px]" align="left">
+                                {availableYears.map((year) => (
+                                    <button
+                                    key={year}
+                                    onClick={() => handleChange(year, selectedMonth)}
+                                    className="block w-full text-left px-4 py-1 hover:bg-red-500"
+                                    >
+                                    {year}
+                                    </button>
+                                ))}
                                 </Dropdown.Content>
                             </Dropdown>
+
+                            {/* Month Dropdown */}
                             <Dropdown>
                                 <Dropdown.Trigger>
-                                    <SecondaryButton className="flex w-full justify-between items-center md:w-[200px]">
-                                        <p className='text-sm'>Select Month</p>
-                                            <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
-                                    </SecondaryButton>
+                                <SecondaryButton className="flex w-full justify-between items-center md:w-[200px]">
+                                    <p className="text-sm">
+                                    {selectedMonth
+                                        ? availableMonths.find((m) => m.number === selectedMonth)?.name
+                                        : "Select Month"}
+                                    </p>
+                                    <RiArrowDropDownLine className="text-2xl transition-transform duration-500 ease-in-out" />
+                                </SecondaryButton>
                                 </Dropdown.Trigger>
-                                <Dropdown.Content contentClasses="w-[200px]" align="left" >
-                                    <option value="Regular">COT</option>
-                                    <option value="Regular">Part-Time</option>
+                                <Dropdown.Content contentClasses="w-[200px]" align="left">
+                                {availableMonths.map((m) => ( 
+                                    <button
+                                    key={m.number}
+                                    onClick={() => handleChange(Number(selectedYear), m.number)}
+                                    className="block w-full text-left px-4 py-1 hover:bg-red-500"
+                                    >
+                                    {m.name}
+                                    </button>
+                                ))}
                                 </Dropdown.Content>
                             </Dropdown>
+                            </div>
+
                         </div>
                         <div className="flex gap-4">
                             <SecondaryButton onClick={() => setAddModal(true)}>
@@ -338,10 +390,10 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                             <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
                                 <div className="text-white px-10 py-3 text-xl">Payroll Summary</div>
                                 <Table
-                                rows={flattenedRows}
+                                rows={filteredRows}
                                 columns={columns}
                                 height={650}
-                                getRowId={(row) => row.user_id}
+                                getRowId={(row) => row.payroll_id}
                                 className="employee-table"
                             />
                             </div>
@@ -374,7 +426,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                                                     </Dropdown.Trigger> 
                                                     <Dropdown.Content ableSearch={true} contentClasses="bg-gray-300 w-full max-h-[200px] overflow-y-auto p-0" align="left">
                                                     {newPayroll
-                                                    .map((newPayroll, index) => {
+                                                    ?.map((newPayroll, index) => {
                                                         const payrolUsers = newPayroll;
                                                         const name = `${payrolUsers?.employee_id} - ${payrolUsers?.first_name} ${payrolUsers?.last_name}`;
 
@@ -545,14 +597,14 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                         </div>
                     </form>
                 </Modal>
-
+                
                 {/*EDIT*/}
                 <Modal show={editModal} onClose={() => setEditModal(false)} maxWidth="5xl" className="h-full">
                     <form >
                         <div className="p-6 space-y-4 border rounded-lg">
                             <div className="flex justify-between">
                                 {/*<h2 className="text-lg text-white">Edit Payroll</h2>*/}
-                                <h2 className="text-lg font-bold mb-4 text-white">Edit Employee's Payroll - {[selectedRow?.user?.employee_id+" - ", selectedRow?.user?.last_name + ", " ,selectedRow?.user?.first_name]}</h2>
+                                <h2 className="text-lg font-bold mb-4 text-white">Edit Employee's Payroll - {[selectedRow?.employee_id+" - ", selectedRow?.last_name + ", " ,selectedRow?.first_name] }</h2>
                                 <span onClick={() => setAddModal(false)}>
                                     <IoMdClose color="white" className="cursor-pointer text-2xl"/>
                                 </span>
@@ -562,7 +614,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
                                     <p>Earning</p>
                                         <div className="flex gap-4">
                                             {/*BASIC SALARY*/}
-                                            <TextInputGroup label="Basic Salary" id="basic_salary" value={data.basic_pay} disabled/>
+                                            <TextInputGroup label="Basic Salary" id="basic_salary" value={data.basic_salary} disabled/>
                                             <TextInputGroup label="PERA" id="PERA" value={data.pera}
                                             onChange={(e) =>{setData('pera', e.target.value)}}/>
                                         </div>

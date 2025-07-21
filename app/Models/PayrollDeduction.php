@@ -9,9 +9,12 @@ class PayrollDeduction extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'payroll_deduction_id';
+
+    public $incrementing = true;
+    protected $keyType = 'int';
     protected $fillable = [
 
-        'payroll_deduction',
         'payroll_id',
         'total_accrued_period',
         'total_deduction',

@@ -5,12 +5,24 @@ import Sidebar from '@/Components/Sidebar';
 import AdminLayout from '@/Layouts/AdminLayout';
 import PayrollPartial from './partial/Payroll';
 
-
+type MonthOption = {
+  number: string;
+  name: string;
+};
 type Props = PageProps<{
     thisMonth : UserPayroll[];
     newPayroll: Employee[];
+    payslips: UserPayroll[];
+      availableYears: number[];
+      availableMonths: MonthOption[];
+      selectedYear: string;
+      selectedMonth: string;
 }>;
-export default function Payroll({ auth,thisMonth,newPayroll}:Props) {
+export default function Payroll({ auth,thisMonth,newPayroll,payslips,
+  availableYears,
+  availableMonths,
+  selectedYear,
+  selectedMonth}:Props) {
 
     return (
         
@@ -26,7 +38,14 @@ export default function Payroll({ auth,thisMonth,newPayroll}:Props) {
                     title="Payroll">
                 
                 <div className="">
-                    <PayrollPartial payrollthisMonth={thisMonth} newPayroll={newPayroll}/>
+                    <PayrollPartial 
+                    payrollthisMonth={thisMonth} 
+                    newPayroll={newPayroll} 
+                    payslips={payslips} 
+                    availableMonths={availableMonths}
+                    availableYears={availableYears}
+                    selectedMonth={selectedMonth}
+                    selectedYear={selectedYear}/>
                 </div>
                 </AdminLayout>
             </div>

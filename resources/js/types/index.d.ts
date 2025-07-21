@@ -33,9 +33,10 @@ export interface User {
         department:string
     }
 
-    export interface UserPayroll {
+    export interface UserPayroll extends Employee{
         payroll_id: number;
-        user_id: number | null;
+        first_name:string;
+        last_name: string;
         basic_salary: number | null;
         pera: number | null;
         absent: number | null;
@@ -68,8 +69,9 @@ export interface User {
         publish_status: 'publish' | 'partial' | 'none';
         created_at: string;
         updated_at: string;
+        pay_date:string;
 
-        user:Employee
+        users?:Employee
         previousPayroll?: UserPayroll
     }
 

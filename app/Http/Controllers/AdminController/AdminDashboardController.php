@@ -34,7 +34,12 @@ class AdminDashboardController extends Controller
         ->select([
             'payrolls.created_at as pay_date',
             'users.employee_id as employee_id',
-            'users.last_name as name',
+            'users.last_name as last_name',
+            'users.first_name as first_name',
+            'users.designation as designation',
+            'users.department as department',
+            'users.employment_type as employment_type',
+            'payrolls.publish_status as publish_status',
             'payrolls.basic_salary',
             'payroll_deductions.total_deduction',
             'payroll_deductions.net_pay'

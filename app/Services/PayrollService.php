@@ -31,16 +31,34 @@ class PayrollService implements IPayrollService
 
     public function storePartial(array $data)
     {
-       $user = $this->userRepository->findById($data["user_id"]);
+        $user = $this->userRepository->findById($data["user_id"]);
+         $salary = $user->basic_pay;
 
-         if (!$user){
+         $rlipContribution = $this->contributionTypeRepo->rlipDeduction($salary);
+         $philContribution = $this->contributionTypeRepo->philDeduction($salary);
+         
+         $totalContribution = $rlipContribution + $philContribution;
+         $totalAccruedPeriod = $salary + ($data['pera'] ?? 0);
+         $totalDeduction = $this->payrollDeductionRepo->calculateTotalDeduction($data,$totalContribution);
+
+         $netPay = $totalAccruedPeriod - $totalDeduction;
+
+           if (!$user){
             throw new \Exception('User not found');
           }
-
-       $data['basic_salary'] = $user->basic_pay;
+       
+       $data['rlip'] = $rlipContribution;
+       $data['philhealth'] = $philContribution;
+       $data['basic_salary'] = $salary;
        $data['publish_status'] = 'partial';
 
-       return $this->payrollRepo->setPayrollModel($data);
+
+       $payroll = $this->payrollRepo->setPayrollModel($data);
+       $payroll->deduction()->create([
+            'total_accrued_period' => $totalAccruedPeriod,
+            'total_deduction' => $totalDeduction,
+            'net_pay' => $netPay
+       ]);
 
     }
 

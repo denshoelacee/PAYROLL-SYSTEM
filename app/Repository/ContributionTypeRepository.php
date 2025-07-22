@@ -28,7 +28,7 @@ class ContributionTypeRepository implements IContributionTypeRepository
 
        $philDeduc = $salary * $contribution / 100;
         
-       return $philDeduc /2;
+       return $philDeduc;
 
     }
 }

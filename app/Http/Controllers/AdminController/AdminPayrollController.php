@@ -41,11 +41,11 @@ class AdminPayrollController extends Controller
       $newPayroll = $this->payrollService->usersWithoutPayrollForCurrentMonth();
 
       $year = $request->year ?? now()->year;
-    $month = $request->month ?? now()->month;
+      $month = $request->month ?? now()->month;
 
     $payslips = Payroll::join('users', 'payrolls.user_id', '=', 'users.user_id')
+        ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
         ->select([
-            'payrolls.created_at as pay_date',
             'users.user_id',
             'users.employee_id as employee_id',
             'users.last_name as last_name',
@@ -53,15 +53,14 @@ class AdminPayrollController extends Controller
             'users.designation as designation',
             'users.department as department',
             'users.employment_type as employment_type',
-
             'users.basic_pay',
-            'payrolls.*'
+            'payrolls.*',
+            'payroll_deductions.*'
         ])
         ->whereMonth('payrolls.created_at', $month)
         ->whereYear('payrolls.created_at', $year)
         ->get();
 
-    // Example months data
     $months = collect(range(1, 12))->map(function ($m) {
         return [
             'number' => str_pad($m, 2, '0', STR_PAD_LEFT),
@@ -70,15 +69,14 @@ class AdminPayrollController extends Controller
     });
 
 
-      return Inertia::render(
-                           'Admin/Payroll',
+      return Inertia::render('Admin/Payroll',
                            ['thisMonth' => $thisMonth,
                             'newPayroll' => $newPayroll,
-                             'payslips' => $payslips,
-                              'availableYears' => range(2025, now()->year),
-                              'availableMonths' => $months,
-                              'selectedYear' => (string)$year,
-                              'selectedMonth' => str_pad($month, 2, '0', STR_PAD_LEFT),
+                            'payslips' => $payslips,
+                            'availableYears' => range(2025, now()->year),
+                            'availableMonths' => $months,
+                            'selectedYear' => (string)$year,
+                            'selectedMonth' => str_pad($month, 2, '0', STR_PAD_LEFT),
                            ]
       );
     }
@@ -89,7 +87,6 @@ class AdminPayrollController extends Controller
        $validated['publish_status'] = $request->input('publish_status'); 
       
        $this->payrollService->editedPartialPublishPayroll($validated,$id);
-        //return dd($validated['publish_status']);
 
        redirect()->back()->with("success","Payroll Updated Successfully!");
     }

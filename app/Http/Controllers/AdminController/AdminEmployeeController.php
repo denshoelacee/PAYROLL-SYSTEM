@@ -5,7 +5,6 @@ namespace App\Http\Controllers\AdminController;
 use App\Contracts\Services\IEmployeeService;
 use App\Contracts\Services\IJobTitleService;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 
@@ -57,18 +56,4 @@ class AdminEmployeeController extends Controller
         }
         
     }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function index(Request $reject)
-    {
-         $pendings = $this->employeeService->pendingUsers();
-         $employeelist = $this->employeeService->employeeList();
-
-          return response()->json([
-  
-            'userList' => $employeelist,
-        ]);
-    }
-
 }

@@ -69,7 +69,6 @@ export interface User {
         publish_status: 'publish' | 'partial' | 'none';
         created_at: string;
         updated_at: string;
-        pay_date:string;
 
         users?:Employee
         previousPayroll?: UserPayroll

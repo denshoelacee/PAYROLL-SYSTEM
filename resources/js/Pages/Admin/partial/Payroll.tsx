@@ -53,7 +53,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
     const filteredRows = useMemo(() => {
     return payslips
         .filter((row) => {
-        const date = new Date(row?.pay_date);
+        const date = new Date(row?.created_at);
         const yearMatch = date.getFullYear().toString() === selectedYear;
         const monthMatch = (date.getMonth() + 1).toString().padStart(2, '0') === selectedMonth;
         return yearMatch && monthMatch;

@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
          User::create([
-        'employee_id' => 100001,
+        'employee_id' => 3220231,
         'last_name' => 'Admin',
         'first_name' => 'Super',
         'designation' => 'System Admin',
@@ -27,6 +27,6 @@ class DatabaseSeeder extends Seeder
         'role' => 'Admin',
     ]);
 
-        User::factory(100)->create();
+        User::factory(100)->create();      
     }
 }

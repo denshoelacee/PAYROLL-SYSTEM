@@ -24,7 +24,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'employee_id' => fake()->unique()->numberBetween(100000, 999999),
+            'employee_id' => $this->faker->unique()->numerify('1#####'), // ensures no 100001 duplicates
             'last_name' => fake()->lastName(),
             'first_name' => fake()->firstName(),
             'designation' => 'Staff',

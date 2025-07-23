@@ -10,6 +10,7 @@ interface TextInputGroupProps {
   value?: any;
   inputMode?: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string; // Optional placeholder prop
 }
 
 export default function TextInputGroup({
@@ -20,6 +21,7 @@ export default function TextInputGroup({
   disabled = false,
   value,
   inputMode,
+  placeholder = "", // Default to empty string if not provided
   onChange= () =>{}
   
 }: TextInputGroupProps) {
@@ -37,6 +39,7 @@ export default function TextInputGroup({
         inputMode={inputMode}
         onChange={onChange}
         className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1 "
+        placeholder={placeholder} // Use the placeholder prop here
       />
     </div>
   );

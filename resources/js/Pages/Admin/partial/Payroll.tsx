@@ -19,7 +19,7 @@ import { Popover } from "@mui/material";
 import TextInputGroup from "@/Components/TextInputGroup";
 import { router, useForm } from "@inertiajs/react";
 import style from '@/../styles/style.css'
-
+import { useNavigate } from 'react-router-dom';
 
 type MonthOption = {
   number: string;
@@ -68,6 +68,55 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
         }));
     }, [payslips, selectedYear, selectedMonth, searchQuery]);
 
+    const fieldTitles = 
+        [
+            {
+                title: "Deductions",
+                fields: [
+                    { label: "Absences w/o pay", id: "absent" },
+                    { label: "W/holding Tax", id: "holding_tax" },
+                    { label: "Late/Undertime", id: "late" },
+                ]
+            },
+            {
+                title: "GSIS",
+                fields: [
+                    { label: "RLIP", id: "rlip", disabled: true },
+                    { label: "Policy Loan", id: "policy_loan" },
+                    { label: "Consol Loan", id: "consol_loan" },
+                    { label: "Emergency Loan", id: "emerg_loan" },
+                    { label: "GEL", id: "gel" },
+                    { label: "GFAL", id: "gfal" },
+                    { label: "MPL", id: "mpl" },
+                    { label: "MPL LITE", id: "mpl_lite" },
+                ]
+            },
+            {
+                title: "HDMF",
+                fields: [
+                    { label: "Contributions", id: "contributions" },
+                    { label: "Loans", id: "loans" },
+                    { label: "Housing Loans", id: "housing_loan" },
+                ]
+            },
+            {
+                title: "OTHER DEDUCTIONS",
+                fields: [
+                    { label: "Philhealth", id: "philhealth", disabled: true },
+                    { label: "CFI", id: "cfi" },
+                    { label: "TIPID", id: "tipid" },
+                    { label: "CITY BANK SAVINGS", id: "city_savings_bank" },
+                    { label: "FEA", id: "fea" },
+                    { label: "CANTEEN", id: "canteen" },
+                    { label: "Disallowance", id: "disallowance" },
+                    { label: "Unliquidated Cash Advances", id: "unliquidated_ca" },
+                    { label: "Disallowance(Honoraria)", id: "disallowance_honoraria" },
+                    { label: "COOP", id: "coop" },
+                    { label: "LANDBANK", id: "landbank" },
+                    { label: "UCPB", id: "ucpb" },
+                ]
+            },
+        ]
 
     const { data, setData, post,reset} = useForm<any>({
         payroll_id:'',
@@ -151,7 +200,6 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
         
     };
 
-    console.log(selectedRow?.users?.first_name)
     useEffect(() => {
         if (editModal && selectedRow) {
             setData({
@@ -225,29 +273,19 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
         }
     }, [editModal, selectedRow]);
 
-    const handleSubmit = (actionType: 'partial' | 'publish') : FormEventHandler  => {
+    const handleSubmit = (actionType: 'partial' | 'publish'): FormEventHandler => {
         return (e) => {
             e.preventDefault();
-            if (actionType === 'partial') {
-                post(route('admin.store.partial'), {
-                    onSuccess: () => {
-                        setAddModal(false);
-                        reset(); 
-                        setSelectName('Select Employee');
-                    },
-                });
-            }
-            if (actionType === 'publish') {
-                post(route('admin.store.publish'), {
-                    onSuccess: () => {
-                        setAddModal(false);
-                        reset(); 
-                        setSelectName('Select Employee');
-                    }
-                })
-            }
-        }
-    }
+            post(route(`admin.store.${actionType}`), {
+                onSuccess: () => {
+                    setAddModal(false);
+                    reset();
+                    setSelectName('Select Employee');
+                },
+            });
+        };
+    };
+
     const handleEdit = (actionType: 'partial' | 'publish'): FormEventHandler => {
         return (e) => {
             e.preventDefault();
@@ -269,7 +307,6 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
     const handleChange = (year: number, month: string) => {
         router.get(route("admin.payroll"), { year, month }, { preserveState: true });
     };
-
 
     const columns: GridColDef[] = [        
         { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center',
@@ -400,342 +437,125 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                         </div>
                     </div>   
 
-            {/*Modal*/}
+            {/*ADD MODAL*/}
                 <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="5xl" className="h-full">
-                    <form >
+                    <form>
                         <div className="p-6 space-y-4 border rounded-lg">
-                            <div className="flex justify-between">
+                            {/* Header */}
+                            <div className="flex justify-between items-center">
                                 <h2 className="text-lg text-white">New Payroll</h2>
-                                {/*<h2 className="text-lg font-bold mb-4 text-white">{[selectedRow?.user?.employee_id+" - ", selectedRow?.user?.last_name + ", " ,selectedRow?.user?.first_name]}</h2>*/}
-                                <span onClick={() => setAddModal(false)}>
-                                    <IoMdClose color="white" className="cursor-pointer text-2xl"/>
-                                </span>
+                                <IoMdClose color="white" className="cursor-pointer text-2xl" onClick={() => setAddModal(false)} />
                             </div>
-                                <CardWrapper className="justify-between p-3 gap-4 text-white">
-                                    {/*EARNINGS*/}
-                                    <p>Earning</p>
-                                        <div className="flex gap-4">
-                                            <div className='w-full my-2'>
-                                                <InputLabel htmlFor="department" value="Employee *"  className='text-white'/>
-                                                <Dropdown>
-                                                    <Dropdown.Trigger>
-                                                        <button type="button" className="bg-transparent w-full border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
-                                                            <p className='text-sm'>{selectName}</p>
-                                                            <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
-                                                        </button>
-                                                    </Dropdown.Trigger> 
-                                                    <Dropdown.Content ableSearch={true} contentClasses="bg-gray-300 w-full max-h-[200px] overflow-y-auto p-0" align="left">
-                                                    {newPayroll
-                                                    ?.map((newPayroll, index) => {
-                                                        const payrolUsers = newPayroll;
-                                                        const name = `${payrolUsers?.employee_id} - ${payrolUsers?.first_name} ${payrolUsers?.last_name}`;
 
-                                                        return (
-                                                        <button
-                                                            key={index}
-                                                            type="button"
-                                                            id="employee"
-                                                            name="employee"
-                                                            onClick={() => handleDropdownSelect(payrolUsers, 'employee')}
-                                                            className="w-full px-4 py-2 text-left bg-gray-300 hover:bg-[#145858] text-black hover:text-white"
-                                                        >
-                                                            {name}
-                                                        </button>
-                                                        );
-                                                    })}
+                            {/* Employee Dropdown */}
+                            <CardWrapper className="justify-between p-3 gap-4 text-white">
+                                <p>Earning</p>
+                                <div className="flex gap-4">
+                                    <div className="w-full my-2">
+                                        <InputLabel htmlFor="department" value="Employee *" className="text-white" />
+                                        <Dropdown>
+                                            <Dropdown.Trigger>
+                                                <button type="button" className="bg-transparent w-full border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center">
+                                                    <p className='text-sm'>{selectName}</p>
+                                                    <RiArrowDropDownLine className="text-2xl" />
+                                                </button>
+                                            </Dropdown.Trigger>
+                                            <Dropdown.Content ableSearch={true} contentClasses="bg-gray-300 w-full max-h-[200px] overflow-y-auto p-0" align="left">
+                                                {newPayroll?.map((user, index) => (
+                                                    <button
+                                                        key={index}
+                                                        type="button"
+                                                        onClick={() => handleDropdownSelect(user, 'employee')}
+                                                        className="w-full px-4 py-2 text-left bg-gray-300 hover:bg-[#145858] text-black hover:text-white"
+                                                    >
+                                                        {`${user.employee_id} - ${user.first_name} ${user.last_name}`}
+                                                    </button>
+                                                ))}
+                                            </Dropdown.Content>
+                                        </Dropdown>
+                                    </div>
+                                    <TextInputGroup label="Basic Salary" id="basic_pay" value={data.basic_pay} disabled />
+                                    <TextInputGroup label="PERA" id="PERA" value={data.pera} onChange={e => setData('pera', e.target.value)} disabled={disableInput} />
+                                </div>
+                            </CardWrapper>
 
-                                                    </Dropdown.Content>
-                                                </Dropdown>
-                                            </div>
-                                            {/*BASIC SALARY*/}
-                                            <TextInputGroup label="Basic Salary" id="basic_pay" value={data.basic_pay} disabled/>
-                                            <TextInputGroup label="PERA" id="PERA" value={data.pera} 
-                                            onChange={(e) => {setData('pera', e.target.value)}} 
-                                            disabled={disableInput}/>
-                                        </div>
-                                </CardWrapper>
-                                {/* DEDUCTIONS */}
-                                <CardWrapper className="justify-between p-3 w-full text-white">
-                                    <p>Deductions</p>
-                                        <div className="flex gap-4 ">
-                                            {/*Absences w/o pay*/}
-                                            <TextInputGroup label="Absences w/o pay" id="Absences w/o pay" value={data.absent }
-                                            onChange={(e) =>{setData('absent', e.target.value)}}
-                                            disabled={disableInput}/>
-                                            {/*W/holding Tax*/}
-                                            <TextInputGroup label="W/holding Tax" id="W/holding Tax" value={data.holding_tax}
-                                            onChange={(e) =>{setData('holding_tax', e.target.value)}}
-                                            disabled={disableInput}/>
-                                            {/*Late/Undertime*/}
-                                            <TextInputGroup label="Late/Undertime" id="Late/Undertime" value={data.late}
-                                            onChange={(e) =>{setData('late', e.target.value)}}
-                                            disabled={disableInput}/>
-                                        </div>
-                                </CardWrapper>  
-                                <CardWrapper className=" p-3 gap-4 text-white">
-                                        <p>GSIS</p>
-                                        <div className="flex justify-between gap-4">
-                                            {/*RLIP*/}
-                                            <TextInputGroup label="RLIP" id="RLIP" value={data.rlip}
-                                            onChange={(e) =>{setData('rlip', e.target.value)}} disabled/>
-                                            {/*Policy Loan*/}
-                                            <TextInputGroup label="Policy Loan" id="Policy Loan" value={data.policy_loan}
-                                            onChange={(e) =>{setData('policy_loan', e.target.value)}}
-                                            disabled={disableInput}/>
-                                            {/*Consol Loan*/}
-                                            <TextInputGroup label="Consol Loan" id="Consol Loan" value={data.consol_loan}
-                                            onChange={(e) =>{setData('consol_loan', e.target.value)}}
-                                            disabled={disableInput}/>                                                    
-                                        </div>
-                                        <div className="flex justify-between gap-4">
-                                            {/*Emergency Loan*/}
-                                            <TextInputGroup label="Emergency Loan" id="Emergency Loan" value={data.emerg_loan}
-                                            onChange={(e) =>{setData('emerg_loan', e.target.value)}}
-                                            disabled={disableInput}/>
-                                            {/*GEL*/}
-                                            <TextInputGroup label="GEL" id="GEL" value={data.gel}
-                                            onChange={(e) =>{setData('gel', e.target.value)}}
-                                            disabled={disableInput}/>
-                                            {/*GFAL*/}
-                                            <TextInputGroup label="GFAL" id="GFAL" value={data.gfal}
-                                            onChange={(e) =>{setData('gfal', e.target.value)}}
-                                            disabled={disableInput}/>
-                                        </div>
-                                        <div className="flex justify-between gap-4">
-                                            {/*MPL*/}
-                                            <TextInputGroup label="MPL" id="MPL" value={data.mpl}
-                                            onChange={(e) =>{setData('mpl', e.target.value)}}
-                                            disabled={disableInput}/>
-                                            {/*MPL LITE*/}
-                                            <TextInputGroup label="MPL LITE" id="MPL" value={data.mpl_lite}
-                                            onChange={(e) =>{setData('mpl_lite', e.target.value)}}
-                                            disabled={disableInput}/>
-                                        </div>
-                                </CardWrapper>
-                                <CardWrapper className="justify-between p-3 w-full text-white">
-                                    <p>HDMF</p>
-                                    <div className="flex gap-4 ">
-                                        {/*Contribution*/}
-                                        <TextInputGroup label="Contributions" id="contributions" value={data.contributions}
-                                        onChange={(e) =>{setData('contributions', e.target.value)}}
-                                        disabled={disableInput}/>
-                                        {/*Loans*/}
-                                        <TextInputGroup label="Loans" id="Loans" value={data.loans}
-                                        onChange={(e) =>{setData('loans', e.target.value)}}
-                                        disabled={disableInput}/>
-                                        {/*Housing Loans*/}
-                                        <TextInputGroup label="Housing Loans" id="Housing Loans" value={data.housing_loan}
-                                        onChange={(e) =>{setData('housing_loan', e.target.value)}}
-                                        disabled={disableInput}/>
+                            {/* Reusable Input Group Rendering */}
+                            {fieldTitles.map((section, index) => (
+                                <CardWrapper key={index} className="justify-between p-3 w-full text-white">
+                                    <p>{section.title}</p>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                                        {section.fields.map(({ label, id, disabled }) => (
+                                            <TextInputGroup
+                                                key={id}
+                                                label={label}
+                                                id={id}
+                                                value={data[id]}
+                                                onChange={e => setData(id, e.target.value)}
+                                                disabled={disabled ?? disableInput}
+                                                placeholder={(label === "RLIP" || label === "Philhealth") ? "(AUTOGENERATED)" : ""}
+                                            />
+                                        ))}
                                     </div>
                                 </CardWrapper>
-                                <CardWrapper className="justify-between p-3 w-full text-white">
-                                    <p>OTHER DEDUCTIONS</p>
-                                    <div className="flex gap-4">
-                                        {/*Philhealht*/}
-                                        <TextInputGroup label="Philhealth" id="philhealth" value={data.philhealth}
-                                        onChange={(e) =>{setData('philhealth', e.target.value)}}disabled />
-                                        {/*CFI*/}
-                                        <TextInputGroup label="CFI" id="cfi" value={data.cfi}
-                                        onChange={(e) =>{setData('cfi', e.target.value)}}
-                                        disabled={disableInput}/>
-                                        {/*TIPID*/}
-                                        <TextInputGroup label="TIPID" id="tipid" value={data.tipid}
-                                        onChange={(e) =>{setData('tipid', e.target.value)}}
-                                        disabled={disableInput}/>
-                                    </div>
-                                    <div className="flex gap-4">
-                                        {/*CITY BANKS SAVING*/}
-                                        <TextInputGroup label="CITY BANK SAVINGS" id="city_bank_savings" value={data.city_savings_bank}
-                                        onChange={(e) =>{setData('city_savings_bank', e.target.value)}}
-                                        disabled={disableInput}/>
-                                        {/*FEA*/}
-                                        <TextInputGroup label="FEA" id="fea" value={data.fea}
-                                        onChange={(e) =>{setData('fea', e.target.value)}}
-                                        disabled={disableInput}/>
-                                        {/*CANTEEN*/}
-                                        <TextInputGroup label="CANTEEN" id="canteen" value={data.canteen}
-                                        onChange={(e) =>{setData('canteen', e.target.value)}}
-                                        disabled={disableInput}/>
-                                    </div>
-                                    <div className="flex gap-4">
-                                        {/*Disallowance*/}
-                                        <TextInputGroup label="Disallowance" id="disallowance1" value={data.disallowance}
-                                        onChange={(e) =>{setData('disallowance', e.target.value)}}
-                                        disabled={disableInput}/>
-                                        {/*Unliquidated Cash Advances*/}
-                                        <TextInputGroup label="Unliquidated Cash Advances" id="unliquidated_cash_advances" value={data.unliquidated_ca}
-                                        onChange={(e) =>{setData('unliquidated_ca', e.target.value)}}
-                                        disabled={disableInput}/>
-                                        {/*Honoraria*/}
-                                        <TextInputGroup label="Disallowance(Honoraria)" id="Honoraria" value={data.disallowance_honoraria}
-                                        onChange={(e) =>{setData('disallowance_honoraria', e.target.value)}}
-                                        disabled={disableInput}/>
-                                    </div>
-                                    <div className="flex gap-4">
-                                        {/*COOP*/}
-                                        <TextInputGroup label="COOP" id="coop" value={data.coop}
-                                        onChange={(e) =>{setData('coop', e.target.value)}}
-                                        disabled={disableInput}/>
-                                        {/*LANDBANK*/}
-                                        <TextInputGroup label="LANDBANK" id="landbank" value={data.landbank}
-                                        onChange={(e) =>{setData('landbank', e.target.value)}}
-                                        disabled={disableInput}/>
-                                        {/*UCPB*/}
-                                        <TextInputGroup label="UCPB" id="ucpb" value={data.ucpb}
-                                        onChange={(e) =>{setData('ucpb', e.target.value)}}
-                                        disabled={disableInput}/>
-                                    </div>
-                            </CardWrapper>  
+                            ))}
+
+                            {/* Footer Buttons */}
                             <div className="flex gap-4">
-                            <PrimaryButton disabled={disableInput} onClick={handleSubmit('publish')}className='text-md mt-4 py-2 hover:bg-yellow-600'>Publish</PrimaryButton>
-                            <PrimaryButton disabled={disableInput} onClick={handleSubmit('partial')}className='text-md mt-4 hover:bg-yellow-600'>Partial</PrimaryButton>
-                            <PrimaryButton onClick={
-                                () => {setAddModal(false)}}className='text-md mt-4 hover:bg-yellow-600'>Cancel</PrimaryButton>
+                                <PrimaryButton disabled={disableInput} onClick={handleSubmit('publish')} className='text-md mt-4 py-2 hover:bg-yellow-600'>Publish</PrimaryButton>
+                                <PrimaryButton disabled={disableInput} onClick={handleSubmit('partial')} className='text-md mt-4 hover:bg-yellow-600'>Partial</PrimaryButton>
+                                <PrimaryButton onClick={() => setAddModal(false)} className='text-md mt-4 hover:bg-yellow-600'>Cancel</PrimaryButton>
                             </div>
-                            
                         </div>
                     </form>
                 </Modal>
+
                 
                 {/*EDIT*/}
                 <Modal show={editModal} onClose={() => setEditModal(false)} maxWidth="5xl" className="h-full">
-                    <form >
+                    <form>
                         <div className="p-6 space-y-4 border rounded-lg">
+                            {/* Header */}
                             <div className="flex justify-between">
-                                {/*<h2 className="text-lg text-white">Edit Payroll</h2>*/}
-                                <h2 className="text-lg font-bold mb-4 text-white">Edit Employee's Payroll - {[selectedRow?.employee_id+" - ", selectedRow?.last_name + ", " ,selectedRow?.first_name] }</h2>
-                                <span onClick={() => setAddModal(false)}>
-                                    <IoMdClose color="white" className="cursor-pointer text-2xl"/>
+                                <h2 className="text-lg font-bold mb-4 text-white">
+                                    Edit Employee's Payroll - {[selectedRow?.employee_id + " - ", selectedRow?.last_name + ", ", selectedRow?.first_name]}
+                                </h2>
+                                <span onClick={() => setEditModal(false)}>
+                                    <IoMdClose color="white" className="cursor-pointer text-2xl" />
                                 </span>
                             </div>
-                                <CardWrapper className="justify-between p-3 gap-4 text-white">
-                                    {/*EARNINGS*/}
-                                    <p>Earning</p>
-                                        <div className="flex gap-4">
-                                            {/*BASIC SALARY*/}
-                                            <TextInputGroup label="Basic Salary" id="basic_salary" value={data.basic_salary} disabled/>
-                                            <TextInputGroup label="PERA" id="PERA" value={data.pera}
-                                            onChange={(e) =>{setData('pera', e.target.value)}}/>
-                                        </div>
-                                </CardWrapper>
-                                <CardWrapper className="justify-between p-3 w-full text-white">
-                                    <p>Deductions</p>
-                                        <div className="flex gap-4 ">
-                                            {/*Absences w/o pay*/}
-                                            <TextInputGroup label="Absences w/o pay" id="Absences w/o pay" value={data.absent}
-                                            onChange={(e) =>{setData('absent', e.target.value)}}/>
-                                            {/*W/holding Tax*/}
-                                            <TextInputGroup label="W/holding Tax" id="W/holding Tax" value={data.holding_tax}
-                                            onChange={(e) =>{setData('holding_tax', e.target.value)}}/>
-                                            {/*Late/Undertime*/}
-                                            <TextInputGroup label="Late/Undertime" id="Late/Undertime" value={data.late}
-                                            onChange={(e) =>{setData('late', e.target.value)}}/>
-                                        </div>
-                                </CardWrapper>  
-                                <CardWrapper className=" p-3 gap-4 text-white">
-                                        <p>GSIS</p>
-                                        <div className="flex justify-between gap-4">
-                                            {/*RLIP*/}
-                                            <TextInputGroup label="RLIP" id="RLIP" value={data.rlip}
-                                            onChange={(e) =>{setData('rlip', e.target.value)}} disabled/>
-                                            {/*Policy Loan*/}
-                                            <TextInputGroup label="Policy Loan" id="Policy Loan" value={data.policy_loan}
-                                            onChange={(e) =>{setData('policy_loan', e.target.value)}}/>
-                                            {/*Consol Loan*/}
-                                            <TextInputGroup label="Consol Loan" id="Consol Loan" value={data.consol_loan}
-                                            onChange={(e) =>{setData('consol_loan', e.target.value)}}/>                                                    
-                                        </div>
-                                        <div className="flex justify-between gap-4">
-                                            {/*Emergency Loan*/}
-                                            <TextInputGroup label="Emergency Loan" id="Emergency Loan" value={data.emerg_loan}
-                                            onChange={(e) =>{setData('emerg_loan', e.target.value)}}/>
-                                            {/*GEL*/}
-                                            <TextInputGroup label="GEL" id="GEL" value={data.gel}
-                                            onChange={(e) =>{setData('gel', e.target.value)}}/>
-                                            {/*GFAL*/}
-                                            <TextInputGroup label="GFAL" id="GFAL" value={data.gfal}
-                                            onChange={(e) =>{setData('gfal', e.target.value)}}/>
-                                        </div>
-                                        <div className="flex justify-between gap-4">
-                                            {/*MPL*/}
-                                            <TextInputGroup label="MPL" id="MPL" value={data.mpl}
-                                            onChange={(e) =>{setData('mpl', e.target.value)}}/>
-                                            {/*MPL LITE*/}
-                                            <TextInputGroup label="MPL LITE" id="MPL" value={data.mpl_lite}
-                                            onChange={(e) =>{setData('mpl_lite', e.target.value)}}/>
-                                        </div>
-                                </CardWrapper>
-                                <CardWrapper className="justify-between p-3 w-full text-white">
-                                    <p>HDMF</p>
-                                    <div className="flex gap-4 ">
-                                        {/*Contribution*/}
-                                        <TextInputGroup label="Contribution" id="Contribution" value={data.contributions}
-                                        onChange={(e) =>{setData('contributions', e.target.value)}}/>
-                                        {/*Loans*/}
-                                        <TextInputGroup label="Loans" id="Loans" value={data.loans}
-                                        onChange={(e) =>{setData('loans', e.target.value)}}/>
-                                        {/*Housing Loans*/}
-                                        <TextInputGroup label="Housing Loans" id="Housing Loans" value={data.housing_loan}
-                                        onChange={(e) =>{setData('housing_loan', e.target.value)}}/>
+                            <CardWrapper className="flex gap-4 p-3">
+                                <TextInputGroup label="Basic Salary" id="basic_pay" value={selectedRow?.basic_pay} disabled />
+                                <TextInputGroup label="PERA" id="PERA" value={data.pera} onChange={e => setData('pera', e.target.value)}/>
+                            </CardWrapper>
+                            {/* Sections */}
+                            {fieldTitles.map((section, idx) => (
+                                <CardWrapper key={idx} className="p-3 text-white space-y-4">
+                                    <p className="font-medium">{section.title}</p>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4">
+                                        {section.fields.map(({ label, id, disabled = false }) => (
+                                            <TextInputGroup
+                                                key={id}
+                                                label={label}
+                                                id={id}
+                                                value={data[id]}
+                                                onChange={e => setData(id, e.target.value)}
+                                                disabled={disabled}
+                                                placeholder={label === "RLIP" || label === "Philhealth" ? "(AUTOGENERATED)" : ""} // Placeholder for specific fields
+                                            />
+                                        ))}
                                     </div>
                                 </CardWrapper>
-                                <CardWrapper className="justify-between p-3 w-full text-white">
-                                    <p>OTHER DEDUCTIONS</p>
-                                    <div className="flex gap-4">
-                                        {/*Philhealht*/}
-                                        <TextInputGroup label="Philhealth" id="philhealth" value={data.philhealth}
-                                        onChange={(e) =>{setData('philhealth', e.target.value)}} disabled />
-                                        {/*CFI*/}
-                                        <TextInputGroup label="CFI" id="cfi" value={data.cfi}
-                                        onChange={(e) =>{setData('cfi', e.target.value)}}/>
-                                        {/*TIPID*/}
-                                        <TextInputGroup label="TIPID" id="tipid" value={data.tipid}
-                                        onChange={(e) =>{setData('tipid', e.target.value)}}/>
-                                    </div>
-                                    <div className="flex gap-4">
-                                        {/*CITY BANKS SAVING*/}
-                                        <TextInputGroup label="CITY BANK SAVINGS" id="city_bank_savings" value={data.city_savings_bank}
-                                        onChange={(e) =>{setData('city_savings_bank', e.target.value)}}/>
-                                        {/*FEA*/}
-                                        <TextInputGroup label="FEA" id="fea" value={data.fea}
-                                        onChange={(e) =>{setData('fea', e.target.value)}}/>
-                                        {/*CANTEEN*/}
-                                        <TextInputGroup label="CANTEEN" id="canteen" value={data.canteen}
-                                        onChange={(e) =>{setData('canteen', e.target.value)}}/>
-                                    </div>
-                                    <div className="flex gap-4">
-                                        {/*Disallowance*/}
-                                        <TextInputGroup label="Disallowance" id="disallowance1" value={data.disallowance}
-                                        onChange={(e) =>{setData('disallowance', e.target.value)}}/>
-                                        {/*Unliquidated Cash Advances*/}
-                                        <TextInputGroup label="Unliquidated Cash Advances" id="unliquidated_cash_advances" value={data.unliquidated_ca}
-                                        onChange={(e) =>{setData('unliquidated_ca', e.target.value)}}/>
-                                        {/*Honoraria*/}
-                                        <TextInputGroup label="Disallowance(Honoraria)" id="Honoraria" value={data.disallowance_honoraria}
-                                        onChange={(e) =>{setData('disallowance_honoraria', e.target.value)}}/>
-                                    </div>
-                                    <div className="flex gap-4">
-                                        {/*COOP*/}
-                                        <TextInputGroup label="COOP" id="coop" value={data.coop}
-                                        onChange={(e) =>{setData('coop', e.target.value)}}/>
-                                        {/*LANDBANK*/}
-                                        <TextInputGroup label="LANDBANK" id="landbank" value={data.landbank}
-                                        onChange={(e) =>{setData('landbank', e.target.value)}}/>
-                                        {/*UCPB*/}
-                                        <TextInputGroup label="UCPB" id="ucpb" value={data.ucpb}
-                                        onChange={(e) =>{setData('ucpb', e.target.value)}}/>
-                                    </div>
-                            </CardWrapper>  
+                            ))}
+
+                            {/* Action Buttons */}
                             <div className="flex gap-4">
-                            <PrimaryButton onClick={handleEdit('publish')}className='text-md mt-4 py-2 hover:bg-yellow-600'>Publish</PrimaryButton>
-                            <PrimaryButton onClick={handleEdit('partial')}className='text-md mt-4 hover:bg-yellow-600'>Partial</PrimaryButton>
-                            <PrimaryButton className='text-md mt-4 hover:bg-yellow-600'>Cancel</PrimaryButton>
+                                <PrimaryButton onClick={handleEdit('publish')} className="text-md mt-4 py-2 hover:bg-yellow-600">Publish</PrimaryButton>
+                                <PrimaryButton onClick={handleEdit('partial')} className="text-md mt-4 hover:bg-yellow-600">Partial</PrimaryButton>
+                                <PrimaryButton onClick={() => setEditModal(false)} className="text-md mt-4 hover:bg-yellow-600">Cancel</PrimaryButton>
                             </div>
-                            
                         </div>
                     </form>
-                </Modal>  
+                </Modal>
                    
                 <Popover
                 open={Boolean(anchorEl)}

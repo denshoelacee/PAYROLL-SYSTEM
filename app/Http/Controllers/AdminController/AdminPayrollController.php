@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\AdminController;
 
 use App\Contracts\Services\IPayrollService;
+use App\Contracts\Services\IPayrollReportsServices\IGeneratePayslipsReportService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditPublishRequest;
-use App\Models\Payroll;
 use Illuminate\Http\Request;
 
 use Inertia\Inertia;
@@ -13,7 +13,9 @@ use Inertia\Inertia;
 class AdminPayrollController extends Controller
 {
 
-    public function __construct(protected IPayrollService $payrollService){}
+    public function __construct(protected IPayrollService $payrollService,
+                                protected IGeneratePayslipsReportService $payslipsReportService
+    ){}
      
     
     public function savePartial(EditPublishRequest $request)
@@ -39,27 +41,11 @@ class AdminPayrollController extends Controller
       $thisMonth = $this->payrollService->payrollThisMonth();
 
       $newPayroll = $this->payrollService->usersWithoutPayrollForCurrentMonth();
-
+       
       $year = $request->year ?? now()->year;
       $month = $request->month ?? now()->month;
 
-    $payslips = Payroll::join('users', 'payrolls.user_id', '=', 'users.user_id')
-        ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
-        ->select([
-            'users.user_id',
-            'users.employee_id as employee_id',
-            'users.last_name as last_name',
-            'users.first_name as first_name',
-            'users.designation as designation',
-            'users.department as department',
-            'users.employment_type as employment_type',
-            'users.basic_pay',
-            'payrolls.*',
-            'payroll_deductions.*'
-        ])
-        ->whereMonth('payrolls.created_at', $month)
-        ->whereYear('payrolls.created_at', $year)
-        ->get();
+      $payslips = $this->payslipsReportService->UserPayrollMonthly($year, $month);
 
     $months = collect(range(1, 12))->map(function ($m) {
         return [
@@ -68,7 +54,7 @@ class AdminPayrollController extends Controller
         ];
     });
 
-
+    
       return Inertia::render('Admin/Payroll',
                            ['thisMonth' => $thisMonth,
                             'newPayroll' => $newPayroll,

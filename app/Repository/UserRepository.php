@@ -66,7 +66,7 @@ class UserRepository implements IUserRepository{
 
     public function findById(int $id): ?User
     {
-       return User::findOrFail($id);
+       return User::find($id);
     }
 
     public function batchApproveAccount(array $user_ids):int
@@ -81,9 +81,17 @@ class UserRepository implements IUserRepository{
                         'status' => 'verified'
                     ]);
     }
-
+    /*
     public function create(array $data):User
     {
        return User::create($data);
+    }
+    **/
+    public function create(array $data): User
+    {
+        $user = new User($data);
+        $user->save();
+
+        return $user;
     }
 }

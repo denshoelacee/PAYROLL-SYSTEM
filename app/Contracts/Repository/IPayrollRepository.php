@@ -15,5 +15,9 @@ interface IPayrollRepository{
       public function updatePartial(array $data,$id): void;
 
       public function updatePublish(array $data,$id): void;
+
+       public function getUserPayrollMonthly($year, $month);
+
+        public function getPayrollReportsYearly($year);
       
 }

@@ -20,8 +20,8 @@ use App\Contracts\Services\IBatchApproveAccountService;
 use App\Contracts\Services\IDashboardService;
 use App\Contracts\Services\IEmployeeService;
 use App\Contracts\Services\Auth\IPasswordResetService;
-use App\Contracts\Services\IPayrollService\IGeneratePayrollService;
-use App\Models\ContributionType;
+use App\Contracts\Services\IPayrollReportsServices\IGeneratePayrollsReportService;
+use App\Contracts\Services\IPayrollReportsServices\IGeneratePayslipsReportService;
 use App\Repository\PayrollDeductionRepository;
 use App\Repository\PayrollRepository;
 use App\Repository\SecretQuestionRepository;
@@ -32,8 +32,9 @@ use App\Services\BatchApproveAccountService;
 use App\Services\DashboardService;
 use App\Services\EmployeeService;
 use App\Services\Auth\PasswordResetService;
+use App\Services\PayrollReportsServices\GeneratePayrollsReportService;
+use App\Services\PayrollReportsServices\GeneratePayslipsReportService;
 use App\Services\PayrollService;
-use App\Services\PayrollService\GeneratePayrollService;
 
 class DependencyInjectionProvider extends ServiceProvider
 {
@@ -52,12 +53,13 @@ class DependencyInjectionProvider extends ServiceProvider
         $this->app->bind(IBatchApproveAccountService::class, BatchApproveAccountService::class);
         $this->app->bind(ISecretQuestionRepository::class, SecretQuestionRepository::class);
         $this->app->bind(ICreateNewAccountService::class, CreateNewAccountService::class);
-        $this->app->bind(IGeneratePayrollService::class,GeneratePayrollService::class);
         $this->app->bind(IPayrollService::class,PayrollService::class);
         $this->app->bind(IPayrollRepository::class,PayrollRepository::class);
         $this->app->bind(IEditDeleteAccountService::class, EditDeleteAccountService::class);
         $this->app->bind(IContributionTypeRepository::class, ContributionTypeRepository::class);
         $this->app->bind(IPayrollDeductionRepository::class, PayrollDeductionRepository::class);
+        $this->app->bind(IGeneratePayslipsReportService::class, GeneratePayslipsReportService::class);
+        $this->app->bind(IGeneratePayrollsReportService::class, GeneratePayrollsReportService::class);
     }
 
     /**

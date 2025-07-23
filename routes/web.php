@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController\AdminDashboardController;
 use App\Http\Controllers\AdminController\AdminEmployeeController;
 use App\Http\Controllers\AdminController\AdminPayrollController;
+use App\Http\Controllers\AdminController\AdminPayrollReportsController;
 use App\Http\Controllers\Auth\CreateNewAccountController;
 use App\Http\Controllers\Auth\EditDeleteAccountController;
 use App\Http\Controllers\BatchProcessingController\BatchApproveController;
@@ -11,9 +12,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use App\Models\User;
-use App\Http\Middleware\VerifyCsrfToken;
-use App\Services\Auth\CreateNewAccountService;
+
+
 
 
 /*
@@ -32,11 +32,6 @@ Route::get('/', function () {
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
     ]);
-});
-Route::get('/payslips', [AdminDashboardController::class, 'index'])->name('payslip.index');
-Route::get('/test', function () {
-    $user = User::where('user_id', Auth::user_id())->first();
-    return response()->json($user);
 });
 
 Route::post('/admin/users/batch-approve', [BatchApproveController::class, 'batchApprove'])->name('admin.users.batch-approve');
@@ -67,6 +62,8 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/payroll/store', [AdminPayrollController::class, 'savePartial'])->name('admin.store.partial');
     Route::post('/payroll/publish', [AdminPayrollController::class, 'publish'])->name('admin.store.publish');
     Route::post('/payroll/updatePartialPublish/{id}', [AdminPayrollController::class, 'editedPartialPublish'])->name('admin.payroll.update-partial-publish');
+    Route::get('/payroll/reports/summary',[AdminPayrollReportsController::class,'payrollReportsYearly'])->name('admin.payroll.summary');
+    Route::get('/payroll/{year}/{month}/view/summary',[AdminPayrollReportsController::class,'payrollReportsYearlyView'])->name('admin.payroll.view.summary');
 
 
         

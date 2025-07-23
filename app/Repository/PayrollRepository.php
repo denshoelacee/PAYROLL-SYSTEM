@@ -20,11 +20,6 @@ class PayrollRepository implements IPayrollRepository{
 
     ){}
 
-    public function getAllPayslip()
-    {
-        
-    }
-
     public function setPayrollModel(array $data):Payroll
     {
         return $payroll = Payroll::create($data);
@@ -81,11 +76,53 @@ class PayrollRepository implements IPayrollRepository{
            $data['basic_salary'] = $salary;
 
         $payroll = $this->payrollModel($id);
-        $payroll->deduction()->create([
+        $payroll->deduction()->update([
             'total_accrued_period' => $totalAccruedPeriod,
             'total_deduction' => $totalDeduction,
             'net_pay' => $netPay
        ]);
        $payroll->update($data);
+    }
+
+    public function getUserPayrollMonthly($year, $month)
+    {
+         return  Payroll::join('users', 'payrolls.user_id', '=', 'users.user_id')
+                        ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
+            ->select([
+                'users.user_id',
+                'users.employee_id as employee_id',
+                'users.last_name as last_name',
+                'users.first_name as first_name',
+                'users.designation as designation',
+                'users.department as department',
+                'users.employment_type as employment_type',
+                'users.basic_pay',
+                'payrolls.*',
+                'payroll_deductions.*'
+            ])
+            ->whereMonth('payrolls.created_at', $month)
+            ->whereYear('payrolls.created_at', $year)
+            ->get();
+
+    }
+
+    public function getPayrollReportsYearly($year)
+    {
+        return DB::table('payrolls')
+        ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
+        ->selectRaw('
+            MONTH(payrolls.created_at) as month,
+            SUM(payrolls.gross_pay) as total_gross,
+            SUM(payroll_deductions.total_deduction) as total_deduction,
+            SUM(payrolls.gross_pay - payroll_deductions.total_deduction) as net_pay
+        ')
+        ->whereYear('payrolls.created_at', $year)
+        ->groupBy(DB::raw('MONTH(payrolls.created_at)'))
+        ->orderBy('month')
+        ->get()
+        ->map(function ($item) {
+            $item->month_name = \Carbon\Carbon::create()->month($item->month)->format('F');
+            return $item;
+        });
     }
 }

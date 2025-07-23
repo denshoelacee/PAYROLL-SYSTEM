@@ -12,4 +12,5 @@ interface IPayrollService
     public function publish(array $data):void;
 
      public function editedPartialPublishPayroll(array $data,$id):void;
+
 }

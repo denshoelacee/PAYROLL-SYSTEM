@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 type TableProps = {
     columns: GridColDef[];
     rows: any[];
-    pageSize?: number| string;
+    pageSize?: number;
     height?: number;
     sx ?: React.CSSProperties;
     pageSizeOptions?: number[];
@@ -13,6 +13,7 @@ type TableProps = {
     className?: string;
     checkboxSelection?:boolean;
     onRowSelectionModelChange?: (selection: GridRowSelectionModel) => void; // Updated type
+    hideFooter?: boolean;
 
 };
 
@@ -26,7 +27,8 @@ export default function Table({
     getRowId,
     className,
     checkboxSelection,
-    onRowSelectionModelChange
+    onRowSelectionModelChange,
+    hideFooter = false
     
 }: TableProps) {
     const paginationModel = { page: 0};
@@ -43,10 +45,11 @@ export default function Table({
                 initialState={{ pagination: { 
                     paginationModel:
                         { page: 0, 
-                            pageSize:10
+                            pageSize:pageSize
                         } 
                     } 
                 }}
+                hideFooter={hideFooter}
                 pageSizeOptions={pageSizeOptions }
                 disableRowSelectionOnClick
                 disableColumnMenu={true}

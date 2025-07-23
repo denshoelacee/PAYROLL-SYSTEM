@@ -29,6 +29,12 @@ export default function Sidebar({auth }: PageProps) {
                         <NavLink href={route('admin.payroll')} active={route().current('admin.payroll')} className='text-[#67CFD5] text-lg'>
                             <BiCoinStack className='font-black text-2xl text-white'/>
                         </NavLink>
+                        <NavLink href={route('admin.department')} active={route().current('admin.department')} className='text-[#67CFD5] text-lg'>
+                            <BiCoinStack className='font-black text-2xl text-white'/>
+                        </NavLink>
+                        <NavLink href={route('admin.reports')} active={route().current('admin.reports')} className='text-[#67CFD5] text-lg'>
+                            <BiCoinStack className='font-black text-2xl text-white'/>
+                        </NavLink>
                     </div>
                 </div>
             ) : (

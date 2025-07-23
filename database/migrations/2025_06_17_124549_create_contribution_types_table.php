@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('contribution_types', function (Blueprint $table) {
             $table->bigIncrements('contribution_type_id');
-            $table->unsignedTinyInteger('rlip');
-            $table->unsignedTinyInteger('philhealth');
-            $table->timestamps();
+            $table->decimal('rlip', 8,2);
+            $table->decimal('philhealth',8,2);
+            $table->timestamps(); 
         });
     }
 

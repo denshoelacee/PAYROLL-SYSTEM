@@ -63,7 +63,7 @@ export default function Authenticated({
                                         )}
                                     </Dropdown.Trigger>
 
-                                    <Dropdown.Content align="right" contentClasses="bg-mainColor w-40">
+                                    <Dropdown.Content align="right" contentClasses="bg-[#145858] w-40">
                                         <Dropdown.Link href={route('profile.edit')}><RiUserSettingsLine className='text-xl'/>
                                             Profile
                                             </Dropdown.Link>

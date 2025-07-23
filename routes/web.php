@@ -68,10 +68,17 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
 
         
     
-    Route::get('/payroll/Payslip', function () {
+    Route::get('/payroll/Payslip/{id}', function () {
         return Inertia::render('Admin/ViewPayslip');
     });
 
+    Route::get('/admin/department', function () {
+        return Inertia::render('Admin/Department');
+    })->name('admin.department');
+
+    Route::get('/admin/reports', function () {
+        return Inertia::render('Admin/Reports');
+    })->name('admin.reports');
 });
 
 Route::prefix('employee')->middleware(['auth', 'role:User'])->group(function () {

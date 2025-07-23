@@ -1,4 +1,3 @@
-
 import SecondaryButton from "@/Components/SecondaryButton";
 import { PageProps,Employee,UserPayroll, User } from "@/types"
 import { GridColDef } from "@mui/x-data-grid";
@@ -19,7 +18,6 @@ import { Popover } from "@mui/material";
 import TextInputGroup from "@/Components/TextInputGroup";
 import { router, useForm } from "@inertiajs/react";
 import style from '@/../styles/style.css'
-import { useNavigate } from 'react-router-dom';
 
 type MonthOption = {
   number: string;
@@ -75,6 +73,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                 fields: [
                     { label: "Absences w/o pay", id: "absent" },
                     { label: "W/holding Tax", id: "holding_tax" },
+                    { label: "Tax Bal Due", id: "tax_bal_due"},
                     { label: "Late/Undertime", id: "late" },
                 ]
             },
@@ -359,6 +358,14 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
         }
     ];
 
+
+    const handleView = (row: UserPayroll) => {
+    localStorage.setItem('selectedPayroll', JSON.stringify(row));
+    router.visit(`/admin/payroll/Payslip/${row.payroll_id}`);
+    };
+
+
+
     return (
         <>
             <div className="flex gap-5 flex-col-reverse md:justify-between md:flex-row">
@@ -372,12 +379,12 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                                     <RiArrowDropDownLine className="text-2xl transition-transform duration-500 ease-in-out" />
                                 </SecondaryButton>
                                 </Dropdown.Trigger>
-                                <Dropdown.Content contentClasses="w-[200px]" align="left">
+                                <Dropdown.Content contentClasses="w-[200px] bg-[#16423D] " align="left">
                                 {availableYears.map((year) => (
                                     <button
                                     key={year}
                                     onClick={() => handleChange(year, selectedMonth)}
-                                    className="block w-full text-left px-4 py-1 hover:bg-red-500"
+                                    className="block w-full text-left px-4 py-1 hover:bg-mainColor"
                                     >
                                     {year}
                                     </button>
@@ -397,12 +404,12 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                                     <RiArrowDropDownLine className="text-2xl transition-transform duration-500 ease-in-out" />
                                 </SecondaryButton>
                                 </Dropdown.Trigger>
-                                <Dropdown.Content contentClasses="w-[200px]" align="left">
+                                <Dropdown.Content contentClasses="w-[200px] bg-[#16423D] " align="left">
                                 {availableMonths.map((m) => ( 
                                     <button
                                     key={m.number}
                                     onClick={() => handleChange(Number(selectedYear), m.number)}
-                                    className="block w-full text-left px-4 py-1 hover:bg-red-500"
+                                    className="block w-full text-left px-4 py-1 hover:bg-mainColor"
                                     >
                                     {m.name}
                                     </button>
@@ -432,15 +439,16 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                                 height={650}
                                 getRowId={(row) => row.payroll_id}
                                 className="employee-table"
+                                pageSize={10}
                             />
                             </div>
                         </div>
                     </div>   
 
             {/*ADD MODAL*/}
-                <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="5xl" className="h-full">
+                <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="5xl" className="h-full scrollbar-hidden">
                     <form>
-                        <div className="p-6 space-y-4 border rounded-lg">
+                        <div className="p-6 space-y-4 border rounded-lg ">
                             {/* Header */}
                             <div className="flex justify-between items-center">
                                 <h2 className="text-lg text-white">New Payroll</h2>
@@ -448,10 +456,10 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                             </div>
 
                             {/* Employee Dropdown */}
-                            <CardWrapper className="justify-between p-3 gap-4 text-white">
+                            <CardWrapper className="justify-between p-3 w-full text-white">
                                 <p>Earning</p>
-                                <div className="flex gap-4">
-                                    <div className="w-full my-2">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                                    <div className="my-2">
                                         <InputLabel htmlFor="department" value="Employee *" className="text-white" />
                                         <Dropdown>
                                             <Dropdown.Trigger>
@@ -460,13 +468,13 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                                                     <RiArrowDropDownLine className="text-2xl" />
                                                 </button>
                                             </Dropdown.Trigger>
-                                            <Dropdown.Content ableSearch={true} contentClasses="bg-gray-300 w-full max-h-[200px] overflow-y-auto p-0" align="left">
+                                            <Dropdown.Content ableSearch={true} contentClasses="w-[275px] md:w-[225px] lg:w-[300px] max-h-[200px] overflow-y-auto p-0" align="left">
                                                 {newPayroll?.map((user, index) => (
                                                     <button
                                                         key={index}
                                                         type="button"
                                                         onClick={() => handleDropdownSelect(user, 'employee')}
-                                                        className="w-full px-4 py-2 text-left bg-gray-300 hover:bg-[#145858] text-black hover:text-white"
+                                                        className="w-full px-4 py-2 text-left  hover:bg-[#145858] text-black hover:text-white"
                                                     >
                                                         {`${user.employee_id} - ${user.first_name} ${user.last_name}`}
                                                     </button>
@@ -590,8 +598,8 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                     <button
                         className="w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100 "
                         onClick={() => {
+                            handleView(selectedRow as UserPayroll);
                             setAnchorEl(null);
-                            
                         }}
                     >
                         View
@@ -613,3 +621,5 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                                                         //onChange={(e) => setData('employee_id', e.target.value)}
                                                         />
                                                         */}
+
+

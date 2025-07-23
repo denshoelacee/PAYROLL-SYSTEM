@@ -70,6 +70,10 @@ export interface User {
         created_at: string;
         updated_at: string;
 
+        total_accrued_period?:number
+        total_deduction?: number; // Optional field for total deductions
+        net_pay?: number; // Optional field for net pay
+
         users?:Employee
         previousPayroll?: UserPayroll
     }

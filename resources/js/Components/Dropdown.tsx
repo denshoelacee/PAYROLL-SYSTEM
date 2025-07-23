@@ -129,14 +129,14 @@ const Content = ({
                 onClick={(e) => e.stopPropagation()}
             >
                 <div
-                    className={`text-white bg-[#1b544c] p-2 rounded-md border border-button-border-color ${contentClasses}`}
+                    className={`text-white bg-gray-300 p-2 rounded-md border border-button-border-color ${contentClasses}`}
                 >
                     {ableSearch && (
                     <>
                     {/* 🔍 Search Input */}
                     <input
                         type="text"
-                        className="w-full px-3 py-1 mb-2 text-black rounded"
+                        className="bg-white border-button-border-color w-full px-3 py-1 mb-2 text-black rounded focus:ring-0 "
                         placeholder="Search..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -163,7 +163,7 @@ const DropdownLink = ({
         <Link
             {...props}
             className={`flex items-center gap-2 w-full px-4 py-2 rounded-lg text-md leading-5 text-white 
-                transition-all duration-150 ease-in-out hover:bg-[#A6CCB8] ${className}`}
+                transition-all duration-150 ease-in-out hover:bg-mainColor ${className}`}
         >
             {children}
         </Link>

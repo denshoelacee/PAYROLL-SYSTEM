@@ -17,8 +17,8 @@ class AdminPayrollReportsController extends Controller
          $year = $request->year ?? now()->year;
         
          $monthlySummary = $this->payrollReportsService->generatePayrollReport($year);
-
-
+       
+       dd($monthlySummary); 
     }
 
     public function payrollReportsYearlyView($year,$month)
@@ -29,17 +29,17 @@ class AdminPayrollReportsController extends Controller
         ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
         ->select([
             'users.user_id',
-            DB::raw("CONCAT(users.first_name, ' ', users.last_name) as employee_name"),
-            'payrolls.gross_pay',
-            'payroll_deductions.sss',
-            'payroll_deductions.philhealth',
-            'payroll_deductions.pagibig',
-            'payroll_deductions.total_deduction',
-            DB::raw('(payrolls.gross_pay - payroll_deductions.total_deduction) as net_pay')
+            DB::raw("CONCAT(users.last_name, ', ',users.first_name) as employee_name"),
+            'payrolls.holding_tax',
+            'payrolls.rlip',
+            'payrolls.basic_salary',
         ])
+        ->where('publish_status', 'publish')
         ->whereMonth('payrolls.created_at', $month)
         ->whereYear('payrolls.created_at', $year)
         ->get();
+
+        dd($details);
 
     $monthName = \Carbon\Carbon::create()->month($month)->format('F');
 

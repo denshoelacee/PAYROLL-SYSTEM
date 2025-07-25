@@ -110,12 +110,14 @@ class PayrollRepository implements IPayrollRepository{
     {
         return DB::table('payrolls')
         ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
+
         ->selectRaw('
             MONTH(payrolls.created_at) as month,
-            SUM(payrolls.gross_pay) as total_gross,
+            SUM(payroll_deductions.total_accrued_period) as total_gross,
             SUM(payroll_deductions.total_deduction) as total_deduction,
-            SUM(payrolls.gross_pay - payroll_deductions.total_deduction) as net_pay
+            SUM(payroll_deductions.net_pay) as net_pay
         ')
+        ->where('publish_status','publish')
         ->whereYear('payrolls.created_at', $year)
         ->groupBy(DB::raw('MONTH(payrolls.created_at)'))
         ->orderBy('month')

@@ -62,8 +62,8 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/payroll/store', [AdminPayrollController::class, 'savePartial'])->name('admin.store.partial');
     Route::post('/payroll/publish', [AdminPayrollController::class, 'publish'])->name('admin.store.publish');
     Route::post('/payroll/updatePartialPublish/{id}', [AdminPayrollController::class, 'editedPartialPublish'])->name('admin.payroll.update-partial-publish');
-    Route::get('/payroll/reports/summary',[AdminPayrollReportsController::class,'payrollReportsYearly'])->name('admin.payroll.summary');
-    Route::get('/payroll/{year}/{month}/view/summary',[AdminPayrollReportsController::class,'payrollReportsYearlyView'])->name('admin.payroll.view.summary');
+    //Route::get('/payroll/reports/summary',[AdminPayrollReportsController::class,'payrollReportsYearly'])->name('admin.payroll.summary');
+    //Route::get('/payroll/{year}/{month}/view/summary',[AdminPayrollReportsController::class,'payrollReportsYearlyView'])->name('admin.payroll.view.summary');
 
 
         
@@ -72,11 +72,11 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
         return Inertia::render('Admin/ViewPayslip');
     });
 
-    Route::get('/admin/department', function () {
+    Route::get('/department', function () {
         return Inertia::render('Admin/Department');
     })->name('admin.department');
 
-    Route::get('/admin/reports', function () {
+    Route::get('/reports', function () {
         return Inertia::render('Admin/Reports');
     })->name('admin.reports');
 });

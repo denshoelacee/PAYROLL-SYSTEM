@@ -118,16 +118,16 @@ export default function ManageUserPartial({ employees}: Props) {
                             Approve
                             </p>
                         </div>
-                    </div>
-                    <p className='mt-5 h-5 border'></p>
-                    <div className=" mt-1 flex flex-col items-center">
-                        <div onClick={(e) => handleOpenPopover(e, data.row, 'reject')} className="group h-12 w-9 flex flex-col items-center justify-center cursor-pointer px-2 hover:border-red-500">
-                            <FaRegTrashCan  className="mb-[5px] w-5 h-5 text-red-500 transition-all duration-300 group-hover:text-red-500 group-hover:hidden group-hover:drop-shadow-[0_0_6px_rgba(34,197,94,0.8)]" />
-                            <p className="absolute text-[11px] text-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ">
-                            Reject
-                            </p>
                         </div>
-                    </div>
+                        <p className='mt-5 h-5 border'></p>
+                        <div className=" mt-1 flex flex-col items-center">
+                            <div onClick={(e) => handleOpenPopover(e, data.row, 'reject')} className="group h-12 w-9 flex flex-col items-center justify-center cursor-pointer px-2 hover:border-red-500">
+                                <FaRegTrashCan  className="mb-[5px] w-5 h-5 text-red-500 transition-all duration-300 group-hover:text-red-500 group-hover:hidden group-hover:drop-shadow-[0_0_6px_rgba(34,197,94,0.8)]" />
+                                <p className="absolute text-[11px] text-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ">
+                                Reject
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     </>

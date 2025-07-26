@@ -19,5 +19,7 @@ interface IPayrollRepository{
        public function getUserPayrollMonthly($year, $month);
 
         public function getPayrollReportsYearly($year);
+
+         public function getPayrollReportsYearlyView($year,$month);
       
 }

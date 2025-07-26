@@ -7,7 +7,6 @@ use App\Contracts\Services\IPayrollReportsServices\IGeneratePayslipsReportServic
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditPublishRequest;
 use Illuminate\Http\Request;
-
 use Inertia\Inertia;
 
 class AdminPayrollController extends Controller
@@ -46,7 +45,6 @@ class AdminPayrollController extends Controller
       $month = $request->month ?? now()->month;
 
       $payslips = $this->payslipsReportService->UserPayrollMonthly($year, $month);
-
     $months = collect(range(1, 12))->map(function ($m) {
         return [
             'number' => str_pad($m, 2, '0', STR_PAD_LEFT),

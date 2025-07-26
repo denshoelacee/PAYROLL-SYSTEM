@@ -15,5 +15,10 @@ class GeneratePayrollsReportService implements IGeneratePayrollsReportService
     {
         return $this->payrollRepository->getPayrollReportsYearly($year);
     }
+
+    public function generatePayrollReportYearlyView($year,$month)
+    {
+        return $this->payrollRepository->getPayrollReportsYearlyView($year,$month);
+    }
 }
 

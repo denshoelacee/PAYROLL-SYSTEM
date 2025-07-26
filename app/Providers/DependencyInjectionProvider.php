@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Contracts\Repository\IContributionTypeRepository;
+use App\Contracts\Repository\IEmploymentTypeRepository;
 use App\Contracts\Repository\IPayrollDeductionRepository;
 use App\Contracts\Services\IPayrollService;
 use App\Repository\ContributionTypeRepository;
@@ -22,6 +23,7 @@ use App\Contracts\Services\IEmployeeService;
 use App\Contracts\Services\Auth\IPasswordResetService;
 use App\Contracts\Services\IPayrollReportsServices\IGeneratePayrollsReportService;
 use App\Contracts\Services\IPayrollReportsServices\IGeneratePayslipsReportService;
+use App\Repository\EmploymentTypeRepository;
 use App\Repository\PayrollDeductionRepository;
 use App\Repository\PayrollRepository;
 use App\Repository\SecretQuestionRepository;
@@ -44,6 +46,7 @@ class DependencyInjectionProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(IJobTitleRepository::class,JobTitleRepository::class);
+        $this->app->singleton(IEmploymentTypeRepository::class, EmploymentTypeRepository::class);
         $this->app->singleton(IJobTitleService::class,JobTitleService::class);
 
         $this->app->singleton(IUserRepository::class, UserRepository::class);

@@ -124,6 +124,10 @@ class PayrollRepository implements IPayrollRepository{
         ->get()
         ->map(function ($item) {
             $item->month_name = \Carbon\Carbon::create()->month($item->month)->format('F');
+            $item->total_gross = (float) $item->total_gross;
+            $item->total_deduction = (float) $item->total_deduction;
+            $item->net_pay = (float) $item->net_pay;
+            
             return $item;
         });
     }

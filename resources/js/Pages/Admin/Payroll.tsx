@@ -6,23 +6,23 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import PayrollPartial from './partial/Payroll';
 
 type MonthOption = {
-  number: string;
-  name: string;
+    number: string;
+    name: string;
 };
 type Props = PageProps<{
     thisMonth : UserPayroll[];
     newPayroll: Employee[];
     payslips: UserPayroll[];
-      availableYears: number[];
-      availableMonths: MonthOption[];
-      selectedYear: string;
-      selectedMonth: string;
+    availableYears: number[];
+    availableMonths: MonthOption[];
+    selectedYear: string;
+    selectedMonth: string;
 }>;
 export default function Payroll({ auth,thisMonth,newPayroll,payslips,
-  availableYears,
-  availableMonths,
-  selectedYear,
-  selectedMonth}:Props) {
+    availableYears,
+    availableMonths,
+    selectedYear,
+    selectedMonth}:Props) {
 
     return (
         

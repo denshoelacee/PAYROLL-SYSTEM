@@ -89,14 +89,14 @@ import { rowSelectionStateInitializer } from "@mui/x-data-grid/internals";
             sortable: false,
             renderCell: (data:any) => (
             <div className="flex gap-2 pt-1 items-center justify-center">
-                <PrimaryButton onClick={ () => {
+                <div onClick={ () => {
                     handleView(data.row)
                 }} className="bg-transparent group h-12 w-9 flex flex-col items-center justify-center cursor-pointer px-2 hover:blue-green-500">
                     <AiOutlineFundView className="mb-[5px] w-6 h-6 text-blue-500 transition-all duration-300 group-hover:text-blue-500 group-hover:hidden group-hover:drop-shadow-[0_0_6px_rgba(34,197,94,0.8)]" />
                     <p className="absolute text-[13px] text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         View
                     </p>
-                </PrimaryButton>
+                </div>
             </div>
             ),
         },

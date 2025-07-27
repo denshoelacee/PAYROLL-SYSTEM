@@ -127,7 +127,7 @@ class PayrollRepository implements IPayrollRepository{
             $item->total_gross = (float) $item->total_gross;
             $item->total_deduction = (float) $item->total_deduction;
             $item->net_pay = (float) $item->net_pay;
-            
+
             return $item;
         });
     }
@@ -138,10 +138,14 @@ class PayrollRepository implements IPayrollRepository{
         ->join('users', 'payrolls.user_id', '=', 'users.user_id')
         ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
         ->select([
+            'users.user_id',
             DB::raw("CONCAT(users.last_name, ', ',users.first_name) AS employee_name"),
             DB::raw('CAST(payrolls.basic_salary AS FLOAT) AS basic_salary'),
             DB::raw('CAST(payrolls.pera AS FLOAT) AS pera'),
+            DB::raw('CAST(payrolls.absent AS FLOAT) AS absent'),
+            DB::raw('CAST(payrolls.late AS FLOAT) AS late'),
             DB::raw('CAST(payrolls.holding_tax AS FLOAT) AS holding_tax'),
+            DB::raw('CAST(payrolls.tax_bal_due AS FLOAT) AS tax_bal_due'),
             DB::raw('CAST(payrolls.rlip AS FLOAT) AS rlip'),
             DB::raw('CAST(payrolls.policy_loan AS FLOAT) AS policy_loan'),
             DB::raw('CAST(payrolls.consol_loan AS FLOAT) AS consol_loan'),

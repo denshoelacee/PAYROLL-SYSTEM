@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController\AdminDashboardController;
 use App\Http\Controllers\AdminController\AdminEmployeeController;
 use App\Http\Controllers\AdminController\AdminPayrollController;
 use App\Http\Controllers\AdminController\AdminPayrollReportsController;
+use App\Http\Controllers\AdminController\AdminMetaDataController;
 use App\Http\Controllers\Auth\CreateNewAccountController;
 use App\Http\Controllers\Auth\EditDeleteAccountController;
 use App\Http\Controllers\BatchProcessingController\BatchApproveController;
@@ -66,17 +67,13 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/payroll/updatePartialPublish/{id}', [AdminPayrollController::class, 'editedPartialPublish'])->name('admin.payroll.update-partial-publish');
     Route::get('/reports/summary',[AdminPayrollReportsController::class,'payrollReportsYearly'])->name('admin.payroll.summary');
     Route::get('/reports/payroll/{year}/{month}/view/summary',[AdminPayrollReportsController::class,'payrollReportsYearlyView'])->name('admin.payroll.view.summary');
-
-
+    Route::get('/department',[AdminMetaDataController::class,'displayEmpTypeList'])->name('admin.department');
         
     
     Route::get('/payroll/Payslip/{id}', function () {
         return Inertia::render('Admin/ViewPayslip');
     });
 
-    Route::get('/department', function () {
-        return Inertia::render('Admin/Department');
-    })->name('admin.department');
 
     /**Route::get('/reports', function () {
         return Inertia::render('Admin/Reports');

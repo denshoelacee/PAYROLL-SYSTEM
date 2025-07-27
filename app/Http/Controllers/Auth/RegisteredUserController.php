@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Contracts\Services\IHrMetaDataService;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Contracts\Services\IJobTitleService;
@@ -16,18 +17,18 @@ use Inertia\Response;
 class RegisteredUserController extends Controller
 {
     
-    public function __construct(protected IJobTitleService $jobTitleService){}
+    public function __construct(protected IHrMetaDataService $metaDataService){}
 
     /**
      * Display the registration view.
      */
     public function create(): Response
     {
-        $data = $this->jobTitleService->getJobTitleService();
+        $data = $this->metaDataService->jobTitleList();
 
-        return Inertia::render('Auth/Register',
-              ['Jobtitles' => $data]
-        );
+            return Inertia::render('Auth/Register',
+                ['Jobtitles' => $data]
+            );
     }
 
     /**

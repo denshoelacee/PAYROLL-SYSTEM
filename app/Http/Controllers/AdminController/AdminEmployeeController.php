@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\AdminController;
 
 use App\Contracts\Services\IEmployeeService;
-use App\Contracts\Services\IJobTitleService;
+use App\Contracts\Services\IHrMetaDataService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -12,18 +12,23 @@ use Inertia\Inertia;
 class AdminEmployeeController extends Controller
 {
 
-    public function __construct(protected IEmployeeService $employeeService,protected IJobTitleService $jobTitleService){}
+    public function __construct(
+             protected IEmployeeService $employeeService,
+             protected IHrMetaDataService $metaDataService
+    ){}
    
     /**
      * Display a listing of the resource.
      */
     public function employee()
     {
-            $jobtitles = $this->jobTitleService->getJobTitleService();
-            $pendings = $this->employeeService->pendingUsers();
-            $employeelist    = $this->employeeService->employeeList();
+        $jobtitles = $this->metaDataService->jobTitleList();
+        $pendings = $this->employeeService->pendingUsers();
+        $employeelist = $this->employeeService->employeeList();
+
              return Inertia::render('Admin/Employee',
-                ['pendingUsers' => $pendings,
+                [
+                'pendingUsers' => $pendings,
                  'employeeList'  => $employeelist,
                  'jobtitles' => $jobtitles
                 ]

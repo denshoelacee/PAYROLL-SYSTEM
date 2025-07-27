@@ -7,9 +7,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 
 class AdminDashboardController extends Controller
-{
-   
-    
+{  
     public function __construct(protected IDashboardService $dashboardService){}
      
 

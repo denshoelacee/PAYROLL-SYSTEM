@@ -12,8 +12,9 @@ use Inertia\Inertia;
 class AdminPayrollController extends Controller
 {
 
-    public function __construct(protected IPayrollService $payrollService,
-                                protected IGeneratePayslipsReportService $payslipsReportService
+    public function __construct(
+              protected IPayrollService $payrollService,
+              protected IGeneratePayslipsReportService $payslipsReportService
     ){}
      
     
@@ -45,7 +46,7 @@ class AdminPayrollController extends Controller
       $month = $request->month ?? now()->month;
 
       $payslips = $this->payslipsReportService->UserPayrollMonthly($year, $month);
-    $months = collect(range(1, 12))->map(function ($m) {
+      $months = collect(range(1, 12))->map(function ($m) {
         return [
             'number' => str_pad($m, 2, '0', STR_PAD_LEFT),
             'name' => \Carbon\Carbon::create()->month($m)->format('F'),
@@ -54,14 +55,15 @@ class AdminPayrollController extends Controller
 
     
       return Inertia::render('Admin/Payroll',
-                           ['thisMonth' => $thisMonth,
-                            'newPayroll' => $newPayroll,
-                            'payslips' => $payslips,
-                            'availableYears' => range(2025, now()->year),
-                            'availableMonths' => $months,
-                            'selectedYear' => (string)$year,
-                            'selectedMonth' => str_pad($month, 2, '0', STR_PAD_LEFT),
-                           ]
+               [
+                'thisMonth' => $thisMonth,
+                'newPayroll' => $newPayroll,
+                'payslips' => $payslips,
+                'availableYears' => range(2025, now()->year),
+                'availableMonths' => $months,
+                'selectedYear' => (string)$year,
+                'selectedMonth' => str_pad($month, 2, '0', STR_PAD_LEFT),
+                ]
       );
     }
 

@@ -173,10 +173,65 @@ class PayrollRepository implements IPayrollRepository{
             DB::raw('CAST((payroll_deductions.total_deduction) AS FLOAT) AS total_deduction'),
             DB::raw('CAST((payroll_deductions.net_pay) AS FLOAT) AS net_pay'), 
         ])
-        ->where('publish_status', 'publish')
-        ->whereMonth('payrolls.created_at', $month)
-        ->whereYear('payrolls.created_at', $year)
-        ->orderBy('employee_name','asc')
-        ->get();
+            ->where('publish_status', 'publish')
+            ->whereMonth('payrolls.created_at', $month)
+            ->whereYear('payrolls.created_at', $year)
+            ->orderBy('employee_name','asc')
+            ->get();
     }
+
+   public function getEmployeePayslipReports($id, $year)
+   {
+      return DB::table('payrolls')
+        ->join('users', 'payrolls.user_id', '=', 'users.user_id')
+        ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
+        ->select([
+            'users.user_id',
+            'users.department',
+            'users.designation',
+            DB::raw("CONCAT(users.last_name, ', ', users.first_name) AS employee_name"),
+            DB::raw('CAST(payrolls.basic_salary AS FLOAT) AS basic_salary'),
+            DB::raw('CAST(payrolls.pera AS FLOAT) AS pera'),
+            DB::raw('CAST(payrolls.absent AS FLOAT) AS absent'),
+            DB::raw('CAST(payrolls.late AS FLOAT) AS late'),
+            DB::raw('CAST(payrolls.holding_tax AS FLOAT) AS holding_tax'),
+            DB::raw('CAST(payrolls.tax_bal_due AS FLOAT) AS tax_bal_due'),
+            DB::raw('CAST(payrolls.rlip AS FLOAT) AS rlip'),
+            DB::raw('CAST(payrolls.policy_loan AS FLOAT) AS policy_loan'),
+            DB::raw('CAST(payrolls.consol_loan AS FLOAT) AS consol_loan'),
+            DB::raw('CAST(payrolls.emerg_loan AS FLOAT) AS emerg_loan'),
+            DB::raw('CAST(payrolls.gel AS FLOAT) AS gel'),
+            DB::raw('CAST(payrolls.gfal AS FLOAT) AS gfal'),
+            DB::raw('CAST(payrolls.mpl AS FLOAT) AS mpl'),
+            DB::raw('CAST(payrolls.mpl_lite AS FLOAT) AS mpl_lite'),
+            DB::raw('CAST(payrolls.contributions AS FLOAT) AS contributions'),
+            DB::raw('CAST(payrolls.loans AS FLOAT) AS loans'),
+            DB::raw('CAST(payrolls.housing_loan AS FLOAT) AS housing_loan'),
+            DB::raw('CAST(payrolls.philhealth AS FLOAT) AS philhealth'),
+            DB::raw('CAST(payrolls.cfi AS FLOAT) AS cfi'),
+            DB::raw('CAST(payrolls.tipid AS FLOAT) AS tipid'),
+            DB::raw('CAST(payrolls.city_savings_bank AS FLOAT) AS city_savings_bank'),
+            DB::raw('CAST(payrolls.fea AS FLOAT) AS fea'),
+            DB::raw('CAST(payrolls.canteen AS FLOAT) AS canteen'),
+            DB::raw('CAST(payrolls.disallowance AS FLOAT) AS disallowance'),
+            DB::raw('CAST(payrolls.unliquidated_ca AS FLOAT) AS unliquidated_ca'),
+            DB::raw('CAST(payrolls.disallowance_honoraria AS FLOAT) AS disallowance_honoraria'),
+            DB::raw('CAST(payrolls.coop AS FLOAT) AS coop'),
+            DB::raw('CAST(payrolls.landbank AS FLOAT) AS landbank'),
+            DB::raw('CAST(payrolls.ucpb AS FLOAT) AS ucpb'),
+            DB::raw('CAST(payroll_deductions.total_accrued_period AS FLOAT) AS gross_salary'),
+            DB::raw('CAST(payroll_deductions.total_deduction AS FLOAT) AS total_deduction'),
+            DB::raw('CAST(payroll_deductions.net_pay AS FLOAT) AS net_pay'),
+            DB::raw('MONTH(payrolls.created_at) AS month'),
+        ])
+            ->where('payrolls.publish_status', 'publish')
+            ->where('payrolls.user_id', $id)
+            ->whereYear('payrolls.created_at', $year)
+            ->get()
+            ->map(function ($item) {
+                $item->month_name = \Carbon\Carbon::create()->month($item->month)->format('F');
+                return $item;
+            }); 
+   }
+
 }

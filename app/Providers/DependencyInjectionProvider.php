@@ -17,6 +17,7 @@ use App\Contracts\Services\IBatchApproveAccountService;
 use App\Contracts\Services\IDashboardService;
 use App\Contracts\Services\IEmployeeService;
 use App\Contracts\Services\Auth\IPasswordResetService;
+use App\Contracts\Services\IEmployeeServices\IPayslipReportsServices;
 use App\Contracts\Services\IHrMetaDataService;
 use App\Contracts\Services\IPayrollReportsServices\IGeneratePayrollsReportService;
 use App\Contracts\Services\IPayrollReportsServices\IGeneratePayslipsReportService;
@@ -31,11 +32,11 @@ use App\Services\BatchApproveAccountService;
 use App\Services\DashboardService;
 use App\Services\EmployeeService;
 use App\Services\Auth\PasswordResetService;
+use App\Services\EmployeeServices\PayslipReportsServices;
 use App\Services\HrMetaDataService;
 use App\Services\PayrollReportsServices\GeneratePayrollsReportService;
 use App\Services\PayrollReportsServices\GeneratePayslipsReportService;
 use App\Services\PayrollService;
-
 
 class DependencyInjectionProvider extends ServiceProvider
 {
@@ -65,6 +66,7 @@ class DependencyInjectionProvider extends ServiceProvider
         $this->app->singleton(IGeneratePayslipsReportService::class, GeneratePayslipsReportService::class);
         $this->app->singleton(IGeneratePayrollsReportService::class, GeneratePayrollsReportService::class);
         $this->app->singleton(IHrMetaDataService::class,HrMetaDataService::class);
+        $this->app->singleton(IPayslipReportsServices::class, PayslipReportsServices::class);
     }
 
     /**

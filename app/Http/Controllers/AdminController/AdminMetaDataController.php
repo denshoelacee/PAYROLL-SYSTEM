@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\AdminController;
 use App\Contracts\Services\IHrMetaDataService;
 use App\Http\Controllers\Controller;
-use App\Models\EmploymentType;
 use Inertia\Inertia;
 class AdminMetaDataController extends Controller
 {

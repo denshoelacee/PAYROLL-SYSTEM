@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\CreateNewAccountController;
 use App\Http\Controllers\Auth\EditDeleteAccountController;
 use App\Http\Controllers\BatchProcessingController\BatchApproveController;
 use App\Http\Controllers\EmployeeController\EmployeeDashboardController;
+use App\Http\Controllers\EmployeeController\EmployeeReportsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -82,6 +83,7 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
 
 Route::prefix('employee')->middleware(['auth', 'role:User'])->group(function () {
     Route::get('/dashboard', [EmployeeDashboardController::class, 'dashboard'])->name('employee.dashboard');
+    Route::get('/payslip/reports/{year}/summary',[EmployeeReportsController::class,'userPayslipReports'])->name('employee.payslip.reports');
     
 });
 

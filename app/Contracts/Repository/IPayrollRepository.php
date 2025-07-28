@@ -16,10 +16,13 @@ interface IPayrollRepository{
 
       public function updatePublish(array $data,$id): void;
 
-       public function getUserPayrollMonthly($year, $month);
+      public function getUserPayrollMonthly($year, $month);
 
-        public function getPayrollReportsYearly($year);
+      public function getPayrollReportsYearly($year);
 
-         public function getPayrollReportsYearlyView($year,$month);
+      public function getPayrollReportsYearlyView($year,$month);
+
+      //Employee SQL Request
+      public function getEmployeePayslipReports($id, $year);
       
 }

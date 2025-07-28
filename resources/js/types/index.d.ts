@@ -76,7 +76,14 @@ export interface User {
 
         users?:Employee
         previousPayroll?: UserPayroll
+        employee_name?:string
+        gross_salary?:number
     }
+
+    export interface EmploymentTypes{
+        employment_type_list: string
+    }
+
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {

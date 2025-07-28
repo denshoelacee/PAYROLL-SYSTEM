@@ -47,7 +47,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
     const [selectedRow, setSelectedRow] = useState<UserPayroll | null>(null);
     const [selectName, setSelectName] = useState('Select Employee')
     const [disableInput, setDisableInput] = useState(true);
-    
+    const isSalaryZero = (selectedRow?.basic_salary ?? 0) === 0
     const filteredRows = useMemo(() => {
     return payslips
         .filter((row) => {
@@ -57,7 +57,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
         return yearMatch && monthMatch;
         })
         .filter((row) => {
-        const fullName = `${row.users?.first_name ?? ''} ${row.users?.last_name ?? ''}`.toLowerCase();
+        const fullName = `${row.first_name ?? ''} ${row.last_name ?? ''}`.toLowerCase();
         return fullName.includes(searchQuery.toLowerCase());
         })
         .map((row, idx) => ({
@@ -509,8 +509,8 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
 
                             {/* Footer Buttons */}
                             <div className="flex gap-4">
-                                <PrimaryButton disabled={disableInput} onClick={handleSubmit('publish')} className='text-md mt-4 py-2 hover:bg-yellow-600'>Publish</PrimaryButton>
-                                <PrimaryButton disabled={disableInput} onClick={handleSubmit('partial')} className='text-md mt-4 hover:bg-yellow-600'>Partial</PrimaryButton>
+                                <PrimaryButton disabled={disableInput || isSalaryZero} onClick={handleSubmit('publish')} className='text-md mt-4 py-2 hover:bg-yellow-600'>Publish</PrimaryButton>
+                                <PrimaryButton disabled={disableInput || isSalaryZero} onClick={handleSubmit('partial')} className='text-md mt-4 hover:bg-yellow-600'>Partial</PrimaryButton>
                                 <PrimaryButton onClick={() => setAddModal(false)} className='text-md mt-4 hover:bg-yellow-600'>Cancel</PrimaryButton>
                             </div>
                         </div>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { PageProps } from '@/types'
+import { EmploymentTypes, JobTitles, PageProps } from '@/types'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head } from '@inertiajs/react'
 import Sidebar from '@/Components/Sidebar'
@@ -11,11 +11,13 @@ import AddDesignation from './partial/AddDesignation'
 import AddEmployment from './partial/AddEmployment'
 import JobTitlesModal from "@/Components/JobTitlesModal";
 import { useState } from "react";
-
-function Department(auth :PageProps) {
+type Props = PageProps<{
+    empTypeList : EmploymentTypes[]
+    jobTitleList : JobTitles[]
+}>
+function Department({auth,empTypeList,jobTitleList}:Props) {
     const [showModal, setShowModal] = useState(false);
     const [actionType, setActionType] = useState<'Department' | 'Designation' | 'Employment Type'>("Department");
-
         const handleAddClick = (type: 'Department' | 'Designation' | 'Employment Type') => {
             setActionType(type);
             setShowModal(true);
@@ -30,14 +32,14 @@ function Department(auth :PageProps) {
         console.log(showModal)
     return (
     <>
-        <AuthenticatedLayout user={auth.auth.user}>
+        <AuthenticatedLayout user={auth.user}>
             <Head title="Department" />
-            <Sidebar auth={auth.auth} />
+            <Sidebar auth={auth} />
             <AdminLayout title="Department Management">
                 <div className="w-full flex justify-between flex-wrap gap-4 p-4">
                     <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg w-full sm:w-[48%] lg:w-[32%] my-4 ">
                         <h2 className="text-lg font-semibold my-3 mx-5 text-white">Department</h2>
-                        <AddDepartment/>
+                        <AddDepartment jobTitleList={jobTitleList}/>
                         <div className='h-12 border px-5 place-content-center'>
                             <PrimaryButton onClick={() => handleAddClick("Department")} className='py-1.5'>Add New Department</PrimaryButton>
                         </div>
@@ -45,7 +47,7 @@ function Department(auth :PageProps) {
 
                    <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg w-full sm:w-[48%] lg:w-[32%] my-4 ">
                         <h2 className="text-lg font-semibold my-3 mx-5 text-white">Designation</h2>
-                        <AddDesignation/>
+                        <AddDesignation jobTitleList={jobTitleList}/>
                         <div className='h-12 border px-5 place-content-center'>
                             <PrimaryButton onClick={() => handleAddClick("Designation")} className='py-1.5'>Add New Designation</PrimaryButton>
                         </div>
@@ -53,7 +55,7 @@ function Department(auth :PageProps) {
 
                     <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg w-full sm:w-[48%] lg:w-[32%] my-4 ">
                         <h2 className="text-lg font-semibold my-3 mx-5 text-white">Employment Type</h2>
-                        <AddEmployment/>
+                        <AddEmployment empTypeList={empTypeList}/>
                         <div className='h-12 border px-5 place-content-center'>
                             <PrimaryButton onClick={() => handleAddClick("Employment Type")} className='py-1.5'>Add New Employment Type</PrimaryButton>
                         </div>

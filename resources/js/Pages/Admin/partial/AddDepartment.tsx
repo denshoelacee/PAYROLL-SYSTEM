@@ -2,55 +2,15 @@ import Table from "@/Components/Table";
 import { GridColDef } from "@mui/x-data-grid";
 import { FaRegEdit } from "react-icons/fa";
 import {FaRegTrashCan} from "react-icons/fa6"
-import JobTitlesModal from "@/Components/JobTitlesModal";
-import { useState } from "react";
+import { JobTitles } from "@/types";
 
-export default function AddDepartment() {
-
-    const rows= [
-        {
-        id: 1,
-        departmentName: "Human Resources",
-        },
-        {
-        id: 2, 
-        departmentName: "Finance",
-        },
-        {
-        id: 3, 
-        departmentName: "Abc",
-        },
-        {
-        id: 4, 
-        departmentName: "Dfg",
-        },
-        {
-        id: 5, 
-        departmentName: "Efg",
-        },
-        {
-        id: 6, 
-        departmentName: "tyu",
-        },
-        {
-        id: 7, 
-        departmentName: "iop",
-        },
-        {
-        id: 8, 
-        departmentName: "jkg",
-        },
-        {
-        id: 9, 
-        departmentName: "sadf",
-        },
-        
-    ]
-
-   
+type Props = {
+    jobTitleList : JobTitles[]
+}
+export default function AddDepartment({jobTitleList}:Props) {
 
     const columns: GridColDef[] = [
-        {field: 'departmentName', headerName: 'Department Name', flex:1, align:'center',headerAlign:'center'},
+        {field: 'department', headerName: 'Department Name', flex:1, align:'center',headerAlign:'center'},
         {field: 'actions', headerName: 'Actions', flex:1,headerAlign:'center',sortable:false,renderCell: (params) => (
             <div className="flex gap-2 pt-1 items-center justify-center">
                 <div className="group  h-12 w-9 flex flex-col items-center justify-center cursor-pointer px-2 hover:blue-green-500">
@@ -72,7 +32,7 @@ export default function AddDepartment() {
         <>
             <div className="h-[430px] overflow-auto scrollbar-hidden">
                 <Table
-                rows={rows}
+                rows={jobTitleList}
                 columns={columns}
                 hideFooter={true}
                 pageSize={100}

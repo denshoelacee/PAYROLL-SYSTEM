@@ -2,50 +2,14 @@ import Table from "@/Components/Table";
 import { GridColDef } from "@mui/x-data-grid";
 import { FaRegEdit } from "react-icons/fa";
 import {FaRegTrashCan} from "react-icons/fa6"
+import { EmploymentTypes } from "@/types";
 
-export default function AddEmployment() {
-        
-    const rows= [
-        {
-        id: 1,
-        employmentType: "Human Resources",
-        },
-        {
-        id: 2, 
-        employmentType: "Finance",
-        },
-        {
-        id: 3, 
-        employmentType: "Abc",
-        },
-        {
-        id: 4, 
-        employmentType: "Dfg",
-        },
-        {
-        id: 5, 
-        employmentType: "Efg",
-        },
-        {
-        id: 6, 
-        employmentType: "tyu",
-        },
-        {
-        id: 7, 
-        employmentType: "iop",
-        },
-        {
-        id: 8, 
-        employmentType: "jkg",
-        },
-        {
-        id: 9, 
-        employmentType: "sadf",
-        },
-        
-    ]
+type Props = {
+    empTypeList : EmploymentTypes[]
+}
+export default function AddEmployment({empTypeList}:Props) {
     const columns: GridColDef[] = [
-        {field: 'employmentType', headerName: 'Employment Type', flex:1, align:'center',headerAlign:'center'},
+        {field: 'employment_type_list', headerName: 'Employment Type', flex:1, align:'center',headerAlign:'center'},
         {field: 'actions', headerName: 'Actions', flex:1,headerAlign:'center',sortable:false,renderCell: (params) => (
             <div className="flex gap-2 pt-1 items-center justify-center">
                 <div className="group  h-12 w-9 flex flex-col items-center justify-center cursor-pointer px-2 hover:blue-green-500">
@@ -67,7 +31,7 @@ export default function AddEmployment() {
         <>
             <div className="h-[430px] overflow-auto scrollbar-hidden">
                 <Table
-                rows={rows}
+                rows={empTypeList}
                 columns={columns}
                 hideFooter={true}
                 pageSize={100}

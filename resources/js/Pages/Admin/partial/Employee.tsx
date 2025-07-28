@@ -21,7 +21,6 @@ import TextInputGroup from '@/Components/TextInputGroup';
 type Props = PageProps<{
     userList: Employee[];
     jobtitles: JobTitles[];
-    auth?: PageProps['auth'];
 }>;
 export default function EmployeePartial({ userList,jobtitles}: Props) {
         const [addModal, setAddModal] = useState(false);

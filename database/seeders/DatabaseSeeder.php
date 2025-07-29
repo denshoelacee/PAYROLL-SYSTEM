@@ -26,6 +26,6 @@ class DatabaseSeeder extends Seeder
         'role' => 'Admin',
     ]);
 
-        User::factory(100)->create();      
+     //  User::factory(100)->create();      
     }
 }

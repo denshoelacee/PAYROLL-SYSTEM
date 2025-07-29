@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Contracts\Services\IHrMetaDataService;
+use App\Events\newRegister;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Contracts\Services\IJobTitleService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -45,7 +45,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'employee_id'     => 'required|integer',
             'last_name'       => 'required|string|max:50',
-            'first_name'      => 'required|string|lowercase|max:50',
+            'first_name'      => 'required|string|max:50',
             'designation'     => 'required|string|max:50',
             'department'      => 'required|string|max:50',
             'basic_pay'       => 'nullable|numeric',
@@ -76,7 +76,7 @@ class RegisteredUserController extends Controller
                 'secret_question' => $request->secret_question,
                 'secret_answer'   => Hash::make(strtolower(trim($request->secret_answer)))
             ]);      
-            
+            event(new newRegister($user));
             return redirect()->back()->with('success','Register successfully, Please wait for approval.');     
             
         }

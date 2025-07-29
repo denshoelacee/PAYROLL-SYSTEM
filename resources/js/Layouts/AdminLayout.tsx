@@ -3,6 +3,8 @@ import { InfoMessage } from '@/Components/Alert';
 import { usePage } from '@inertiajs/react';
 import React, { ReactNode, useEffect, useState } from 'react'
 import { PropsWithChildren } from 'react';
+import echo from '@/echo';
+import NotificationSound from "../../../sound/notification.mp3";
 
 
 export default function AdminLayout({title, children}:PropsWithChildren ){
@@ -18,7 +20,14 @@ export default function AdminLayout({title, children}:PropsWithChildren ){
           return () => clearTimeout(timer);
         }
       }, [message]);
-      
+
+//Toast
+   useEffect(() => {
+      echo.channel('hr.notifications')  
+        .listen('.user.created', (e: any) => {
+          alert(`New user registered: ${e.user.name}`);
+    });
+  });
   return (
     <>
     {hasMessages && dismissed &&
@@ -26,7 +35,7 @@ export default function AdminLayout({title, children}:PropsWithChildren ){
                 {message.information && (
                     <InfoMessage severity="info" info={message.information} onClose={() => {
                         setDismissed(false)
-                    }}/>
+                    }}/>  
                 )}
                 {message.error && (
                     <InfoMessage severity="error" info={message.error} onClose={() => {

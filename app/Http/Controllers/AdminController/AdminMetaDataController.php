@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Termwind\Components\Raw;
+
 class AdminMetaDataController extends Controller
 {
     public function __construct(protected IHrMetaDataService $metadataService){}
@@ -56,6 +58,50 @@ class AdminMetaDataController extends Controller
             return redirect()->back()->with('success','Delete Employee Type Successfully!');
         }catch(\Exception $e){
              return redirect()->back()->with('error','Something Wrong!');
+        }
+    }
+
+    public function createPositions(Request $request)
+    {
+         $data = $request->validate([
+            'department' => 'nullable|string|max:50',
+            'desination' => 'nullable|string|max:50'
+         ]);
+
+         $checker = $request->input('checker');
+
+         try{
+             $this->metadataService->addJobTitle($data,$checker);
+             return Redirect()->back()->with('success','Added Department Successfully.');
+         }catch(\Exception $e){
+            return redirect()->back()->with('error','Something Wrong!');
+         }
+    }
+
+    public function updateJobTitle(Request $request, $id)
+    {
+         $data = $request->validate([
+            'department' => 'nullable|string|max:50',
+            'designation' => 'nullable|string|max:50'
+         ]);
+
+         try{
+             $this->metadataService->updatePositions( $id, $data);
+             return redirect()->back()->with('success','Added Successfully.');
+         }catch(\Exception $e){
+            return redirect()->back()->with('error','Something Wrong!');
+         }
+    }
+
+    public function deleteJobTitle(Request $request, $id)
+    {
+         $checker = $request->input('checker');
+         
+        try{
+            $this->metadataService->destroyJobtitle($id,$checker);
+            return redirect()->back()->with('success','Delete Successfully.');
+        }catch(\Exception $e){
+            return redirect()->back()->with('error','Something Wrong!');
         }
     }
 }

@@ -50,8 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-   // Route::delete('/account/delete/{id}',[EditDeleteAccountController::class, 'deleteAccount'])->name('delete.account');
-   // Route::patch('/account/update/{id}', [EditDeleteAccountController::class, 'editAccount'])->name('update.account');
+    Route::delete('/account/delete/{id}',[EditDeleteAccountController::class, 'deleteAccount'])->name('delete.account');
+    Route::patch('/account/update/{id}', [EditDeleteAccountController::class, 'editAccount'])->name('update.account');
 });
 
 Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {  
@@ -69,9 +69,15 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
     Route::get('/reports/summary',[AdminPayrollReportsController::class,'payrollReportsYearly'])->name('admin.payroll.summary');
     Route::get('/reports/payroll/{year}/{month}/view/summary',[AdminPayrollReportsController::class,'payrollReportsYearlyView'])->name('admin.payroll.view.summary');
     Route::get('/department',[AdminMetaDataController::class,'displayEmpTypeList'])->name('admin.department');
-    Route::post('addEmploymentType', [AdminMetaDataController::class, 'createEmploymentType'])->name('adminAdd.EmploymentType');
+    Route::post('/addEmploymentType', [AdminMetaDataController::class, 'createEmploymentType'])->name('adminAdd.EmploymentType');
     Route::post('editEmploymentType/{id}', [AdminMetaDataController::class, 'updateEmploymentType'])->name('adminUpdate.EmploymentType');
     Route::delete('deleteEmploymentType/{id}', [AdminMetaDataController::class, 'deleteEmploymentType'])->name('adminDelete.EmploymentType');
+
+    //Admin MetaData Controller
+    Route::post('/createPositions', [AdminMetaDataController::class, 'createPositions'])->name('admin.create.positions');
+    Route::post('/updatePositions/{id}', [AdminMetaDataController::class, 'updateJobTitle'])->name('admin.update.position');
+    Route::delete('deletePositions/{id}', [AdminMetaDataController::class, 'deleteJobTitle'])->name('admin.delete.position');
+
 
     Route::get('/payroll/Payslip/{id}', function () {
         return Inertia::render('Admin/ViewPayslip');

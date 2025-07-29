@@ -14,6 +14,38 @@ class HrMetaDataService implements IHrMetaDataService
         return $this->hrMetaDataRepository->getJobTitle();
     }
 
+    public function addJobTitle(array $data,$checker):void
+    {
+        if($checker === 'toDepartment')
+        {
+            $this->hrMetaDataRepository->addJobTitleDepartment($data);
+        }
+        elseif($checker === 'toDesignation')
+        {
+            $this->hrMetaDataRepository->addJobTitleDesignation($data);
+        }
+
+    }
+
+    public function updatePositions($id,array $data)
+    {
+         return $this->hrMetaDataRepository->updateJobTitle($id, $data);
+    }
+
+    public function destroyJobtitle($id,$checker):void
+    {
+        if($checker === 'toDepartment')
+        {
+            $this->hrMetaDataRepository->deleteJobTitleDepartment($id);
+        }
+        if($checker === 'toDesignation')
+        {
+            $this->hrMetaDataRepository->deleteJobTitleDesignation($id);
+        }
+    }
+
+
+    //CRUD EMPLOYEE TYPE
     public function empTypeList()
     {
          return $this->hrMetaDataRepository->getEmpTypeList();

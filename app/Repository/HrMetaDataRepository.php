@@ -70,7 +70,7 @@ class HrMetaDataRepository implements IHrMetaDataRepository
             $find->delete();
         }
     }
-    
+    //CRUD EMPLOYEE TYPE
     public function getEmpTypeList()
     {
         return EmploymentType::SELECT('id','employment_type_list')->get();

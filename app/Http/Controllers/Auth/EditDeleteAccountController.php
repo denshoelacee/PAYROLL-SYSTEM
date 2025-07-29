@@ -37,7 +37,7 @@ class EditDeleteAccountController extends Controller
             'designation'=> $commonRule,
             'basic_pay'  => ['sometimes', 'numeric'],
             'role'       => ['sometimes', 'string', 'in:Admin,User'],
-            'employment_type' => ['sometimes', 'string', 'in:Regular,Part-Time']
+            'employment_type' => ['sometimes', 'string']
         ]);
         
         try{

@@ -187,6 +187,7 @@ class PayrollRepository implements IPayrollRepository{
         ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
         ->select([
             'users.user_id',
+            'users.employee_id',
             'users.department',
             'users.designation',
             DB::raw("CONCAT(users.last_name, ', ', users.first_name) AS employee_name"),
@@ -223,6 +224,7 @@ class PayrollRepository implements IPayrollRepository{
             DB::raw('CAST(payroll_deductions.total_deduction AS FLOAT) AS total_deduction'),
             DB::raw('CAST(payroll_deductions.net_pay AS FLOAT) AS net_pay'),
             DB::raw('MONTH(payrolls.created_at) AS month'),
+            'payrolls.created_at',
         ])
             ->where('payrolls.publish_status', 'publish')
             ->where('payrolls.user_id', $id)

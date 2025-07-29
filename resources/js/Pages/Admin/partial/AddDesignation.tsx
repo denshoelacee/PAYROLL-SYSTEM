@@ -1,8 +1,10 @@
+import PrimaryButton from "@/Components/PrimaryButton";
 import Table from "@/Components/Table";
 import { JobTitles } from "@/types";
 import { GridColDef } from "@mui/x-data-grid";
 import { FaRegEdit } from "react-icons/fa";
 import {FaRegTrashCan} from "react-icons/fa6"
+
 type Props = {
     jobTitleList : JobTitles[]
 }
@@ -40,6 +42,11 @@ export default function AddDesignation({jobTitleList}:Props) {
                     
                 }}
                 />
+            </div>
+            <div className="h-12 border px-5 flex items-center justify-center">
+              <PrimaryButton  className="py-1.5">
+                Add New Designation
+              </PrimaryButton>
             </div>
         </>
     );

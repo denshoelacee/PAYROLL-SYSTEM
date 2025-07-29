@@ -69,11 +69,14 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
     Route::get('/reports/summary',[AdminPayrollReportsController::class,'payrollReportsYearly'])->name('admin.payroll.summary');
     Route::get('/reports/payroll/{year}/{month}/view/summary',[AdminPayrollReportsController::class,'payrollReportsYearlyView'])->name('admin.payroll.view.summary');
     Route::get('/department',[AdminMetaDataController::class,'displayEmpTypeList'])->name('admin.department');
-        
-    
+    Route::post('addEmploymentType', [AdminMetaDataController::class, 'createEmploymentType'])->name('adminAdd.EmploymentType');
+    Route::post('editEmploymentType/{id}', [AdminMetaDataController::class, 'updateEmploymentType'])->name('adminUpdate.EmploymentType');
+    Route::delete('deleteEmploymentType/{id}', [AdminMetaDataController::class, 'deleteEmploymentType'])->name('adminDelete.EmploymentType');
+
     Route::get('/payroll/Payslip/{id}', function () {
         return Inertia::render('Admin/ViewPayslip');
     });
+    
 
 
     /**Route::get('/reports', function () {
@@ -83,8 +86,12 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
 
 Route::prefix('employee')->middleware(['auth', 'role:User'])->group(function () {
     Route::get('/dashboard', [EmployeeDashboardController::class, 'dashboard'])->name('employee.dashboard');
+    Route::get('/payslip/summary',[EmployeeReportsController::class,'userPayslipReports'])->name('employee.payslipsummary');
     Route::get('/payslip/reports/{year}/summary',[EmployeeReportsController::class,'userPayslipReports'])->name('employee.payslip.reports');
     
+    Route::get('/payroll/Payslip/{id}', function () {
+        return Inertia::render('Employee/ViewPayslip');
+    });
 });
 
 Route::middleware(['auth', 'role:Admin,User'])->group(function () {

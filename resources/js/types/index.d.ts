@@ -81,6 +81,7 @@ export interface User {
     }
 
     export interface EmploymentTypes{
+        id: number
         employment_type_list: string
     }
 

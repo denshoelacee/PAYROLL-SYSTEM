@@ -17,7 +17,7 @@ use Inertia\Response;
 class RegisteredUserController extends Controller
 {
     
-    public function __construct(protected IHrMetaDataService $metaDataService){}
+    public function __construct(protected IHrMetaDataService $metaDataService,){}
 
     /**
      * Display the registration view.
@@ -25,9 +25,13 @@ class RegisteredUserController extends Controller
     public function create(): Response
     {
         $data = $this->metaDataService->jobTitleList();
+        $empTypeList = $this->metaDataService->empTypeList();
+
 
             return Inertia::render('Auth/Register',
-                ['Jobtitles' => $data]
+                ['Jobtitles' => $data,
+                'employeeTypeList' => $empTypeList]
+                
             );
     }
 

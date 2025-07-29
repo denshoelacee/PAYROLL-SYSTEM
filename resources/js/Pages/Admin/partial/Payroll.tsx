@@ -47,7 +47,6 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
     const [selectedRow, setSelectedRow] = useState<UserPayroll | null>(null);
     const [selectName, setSelectName] = useState('Select Employee')
     const [disableInput, setDisableInput] = useState(true);
-    const isSalaryZero = (selectedRow?.basic_salary ?? 0) === 0
     const filteredRows = useMemo(() => {
     return payslips
         .filter((row) => {
@@ -271,6 +270,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
             })
         }
     }, [editModal, selectedRow]);
+    const isSalaryZero = Number(data.basic_pay) === 0;
 
     const handleSubmit = (actionType: 'partial' | 'publish'): FormEventHandler => {
         return (e) => {
@@ -379,7 +379,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                                     <RiArrowDropDownLine className="text-2xl transition-transform duration-500 ease-in-out" />
                                 </SecondaryButton>
                                 </Dropdown.Trigger>
-                                <Dropdown.Content contentClasses="w-[200px] bg-[#16423D] " align="left">
+                                <Dropdown.Content contentClasses="bg-[#1B4D4D] w-[200px] bg-[#1B4D4E] " align="left">
                                 {availableYears.map((year) => (
                                     <button
                                     key={year}
@@ -404,7 +404,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                                     <RiArrowDropDownLine className="text-2xl transition-transform duration-500 ease-in-out" />
                                 </SecondaryButton>
                                 </Dropdown.Trigger>
-                                <Dropdown.Content contentClasses="w-[200px] bg-[#16423D] " align="left">
+                                <Dropdown.Content contentClasses="bg-[#1B4D4D] w-[200px] bg-[#1B4D4E] " align="left">
                                 {availableMonths.map((m) => ( 
                                     <button
                                     key={m.number}

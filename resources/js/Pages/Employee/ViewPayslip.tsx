@@ -108,7 +108,7 @@ export default function Payslip({ auth }: PageProps) {
 
     // Billing Info
     addSectionTitle("Billing Address");
-    addText(`Name: ${payroll.last_name}, ${payroll.first_name}`);
+    addText(`Name: ${payroll.employee_name}`);
     addText(`Designation: ${payroll.designation}`);
     addText(`Department: ${payroll.department}`);
      y -= 10;
@@ -273,7 +273,7 @@ return (
 
                 <div className="px-5 text-white text-sm lg:text-md">
                     <p className="text-md md:text-xl">Billing Address</p>
-                    <p>{payroll?.last_name}, {payroll?.first_name}</p>
+                    <p>{payroll?.employee_name}</p>
                     <p>Designation: {payroll?.designation}</p>
                     <p>Department: {payroll?.department}</p>
                 </div>

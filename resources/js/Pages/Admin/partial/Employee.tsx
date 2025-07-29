@@ -1,4 +1,4 @@
-import {Employee, PageProps,JobTitles} from '@/types';
+import {Employee, PageProps,JobTitles, EmploymentTypes} from '@/types';
 import Search from '@/Components/Search';
 import PrimaryButton  from '@/Components/PrimaryButton';
 import Modal from '@/Components/Modal';
@@ -21,8 +21,9 @@ import TextInputGroup from '@/Components/TextInputGroup';
 type Props = PageProps<{
     userList: Employee[];
     jobtitles: JobTitles[];
+    employeeTypeList: EmploymentTypes[];
 }>;
-export default function EmployeePartial({ userList,jobtitles}: Props) {
+export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: Props) {
         const [addModal, setAddModal] = useState(false);
         const [editModal, setEditModal] = useState(false);
         const [deleteModal, setDeleteModal] = useState(false);
@@ -33,9 +34,10 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
         const [selectDesignation, setSelectDesignation] = useState('Select Designation');
         const [selectRole, setSelectRole] = useState('Select Role');
         const [selectEmploymentType, setSelectEmploymentType] = useState('Select Employment Type');
-        
         const role = ['Admin','User'];
-        const employmenttype = ['Regular', 'Part-Time']
+
+        const employeeTypes = employeeTypeList;
+
 
         const handleOpenPopover = (event:any, row:Employee) => {
             setAnchorEl(event.currentTarget);
@@ -122,6 +124,8 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                     reset(); 
                     setSelectDepartment('Select Department')
                     setSelectDesignation('Select Designation')
+                    setSelectRole('Select Role')
+                    setSelectEmploymentType('Select Employment Type')
                 },
             });
         };
@@ -137,7 +141,6 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
         setAnchorEl(null);  
 
         };
-
         const updateSubmit: FormEventHandler = (e) => {
             e.preventDefault();
             if (!selectedRow?.user_id) return;
@@ -355,18 +358,18 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                                 </button>
                             </Dropdown.Trigger> 
                             <Dropdown.Content contentClasses="bg-gray-300 w-full" align="left" >
-                                {employmenttype.map((option, index) => (
+                                {employeeTypes.map((option, index) => (
                                 <button
                                     key={index}
                                     type="button"
                                     id='role'
                                     name='role'
                                     onClick={() => {
-                                    handleDropdownSelect(option, 'employment_type');
+                                    handleDropdownSelect(option.employment_type_list, 'employment_type');
                                     }}
                                     className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
                                 >
-                                    {option}
+                                {option.employment_type_list}
                                 </button>
                                 ))}
                             </Dropdown.Content>
@@ -517,18 +520,18 @@ export default function EmployeePartial({ userList,jobtitles}: Props) {
                                 </button>
                             </Dropdown.Trigger> 
                             <Dropdown.Content contentClasses="bg-gray-300 w-full" align="left" >
-                                {employmenttype.map((option, index) => (
+                                {employeeTypes.map((option, index) => (
                                 <button
                                     key={index}
                                     type="button"
                                     id='role'
                                     name='role'
                                     onClick={() => {
-                                    handleDropdownSelect(option, 'employment_type');
+                                    handleDropdownSelect(option.employment_type_list, 'employment_type');
                                     }}
                                     className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
                                 >
-                                    {option}
+                                    {option.employment_type_list}
                                 </button>
                                 ))}
                             </Dropdown.Content>

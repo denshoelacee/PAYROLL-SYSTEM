@@ -12,16 +12,20 @@ import { RiArrowDropDownLine } from 'react-icons/ri';
 import VerifyMessage from '@/Components/VerifyMessage';
 import { Alert } from '@mui/material';
 import {InfoMessage} from '@/Components/Alert';
-import { PageProps } from '@/types';
+import { EmploymentTypes, PageProps } from '@/types';
 import { JobTitles } from '@/types';
 
-
-export default function Register({Jobtitles}: PageProps<{Jobtitles:JobTitles[]}>) {
+type Props = {
+    Jobtitles : JobTitles[]
+    employeeTypeList :EmploymentTypes[]
+}
+export default function Register({Jobtitles,employeeTypeList}: Props) {
 
     
 
     const jobtitles = Jobtitles;
     //const designation = Jobtitles;
+    const employeeTypelist = employeeTypeList
 
     const [step, setStep] = useState(1);
     const [validateErrors, setValidationErrors] = useState({
@@ -74,6 +78,7 @@ const nextStep = () => {
     const [selectDepartment, setSelectDepartment] = useState('Select Department');
     const [selectQuestion, setSelectQuestion] = useState('Select Question');
     const [selectDesignation, setSelectDesignation] = useState('Select Designation');
+    const [selectEmploymentType, setSelectEmploymentType] = useState('Select Employment Type');
 
     const options = ['What is ROBLOX', 'ADIK BA SI RAYJAY UG GROW A GARDEN?'];
 
@@ -100,6 +105,7 @@ const nextStep = () => {
         setSelectQuestion('Select Question'); 
         setSelectDepartment('Select Department')
         setSelectDesignation('Select Designation')
+        setSelectEmploymentType('Select Employment Type')
         }
         return () => {
             reset('password', 'password_confirmation'); 
@@ -127,6 +133,8 @@ const nextStep = () => {
             setSelectQuestion(value)        }
         else if(field === 'designation'){
             setSelectDesignation(value)
+        }else if(field === 'employment_type'){
+            setSelectEmploymentType(value)
         }
         setData(field, value); 
     };
@@ -227,7 +235,7 @@ const nextStep = () => {
                                             <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                         </button>
                                     </Dropdown.Trigger> 
-                                    <Dropdown.Content contentClasses=" bg-gray-300 p-0 w-full max-h-[200px] overflow-y-auto" align="left">
+                                    <Dropdown.Content ableSearch={true} contentClasses=" bg-gray-300 p-0 w-full max-h-[200px] overflow-y-auto" align="left">
                                     {jobtitles
                                         .map(des => des.designation)
                                         .filter(designations => designations && designations.toUpperCase() !== 'NULL') 
@@ -246,22 +254,34 @@ const nextStep = () => {
                                 </Dropdown.Content>
                             </Dropdown>
                             <InputError message={errors.designation} className="mt-1" />
-                        </div>
+                            </div>
 
-                        
-                        <div>
-                                <InputLabel htmlFor="employment_type" value="Employment Type *" className='text-white'/>
-                                    <div className="bg-gray-300 rounded-xl">
-                                        <TextInput
-                                        id="employment_type"
-                                        name="employment_type"
-                                        value={data.employment_type}
-                                        className=" block w-full bg-gray-300 text-black"
-                                        onChange={(e) => setData('employment_type', e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <InputError message={errors.last_name} className="mt-1" />
+                            <div>
+                                <InputLabel htmlFor="employment_type" value="Employment Type *" className='text-white' />
+                                <Dropdown>
+                                    <Dropdown.Trigger>
+                                        <button type="button" className="bg-gray-300 w-full border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                            <p className='text-sm'>{selectEmploymentType}</p>
+                                            <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
+                                        </button>
+                                    </Dropdown.Trigger> 
+                                    <Dropdown.Content ableSearch={true} contentClasses="bg-gray-300 p-0 w-full max-h-[200px] overflow-y-auto" align="left" >
+                                        {employeeTypelist.map((option, index) => (
+                                        <button
+                                            key={index}
+                                            type="button"
+                                            id='role'
+                                            name='role'
+                                            onClick={() => {
+                                            handleDropdownSelect(option.employment_type_list, 'employment_type');
+                                            }}
+                                            className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
+                                        >
+                                            {option.employment_type_list}
+                                        </button>
+                                        ))}
+                                    </Dropdown.Content>
+                                </Dropdown>
                             </div>
                         <div className="pt-10">
                             <PrimaryButton className=" py-2 hover:bg-yellow-600" onClick={nextStep} >

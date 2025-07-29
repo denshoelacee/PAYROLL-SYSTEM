@@ -3,6 +3,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import { FaRegEdit } from "react-icons/fa";
 import {FaRegTrashCan} from "react-icons/fa6"
 import { JobTitles } from "@/types";
+import PrimaryButton from "@/Components/PrimaryButton";
 
 type Props = {
     jobTitleList : JobTitles[]
@@ -42,7 +43,11 @@ export default function AddDepartment({jobTitleList}:Props) {
                 }}
                 />
             </div>
-            
+            <div className="h-12 border px-5 flex items-center justify-center">
+              <PrimaryButton className="py-1.5">
+                Add New Department
+              </PrimaryButton>
+            </div>
         </>
     );
 }

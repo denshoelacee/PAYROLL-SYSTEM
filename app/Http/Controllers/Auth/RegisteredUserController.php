@@ -77,7 +77,7 @@ class RegisteredUserController extends Controller
                 'secret_answer'   => Hash::make(strtolower(trim($request->secret_answer)))
             ]);      
             event(new newRegister($user));
-            return redirect()->back()->with('success','Register successfully, Please wait for approval.');     
+            return redirect()->route('login')->with('success','Register successfully, Please wait for approval.');     
             
         }
        catch(\Exception $e)

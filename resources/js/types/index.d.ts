@@ -29,6 +29,7 @@ export interface User {
 
 
     export interface JobTitles{
+        id:number
         designation:string,
         department:string
     }

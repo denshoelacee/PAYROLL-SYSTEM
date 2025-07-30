@@ -151,7 +151,7 @@ export default function AddEmployment({empTypeList}:Props) {
                         Delete Employment Type
                     </h2>
                     <p className="text-white mb-4">
-                        Are you sure you want to this Employment Type? {selectedRow?.employment_type_list}   
+                        Are you sure you want to this Delete Employment Type? {selectedRow?.employment_type_list}   
                     </p>
                         <div className="flex justify-evenly gap-3 py-3">
                             <PrimaryButton className="py-2"onClick={deleteSubmit}>

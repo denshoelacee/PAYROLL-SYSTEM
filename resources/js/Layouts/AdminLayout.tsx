@@ -4,12 +4,14 @@ import { usePage } from '@inertiajs/react';
 import React, { ReactNode, useEffect, useState } from 'react'
 import { PropsWithChildren } from 'react';
 import echo from '@/echo';
-import NotificationSound from "../../../sound/notification.mp3";
+import NotificationSound from "../../sound/notification.mp3"
 
 
 export default function AdminLayout({title, children}:PropsWithChildren ){
       const {message}:any = usePage().props;
       const [dismissed, setDismissed] = useState(true);
+      const [notification, setNotification] = useState<string | null>(null);
+
       const hasMessages = message?.information || message?.error || message?.success;
       useEffect(() => {
         if (hasMessages) {
@@ -22,12 +24,23 @@ export default function AdminLayout({title, children}:PropsWithChildren ){
       }, [message]);
 
 //Toast
-   useEffect(() => {
-      echo.channel('hr.notifications')  
-        .listen('.user.created', (e: any) => {
-          alert(`New user registered: ${e.user.name}`);
-    });
-  });
+    useEffect(() => {
+    const channel = echo.channel('hr.notifications')
+      .listen('.user.created', (e: any) => {
+        setNotification(`Hey! A new account is waiting for your approval!. Please take a look when you get a chance.`);
+        new Audio(NotificationSound).play(); // Play sound
+
+        // Auto-dismiss after 5 seconds
+        setTimeout(() => {
+          setNotification(null);
+        }, 5000);
+      });
+
+    return () => {
+      echo.leaveChannel('hr.notifications'); // cleanup
+    };
+  }, []);
+
   return (
     <>
     {hasMessages && dismissed &&
@@ -49,6 +62,13 @@ export default function AdminLayout({title, children}:PropsWithChildren ){
                 )}
             </div>
     }
+    {notification && (
+    <div className="fixed bottom-2 right-5 z-50 bg-gray-800 text-white px-4 py-5 rounded-lg shadow-lg animate-slide-in w-[400px] h-[115px]">
+        <p>New Notification</p>
+        {notification}
+    </div>
+    )}
+
     <div className="w-full mx-auto px-3 sm:px-5 md:pl-[150px] md:pr-[50px] lg:pl-[170px] lg:pr-[70px]">
         <p className='pb-3 text-3xl text-white font-black'>{title}</p>
             {children}           

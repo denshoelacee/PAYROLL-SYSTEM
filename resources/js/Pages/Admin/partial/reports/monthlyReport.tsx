@@ -24,7 +24,7 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             const headerRow = [
             "No.", "Name", "Monthly Rate", "PERA","Gross Salary","Amount of Tardiness and Absences without pay", "W/ Holding TAX",
             "Tax Balance Due", "GSIS",
-            "HDMF", "PHIC", "Other Deductions", "Total Deductions",
+            "HDMF", "PHIC", "Other Deductions",
             "Net Pay", "Signature of Employee"
             ];
             //HEADER TITLE
@@ -64,7 +64,6 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             { width: 12 },   // J: "HDMF"
             { width: 12 },   // K: "PHIC"
             { width: 13 },   // L: "Other Deductions"
-            { width: 13 },   // M: "Total Deductions"
             { width: 15 },   // N: "Net Pay"
             { width: 15 },   // O: "Signature"
             ];
@@ -198,7 +197,6 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             hdmfTotal:0,
             philhealth :0,
             other_deduction:0,
-            total_deduction :0,
             net_pay :0,
         };
     
@@ -213,7 +211,6 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             footerTotals.hdmfTotal      += [row.contributions,row.loans,row.housing_loan].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
             footerTotals.philhealth     += parseFloat(row.philhealth ?? 0);
             footerTotals.other_deduction+= [row.cfi,row.tipid,row.city_savings_bank,row.fea,row.canteen,row.disallowance,row.unliquidated_ca,row.disallowance_honoraria,row.coop,row.landbank,row.ucpb].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
-            footerTotals.total_deduction+= [row.total_deduction].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
             footerTotals.net_pay        += parseFloat(row.net_pay ?? 0);
         });
     
@@ -230,7 +227,6 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             footerTotals.hdmfTotal,
             footerTotals.philhealth,
             footerTotals.other_deduction,
-            footerTotals.total_deduction,
             footerTotals.net_pay,
             '' // Signature
         ]); 

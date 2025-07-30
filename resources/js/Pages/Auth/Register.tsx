@@ -260,7 +260,7 @@ const nextStep = () => {
                                 <InputLabel htmlFor="employment_type" value="Employment Type *" className='text-white' />
                                 <Dropdown>
                                     <Dropdown.Trigger>
-                                        <button type="button" className="bg-gray-300 w-full border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                        <button type="button" className="bg-gray-300 w-full border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center">
                                             <p className='text-sm'>{selectEmploymentType}</p>
                                             <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                         </button>
@@ -331,7 +331,7 @@ const nextStep = () => {
                         <InputLabel htmlFor="secret_question" value="Secret Question *" className='text-white' />
                             <Dropdown>
                                 <Dropdown.Trigger>
-                                    <button type="button" className="bg-gray-300 border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                    <button type="button" className="w-full bg-gray-300 border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
                                         <p className='text-sm'>{selectQuestion}</p>
                                         <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                     </button>

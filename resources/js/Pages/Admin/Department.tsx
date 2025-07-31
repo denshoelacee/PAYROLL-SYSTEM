@@ -18,10 +18,9 @@ type Props = PageProps<{
 }>;
 
 function Department({ auth, empTypeList, jobTitleList }: Props) {
+
   return (
     <>
-      <AuthenticatedLayout user={auth.user}>
-        <Head title="Department" />
         <Sidebar auth={auth} />
         <AdminLayout title="Department Management">
           <div className="w-full flex justify-between flex-wrap gap-4 p-4">
@@ -44,7 +43,7 @@ function Department({ auth, empTypeList, jobTitleList }: Props) {
             </div>
           </div>
         </AdminLayout>
-      </AuthenticatedLayout>
+
     </>
   );
 }

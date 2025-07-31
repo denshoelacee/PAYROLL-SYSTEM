@@ -22,7 +22,7 @@ export default function Reports({auth,selectedYear,monthlySummary,availableYears
 
   return (
     <>
-        <AuthenticatedLayout user={auth.user}>
+        
             <Head title="Reports" />
             <Sidebar auth={auth} />
             <AdminLayout title="Reports">
@@ -31,7 +31,7 @@ export default function Reports({auth,selectedYear,monthlySummary,availableYears
                    monthlySummary={monthlySummary}
                    availableYears={availableYears}/>
             </AdminLayout>
-        </AuthenticatedLayout>
+
     </>
   )
 }

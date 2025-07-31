@@ -52,14 +52,14 @@ export default function Sidebar({auth }: PageProps) {
             ) : (
                 <div className="p-2 ">
                 <Link href='/' className='flex items-center justify-center'>
-                    <CtuLogo className='p-1 w-20 h-15'/>x``
+                    <CtuLogo className='p-1 w-20 h-15'/>
                 </Link>
                 
                 <div className="flex flex-col items-center  justify-center gap-5 h-[500px]">
                         <NavLink href={route('employee.dashboard')} active={route().current('employee.dashboard')}>
                             <FiGrid className='text-2xl text-white'/>
                         </NavLink>
-                        <NavLink href={route('employee.payslipsummary')} active={route().current('employee.payslipsummary')} className='text-[#67CFD5] text-lg'>
+                        <NavLink href={route('employee.payslip.summary')} active={route().current('employee.payslip.summary')} className='text-[#67CFD5] text-lg'>
                             <BiCoinStack className='font-black text-2xl text-white'/>
                         </NavLink>
                 </div>

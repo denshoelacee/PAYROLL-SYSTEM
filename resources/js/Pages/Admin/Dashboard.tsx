@@ -35,8 +35,9 @@ export default function Dashboard({ auth}: PageProps) {
     const {chartData, percentChange } = usePage<PageProps<{chartData: ChartDatum[],percentChange: number}>>().props
     
     return (
-        
-        <AuthenticatedLayout user={auth.user}>
+          
+            <>
+            
             <Head title="Dashboard" />
             <div className="">
                     <Sidebar auth={auth}/>  
@@ -58,6 +59,7 @@ export default function Dashboard({ auth}: PageProps) {
                     
                 </AdminLayout>
             </div>
-        </AuthenticatedLayout>
+            </>
+
     );
 }

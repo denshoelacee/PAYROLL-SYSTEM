@@ -26,10 +26,8 @@ export default function Payroll({ auth,thisMonth,newPayroll,payslips,
 
     return (
         
-        <AuthenticatedLayout
-            user={auth.user}
-        >
-            <Head title="Employee" />
+        <>            
+        <Head title="Employee" />
             <div className="">
                 <div className="">
                     <Sidebar auth={auth}/>
@@ -49,6 +47,7 @@ export default function Payroll({ auth,thisMonth,newPayroll,payslips,
                 </div>
                 </AdminLayout>
             </div>
-        </AuthenticatedLayout>
+        </>
+
     );
 }

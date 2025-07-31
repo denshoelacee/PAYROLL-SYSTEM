@@ -4,6 +4,7 @@ import { PageProps,Employee,UserPayroll} from '@/types';
 import Sidebar from '@/Components/Sidebar';
 import AdminLayout from '@/Layouts/AdminLayout';
 import EmployeePayrollPartial from '../Employee/partial/Payroll';
+import EmployeeLayout from '@/Layouts/EmployeeLayout';
 type MonthlySummaryRow = {
         month: number;
         month_name: string;
@@ -19,26 +20,15 @@ type Props = PageProps<{
 export default function Payroll({ auth,userPayslip,availableYears,selectedYear,}:Props) {
 
     return (
-        
-        <AuthenticatedLayout
-            user={auth.user}
-        >
+       <>
+        <Sidebar auth={auth}/>
+        <EmployeeLayout>
             <Head title="Employee" />
-            <div className="">
-                <div className="">
-                    <Sidebar auth={auth}/>
-                </div>
-                <AdminLayout
-                    title="Payroll">
-                
-                <div className="">
                     <EmployeePayrollPartial
                     userPayslip={userPayslip}
                     availableYears={availableYears}
                     selectedYear={selectedYear}/>
-                </div>
-                </AdminLayout>
-            </div>
-        </AuthenticatedLayout>
+        </EmployeeLayout>
+       </>
     );
 }

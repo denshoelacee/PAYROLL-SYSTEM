@@ -231,7 +231,7 @@ export default function Payslip({ auth }: PageProps) {
     const shouldDisplay = (val: any) => Number(val) > 0;
 
 return (
-    <AuthenticatedLayout user={auth.user}>
+<>
         <Head title="Payslip" />
         <div className="">
             <Sidebar auth={auth} />
@@ -383,6 +383,6 @@ return (
             </div>
             </AdminLayout>
         </div>
-    </AuthenticatedLayout>
+</>
     );
 }

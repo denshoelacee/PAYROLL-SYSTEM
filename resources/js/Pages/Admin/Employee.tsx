@@ -20,7 +20,7 @@ export default function Employees({ auth, pendingUsers,employeeList,jobtitles,em
     const [ActiveTab , setActiveTab] = useState('manageusers');
    
     return (
-        <AuthenticatedLayout user={auth.user}>
+        <>
             <Head title="Employee " />
             <Sidebar auth={auth} />
             <AdminLayout title="Employee Management">
@@ -48,6 +48,6 @@ export default function Employees({ auth, pendingUsers,employeeList,jobtitles,em
                     </>
                 )}
             </AdminLayout>
-        </AuthenticatedLayout>
+</>
     );
 }

@@ -31,7 +31,7 @@ class AdminMetaDataController extends Controller
         ]);
         try{
             $this->metadataService->createEmpType($data);
-            return redirect()->back()->with('success','Add Employment Type Successfully!');
+            return redirect()->back()->with('success','Great! The new Employement Type was added successfully.');
         }catch(\Exception $e){
             return redirect()->back()->with('error','Something Wrong');
         }
@@ -45,7 +45,7 @@ class AdminMetaDataController extends Controller
         
         try{
             $this->metadataService->updateEmpType($id,$validated);
-            return redirect()->back()->with('success','Update Employment Type Successfully!');
+            return redirect()->back()->with('success','Employment Type updated Successfully!');
         }catch(\Exception $e){
             return redirect()->back()->with('error','Something Wrong!');
         }
@@ -55,24 +55,25 @@ class AdminMetaDataController extends Controller
     {
         try{
             $this->metadataService->deleteEmpType($id);
-            return redirect()->back()->with('success','Delete Employee Type Successfully!');
+            return redirect()->back()->with('success','Employment Type deleted successfully.');
         }catch(\Exception $e){
              return redirect()->back()->with('error','Something Wrong!');
         }
     }
 
     public function createPositions(Request $request)
-    {
+    {   
          $data = $request->validate([
             'department' => 'nullable|string|max:50',
-            'desination' => 'nullable|string|max:50'
-         ]);
+            'designation' => 'nullable|string|max:50'
+         ]);       
 
          $checker = $request->input('checker');
 
+         //dd($checker,$data);
          try{
              $this->metadataService->addJobTitle($data,$checker);
-             return Redirect()->back()->with('success','Added Department Successfully.');
+             return Redirect()->back()->with('success','Great! The new Position was added successfully.');
          }catch(\Exception $e){
             return redirect()->back()->with('error','Something Wrong!');
          }
@@ -87,19 +88,19 @@ class AdminMetaDataController extends Controller
 
          try{
              $this->metadataService->updatePositions( $id, $data);
-             return redirect()->back()->with('success','Added Successfully.');
+             return redirect()->back()->with('success','Great! The Position details were updated successfully.');
          }catch(\Exception $e){
             return redirect()->back()->with('error','Something Wrong!');
          }
     }
 
-    public function deleteJobTitle(Request $request, $id)
+    public function deleteJobTitle(Request $request, $id)   
     {
          $checker = $request->input('checker');
-         
+         //dd($checker);
         try{
             $this->metadataService->destroyJobtitle($id,$checker);
-            return redirect()->back()->with('success','Delete Successfully.');
+            return redirect()->back()->with('success','Position deleted successfully..');
         }catch(\Exception $e){
             return redirect()->back()->with('error','Something Wrong!');
         }

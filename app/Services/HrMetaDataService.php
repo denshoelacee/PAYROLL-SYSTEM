@@ -15,7 +15,8 @@ class HrMetaDataService implements IHrMetaDataService
     }
 
     public function addJobTitle(array $data,$checker):void
-    {
+    {   
+        //dd($data,$checker);
         if($checker === 'toDepartment')
         {
             $this->hrMetaDataRepository->addJobTitleDepartment($data);

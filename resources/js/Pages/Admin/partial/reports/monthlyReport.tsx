@@ -23,8 +23,8 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
         // Define header row
             const headerRow = [
             "No.", "Name", "Monthly Rate", "PERA","Gross Salary","Amount of Tardiness and Absences without pay", "W/ Holding TAX",
-            "Tax Balance Due", "GSIS",
-            "HDMF", "PHIC", "Other Deductions",
+            "Tax Balance Due", "GSIS - Life and Retirement",
+            "Pag-IBIG", "PHIC", "Other Deductions",
             "Net Pay", "Signature of Employee"
             ];
             //HEADER TITLE
@@ -60,8 +60,8 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             { width: 13 },   // F  "Amount of Tardiness and Absences without pay"
             { width: 13 },   // G: "W/ Holding TAX"
             { width: 13 },   // H: "Tax Balance Due"
-            { width: 12 },   // I: "GSIS"
-            { width: 12 },   // J: "HDMF"
+            { width: 12 },   // I: "GSIS/RLIP"
+            { width: 12 },   // J: "PAGIBIG"
             { width: 12 },   // K: "PHIC"
             { width: 13 },   // L: "Other Deductions"
             { width: 15 },   // N: "Net Pay"
@@ -91,35 +91,8 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
                     row.absent,
                     row.late,
                 ].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
-                // Compute GSIS total per row
-                const gsisTotal = [
-                    row.policy_loan,
-                    row.consol_loan,
-                    row.emerg_loan,
-                    row.rlip,
-                    row.gel,
-                    row.gfal,
-                    row.mpl,
-                    row.mpl_lite,
-                ].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
-                const hdmfTotal = [
-                    row.contributions,
-                    row.loans,
-                    row.housing_loan
-                ].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
-    
                 const otherDeductionTotal = [
-                    row.cfi,
-                    row.tipid,
-                    row.city_savings_bank,
-                    row.fea,
-                    row.canteen,
-                    row.disallowance,
-                    row.unliquidated_ca,
-                    row.disallowance_honoraria,
-                    row.coop,
-                    row.landbank,
-                    row.ucpb,
+                    row.loans,row.housing_loan,row.policy_loan,row.consol_loan,row.emerg_loan,row.gel,row.gfal,row.mpl,row.mpl_lite,row.cfi,row.tipid,row.city_savings_bank,row.fea,row.canteen,row.disallowance,row.unliquidated_ca,row.disallowance_honoraria,row.coop,row.landbank,row.ucpb
                 ].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
                 const excelRow = worksheet.addRow([
                     index + 1,
@@ -130,11 +103,10 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
                     absentandLate,
                     row.holding_tax ?? 0,
                     row.tax_bal_due ?? 0,
-                    gsisTotal,
-                    hdmfTotal,
+                    row.rlip ?? 0,
+                    row.contributions ?? 0,
                     row.philhealth ?? 0,
                     otherDeductionTotal,
-                    row.total_deduction ?? 0,
                     row.net_pay ?? 0,
                     ''
                     ]);
@@ -154,12 +126,12 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
                     cell.alignment= {
                         horizontal: 'center'
                     }
-                } else if (colNumber === 15){
+                } else if (colNumber === 14){
                     cell.border = {
                     top: { style: 'medium' },
-                    left: { style: 'medium' },
+                    left: { style: 'dashed', color: { argb: 'FF000000' } },
                     bottom: { style: 'medium' },
-                    right: { style: 'medium' },
+                    right: { style: 'thin', color: { argb: 'FF000000' } },
                     };
                 }else if (colNumber === 2) {
                     cell.alignment = {horizontal: 'left'}
@@ -193,8 +165,8 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             absentandLate :0, 
             holding_tax :0,
             tax_bal_due :0,
-            gsisTotal:0,
-            hdmfTotal:0,
+            gsisrlipTotal:0,
+            contributionspagibig:0,
             philhealth :0,
             other_deduction:0,
             net_pay :0,
@@ -207,10 +179,10 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             footerTotals.absentandLate  += [row.absent,row.late,].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
             footerTotals.holding_tax    += parseFloat(row.holding_tax ?? 0)
             footerTotals.tax_bal_due    += parseFloat(row.tax_bal_due?? 0)
-            footerTotals.gsisTotal      += [row.rlip,row.policy_loan,row.emerg_loan,row.gel,row.gfal,row.mpl,row.mpl_lite].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
-            footerTotals.hdmfTotal      += [row.contributions,row.loans,row.housing_loan].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
+            footerTotals.gsisrlipTotal      += parseFloat(row.rlip ?? 0)
+            footerTotals.contributionspagibig      += parseFloat(row.contributions ?? 0)
             footerTotals.philhealth     += parseFloat(row.philhealth ?? 0);
-            footerTotals.other_deduction+= [row.cfi,row.tipid,row.city_savings_bank,row.fea,row.canteen,row.disallowance,row.unliquidated_ca,row.disallowance_honoraria,row.coop,row.landbank,row.ucpb].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
+            footerTotals.other_deduction+= [row.loans,row.housing_loan,row.policy_loan,row.consol_loan,row.emerg_loan,row.gel,row.gfal,row.mpl,row.mpl_lite,row.cfi,row.tipid,row.city_savings_bank,row.fea,row.canteen,row.disallowance,row.unliquidated_ca,row.disallowance_honoraria,row.coop,row.landbank,row.ucpb].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
             footerTotals.net_pay        += parseFloat(row.net_pay ?? 0);
         });
     
@@ -223,8 +195,8 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             footerTotals.absentandLate,
             footerTotals.holding_tax,
             footerTotals.tax_bal_due,
-            footerTotals.gsisTotal,
-            footerTotals.hdmfTotal,
+            footerTotals.gsisrlipTotal,
+            footerTotals.contributionspagibig,
             footerTotals.philhealth,
             footerTotals.other_deduction,
             footerTotals.net_pay,
@@ -481,7 +453,7 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
                 bottom: {style: 'medium'}
             }
             const cTitle = signatureStartRow + 1;
-            worksheet.mergeCells(`I${cTitle}:O${cTitle}`);
+            worksheet.mergeCells(`I${cTitle}:N${cTitle}`);
             const ctitleCell = worksheet.getCell(`I${cTitle}`);
             ctitleCell.alignment = { horizontal: 'left' };
             ctitleCell.font = { bold: true };
@@ -496,20 +468,20 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             }
     
             const cTitle2 = signatureStartRow + 2;
-            worksheet.mergeCells(`I${cTitle2}:O${cTitle2}`);
+            worksheet.mergeCells(`I${cTitle2}:N${cTitle2}`);
             const ctitleCell2 = worksheet.getCell(`I${cTitle2}`);
             ctitleCell2.alignment = { horizontal: 'left' };
             ctitleCell2.font = { bold: true };
             worksheet.getCell(`I${cTitle2}`).value = {
             richText: [
-                { text: '                                            ____________________________________________________ (P                                              )', font: { bold: true , name:'Cambria'} },
+                { text: '           ____________________________________________________ (P                                              )', font: { bold: true , name:'Cambria'} },
                 ]
             }
             const cRight = signatureStartRow + 2;
             const cEnd = cRight + 6;
             // C Bottom Border
             const cBottomEnd = cRight + 6;
-            for (let col = 9; col <= 14; col++) {
+            for (let col = 9; col <= 13; col++) {
             const cell = worksheet.getCell(cBottomEnd, col);
                 cell.border = {
                     bottom: { style: 'medium' },
@@ -518,7 +490,7 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             
             //C Right Border
             for (let i = cRight; i <= cEnd; i++) {
-                const cell = worksheet.getCell(`O${i}`);
+                const cell = worksheet.getCell(`N${i}`);
                 cell.border = {
                     right: { style: 'medium' },
                 };
@@ -541,14 +513,14 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
                 const row = cdataStartRow + index + 2
 
                 // Merge J & L for Name
-                worksheet.mergeCells(`J${row}:L${row}`);
-                const cnameCell = worksheet.getCell(`J${row}`);
+                worksheet.mergeCells(`I${row}:K${row}`);
+                const cnameCell = worksheet.getCell(`I${row}`);
                 cnameCell.value = sig.name;
                 cnameCell.alignment = { horizontal: 'center' };
                 cnameCell.font = { bold: true };
 
-                worksheet.mergeCells(`J${row+1}:L${row+1}`);
-                const csignature = worksheet.getCell(`J${row+1}`);
+                worksheet.mergeCells(`I${row+1}:K${row+1}`);
+                const csignature = worksheet.getCell(`I${row+1}`);
                 csignature.value = sig.signature;
                 csignature.alignment = { horizontal: 'center',wrapText:true};
                 csignature.font = { name: 'Cambria'};
@@ -557,8 +529,8 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
                 }
 
                 // Merge J & L for Title
-                worksheet.mergeCells(`J${row + 2}:L${row + 3}`);
-                const ctitleCell = worksheet.getCell(`J${row + 2}`);
+                worksheet.mergeCells(`I${row + 2}:K${row + 3}`);
+                const ctitleCell = worksheet.getCell(`I${row + 2}`);
                 ctitleCell.value = sig.title;
                 ctitleCell.alignment = { horizontal: 'center', wrapText:true};
                 ctitleCell.font = { name: 'Cambria'};
@@ -574,7 +546,7 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             worksheet.getCell(`E${cRowBlank}`).value = '';
             worksheet.getCell(`E${cRowBlank}`).alignment = { horizontal: 'left' };
 
-            const cdateCell = worksheet.getCell(`N${cRowDate}`);
+            const cdateCell = worksheet.getCell(`M${cRowDate}`);
             cdateCell.value = 'Date:';
             cdateCell.font = { name: 'Cambria'};
             cdateCell.alignment = { horizontal: 'center' };
@@ -594,9 +566,9 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             }
             
             const dTitle = signatureStartRow + 9;
-            worksheet.mergeCells(`I${dTitle}:M${dTitle+1}`);
+            worksheet.mergeCells(`I${dTitle}:L${dTitle+2}`);
             const dtitleCell = worksheet.getCell(`I${dTitle}`);
-            dtitleCell.alignment = { horizontal: 'left',wrapText:true };
+            dtitleCell.alignment = { horizontal: 'left',vertical: 'top',wrapText:true };
             dtitleCell.font = { bold: true };
             worksheet.getCell(`I${dTitle}`).value = {
             richText: [
@@ -632,7 +604,7 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             
             // D Right Border
             for (let i = dRight; i <= dEnd; i++) {
-                const cell = worksheet.getCell(`O${i}`);
+                const cell = worksheet.getCell(`N${i}`);
                 cell.border = {
                     right: { style: 'medium' },
                 };
@@ -656,14 +628,14 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
                 const row = ddataStartRow + index + 4
 
                 // Merge J & L for Name
-                worksheet.mergeCells(`J${row}:L${row}`);
-                const dnameCell = worksheet.getCell(`J${row}`);
+                worksheet.mergeCells(`I${row}:K${row}`);
+                const dnameCell = worksheet.getCell(`I${row}`);
                 dnameCell.value = sig.name;
                 dnameCell.alignment = { horizontal: 'center' };
                 dnameCell.font = { bold: true };
 
-                worksheet.mergeCells(`J${row+1}:L${row+1}`);
-                const dsignatureCell = worksheet.getCell(`J${row+1}`);
+                worksheet.mergeCells(`I${row+1}:K${row+1}`);
+                const dsignatureCell = worksheet.getCell(`I ${row+1}`);
                 dsignatureCell.value = sig.signature;
                 dsignatureCell.alignment = { horizontal: 'center',wrapText:true };
                 dsignatureCell.font = { name: 'Cambria'};
@@ -672,8 +644,8 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
                 }
 
                 // Merge J & L for Title
-                worksheet.mergeCells(`J${row + 2}:L${row + 2}`);
-                const dtitleCell = worksheet.getCell(`J${row + 2}`);
+                worksheet.mergeCells(`I${row + 2}:K${row + 2}`);
+                const dtitleCell = worksheet.getCell(`I${row + 2}`);
                 dtitleCell.value = sig.title;
                 dtitleCell.alignment = { horizontal: 'center', wrapText:true};
                 dtitleCell.font = { name: 'Cambria'};
@@ -682,9 +654,9 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
                 }
             });
             //E
-            const elabelCell = worksheet.getCell(`N${signatureStartRow + 9}`);
+            const elabelCell = worksheet.getCell(`M${signatureStartRow + 9}`);
             elabelCell.value = "E";
-            elabelCell.alignment ={
+            elabelCell.alignment ={ 
                 horizontal: 'center'
             }
             elabelCell.border ={
@@ -696,7 +668,7 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             const eRight = signatureStartRow + 10;
             const eEnd = eRight + 6;
             for (let i = eRight; i <= eEnd; i++) {
-                const cell = worksheet.getCell(`N${i}`);
+                const cell = worksheet.getCell(`M${i}`);
                     cell.border ={
                         left: { style: 'medium' },
                     }
@@ -713,7 +685,7 @@ export default function generatemonthlyReport({worksheet,headerMonthTitle,header
             const eEndRow = eStartRow + 6;
         
     
-            const eDataCell = worksheet.getCell(`N${eStartRow}`);
+            const eDataCell = worksheet.getCell(`M${eStartRow}`);
     
             eDataCell.value =
             'ORS/BURS No. : _______________\n' +

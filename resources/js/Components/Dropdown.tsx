@@ -129,7 +129,7 @@ const Content = ({
                 onClick={(e) => e.stopPropagation()}
             >
                 <div
-                    className={`text-white bg-gray-300 p-2 rounded-md border border-button-border-color ${contentClasses}`}
+                    className={`text-white bg-[#1B4D4E] p-2 rounded-md border border-button-border-color ${contentClasses}`}
                 >
                     {ableSearch && (
                     <>

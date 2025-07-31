@@ -379,7 +379,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                                     <RiArrowDropDownLine className="text-2xl transition-transform duration-500 ease-in-out" />
                                 </SecondaryButton>
                                 </Dropdown.Trigger>
-                                <Dropdown.Content contentClasses="bg-[#1B4D4D] w-[200px] bg-[#1B4D4E] " align="left">
+                                <Dropdown.Content contentClasses="w-[200px] " align="left">
                                 {availableYears.map((year) => (
                                     <button
                                     key={year}

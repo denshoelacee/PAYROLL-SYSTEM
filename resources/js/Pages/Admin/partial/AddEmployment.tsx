@@ -125,25 +125,23 @@ export default function AddEmployment({empTypeList}:Props) {
                 </form>
             </Modal>
              <Modal show={editModal} onClose={() => setEditModal(false)} maxWidth="sm">
-                <form>
-                <div className="p-6">
-                    <h2 className="text-lg font-semibold mb-4 text-white">Edit Employment Type</h2>
-                    <TextInputGroup
-                        id="employment_type_list"
-                        label="Employment Type"
-                        type="text"
-                        placeholder={`Enter Employment Type`}
-                        value={data.employment_type_list}
-                        onChange={(e) => setData('employment_type_list', e.target.value)}
-                    />
-                    <div className="flex justify-end gap-2 mt-3">
-                        <PrimaryButton onClick={() => setShowModal(false)} className="bg-gray-300 px-4 py-2 rounded">
-                        Cancel
-                        </PrimaryButton>
-                        <PrimaryButton onClick={HandleEditSubmit}>Submit</PrimaryButton>
+                    <div className="p-6">
+                        <h2 className="text-lg font-semibold mb-4 text-white">Edit Employment Type</h2>
+                        <TextInputGroup
+                            id="employment_type_list"
+                            label="Employment Type"
+                            type="text"
+                            placeholder={`Enter Employment Type`}
+                            value={data.employment_type_list}
+                            onChange={(e) => setData('employment_type_list', e.target.value)}
+                        />
+                        <div className="flex justify-end gap-2 mt-3">
+                            <PrimaryButton onClick={HandleEditSubmit}>Submit</PrimaryButton>
+                            <PrimaryButton onClick={() => setEditModal(false)} className="bg-gray-300 px-4 py-2 rounded">
+                            Cancel
+                            </PrimaryButton>
+                        </div>
                     </div>
-                </div>
-                </form>
             </Modal>
             <Modal show={deleteModal} onClose={() => setDeleteModal(false)} maxWidth='sm' >
                     <div className="p-6">

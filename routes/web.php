@@ -38,12 +38,14 @@ Route::get('/', function () {
 
 Route::post('/admin/users/batch-approve', [BatchApproveController::class, 'batchApprove'])->name('admin.users.batch-approve');
 
-Route::get('/dashboard', function () {
+Route::get('/dashboard', action: function () {
     $user = Auth::user();
 
-    return redirect()->intended(
-                $user->role === 'Admin' ? '/admin/dashboard' : '/employee/dashboard'
-            );
+    if (isset($user->role)) {
+        return redirect()->intended(
+                    $user->role === 'Admin' ? '/admin/dashboard' : '/employee/dashboard'
+                );
+    }
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -54,7 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/account/update/{id}', [EditDeleteAccountController::class, 'editAccount'])->name('update.account');
 });
 
-Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {  
+Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/employee', [AdminEmployeeController::class, 'employee'])->name('admin.employee');
     Route::get('/payroll', [AdminPayrollController::class, 'payrollThisDay'])->name('admin.payroll');
@@ -82,7 +84,7 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
     Route::get('/payroll/Payslip/{id}', function () {
         return Inertia::render('Admin/ViewPayslip');
     });
-    
+
 
 
     /**Route::get('/reports', function () {
@@ -92,9 +94,9 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
 
 Route::prefix('employee')->middleware(['auth', 'role:User'])->group(function () {
     Route::get('/dashboard', [EmployeeDashboardController::class, 'dashboard'])->name('employee.dashboard');
-    Route::get('/payslip/summary',[EmployeeReportsController::class,'userPayslipReports'])->name('employee.payslipsummary');
+    Route::get('/payslip/summary',[EmployeeReportsController::class,'userPayslipReports'])->name('employee.payslip.summary');
     Route::get('/payslip/reports/{year}/summary',[EmployeeReportsController::class,'userPayslipReports'])->name('employee.payslip.reports');
-    
+
     Route::get('/payroll/Payslip/{id}', function () {
         return Inertia::render('Employee/ViewPayslip');
     });

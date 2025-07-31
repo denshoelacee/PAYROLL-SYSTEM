@@ -10,35 +10,36 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\User;
 
-class newRegister implements ShouldBroadcast
+class countPendingAccount implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-   
-    public function __construct(
-        public User $user){}
+    public function __construct(public IEventsService $events)
+    {
+        //
+    }
 
     /**
      * Get the channels the event should broadcast on.
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-      public function broadcastOn(): Channel
+    public function broadcastOn(): Channel
     {
-        return new Channel('hr.notifications');
+        return new Channel('admin.countPendingAccount');
+    }
+
+    public function broadcastWith()
+    {
+        return $this->events->getCountPendingAccount();
     }
 
     public function broadcastAs(): string
     {
-    return 'user.created';
+        return 'pendingAccountListen';
     }
-     public function broadcastWith(): array
-    {
-        return ['user' => $this->user];
-    }  
 }

@@ -8,7 +8,7 @@
     import { AiOutlineFundView } from "react-icons/ai";
     import { UserPayroll } from "@/types";
 import { useState } from "react";
-    
+
     type MonthlySummaryRow = {
         month: number;
         month_name: string;
@@ -24,15 +24,15 @@ import { useState } from "react";
         const [selectedRow, setSelectedRow] = useState<UserPayroll | null>(null);
         console.log(userPayslip)
         const handleChange = (selectedYear:number) => {
-            router.get(route("employee.payslipsummary"), { year: selectedYear }, { preserveState: true });
+            router.get(route("employee.payslip.summary"), { year: selectedYear }, { preserveState: true });
         };
-        
+
         const handleView = (row: UserPayroll) => {
             localStorage.setItem('selectedPayroll', JSON.stringify(row));
             router.visit(`/employee/payroll/Payslip/${row.user_id}`);
             };
-        
-        
+
+
         const columns: GridColDef[] = [
         {
             field: 'month_name',
@@ -55,7 +55,7 @@ import { useState } from "react";
                 }} className="bg-transparent group h-12 w-9 flex flex-col items-center justify-center cursor-pointer px-2 hover:blue-green-500">
                     <AiOutlineFundView className="mb-[5px] w-6 h-6 text-blue-500 transition-all duration-300 group-hover:text-blue-500 group-hover:hidden group-hover:drop-shadow-[0_0_6px_rgba(34,197,94,0.8)]" />
                     <p className="absolute text-[13px] text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        View 
+                        View
                     </p>
                 </div>
             </div>
@@ -96,7 +96,7 @@ import { useState } from "react";
                             />
                         </div>
                     </div>
-                </div> 
+                </div>
             </>
         );
     }

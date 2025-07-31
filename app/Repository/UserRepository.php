@@ -48,11 +48,6 @@ class UserRepository implements IUserRepository{
                    ->get();
     }
 
-    public function getUsersToGeneratePayroll()
-    {
-        return User::select();
-    }
-
     public function getResetPassword($validateReset)
     {
         $user = User::with('answerQuestion')->where('employee_id', $validateReset['employee_id'])->first();
@@ -93,5 +88,10 @@ class UserRepository implements IUserRepository{
         $user->save();
 
         return $user;
+    }
+
+    public function countUserPending()
+    {
+        return User::where('status', 'pending')->count();
     }
 }

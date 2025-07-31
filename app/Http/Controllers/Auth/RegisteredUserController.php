@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Contracts\Services\IHrMetaDataService;
+use App\Events\countPendingAccount;
 use App\Events\newRegister;
 use App\Http\Controllers\Controller;
 use App\Models\User;

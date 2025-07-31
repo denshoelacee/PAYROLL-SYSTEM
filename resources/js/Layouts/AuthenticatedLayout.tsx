@@ -6,6 +6,7 @@ import { RiArrowDropDownLine,RiUserSettingsLine } from 'react-icons/ri';
 import { TbLogout } from "react-icons/tb";
 import { createAvatar } from '@dicebear/core';
 import { initials } from '@dicebear/collection';
+import NotificationBell from '@/Components/NotificationBell';
 
 export default function Authenticated({
     user,
@@ -38,7 +39,12 @@ export default function Authenticated({
             <nav className="bg-mainColor">
                 <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-end h-16">
-                        <div className="hidden sm:flex sm:items-center sm:ms-6">
+                        <div className="">
+                            <button className="hover:text-red-600 hover:rounded-full p-2 transition duration-150">
+                                <NotificationBell count={0} />
+                            </button>
+                        </div>
+                           <div className="hidden sm:flex sm:items-center sm:ms-6">
                             <div className="pt-10 relative">
                                 <Dropdown>
                                     <Dropdown.Trigger>

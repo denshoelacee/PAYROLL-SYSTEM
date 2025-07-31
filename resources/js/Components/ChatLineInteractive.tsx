@@ -1,9 +1,15 @@
-// ChartAreaInteractive.tsx
-
 "use client"
 
 import * as React from "react"
-import { Area, AreaChart, CartesianGrid, Legend, XAxis } from "recharts"
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Legend,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts"
 
 import {
   Card,
@@ -15,9 +21,7 @@ import {
 import {
   ChartConfig,
   ChartContainer,
-  ChartLegend,
   ChartLegendContent,
-  ChartTooltip,
   ChartTooltipContent,
 } from "@/Components/ui/chart"
 import {
@@ -30,8 +34,10 @@ import {
 
 type DataPoint = {
   date: string
-  desktop: number
-  mobile: number
+  Loans: number
+  Contributions: number
+  GrossPay: number
+  Deductions: number
 }
 
 type ChartAreaInteractiveProps = {
@@ -39,112 +45,138 @@ type ChartAreaInteractiveProps = {
 }
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
+  Loans: {
+    label: "Loans",
+    color: "#ff7300",
   },
-  desktop: {
-    label: "Desktop",
-    color: "#ff7300"
+  Contributions: {
+    label: "Contributions",
+    color: "#1e90ff",
   },
-  mobile: {
-    label: "Mobile",
-    color:  "#ff7300"
+  GrossPay: {
+    label: "Gross Pay",
+    color: "violet",
+  },
+  Deductions: {
+    label: "Deductions",
+    color: "green",
   },
 } satisfies ChartConfig
 
 export function ChartAreaInteractive({ data }: ChartAreaInteractiveProps) {
-  const [timeRange, setTimeRange] = React.useState("90d")
+  const uniqueYears = Array.from(
+    new Set(data.map((item) => new Date(item.date).getFullYear()))
+  ).sort((a, b) => b - a)
+
+  const [selectedYear, setSelectedYear] = React.useState(
+    new Date().getFullYear().toString()
+  )
 
   const filteredData = data.filter((item) => {
-    const date = new Date(item.date)
-    const referenceDate = new Date("2025-06-26")
-    let daysToSubtract = 90
-    if (timeRange === "30d") {
-      daysToSubtract = 30
-    } else if (timeRange === "7d") {
-      daysToSubtract = 7
-    }
-    const startDate = new Date(referenceDate)
-    startDate.setDate(startDate.getDate() - daysToSubtract)
-    return date >= startDate
+    const year = new Date(item.date).getFullYear().toString()
+    return year === selectedYear
   })
 
   return (
-    <Card className="pt-0 bg-[#16423C] border-button-border-color">
+    <Card className="pt-0 bg-[#16423C] border border-white">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
           <CardTitle className="text-white">Area Chart - Interactive</CardTitle>
           <CardDescription className="text-white">
-            Showing total visitors for the selected period
+            Showing total data for the selected year
           </CardDescription>
         </div>
-        <Select value={timeRange} onValueChange={setTimeRange}>
-          <SelectTrigger className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex">
-            <SelectValue placeholder="Last 3 months" />
+        <Select value={selectedYear} onValueChange={setSelectedYear}>
+          <SelectTrigger className="text-white hidden w-[160px] rounded-lg sm:ml-auto sm:flex">
+            <SelectValue placeholder="Select year" />
           </SelectTrigger>
-          <SelectContent className="rounded-xl">
-            <SelectItem value="90d">Last 3 months</SelectItem>
-            <SelectItem value="30d">Last 30 days</SelectItem>
-            <SelectItem value="7d">Last 7 days</SelectItem>
+          <SelectContent className="rounded-xl bg-[#1B4D4E] text-white">
+            {uniqueYears.map((year) => (
+              <SelectItem key={year} value={year.toString()}>
+                {year}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-[300px] w-full"
-        >
-          <AreaChart data={filteredData}>
+        <ChartContainer config={chartConfig} className="h-[300px] w-full">
+          <AreaChart width={1150} height={300} data={filteredData}>
             <defs>
-              <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#ff7300"stopOpacity={0.8} />
+              <linearGradient id="fillLoans" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#ff7300" stopOpacity={0.8} />
                 <stop offset="95%" stopColor="#ff7300" stopOpacity={0.1} />
               </linearGradient>
-              <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillContributions" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#1e90ff" stopOpacity={0.8} />
                 <stop offset="95%" stopColor="#1e90ff" stopOpacity={0.1} />
               </linearGradient>
+              <linearGradient id="fillGrossPay" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="violet" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="violet" stopOpacity={0.1} />
+              </linearGradient>
+              <linearGradient id="fillDeductions" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="green" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="green" stopOpacity={0.1} />
+              </linearGradient>
             </defs>
-            <CartesianGrid vertical={false} />
+
+            <YAxis tick={{ fill: "#ffffff" }} />
+            <CartesianGrid vertical={false} strokeDasharray="3 3" />
             <XAxis
               dataKey="date"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
               minTickGap={32}
+              tick={{ fill: "#ffffff" }}
               tickFormatter={(value) =>
                 new Date(value).toLocaleDateString("en-US", {
                   month: "short",
-                  day: "numeric",
                 })
               }
             />
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  labelFormatter={(value) =>
-                    new Date(value).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    })
-                  }
-                  indicator="dot"
-                />
-              }
+            <Tooltip
+            content={({ label, payload }) => (
+              <ChartTooltipContent
+                label={label}
+                payload={payload}
+                indicator="dot"
+                labelFormatter={(value) =>
+                  new Date(value as string).toLocaleDateString("en-US", {
+                    month: "short",
+                    year: "numeric",
+                  })
+                }
+              />
+            )}
+          />
+            <Area
+              dataKey="Loans"
+              type="monotone"
+              fill="url(#fillLoans)"
+              stroke="#ff7300"
+              stackId="a"
             />
             <Area
-              dataKey="mobile"
-              type="natural"
-              fill="url(#fillMobile)"
+              dataKey="Contributions"
+              type="monotone"
+              fill="url(#fillContributions)"
               stroke="#1e90ff"
               stackId="a"
             />
             <Area
-              dataKey="desktop"
-              type="natural"
-              fill="url(#fillDesktop)"
-              stroke="#ff7300"
+              dataKey="GrossPay"
+              type="monotone"
+              fill="url(#fillGrossPay)"
+              stroke="violet"
+              stackId="a"
+            />
+            <Area
+              dataKey="Deductions"
+              type="monotone"
+              fill="url(#fillDeductions)"
+              stroke="green"
               stackId="a"
             />
             <Legend content={<ChartLegendContent />} />

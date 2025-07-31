@@ -53,7 +53,7 @@ export function ChartLegendContent({
             className="h-3 w-3 rounded-sm"
             style={{ backgroundColor: entry.color }}
           />
-          <span className="text-muted-foreground">{entry.value}</span>
+          <span className="text-muted-foreground text-white">{entry.value}</span>
         </div>
       ))}
     </div>
@@ -76,9 +76,9 @@ export function ChartTooltipContent({
   labelFormatter,
   indicator = "square",
 }: {
-  label?: string
+  label?: string | number
   payload?: any[]
-  labelFormatter?: (label: string) => string
+  labelFormatter?: (label: string | number) => string
   indicator?: "dot" | "square"
 }) {
   if (!payload.length) return null
@@ -86,7 +86,7 @@ export function ChartTooltipContent({
   return (
     <div className="rounded-md border bg-background p-2 shadow-sm">
       <div className="mb-2 text-[0.7rem] font-medium text-muted-foreground">
-        {labelFormatter ? labelFormatter(label!) : label}
+        {labelFormatter ? labelFormatter(label ?? "") : label}
       </div>
       <div className="grid gap-1">
         {payload.map((entry: any, index: number) => (
@@ -108,3 +108,4 @@ export function ChartTooltipContent({
     </div>
   )
 }
+

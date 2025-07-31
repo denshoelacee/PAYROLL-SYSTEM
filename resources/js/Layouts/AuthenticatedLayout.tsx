@@ -1,4 +1,4 @@
-import { useState, PropsWithChildren, ReactNode, useEffect } from 'react';
+import { useState, PropsWithChildren, ReactNode, useEffect, useRef } from 'react';
 import Dropdown from '@/Components/Dropdown';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { User } from '@/types';
@@ -18,6 +18,19 @@ export default function Authenticated({
   setNotifications: React.Dispatch<React.SetStateAction<string[]>>; }>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     const [isOpen, setIsOpen] = useState(false)
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        const handler = (e: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+    }, [isOpen]);
+
 
     function getInitals(firstName: string, lastName: string) {
         const firstInitial = firstName?.[0]?.toUpperCase() ?? '';
@@ -25,7 +38,10 @@ export default function Authenticated({
         return `${firstInitial}${lastInitial}`;
         
     }
-
+    const notifHandler = (e:any) => {
+        e.preventDefault();
+        setIsOpen(true);
+    }
     const finalInitials = getInitals(user.first_name, user.last_name);
 
     const avatar = createAvatar(initials, {
@@ -45,7 +61,7 @@ export default function Authenticated({
                     <div className="flex justify-end h-16">
                         <div className="pt-7">
                             <button
-                                onClick={() => setIsOpen(!isOpen)}
+                                onClick={notifHandler}
                                 className="hover:text-red-600 hover:rounded-full p-2 transition duration-150"
                             >
                                 <NotificationBell count={notifications.length} />
@@ -54,7 +70,7 @@ export default function Authenticated({
 
                         {/* Notification Stack */}
                         {isOpen && (
-                            <div className="absolute top-16 right-10 md:right-52 w-72 bg-[#1B4D4E] rounded-lg shadow-lg z-50 animate-fade-in">
+                            <div ref={dropdownRef} className="absolute top-16 right-10 md:right-52 w-72 bg-[#1B4D4E] rounded-lg shadow-lg z-50 animate-fade-in">
                                 <div className="p-4 border-b font-bold text-white">Notifications</div>
                                 <ul className="max-h-60 overflow-y-auto divide-y divide-gray-200">
                                     {notifications.length > 0 ? (
@@ -64,7 +80,7 @@ export default function Authenticated({
                                             onClick={() => {
                                                 setNotifications(prev => prev.filter((_, i) => i !== idx));
                                             }}
-                                            className="p-3 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
+                                            className="p-3 text-sm text-white font-black hover:bg-gray-300 hover:text-black cursor-pointer"
                                             >
                                             {msg}
                                             </li>

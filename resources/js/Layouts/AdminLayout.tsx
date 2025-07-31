@@ -6,14 +6,14 @@ import NotificationSound from "../../sound/notification.mp3";
 import { createAvatar } from '@dicebear/core';
 import { initials } from '@dicebear/collection';
 import Authenticated from './AuthenticatedLayout';
-import { User } from '@/types'; // 👈 Replace with your user type if needed
+import { User } from '@/types'; 
 
 export default function AdminLayout({ title, children }: PropsWithChildren) {
   const { message, auth }: any = usePage().props;
   const [dismissed, setDismissed] = useState(true);
   const [notification, setNotification] = useState<string | null>(null);
   const [avatarSvg, setAvatarSvg] = useState<string | null>(null);
-  const [notifications, setNotifications] = useState<string[]>([]); // ✅ shared state
+  const [notifications, setNotifications] = useState<string[]>([]); 
 
   const hasMessages = message?.information || message?.error || message?.success;
 

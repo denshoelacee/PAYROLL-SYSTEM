@@ -16,20 +16,28 @@ type ChartDatum = {
   Employees: number
 }
 
- const chartDatas = [
-    { date: "2025-07-01", desktop: 20, mobile: 80 },
-    { date: "2025-07-02", desktop: 150, mobile: 110 },
-    { date: "2025-07-03", desktop: 180, mobile: 130 },
-    { date: "2025-07-04", desktop: 200, mobile: 170 },
-    { date: "2025-07-05", desktop: 220, mobile: 180 },
-    { date: "2025-07-06", desktop: 210, mobile: 160 },
-    { date: "2025-07-07", desktop: 250, mobile: 200 },
-    { date: "2025-06-30", desktop: 260, mobile: 210 },
-    { date: "2025-06-29", desktop: 230, mobile: 190 },
-    { date: "2025-06-28", desktop: 190, mobile: 140 },
-    { date: "2025-06-27", desktop: 300, mobile: 250 },
-    { date: "2025-06-26", desktop: 310, mobile: 240 },
-  ];
+const sampleData: { date: string; Loans: number; Contributions: number, Deductions: number, GrossPay:number}[] = [];
+
+for (let year = 2015; year <= 2025; year++) {
+  for (let month = 1; month <= 12; month++) {
+    const date = `${year}-${month.toString().padStart(2, "0")}-01`;
+
+    // Optional: simulate trends over time
+    const trendFactor = (year - 2010) / (2025 - 2010); // 0 to 1
+    const desktopBase = 5000 - trendFactor * 2000; // decrease over time
+    const mobileBase = 100 + trendFactor * 300;    // increase over time
+    const Deductions = 3100 + trendFactor * 300;    // increase over time
+    const GrossPay = 1500 + trendFactor * 300;    // increase over time
+
+    const Loans = Math.floor(desktopBase + Math.random() * 500); // variability
+    const Contributions = Math.floor(mobileBase + Math.random() * 100);
+
+    sampleData.push({ date, Loans, Contributions,Deductions,GrossPay });
+  }
+}
+
+
+
 
 export default function Dashboard({ auth}: PageProps) {
     const {chartData, percentChange } = usePage<PageProps<{chartData: ChartDatum[],percentChange: number}>>().props
@@ -50,11 +58,13 @@ export default function Dashboard({ auth}: PageProps) {
                         </div>
                     </div>
                     */}
-                    <div className="flex w-full gap-4 flex-wrap">
+                    <div className="space-y-5">
+                        <div className="flex w-full gap-4 flex-wrap">
                         <ChartAreaDefault data={chartData} percentChange={percentChange}/>
                     </div>  
-                    <div>
-                        <ChartAreaInteractive data={chartDatas} />
+                    <div className="flex w-full gap-4 flex-wrap">
+                        <ChartAreaInteractive data={sampleData} />
+                    </div>
                     </div>
                     
                 </AdminLayout>

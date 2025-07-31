@@ -39,7 +39,7 @@ export default function Authenticated({
             <nav className="bg-mainColor">
                 <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-end h-16">
-                        <div className="">
+                        <div className="pt-7 place-content-end">
                             <button className="hover:text-red-600 hover:rounded-full p-2 transition duration-150">
                                 <NotificationBell count={0} />
                             </button>

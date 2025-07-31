@@ -33,7 +33,7 @@ export default function AdminLayout({title, children}:PropsWithChildren ){
         // Auto-dismiss after 5 seconds
         setTimeout(() => {
           setNotification(null);
-        }, 50000);
+        }, 500000);
       });
 
     return () => {
@@ -65,8 +65,10 @@ export default function AdminLayout({title, children}:PropsWithChildren ){
     {notification && (
     <div className="fixed bottom-2 right-5 z-50 bg-gray-800 text-white px-4 py-5 rounded-lg shadow-lg animate-slide-in w-[400px] h-[115px]">
         <p>New Notification</p>
-        {notification}
+        <div className="flex">
+          {notification}
         <p className='text-sm text-gray-200'>registered! Needs approval.</p>
+        </div>
     </div>
     )}
 

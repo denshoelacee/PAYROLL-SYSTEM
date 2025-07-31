@@ -5,7 +5,7 @@ const NotificationBell = ({ count = 3 }) => {
   return (
     <div className="relative inline-block">
       {/* Bell Icon */}
-      <div className="text-[#FFBB33] text-3xl">
+      <div className="text-[#FFBB33] text-2xl">
         <GoBell />
       </div>
 

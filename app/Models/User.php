@@ -46,11 +46,16 @@ class User extends Authenticatable
         return $this->hasOne(SecretQuestion::class,'user_id','user_id');
     }
 
-    public function latestPayroll()
-{
+    public function latestPayroll(){
+
     return $this->hasOne(Payroll::class, 'user_id', 'user_id')
         ->latest('created_at');
-}
+    }
+
+    public function notifications(){
+
+         return $this->morphMany(Notification::class, 'notifiable');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

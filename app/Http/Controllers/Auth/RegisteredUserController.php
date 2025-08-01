@@ -76,7 +76,14 @@ class RegisteredUserController extends Controller
             $user->answerQuestion()->create([
                 'secret_question' => $request->secret_question,
                 'secret_answer'   => Hash::make(strtolower(trim($request->secret_answer)))
-            ]);      
+            ]);     
+
+            $user->notifications()->create([
+                'type' =>  'payslip',
+                'year' => now()->year,
+                'month'=> now()->month,
+                'status' => 'markAsUnread',
+                ]); 
             event(new newRegister($user));
             return redirect()->route('login')->with('success','Register successfully, Please wait for approval.');     
             

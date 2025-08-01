@@ -7,6 +7,7 @@ import { TbLogout } from "react-icons/tb";
 import { createAvatar } from '@dicebear/core';
 import { initials } from '@dicebear/collection';
 import NotificationBell from '@/Components/NotificationBell';
+import echo from '@/echo';
 
 export default function Authenticated({
     user,
@@ -52,6 +53,15 @@ export default function Authenticated({
         radius: 50,
         backgroundColor: ['b6e3f4', 'c0aede', 'd1d4f9'],
         textColor: ['black'],
+    });
+
+    const userId = user.user_id;
+
+    echo.private(`App.Models.User.${userId}`)
+    .notification((notification:any) => {
+        console.log('📢 Notification:', notification);
+        alert(notification.description);
+        
     });
 
     const svg = avatar.toString();

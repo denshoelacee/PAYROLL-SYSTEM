@@ -63,6 +63,11 @@ class Payroll extends Model
         return $this->hasOne(PayrollDeduction::class, 'payroll_id');
     }
 
+    public function notifications(){
+
+         return $this->morphMany(Notification::class, 'notifiable');
+    }
+
     public function previousPayroll()
     {
     return $this->hasOne(self::class, 'user_id', 'user_id')

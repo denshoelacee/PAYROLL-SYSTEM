@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\EmploymentType;
+use App\Models\JobTitle;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,7 +27,15 @@ class DatabaseSeeder extends Seeder
         'status' => 'verified',
         'role' => 'Admin',
     ]);
+      EmploymentType::create([
 
-     //  User::factory(100)->create();      
+        'employment_type_list' => 'Regular'
+      ]);
+
+      JobTitle::create([
+        'department' => 'COT',
+        'designation' => 'Instructor I'
+       ]);
+        
     }
 }

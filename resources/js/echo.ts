@@ -11,6 +11,12 @@ const echo = new Echo({
   wssPort: 6001,
   forceTLS: false,
   enabledTransports: ['ws'],
+  auth: {
+    withCredentials: true, 
+     headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+    },// <== Important to send cookies for auth
+  },
 });
 
 export default echo;

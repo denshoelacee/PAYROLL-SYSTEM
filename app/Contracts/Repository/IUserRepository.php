@@ -19,7 +19,9 @@ interface IUserRepository{
 
     public function getResetPassword($validateReset);
 
-    public function batchApproveAccount(array $user_ids):int;
+    public function executeBatchDecission(array $user_ids, string $checker): int;
+
+    public function batchDeleteAccount(array $user_ids):int;
 
     public function create(array $data):User;
 

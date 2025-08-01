@@ -64,24 +64,33 @@ class UserRepository implements IUserRepository{
        return User::find($id);
     }
 
-    public function batchApproveAccount(array $user_ids):int
+    public function executeBatchDecission(array $user_ids, string $checker): int
     {
-       
-       if(empty($user_ids)){
+        if (empty($user_ids)) {
             return 0;
         }
-        
-        return User::whereIn('user_id',$user_ids)
-                    ->update([
-                        'status' => 'verified'
-                    ]);
+
+        $statusMap = [
+            'toApproved' => 'verified',
+            'toRejected' => 'rejected',
+        ];
+
+        if (!isset($statusMap[$checker])) {
+            return 0;
+        }
+
+        return User::whereIn('user_id', $user_ids)
+               ->update(['status' => $statusMap[$checker]]);
     }
-    /*
-    public function create(array $data):User
+    
+    public function batchDeleteAccount(array $user_ids):int
     {
-       return User::create($data);
+        if (empty($user_ids)) {
+            return 0;
+        }
+
+        return User::whereIn('user_id', $user_ids)->delete();
     }
-    **/
     public function create(array $data): User
     {
         $user = new User($data);

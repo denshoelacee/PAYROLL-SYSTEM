@@ -7,7 +7,7 @@ use App\Http\Controllers\AdminController\AdminPayrollReportsController;
 use App\Http\Controllers\AdminController\AdminMetaDataController;
 use App\Http\Controllers\Auth\CreateNewAccountController;
 use App\Http\Controllers\Auth\EditDeleteAccountController;
-use App\Http\Controllers\BatchProcessingController\BatchApproveController;
+use App\Http\Controllers\BatchProcessingController\BatchDecissionController;
 use App\Http\Controllers\EmployeeController\EmployeeDashboardController;
 use App\Http\Controllers\EmployeeController\EmployeeReportsController;
 use App\Http\Controllers\ProfileController;
@@ -36,8 +36,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::post('/admin/users/batch-approve', [BatchApproveController::class, 'batchApprove'])->name('admin.users.batch-approve');
-
 Route::get('/dashboard', action: function () {
     $user = Auth::user();
 
@@ -57,29 +55,41 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
+
+    //Admin Dashboard Controller
     Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
+
+    //Admin Employee Controller
     Route::get('/employee', [AdminEmployeeController::class, 'employee'])->name('admin.employee');
-    Route::get('/payroll', [AdminPayrollController::class, 'payrollThisDay'])->name('admin.payroll');
-    Route::post('/added-user',[CreateNewAccountController::class,'store'])->name('add.new.account');
     Route::post('/approve/{id}', [AdminEmployeeController::class, 'approve'])->name('admin.approve');
     Route::post('/reject/{id}', [AdminEmployeeController::class, 'reject'])->name('admin.reject');
-    Route::delete('/account/delete/{id}',[EditDeleteAccountController::class, 'deleteAccount'])->name('delete.account');
-    Route::patch('/account/update/{id}', [EditDeleteAccountController::class, 'editAccount'])->name('update.account');
+
+    //Admin MetaData Controller
+    Route::post('/addEmploymentType', [AdminMetaDataController::class, 'createEmploymentType'])->name('adminAdd.EmploymentType');
+    Route::post('editEmploymentType/{id}', [AdminMetaDataController::class, 'updateEmploymentType'])->name('adminUpdate.EmploymentType');
+    Route::delete('deleteEmploymentType/{id}', [AdminMetaDataController::class, 'deleteEmploymentType'])->name('adminDelete.EmploymentType');
+    Route::post('/createPositions', [AdminMetaDataController::class, 'createPositions'])->name('admin.create.positions');
+    Route::post('/updatePositions/{id}', [AdminMetaDataController::class, 'updateJobTitle'])->name('admin.update.position');
+    Route::delete('deletePositions/{id}', [AdminMetaDataController::class, 'deleteJobTitle'])->name('admin.delete.position');
+    Route::get('/department',[AdminMetaDataController::class,'displayEmpTypeList'])->name('admin.department');
+
+    //Batch Processing Controller
+    Route::post('/pending/accounts/batch-approve',[BatchDecissionController::class, 'batchApprove'])->name('admin.users.batch-approve');
+    Route::post('/pending/accounts/batch-reject', [BatchDecissionController::class, 'batchReject'])->name('admin.users.batch-reject');
+    Route::post('/pending/accounts/batch-delete', [BatchDecissionController::class, 'batchDelete'])->name('admin.users.batch-delete');
+
+    //Admin Payroll Controller
+    Route::get('/payroll', [AdminPayrollController::class, 'payrollThisDay'])->name('admin.payroll');
     Route::post('/payroll/store', [AdminPayrollController::class, 'savePartial'])->name('admin.store.partial');
     Route::post('/payroll/publish', [AdminPayrollController::class, 'publish'])->name('admin.store.publish');
     Route::post('/payroll/updatePartialPublish/{id}', [AdminPayrollController::class, 'editedPartialPublish'])->name('admin.payroll.update-partial-publish');
     Route::get('/reports/summary',[AdminPayrollReportsController::class,'payrollReportsYearly'])->name('admin.payroll.summary');
     Route::get('/reports/payroll/{year}/{month}/view/summary',[AdminPayrollReportsController::class,'payrollReportsYearlyView'])->name('admin.payroll.view.summary');
-    Route::get('/department',[AdminMetaDataController::class,'displayEmpTypeList'])->name('admin.department');
-    Route::post('/addEmploymentType', [AdminMetaDataController::class, 'createEmploymentType'])->name('adminAdd.EmploymentType');
-    Route::post('editEmploymentType/{id}', [AdminMetaDataController::class, 'updateEmploymentType'])->name('adminUpdate.EmploymentType');
-    Route::delete('deleteEmploymentType/{id}', [AdminMetaDataController::class, 'deleteEmploymentType'])->name('adminDelete.EmploymentType');
 
-    //Admin MetaData Controller
-    Route::post('/createPositions', [AdminMetaDataController::class, 'createPositions'])->name('admin.create.positions');
-    Route::post('/updatePositions/{id}', [AdminMetaDataController::class, 'updateJobTitle'])->name('admin.update.position');
-    Route::delete('deletePositions/{id}', [AdminMetaDataController::class, 'deleteJobTitle'])->name('admin.delete.position');
-
+    //Admin Actions Controller
+    Route::post('/added-user',[CreateNewAccountController::class,'store'])->name('add.new.account');
+    Route::delete('/account/delete/{id}',[EditDeleteAccountController::class, 'deleteAccount'])->name('delete.account');
+    Route::patch('/account/update/{id}', [EditDeleteAccountController::class, 'editAccount'])->name('update.account');
 
     Route::get('/payroll/Payslip/{id}', function () {
         return Inertia::render('Admin/ViewPayslip');

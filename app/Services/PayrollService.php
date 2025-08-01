@@ -7,6 +7,7 @@ use App\Contracts\Repository\IPayrollRepository;
 use App\Contracts\Services\IPayrollService;
 use App\Contracts\Repository\IUserRepository;
 use App\Contracts\Repository\IPayrollDeductionRepository;
+use App\Notifications\PayslipReadyNotification;
 
 class PayrollService implements IPayrollService
 {
@@ -92,6 +93,8 @@ class PayrollService implements IPayrollService
             'total_deduction' => $totalDeduction,
             'net_pay' => $netPay
        ]);
+
+      $user->notify(new PayslipReadyNotification($data));
     }
 
     public function editedPartialPublishPayroll(array $data,$id):void

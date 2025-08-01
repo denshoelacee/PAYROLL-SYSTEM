@@ -8,8 +8,9 @@ import PayrollPartial from './partial/Payroll';
 
 type Props = PageProps<{
     thisMonth : UserPayroll[];
+    newPayroll: Employee[];
 }>;
-export default function Payroll({ auth,thisMonth}:Props) {
+export default function Payroll({ auth,thisMonth,newPayroll}:Props) {
 
     return (
         
@@ -25,7 +26,7 @@ export default function Payroll({ auth,thisMonth}:Props) {
                     title="Payroll">
                 
                 <div className="">
-                    <PayrollPartial payroll={thisMonth}/>
+                    <PayrollPartial payrollthisMonth={thisMonth} newPayroll={newPayroll}/>
                 </div>
                 </AdminLayout>
             </div>

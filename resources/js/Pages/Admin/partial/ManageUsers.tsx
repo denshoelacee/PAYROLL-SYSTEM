@@ -17,7 +17,7 @@ type Props = PageProps <{
 }>
 
 export default function ManageUserPartial({ employees}: Props) {
-        const [actionType, setActionType] = useState<'approve' | 'reject' | 'batch-approve' | 'batch-reject' | null>(null);
+    const [actionType, setActionType] = useState<'approve' | 'reject' | 'batch-approve' | 'batch-reject' | null>(null);
     const [approveModal, setApproveModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState<Employee | null>(null);
     const [selectedRows, setSelectedRows] = useState<Employee[]>([]);

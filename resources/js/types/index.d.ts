@@ -12,64 +12,64 @@ export interface User {
     role: string;
 }
 
-export interface Employee{
-    user_id:number;
-    employee_id: number;
-    first_name:string;
-    last_name: string;
-    basic_pay:number;
-    designation: string;
-    department: string;
-    employment_type: string;
-    role: string;
-    status: string;
-}
+    export interface Employee{
+        user_id:number;
+        employee_id: number;
+        first_name:string;
+        last_name: string;
+        basic_pay:number;
+        designation: string;
+        department: string;
+        employment_type: string;
+        role: string;
+        status: string;
+    }
 
 
-export interface JobTitles{
-    designation:string,
-    department:string
-}
+    export interface JobTitles{
+        designation:string,
+        department:string
+    }
 
-export interface UserPayroll {
-    payroll_id: number;
-    user_id: number | null;
-    basic_salary: number | null;
-    pera: number | null;
-    absent: number | null;
-    late: number | null;
-    holding_tax: number | null;
-    tax_bal_due: number | null;
-    rlip: number | null;
-    policy_loan: number | null;
-    consol_loan: number | null;
-    emerg_loan: number | null;
-    gel: number | null;
-    gfal: number | null;
-    mpl: number | null;
-    mpl_lite: number | null;
-    contributions: number | null;
-    loans: number | null;
-    housing_loan: number | null;
-    philhealth: number | null;
-    cfi: number | null;
-    tipid: number | null;
-    city_savings_bank: number | null;
-    fea: number | null;
-    canteen: number | null;
-    disallowance: number | null;
-    unliquidated_ca: number | null;
-    disallowance_honoraria: number | null;
-    coop: number | null;
-    landbank: number | null;
-    ucpb: number | null;
-    publish_status: 'publish' | 'partial' | 'none';
-    created_at: string;
-    updated_at: string;
+    export interface UserPayroll {
+        payroll_id: number;
+        user_id: number | null;
+        basic_salary: number | null;
+        pera: number | null;
+        absent: number | null;
+        late: number | null;
+        holding_tax: number | null;
+        tax_bal_due: number | null;
+        rlip: number | null;
+        policy_loan: number | null;
+        consol_loan: number | null;
+        emerg_loan: number | null;
+        gel: number | null;
+        gfal: number | null;
+        mpl: number | null;
+        mpl_lite: number | null;
+        contributions: number | null;
+        loans: number | null;
+        housing_loan: number | null;
+        philhealth: number | null;
+        cfi: number | null;
+        tipid: number | null;
+        city_savings_bank: number | null;
+        fea: number | null;
+        canteen: number | null;
+        disallowance: number | null;
+        unliquidated_ca: number | null;
+        disallowance_honoraria: number | null;
+        coop: number | null;
+        landbank: number | null;
+        ucpb: number | null;
+        publish_status: 'publish' | 'partial' | 'none';
+        created_at: string;
+        updated_at: string;
 
-    user:Employee
-    previousPayroll?: UserPayroll
-}
+        user:Employee
+        previousPayroll?: UserPayroll
+    }
 
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {

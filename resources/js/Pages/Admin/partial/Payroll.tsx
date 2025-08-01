@@ -19,21 +19,34 @@ import TextInputGroup from "@/Components/TextInputGroup";
 
 
 type Props = {
-    payroll : UserPayroll[];
+    payrollthisMonth : UserPayroll[];
+    newPayroll: Employee[];
+    
 }
-export default function PayrollPartial ({ payroll}:Props) {
+export default function PayrollPartial ({ payrollthisMonth,newPayroll}:Props) {
     
     const [addModal, setAddModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    //const filteredRows = searchHooks(searchQuery, payroll);
+    const filteredRows = searchHooks(searchQuery, payrollthisMonth);
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedRow, setSelectedRow] = useState<UserPayroll | null>(null);
-
+    const [selectName, setSelectName] = useState('Select Employee')
+    const [basicPay, setBasicPay]= useState('');
+    const [absent, setAbsent] = useState('')
+    
     const handleOpenPopover = (event:any, row:UserPayroll) => {
             setAnchorEl(event.currentTarget);
             setSelectedRow(row);
         };
     
+    const handleDropdownSelect = (value: any, field: string) => {
+        if(field === 'employee'){
+            setSelectName(`${value.employee_id} - ${value.first_name} ${value.last_name}`);
+            setBasicPay(`${value.basic_pay}`)
+            setAbsent(`${value?.absent}`)
+        } 
+        
+    }
     const columns: GridColDef[] = [        
         { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center',
             renderCell: (params) => `${params.row.user?.employee_id || ''}`,
@@ -132,7 +145,7 @@ export default function PayrollPartial ({ payroll}:Props) {
                             <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
                                 <div className="text-white px-10 py-3 text-xl">Payroll Summary</div>
                                 <Table
-                                rows={payroll}
+                                rows={filteredRows}
                                 columns={columns}
                                 height={650}
                                 getRowId={(row) => row.user_id}
@@ -157,10 +170,43 @@ export default function PayrollPartial ({ payroll}:Props) {
                                     {/*EARNINGS*/}
                                     <p>Earning</p>
                                         <div className="flex gap-4">
+                                            <div className='w-full'>
+                                                <InputLabel htmlFor="department" value="Employee *"  className='text-white'/>
+                                                <Dropdown>
+                                                    <Dropdown.Trigger>
+                                                        <button type="button" className="bg-transparent w-full border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                                            <p className='text-sm'>{selectName}</p>
+                                                            <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
+                                                        </button>
+                                                    </Dropdown.Trigger> 
+                                                    <Dropdown.Content ableSearch={true} contentClasses="bg-gray-300 w-full max-h-[200px] overflow-y-auto p-0" align="left">
+                                                    {newPayroll
+                                                    .map((newPayroll, index) => {
+                                                        const payrolUsers = newPayroll;
+                                                        const name = `${payrolUsers?.employee_id} - ${payrolUsers?.first_name} ${payrolUsers?.last_name}`;
+
+                                                        return (
+                                                        <button
+                                                            key={index}
+                                                            type="button"
+                                                            id="employee"
+                                                            name="employee"
+                                                            onClick={() => handleDropdownSelect(payrolUsers, 'employee')}
+                                                            className="w-full px-4 py-2 text-left bg-gray-300 hover:bg-[#145858] text-black hover:text-white"
+                                                        >
+                                                            {name}
+                                                        </button>
+                                                        );
+                                                    })}
+
+                                                    </Dropdown.Content>
+                                                </Dropdown>
+                                            </div>
+
                                             {/*BASIC SALARY*/}
-                                            <TextInputGroup label="Basic Salary" id="basic_salary" value={selectedRow?.basic_salary} disabled/>
+                                            <TextInputGroup label="Basic Salary" id="basic_salary" value={basicPay} disabled/>
                                             {/*PERA*/}
-                                            <TextInputGroup label="PERA" id="PERA"/>
+                                            <TextInputGroup label="PERA" id="PERA" value={absent ?? "" }/>
                                         </div>
                                 </CardWrapper>
                                 {/* DEDUCTIONS */}
@@ -268,7 +314,6 @@ export default function PayrollPartial ({ payroll}:Props) {
                     <button
                         className="w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100"
                         onClick={() => {
-                            setAddModal(true);
                             setAnchorEl(null);
                         }}
                     >

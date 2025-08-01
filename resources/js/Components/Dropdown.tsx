@@ -129,14 +129,15 @@ const Content = ({
                 onClick={(e) => e.stopPropagation()}
             >
                 <div
-                    className={`text-white bg-[#1B4D4E] p-2 rounded-md border border-button-border-color ${contentClasses}`}
+                    className={`text-white bg-[#1B4D4E]  p-2 rounded-md border border-button-border-color ${contentClasses}`}
                 >
                     {ableSearch && (
                     <>
                     {/* 🔍 Search Input */}
                     <input
                         type="text"
-                        className="bg-white border-button-border-color w-full px-3 py-1 mb-2 text-black rounded focus:ring-0 "
+                        className="bg-transparent border-button-border-color w-full px-3 py-1 mb-2 text-white rounded focus:outline-none 
+             focus:border-white"
                         placeholder="Search..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}

@@ -18,19 +18,7 @@ export default function Authenticated({
   setNotifications: React.Dispatch<React.SetStateAction<string[]>>; }>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     const [isOpen, setIsOpen] = useState(false)
-    const dropdownRef = useRef<HTMLDivElement | null>(null);
-
-    useEffect(() => {
-        const handler = (e: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-                setIsOpen(false);
-            }
-        };
-
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-    }, [isOpen]);
-
+    const autoCloseBell = useRef<HTMLDivElement>(null);
 
     function getInitals(firstName: string, lastName: string) {
         const firstInitial = firstName?.[0]?.toUpperCase() ?? '';
@@ -38,10 +26,24 @@ export default function Authenticated({
         return `${firstInitial}${lastInitial}`;
         
     }
-    const notifHandler = (e:any) => {
-        e.preventDefault();
-        setIsOpen(true);
-    }
+    useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+        if (autoCloseBell.current && !autoCloseBell.current.contains(event.target as Node)) {
+            setIsOpen(false);
+        }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+    };
+}, []);
+
+    const notifHandler = () => {
+    setIsOpen(prev => !prev);
+    };
+
+    
     const finalInitials = getInitals(user.first_name, user.last_name);
 
     const avatar = createAvatar(initials, {
@@ -59,18 +61,18 @@ export default function Authenticated({
             <nav className="bg-mainColor">
                 <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-end h-16">
-                        <div className="pt-7">
+                        <div ref={autoCloseBell} className="pt-7 ">
                             <button
                                 onClick={notifHandler}
                                 className="hover:text-red-600 hover:rounded-full p-2 transition duration-150"
                             >
                                 <NotificationBell count={notifications.length} />
                             </button>
-                        </div>
+                        
 
                         {/* Notification Stack */}
                         {isOpen && (
-                            <div ref={dropdownRef} className="absolute top-16 right-10 md:right-52 w-72 bg-[#1B4D4E] rounded-lg shadow-lg z-50 animate-fade-in">
+                            <div className="absolute top-16 right-10 md:right-52 w-72 bg-[#1B4D4E] rounded-lg shadow-lg z-50 animate-fade-in">
                                 <div className="p-4 border-b font-bold text-white">Notifications</div>
                                 <ul className="max-h-60 overflow-y-auto divide-y divide-gray-200">
                                     {notifications.length > 0 ? (
@@ -92,6 +94,7 @@ export default function Authenticated({
                                 </ul>
                             </div>
                         )}
+                        </div>
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
                             <div className="pt-10 relative">
                                 <Dropdown>
@@ -198,7 +201,7 @@ export default function Authenticated({
                     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">{header}</div>
                 </header>
             )}
-
+    
             {/* Page Content */}
             <main>{children}</main>
         </div>

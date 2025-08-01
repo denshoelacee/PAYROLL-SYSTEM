@@ -6,7 +6,7 @@ import Modal from '@/Components/Modal';
 import { useState, useEffect, FormEventHandler } from 'react';
 import Table from '@/Components/Table';
 import searchHooks from '@/hooks/searchHooks';
-import { GridColDef } from '@mui/x-data-grid';
+import { GridColDef,GridRowSelectionModel} from '@mui/x-data-grid';
 import { useForm } from '@inertiajs/react';
 import { LiaCheckSolid } from 'react-icons/lia';
 import { FaRegTrashCan } from "react-icons/fa6";
@@ -23,16 +23,19 @@ export default function ManageUserPartial({ employees}: Props) {
     const [selectedRows, setSelectedRows] = useState<Employee[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const filteredRows = searchHooks(searchQuery, employees);
+    const [batchSubmit, setBatchSubmit] = useState(false)
+    const [submitTrigger, setSubmitTrigger] = useState<'batch-approve' | 'batch-reject' | null>(null);
 
-
+    const routeMap = {
+            'approve': 'admin.approve',
+            'reject': 'admin.reject',
+            'batch-approve': 'admin.users.batch-approve',
+            'batch-reject': 'admin.batch-reject'
+        };  
     // Handle batch action opening
     const handleOpenBatchAction = (action: 'batch-approve' | 'batch-reject') => {
-        if (selectedRows.length === 0) {
-            // Show error or alert that no rows are selected
-            return;
-        }
         setActionType(action);
-        setApproveModal(true);
+        setBatchSubmit(true);
     };
 
     // Handle single row action opening (existing)
@@ -47,7 +50,7 @@ export default function ManageUserPartial({ employees}: Props) {
     };
 
     // Form handling
-    const { data, setData, post, processing } = useForm<{
+    const { data, setData, post } = useForm<{
         user_id?: number;
         user_ids?: number[];
     }>({
@@ -57,23 +60,21 @@ export default function ManageUserPartial({ employees}: Props) {
 
     // Submit handler for both single and batch actions
     const handleSubmitAction = () => {
-        if (!actionType) return;
+        
 
+        if (!actionType) return;
         if (actionType === 'approve' || actionType === 'reject') {
             if (!selectedRow) return;
             setData({ user_id: selectedRow.user_id });
-        } else if (actionType === 'batch-approve' || actionType === 'batch-reject') {
-            if (selectedRows.length === 0) return;
-            setData({ user_ids: selectedRows.map(row => row.user_id) });
+        } 
+
+        if (actionType === 'batch-approve' || actionType === 'batch-reject') {
+            if (!selectedRows) return;
+            const ids = selectedRows.map((row) => row.user_id);
+            setData('user_ids', ids);
+            setSubmitTrigger(actionType);
         }
-
-        const routeMap = {
-            'approve': 'admin.approve',
-            'reject': 'admin.reject',
-            'batch-approve': 'admin.users.batch-approve',
-            'batch-reject': 'admin.batch-reject'
-        };
-
+        
         post(route(routeMap[actionType], selectedRow?.user_id), {
             onSuccess: () => {
                 setSelectedRows([]);
@@ -84,6 +85,18 @@ export default function ManageUserPartial({ employees}: Props) {
         setSelectedRow(null);
         setActionType(null);
     };
+
+    useEffect(() => {
+        if (submitTrigger && (submitTrigger === 'batch-approve' || submitTrigger === 'batch-reject') && data.user_ids?.length) {
+            post(route(routeMap[submitTrigger]), {
+                onSuccess: () => {
+                    setSelectedRows([]);    
+                    setBatchSubmit(false);
+                    setSubmitTrigger(null); 
+                }
+            });
+        }
+    }, [submitTrigger, data.user_ids]);
 
         const handleClose = () => {
             setApproveModal(false)
@@ -146,7 +159,9 @@ export default function ManageUserPartial({ employees}: Props) {
                     disabled={selectedRows.length === 0}
                     className= {selectedRows.length === 0 ? 'opacity-50 cursor-not-allowed ' : ''}
                 >
-                    <p className='text-[10px]'>Approve ({selectedRows.length})</p>
+                   <div className="w-[100px]">
+                     <p className='text-[10px]'>Approve ({selectedRows.length})</p> 
+                   </div>
                 </PrimaryButton>
                 <PrimaryButton 
                     onClick={() => handleOpenBatchAction('batch-reject')}
@@ -166,14 +181,25 @@ export default function ManageUserPartial({ employees}: Props) {
                     rows={filteredRows}
                     columns={columns}
                     height={650}
-                    getRowId={(row) => String(row.user_id)} // Ensure consistent string IDs
-                    className="employee-table"
                     pageSize={10}     
-                    pageSizeOptions={[10]}           
+                                        pageSizeOptions={[10]}    
+                    getRowId={(row) => {return row.user_id;}}
+                    onRowSelectionModelChange={(selection) => {
+                    const selectionArray =
+                        selection && typeof selection === 'object' && 'ids' in selection
+                        ? Array.from(selection.ids)
+                        : [];
+
+                    const selected = employees.filter((row) =>
+                        selectionArray.includes(row.user_id)
+                    );
+
+                    setSelectedRows(selected);
+                    }}
                     />
                 </div>
             </div>
-        </div>
+        </div>  
         <Modal show={approveModal} onClose={() => setApproveModal(false)} maxWidth='sm'>
             {actionType && selectedRow && (
                 <div className="p-6">
@@ -185,6 +211,27 @@ export default function ManageUserPartial({ employees}: Props) {
                 </p>
                     <div className="flex justify-evenly gap-3 py-3">
                         <PrimaryButton className="py-2"onClick={handleSubmitAction}>
+                        Confirm
+                    </PrimaryButton>
+                    <PrimaryButton onClick={handleClose}>
+                        Close
+                    </PrimaryButton>
+                    </div>
+                </div>
+            )}
+            </Modal>
+
+            <Modal show={batchSubmit} onClose={() => setApproveModal(false)} maxWidth='sm'>
+            {actionType && selectedRows && (
+                <div className="p-6">
+                <h2 className="text-lg font-bold mb-4 text-white">
+                    {actionType === 'batch-approve' ? 'Approve User' : 'Reject User'}
+                </h2>
+                <p className="text-white mb-4">
+                    Are you sure you want to {actionType} this user?    
+                </p>
+                    <div className="flex justify-evenly gap-3 py-3">
+                        <PrimaryButton className="py-2"onClick={handleSubmitAction}>    
                         Confirm
                     </PrimaryButton>
                     <PrimaryButton onClick={handleClose}>

@@ -474,7 +474,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                                                         key={index}
                                                         type="button"
                                                         onClick={() => handleDropdownSelect(user, 'employee')}
-                                                        className="w-full px-4 py-2 text-left  hover:bg-[#145858] text-black hover:text-white"
+                                                        className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
                                                     >
                                                         {`${user.employee_id} - ${user.first_name} ${user.last_name}`}
                                                     </button>

@@ -24,7 +24,7 @@ class AdminEmployeeController extends Controller
     {
             $jobtitles = $this->metaDataService->jobTitleList();
             $pendings = $this->employeeService->pendingUsers();
-            $employeelist    = $this->employeeService->employeeList();
+            $employeelist = $this->employeeService->employeeList();
             $empTypeList = $this->metaDataService->empTypeList();
 
              return Inertia::render('Admin/Employee',

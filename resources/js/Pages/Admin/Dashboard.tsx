@@ -1,75 +1,64 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import { PageProps } from '@/types';
-import Sidebar from '@/Components/Sidebar';
-import AdminLayout from '@/Layouts/AdminLayout';
-import CardWrapper from '@/Components/CardWrapper';
-import { TrendingUp } from "lucide-react"
-import { ChartAreaDefault } from "@/Components/ChartAreaDefault"
-import { usePage } from "@inertiajs/react"
-import { useEffect } from 'react';
+import { Head, usePage } from '@inertiajs/react'
+import Sidebar from '@/Components/Sidebar'
+import AdminLayout from '@/Layouts/AdminLayout'
 import { ChartAreaInteractive } from '@/Components/ChatLineInteractive';
-
+import { PageProps } from '@/types'
 
 type ChartDatum = {
-  month: string
-  Employees: number
+  month: number
+  month_name: string
+  total_gross: number
+  total_deduction: number
+  net_pay: number
 }
 
-const sampleData: { date: string; Loans: number; Contributions: number, Deductions: number, GrossPay:number}[] = [];
-
-for (let year = 2015; year <= 2025; year++) {
-  for (let month = 1; month <= 12; month++) {
-    const date = `${year}-${month.toString().padStart(2, "0")}-01`;
-
-    // Optional: simulate trends over time
-    const trendFactor = (year - 2010) / (2025 - 2010); // 0 to 1
-    const desktopBase = 5000 - trendFactor * 2000; // decrease over time
-    const mobileBase = 100 + trendFactor * 300;    // increase over time
-    const Deductions = 3100 + trendFactor * 300;    // increase over time
-    const GrossPay = 1500 + trendFactor * 300;    // increase over time
-
-    const Loans = Math.floor(desktopBase + Math.random() * 500); // variability
-    const Contributions = Math.floor(mobileBase + Math.random() * 100);
-
-    sampleData.push({ date, Loans, Contributions,Deductions,GrossPay });
-  }
+type DataPoint = {
+  date: string
+  NetPay: number
+  GrossPay: number
+  Deductions: number
 }
 
+export default function Dashboard({ auth }: PageProps) {
+  const {
+    yearlyReports,
+    availableYears,
+    selectedYear,
+  } = usePage<PageProps<{
+    yearlyReports: ChartDatum[]
+    availableYears: number[]
+    selectedYear: string
+  }>>().props
 
+  const sampleData: DataPoint[] = Array.from({ length: 12 }, (_, index) => {
+    const month = index + 1
+    const found = yearlyReports.find((item) => item.month === month)
 
+    return {
+      date: `${selectedYear}-${String(month).padStart(2, '0')}-01`,
+      NetPay: found ? found.net_pay : 0,
+      GrossPay: found ? found.total_gross : 0,
+      Deductions: found ? found.total_deduction : 0,
+    }
+  })
 
-export default function Dashboard({ auth}: PageProps) {
-    const {chartData, percentChange } = usePage<PageProps<{chartData: ChartDatum[],percentChange: number}>>().props
-    
-    return (
-          
-            <>
-            
-            <Head title="Dashboard" />
-            <div className="">
-                    <Sidebar auth={auth}/>  
-                <AdminLayout
-                    title="Dashboard">
-                    {/* <div className="mb-8 bg-green-100 rounded-md bg-clip-padding bg-opacity-10 border border-button-border-color">
-                        <div className="py-2 px-4 text-white space-y-1">
-                            <p>Good to see you, {auth.user.last_name} </p>
-                            <p className="text-sm text-gray-300">Role MotherFucker!</p>
-                        </div>
-                    </div>
-                    */}
-                    <div className="space-y-5">
-                        <div className="flex w-full gap-4 flex-wrap">
-                        <ChartAreaDefault data={chartData} percentChange={percentChange}/>
-                    </div>  
-                    <div className="flex w-full gap-4 flex-wrap">
-                        <ChartAreaInteractive data={sampleData} />
-                    </div>
-                    </div>
-                    
-                </AdminLayout>
+  return (
+    <>
+      <Head title="Dashboard" />
+      <div className="">
+        <Sidebar auth={auth} />
+        <AdminLayout title="Dashboard">
+          <div className="space-y-5">
+            <div className="flex w-full gap-4 flex-wrap">
+              <ChartAreaInteractive
+                data={sampleData}
+                selectedYear={selectedYear}
+                availableYears={availableYears}
+              />
             </div>
-            </>
-
-    );
+          </div>
+        </AdminLayout>
+      </div>
+    </>
+  )
 }

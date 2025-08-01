@@ -1,15 +1,10 @@
-    import Table from "@/Components/Table";
-    import { GridColDef } from "@mui/x-data-grid";
-    import Search from '@/Components/Search'
-    import Dropdown from '@/Components/Dropdown'
-    import SecondaryButton from '@/Components/SecondaryButton'
-    import { RiArrowDropDownLine, RiContactsBookLine } from 'react-icons/ri'
-    import { router } from "@inertiajs/react";
-    import { AiOutlineFundView } from "react-icons/ai";
-    
-import { useMemo } from "react";
-import PrimaryButton from "@/Components/PrimaryButton";
-import { rowSelectionStateInitializer } from "@mui/x-data-grid/internals";
+import Table from "@/Components/Table";
+import { GridColDef } from "@mui/x-data-grid";
+import Dropdown from '@/Components/Dropdown'
+import SecondaryButton from '@/Components/SecondaryButton'
+import { RiArrowDropDownLine,} from 'react-icons/ri'
+import { router } from "@inertiajs/react";
+import { AiOutlineFundView } from "react-icons/ai";
     
     type MonthlySummaryRow = {
         month: number;

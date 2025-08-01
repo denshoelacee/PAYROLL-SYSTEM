@@ -16,7 +16,7 @@ class BatchDecissionController extends Controller
                 'user_ids' => 'required|array',
                 'user_ids.*' =>'integer|exists:users,user_id'
             ]);
-        $checker = 'verified';
+        $checker = 'toApproved';
         
        try{
            $this->batchDecissionService->handleApproveRejectBatch($validated['user_ids'],$checker);
@@ -33,7 +33,7 @@ class BatchDecissionController extends Controller
                 'user_ids' => 'required|array',
                 'user_ids.*' =>'integer|exists:users,user_id'
             ]);
-        $checker = 'rejected';
+        $checker = 'toRejected';
         
        try{
            $this->batchDecissionService->handleApproveRejectBatch($validated['user_ids'],$checker);

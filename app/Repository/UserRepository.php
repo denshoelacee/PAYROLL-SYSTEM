@@ -65,7 +65,7 @@ class UserRepository implements IUserRepository{
     }
 
     public function executeBatchDecission(array $user_ids, string $checker): int
-    {
+    {  
         if (empty($user_ids)) {
             return 0;
         }

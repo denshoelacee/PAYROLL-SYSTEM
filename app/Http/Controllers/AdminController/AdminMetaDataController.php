@@ -70,7 +70,6 @@ class AdminMetaDataController extends Controller
 
          $checker = $request->input('checker');
 
-         //dd($checker,$data);
          try{
              $this->metadataService->addJobTitle($data,$checker);
              return Redirect()->back()->with('success','Great! The new Position was added successfully.');

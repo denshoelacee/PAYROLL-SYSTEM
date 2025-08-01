@@ -23,7 +23,7 @@ class AdminPayrollReportsController extends Controller
         [
             'selectedYear' => (string)$year,
             'monthlySummary' => $monthlySummary,
-            'availableYears' => range(2024, now()->year),
+            'availableYears' => range(2025, now()->year),
         ]);
        
     }

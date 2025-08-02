@@ -24,4 +24,8 @@ interface IHrMetaDataRepository
 
     public function updateEmpType(int $id, array $data);
     public function deleteEmpType(int $id): bool;
+
+    //Contribution
+     public function create(array $data);
+    
 }

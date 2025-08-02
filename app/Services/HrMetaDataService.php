@@ -2,12 +2,16 @@
 
 namespace App\Services;
 
+use App\Contracts\Repository\IContributionTypeRepository;
 use App\Contracts\Repository\IHrMetaDataRepository;
 use App\Contracts\Services\IHrMetaDataService;
 
 class HrMetaDataService implements IHrMetaDataService
 {
-    public function __construct(protected IHrMetaDataRepository $hrMetaDataRepository){}
+    public function __construct(
+        protected IHrMetaDataRepository $hrMetaDataRepository,
+        protected IContributionTypeRepository $contributionTypeRepository
+    ){}
 
     public function jobTitleList()
     {
@@ -65,5 +69,15 @@ class HrMetaDataService implements IHrMetaDataService
     public function deleteEmpType(int $id)
     {
         return $this->hrMetaDataRepository->deleteEmpType($id);
+    }
+    //Contribution
+    public function addContributionType(array $data)
+    {
+        return $this->hrMetaDataRepository->create($data);
+    }
+
+    public function displayContributionType()
+    {
+        return $this->contributionTypeRepository->getContribution();
     }
 }

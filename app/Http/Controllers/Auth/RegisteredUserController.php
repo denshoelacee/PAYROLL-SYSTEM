@@ -85,7 +85,7 @@ class RegisteredUserController extends Controller
                 'status' => 'markAsUnread',
                 ]); 
             event(new newRegister($user));
-            return redirect()->route('login')->with('success','Register successfully, Please wait for approval.');     
+            return redirect()->route('login')->with('information','Register successfully, Please wait for approval.');     
             
         }
        catch(\Exception $e)

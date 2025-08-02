@@ -20,7 +20,6 @@ class AdminDashboardController extends Controller
 
         $year = $request->year ?? now()->year;
 
-        $userStatsMonthly = $this->dashboardService->getMonthlyUserStatsService();
         $yearlyReports = $this->payrollReportsService->generatePayrollReport($year);
         $summaryTotal = $this->dashboardService->getTaxAndUserSummary();
         $departmentGross = $this->dashboardService->latestGrossPayMonthly();
@@ -28,7 +27,6 @@ class AdminDashboardController extends Controller
         
         return Inertia::render('Admin/Dashboard',
             [
-                'userStatsMonthly' => $userStatsMonthly,
                 'yearlyReports'    => $yearlyReports,
                 'selectedYear'     => (string)$year,
                 'availableYears'   => range(2024, now()->year),

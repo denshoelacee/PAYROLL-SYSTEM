@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Contracts\Repository\IHrMetaDataRepository;
 use Illuminate\Validation\ValidationException;
 use App\Models\JobTitle;
+use App\Models\ContributionType;
 use App\Models\EmploymentType;
 
 class HrMetaDataRepository implements IHrMetaDataRepository
@@ -93,4 +94,11 @@ class HrMetaDataRepository implements IHrMetaDataRepository
     {
         return EmploymentType::destroy($id) > 0;
     }
+
+    //Contribution Type
+    public function create(array $data)
+    {
+        return ContributionType::Create($data);
+    }
+
 }   

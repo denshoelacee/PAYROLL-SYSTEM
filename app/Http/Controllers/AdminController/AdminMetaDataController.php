@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Termwind\Components\Raw;
 
 class AdminMetaDataController extends Controller
 {
@@ -16,14 +15,29 @@ class AdminMetaDataController extends Controller
     {
        $empTypeList = $this->metadataService->empTypeList();
        $jobTitleList = $this->metadataService->jobTitleList();
+       $contributionType = $this->metadataService->displayContributionType();
     
         return Inertia::render('Admin/Department',
                 [
-                   'empTypeList' => $empTypeList,
-                   'jobTitleList' => $jobTitleList
+                   'contributionType' => $contributionType,
+                   'empTypeList'      => $empTypeList,
+                   'jobTitleList'     => $jobTitleList,
                 ]);
     }
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            'rlip' => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'philhealth' => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/'
+        ]);
+        try{
+             $this->metadataService->addContributionType($request->all());
+             return redirect()->back()->with('success','Added successfully.');
+        }catch(\Exception $e){
+            return redirect()->back()->with('error', 'Something Wrong!');
+        }
+    }
     public function createEmploymentType(Request $request):RedirectResponse
     {      
         $data = $request->validate([

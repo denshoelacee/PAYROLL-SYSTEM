@@ -22,15 +22,15 @@ class AdminDashboardController extends Controller
 
         $userStatsMonthly = $this->dashboardService->getMonthlyUserStatsService();
         $yearlyReports = $this->payrollReportsService->generatePayrollReport($year);
-        
-
+        $summaryTotal = $this->dashboardService->getTaxAndUserSummary();
+        dd($summaryTotal);
         return Inertia::render('Admin/Dashboard',
             [
                 'userStatsMonthly' => $userStatsMonthly,
-                'yearlyReports'   => $yearlyReports,
-                'selectedYear' => (string)$year,
-                'availableYears' => range(2025, now()->year),
-
+                'yearlyReports'    => $yearlyReports,
+                'selectedYear'     => (string)$year,
+                'availableYears'   => range(2025, now()->year),
+                'summaryTotal'     => $summaryTotal,
             ]);
     }
 }

@@ -20,6 +20,8 @@ interface IPayrollRepository{
 
       public function getPayrollReportsYearly($year);
 
+      public function geTotalTaxThisMonth();
+      
       public function getPayrollReportsYearlyView($year,$month);
 
       //Employee SQL Request

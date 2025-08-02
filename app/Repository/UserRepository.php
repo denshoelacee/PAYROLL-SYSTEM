@@ -99,8 +99,8 @@ class UserRepository implements IUserRepository{
         return $user;
     }
 
-    public function countUserPending()
+    public function countUser()
     {
-        return User::where('status', 'pending')->count();
+        return DB::table('users')->count();
     }
 }

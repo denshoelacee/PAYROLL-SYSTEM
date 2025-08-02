@@ -236,4 +236,41 @@ class PayrollRepository implements IPayrollRepository{
             }); 
    }
 
+   public function geTotalTaxThisMonth()
+   {
+       return  DB::table('payrolls')
+                    ->selectRaw('
+                        COALESCE(SUM(holding_tax), 0) AS tax,
+                        COALESCE(SUM(tax_bal_due), 0) AS due_tax,
+                        COALESCE(SUM(
+                            policy_loan + consol_loan + emerg_loan +
+                            gel + gfal + mpl + mpl_lite +
+                            loans + housing_loan
+                        ), 0) AS totalLoan
+                    ')
+                    ->where('publish_status', 'publish')
+                    ->whereBetween('created_at', [
+                        now()->startOfMonth(),
+                        now()->endOfMonth()
+                    ])
+                    ->first();
+   }
+
+   public function getLatestContributionBreakdown()
+   {
+        return DB::table('payrolls')
+            ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
+            ->selectRaw('
+                SUM(payrolls.rlip) AS gsis,
+                SUM(payrolls.contributions) AS contribution,
+                SUM(payrolls.philhealth) AS phic,
+                MONTH(payrolls.created_at) AS month,
+                YEAR(payrolls.created_at) AS year
+            ')
+            ->where('payrolls.publish_status', 'publish')
+            ->orderByDesc('payrolls.created_at')
+            ->groupBy(DB::raw('MONTH(payrolls.created_at), YEAR(payrolls.created_at)'))
+            ->get();
+    }
+
 }

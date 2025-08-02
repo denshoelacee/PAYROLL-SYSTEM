@@ -27,12 +27,15 @@ class AdminMetaDataController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'rlip' => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/',
-            'philhealth' => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/'
+        $validated = $request->validate([
+        'rlip' => ['nullable', 'regex:/^\d{1,6}(\.\d{1,2})?$/'],
+        'philhealth' => ['nullable', 'regex:/^\d{1,6}(\.\d{1,2})?$/'],
+        ], [
+            'rlip.regex' => 'RLIP must be a number with up to 2 decimal places and max 999999.99.',
+            'philhealth.regex' => 'PhilHealth must be a number with up to 2 decimal places and max 999999.99.',
         ]);
         try{
-             $this->metadataService->addContributionType($request->all());
+             $this->metadataService->addContributionType($validated);
              return redirect()->back()->with('success','Added successfully.');
         }catch(\Exception $e){
             return redirect()->back()->with('error', 'Something Wrong!');

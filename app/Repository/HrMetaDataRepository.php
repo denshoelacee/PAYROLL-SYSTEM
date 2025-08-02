@@ -98,6 +98,8 @@ class HrMetaDataRepository implements IHrMetaDataRepository
     //Contribution Type
     public function create(array $data)
     {
+        ContributionType::truncate();
+        
         return ContributionType::Create($data);
     }
 

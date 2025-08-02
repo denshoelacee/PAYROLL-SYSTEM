@@ -8,6 +8,7 @@ import { FiUsers } from "react-icons/fi";
 import { TbTax } from "react-icons/tb";
 import { HiOutlineBanknotes } from "react-icons/hi2";
 import BarChart from '@/Components/BarChart';
+import PieChart from '@/Components/PieChart';
 
 type ChartDatum = {
   month: number
@@ -35,14 +36,21 @@ type DepartmentsGross ={
     department:string
     total_gross:number
 }
+
+type ContributionBreakdown = {
+    gsis:number
+    pagibig:number
+    philhealth:number
+}
 export default function Dashboard({ auth }: PageProps) {
-  const { yearlyReports, availableYears, selectedYear, summaryTotal,departmentGross} =
+  const { yearlyReports, availableYears, selectedYear, summaryTotal,departmentGross,contributionBreakdown} =
     usePage<PageProps<{
       yearlyReports: ChartDatum[]
       availableYears: number[]
       selectedYear: string
       summaryTotal: SummaryTotal
       departmentGross: DepartmentsGross[]
+      contributionBreakdown:ContributionBreakdown
     }>>().props
 
 
@@ -72,7 +80,7 @@ export default function Dashboard({ auth }: PageProps) {
       <div className="font-Inter">
         <Sidebar auth={auth} />
         <AdminLayout title="Dashboard">
-          <div className="space-y-4">
+          <div className="space-y-4 pb-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <CardWrapper 
                     label={"Total Employees"} 
@@ -131,13 +139,15 @@ export default function Dashboard({ auth }: PageProps) {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
                 <CardWrapper className='w-full'>
                     <div className="flex items-center h-full border py-3 rounded-t-lg">
-                        <p className="text-white pl-4 text-sm">Gross Pay Breakdown by Department this month</p>
+                        <p className="text-white pl-4 text-sm">Gross Pay Breakdown by Department this Month</p>
                     </div>
                     <BarChart departmentsGross={departmentGross}/>
                 </CardWrapper> 
                 <CardWrapper className='w-full'>
-                    <p>Pie Chart </p>
-                    <BarChart departmentsGross={departmentGross}/>
+                    <div className="flex items-center h-full border py-3 rounded-t-lg">
+                        <p className="text-white pl-4 text-sm">Contributions Breakdown for this Month</p>
+                    </div>
+                    <PieChart contributionBreakdown={contributionBreakdown}/>
                 </CardWrapper>
             </div>
           </div>

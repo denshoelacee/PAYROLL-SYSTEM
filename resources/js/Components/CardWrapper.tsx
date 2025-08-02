@@ -9,7 +9,7 @@ type CardProps = {
   fontsize?:string
 };
 
-export default function CardWrapper({ className = '',data,label,icon,fontsize}: CardProps) {
+export default function CardWrapper({ className = '',children,data,label,icon,fontsize}: CardProps) {
   return (
     <div
       className={`border border-button-border-color rounded-lg ${className}`}
@@ -23,13 +23,14 @@ export default function CardWrapper({ className = '',data,label,icon,fontsize}: 
       }}
     >
         <div className="">
-          <div className="flex justify-between p-5">
+          <div className={`flex justify-between`}>
             <div className="text-lg">
               <p className={`text-[25px] text-yellow-500 font-black`}>{data}</p>
               <p className={`${fontsize} text-white tracking-wider`}>{label}</p>
             </div>
               {icon}
           </div>
+          {children}
         </div>
     </div>
   );

@@ -106,90 +106,97 @@ export function ChartAreaInteractive({
         </Dropdown>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+        {(!data || data.length === 0) ? (
+          <div className="flex items-center justify-center h-[300px] w-full text-white text-lg">
+            No data available
+          </div>
+        ) : (
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
-          <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={data}>
-            <defs>
-              <linearGradient id="fillNetPay" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#1e90ff" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#1e90ff" stopOpacity={0.1} />
-              </linearGradient>
-              <linearGradient id="fillDeductions" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="violet" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="violet" stopOpacity={0.1} />
-              </linearGradient>
-              <linearGradient id="fillGrossPay" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="green" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="green" stopOpacity={0.1} />
-              </linearGradient>
-            </defs>
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={data}>
+                <defs>
+                  <linearGradient id="fillNetPay" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#1e90ff" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#1e90ff" stopOpacity={0.1} />
+                  </linearGradient>
+                  <linearGradient id="fillDeductions" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="violet" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="violet" stopOpacity={0.1} />
+                  </linearGradient>
+                  <linearGradient id="fillGrossPay" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="green" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="green" stopOpacity={0.1} />
+                  </linearGradient>
+                </defs>
 
-            <YAxis
-            tick={{ fill: "#ffffff" }}
-            tickFormatter={(value: any) => {
-              if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}m`;
-              if (value >= 100_000) return `${(value / 1_000).toFixed(0)}k`;
-              if (value >= 1_000) return `${(value).toFixed(0)}`;
-              return value;
-            }}
-          />
-            <CartesianGrid vertical={false} strokeDasharray="3 3" />
-            <XAxis
-              dataKey="date"
-              tick={{ fill: "#ffffff" }}
-              tickFormatter={(value) =>
-                new Date(value).toLocaleDateString("en-US", {
-                  month: "short",
-                })
-              }
-            />
-            <Tooltip
-            content={({ label, payload }) => (
-              <ChartTooltipContent
-                label={label}
-                payload={
-                  payload?.map((item) => ({
-                    ...item,
-                    value: new Intl.NumberFormat("en-US", {
-                      style:'currency',
-                      currency:"PHP",
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    }).format(Number(item.value)),
-                  })) || []
-                }
-                indicator="dot"
-                labelFormatter={(value) =>
-                  new Date(value as string).toLocaleDateString("en-US", {
-                    month: "short",
-                    year: "numeric",
-                  })
-                }
+                <YAxis
+                tick={{ fill: "#ffffff" }}
+                tickFormatter={(value: any) => {
+                  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}m`;
+                  if (value >= 100_000) return `${(value / 1_000).toFixed(0)}k`;
+                  if (value >= 1_000) return `${(value).toFixed(0)}`;
+                  return value;
+                }}
               />
-            )}
-            />
-            <Area
-              dataKey="NetPay"
-              type="monotone"
-              fill="url(#fillNetPay)"
-              stroke="#1e90ff"
-            />
-            <Area
-              dataKey="Deductions"
-              type="monotone"
-              fill="url(#fillDeductions)"
-              stroke="violet"
-            />
-            <Area
-              dataKey="GrossPay"
-              type="monotone"
-              fill="url(#fillGrossPay)"
-              stroke="green"
-            />
-            <Legend content={<ChartLegendContent />} />
-            </AreaChart>
-          </ResponsiveContainer>
-        </ChartContainer>
+                <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="date"
+                  tick={{ fill: "#ffffff" }}
+                  tickFormatter={(value) =>
+                    new Date(value).toLocaleDateString("en-US", {
+                      month: "short",
+                    })
+                  }
+                />
+                <Tooltip
+                content={({ label, payload }) => (
+                  <ChartTooltipContent
+                    label={label}
+                    payload={
+                      payload?.map((item) => ({
+                        ...item,
+                        value: new Intl.NumberFormat("en-US", {
+                          style:'currency',
+                          currency:"PHP",
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }).format(Number(item.value)),
+                      })) || []
+                    }
+                    indicator="dot"
+                    labelFormatter={(value) =>
+                      new Date(value as string).toLocaleDateString("en-US", {
+                        month: "short",
+                        year: "numeric",
+                      })
+                    }
+                  />
+                )}
+                />
+                <Area
+                  dataKey="NetPay"
+                  type="monotone"
+                  fill="url(#fillNetPay)"
+                  stroke="#1e90ff"
+                />
+                <Area
+                  dataKey="Deductions"
+                  type="monotone"
+                  fill="url(#fillDeductions)"
+                  stroke="violet"
+                />
+                <Area
+                  dataKey="GrossPay"
+                  type="monotone"
+                  fill="url(#fillGrossPay)"
+                  stroke="green"
+                />
+                <Legend content={<ChartLegendContent />} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+      )}
+
       </CardContent>
     </Card>
   )

@@ -25,7 +25,7 @@ class AdminDashboardController extends Controller
         $summaryTotal = $this->dashboardService->getTaxAndUserSummary();
         $departmentGross = $this->dashboardService->latestGrossPayMonthly();
         
-        dd($departmentGross);
+        //dd($departmentGross);
         return Inertia::render('Admin/Dashboard',
             [
                 'userStatsMonthly' => $userStatsMonthly,
@@ -33,6 +33,7 @@ class AdminDashboardController extends Controller
                 'selectedYear'     => (string)$year,
                 'availableYears'   => range(2024, now()->year),
                 'summaryTotal'     => $summaryTotal,
+                'departmentGross'  => $departmentGross
             ]);
     }
 }

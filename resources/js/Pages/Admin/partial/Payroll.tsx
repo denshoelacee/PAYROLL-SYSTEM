@@ -9,7 +9,7 @@ import searchHooks from "@/hooks/searchHooks";
 import { useEffect, useState,FormEventHandler, useMemo } from "react";
 import Search from "@/Components/Search";
 import Modal from "@/Components/Modal";
-import CardWrapper from "@/Components/CardWrapper";
+import InputWrapper from "@/Components/InputWrapper";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import PrimaryButton from "@/Components/PrimaryButton";
@@ -456,7 +456,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                             </div>
 
                             {/* Employee Dropdown */}
-                            <CardWrapper className="justify-between p-3 w-full text-white">
+                            <InputWrapper className="justify-between p-3 w-full text-white">
                                 <p>Earning</p>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
                                     <div className="my-2">
@@ -485,11 +485,11 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                                     <TextInputGroup label="Basic Salary" id="basic_pay" value={data.basic_pay} disabled />
                                     <TextInputGroup label="PERA" id="PERA" value={data.pera} onChange={e => setData('pera', e.target.value)} disabled={disableInput} />
                                 </div>
-                            </CardWrapper>
+                            </InputWrapper>
 
                             {/* Reusable Input Group Rendering */}
                             {fieldTitles.map((section, index) => (
-                                <CardWrapper key={index} className="justify-between p-3 w-full text-white">
+                                <InputWrapper key={index} className="justify-between p-3 w-full text-white">
                                     <p>{section.title}</p>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
                                         {section.fields.map(({ label, id, disabled }) => (
@@ -504,7 +504,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                                             />
                                         ))}
                                     </div>
-                                </CardWrapper>
+                                </InputWrapper>
                             ))}
 
                             {/* Footer Buttons */}
@@ -531,13 +531,13 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                                     <IoMdClose color="white" className="cursor-pointer text-2xl" />
                                 </span>
                             </div>
-                            <CardWrapper className="flex gap-4 p-3">
+                            <InputWrapper className="flex gap-4 p-3">
                                 <TextInputGroup label="Basic Salary" id="basic_pay" value={selectedRow?.basic_pay} disabled />
                                 <TextInputGroup label="PERA" id="PERA" value={data.pera} onChange={e => setData('pera', e.target.value)}/>
-                            </CardWrapper>
+                            </InputWrapper>
                             {/* Sections */}
                             {fieldTitles.map((section, idx) => (
-                                <CardWrapper key={idx} className="p-3 text-white space-y-4">
+                                <InputWrapper key={idx} className="p-3 text-white space-y-4">
                                     <p className="font-medium">{section.title}</p>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4">
                                         {section.fields.map(({ label, id, disabled = false }) => (
@@ -552,7 +552,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
                                             />
                                         ))}
                                     </div>
-                                </CardWrapper>
+                                </InputWrapper>
                             ))}
 
                             {/* Action Buttons */}

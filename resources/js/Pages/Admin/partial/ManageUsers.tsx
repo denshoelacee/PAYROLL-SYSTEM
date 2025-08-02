@@ -30,7 +30,7 @@ export default function ManageUserPartial({ employees}: Props) {
             'approve': 'admin.approve',
             'reject': 'admin.reject',
             'batch-approve': 'admin.users.batch-approve',
-            'batch-reject': 'admin.batch-reject'
+            'batch-reject': 'admin.users.batch-reject'
         };  
     // Handle batch action opening
     const handleOpenBatchAction = (action: 'batch-approve' | 'batch-reject') => {

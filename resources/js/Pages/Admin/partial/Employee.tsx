@@ -6,7 +6,7 @@ import { useState, useMemo,FormEventHandler, useEffect} from 'react';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { IoMdAdd } from "react-icons/io";
 import { HiOutlineDotsVertical } from "react-icons/hi";
-import CardWrapper from '@/Components/CardWrapper';
+import InputWrapper from '@/Components/InputWrapper';
 import InputLabel from '@/Components/InputLabel';
 import Table from '@/Components/Table';
 import { Popover } from '@mui/material';
@@ -226,7 +226,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
             <form onSubmit={addSubmit} >
             <div className="p-6 space-y-4 rounded-lg">
                 <h2 className="text-lg font-bold mb-4 text-white">Add New Employee</h2>
-                    <CardWrapper className="justify-between p-3 gap-4">
+                    <InputWrapper className="justify-between p-3 gap-4">
                         <TextInputGroup 
                             label='Employee ID*' 
                             id='employee_id' 
@@ -252,8 +252,8 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                             onChange={(e) => setData('last_name', e.target.value)}
                         />
                     </div>
-                </CardWrapper>
-                <CardWrapper className="p-3 flex gap-4">
+                </InputWrapper>
+                <InputWrapper className="p-3 flex gap-4">
                     <div className='w-full'>
                         <InputLabel htmlFor="department" value="Department *"  className='text-white'/>
                         <Dropdown>
@@ -310,8 +310,8 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                             </Dropdown.Content>
                         </Dropdown>
                     </div>
-                </CardWrapper>
-                <CardWrapper className="flex justify-between p-3 gap-4 w-full">
+                </InputWrapper>
+                <InputWrapper className="flex justify-between p-3 gap-4 w-full">
                     <TextInputGroup 
                         label='Basic Pay*' 
                         id='basic_pay' 
@@ -319,8 +319,8 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                         value={data.basic_pay}
                         onChange={handleInputChange}
                     />
-                </CardWrapper>
-                <CardWrapper className=" p-3 gap-4 flex">
+                </InputWrapper>
+                <InputWrapper className=" p-3 gap-4 flex">
                     <div className="w-full">
                         <InputLabel htmlFor="role" value="Role *" className='text-white' />
                         <Dropdown>
@@ -375,7 +375,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                             </Dropdown.Content>
                         </Dropdown>
                     </div>
-                </CardWrapper>
+                </InputWrapper>
                 <PrimaryButton className='text-md mt-4'>Save</PrimaryButton>
             </div>
             </form>
@@ -387,7 +387,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                 <h2 className="text-lg font-bold mb-4 text-white">Edit: {[selectedRow?.employee_id+" - ", selectedRow?.last_name + ", " ,selectedRow?.first_name]}</h2>
                 {/*<h2 className="text-lg font-bold mb-4 text-white">Edit Employee</h2>*/}   
                 
-                <CardWrapper className="justify-between p-3 gap-4">
+                <InputWrapper className="justify-between p-3 gap-4">
                         <TextInputGroup 
                             label='Employee ID*' 
                             id='employee_id' 
@@ -414,8 +414,8 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                             onChange={(e) => setData('last_name', e.target.value)}
                         />
                     </div>
-                </CardWrapper>
-                <CardWrapper className="p-3 flex gap-4">
+                </InputWrapper>
+                <InputWrapper className="p-3 flex gap-4">
                     <div className='w-full'>
                         <InputLabel htmlFor="department" value="Department *"  className='text-white'/>
                         <Dropdown>
@@ -472,8 +472,8 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                             </Dropdown.Content>
                         </Dropdown>
                     </div>
-                </CardWrapper>
-                <CardWrapper className="flex justify-between p-3 gap-4 w-full">
+                </InputWrapper>
+                <InputWrapper className="flex justify-between p-3 gap-4 w-full">
                     <TextInputGroup 
                         label='Basic Pay*' 
                         id='basic_pay' 
@@ -481,8 +481,8 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                         value={data.basic_pay}
                         onChange={handleInputChange}
                     />
-                </CardWrapper>
-                <CardWrapper className=" p-3 gap-4 flex">
+                </InputWrapper>
+                <InputWrapper className=" p-3 gap-4 flex">
                     <div className="w-full">
                         <InputLabel htmlFor="role" value="Role *" className='text-white' />
                         <Dropdown>
@@ -537,7 +537,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                             </Dropdown.Content>
                         </Dropdown>
                     </div>
-                </CardWrapper>
+                </InputWrapper>
                 <PrimaryButton className='text-md mt-4'>Save</PrimaryButton>
                 
             </div>

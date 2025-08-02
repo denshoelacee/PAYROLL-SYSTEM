@@ -17,7 +17,9 @@ export default {
     			sans: [
     				'Figtree',
                     ...defaultTheme.fontFamily.sans
-                ]
+                ],
+				poppins: ['Poppins', 'sans-serif'],
+				Inter: ['Inter', 'sans-serif'],
     		},
     		colors: {
     			'button-border-color': '#67CFD5',

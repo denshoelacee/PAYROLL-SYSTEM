@@ -6,6 +6,7 @@ import {
   AreaChart,
   CartesianGrid,
   Legend,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -69,7 +70,14 @@ export function ChartAreaInteractive({
   }
 
   return (
-    <Card className="pt-0 bg-[#16423C] border border-white">
+    <Card style={{
+        background: `linear-gradient(
+          105.8deg,
+          rgba(200, 237, 217, 0.22) 3.42%,
+          rgba(177, 198, 186, 0.0484) 101.99%,
+          rgba(115, 210, 159, 0) 134.85%
+        )`,
+      }}className="pt-0 w-full border border-white">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
           <CardTitle className="text-white">Area Chart - Interactive</CardTitle>
@@ -99,7 +107,8 @@ export function ChartAreaInteractive({
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
-          <AreaChart width={1150} height={300} data={data}>
+          <ResponsiveContainer width="100%" height={300}>
+            <AreaChart data={data}>
             <defs>
               <linearGradient id="fillNetPay" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#1e90ff" stopOpacity={0.8} />
@@ -115,7 +124,15 @@ export function ChartAreaInteractive({
               </linearGradient>
             </defs>
 
-            <YAxis tick={{ fill: "#ffffff" }} />
+            <YAxis
+            tick={{ fill: "#ffffff" }}
+            tickFormatter={(value: any) => {
+              if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}m`;
+              if (value >= 100_000) return `${(value / 1_000).toFixed(0)}k`;
+              if (value >= 1_000) return `${(value).toFixed(0)}`;
+              return value;
+            }}
+          />
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
             <XAxis
               dataKey="date"
@@ -127,43 +144,51 @@ export function ChartAreaInteractive({
               }
             />
             <Tooltip
-              content={({ label, payload }) => (
-                <ChartTooltipContent
-                  label={label}
-                  payload={payload}
-                  indicator="dot"
-                  labelFormatter={(value) =>
-                    new Date(value as string).toLocaleDateString("en-US", {
-                      month: "short",
-                      year: "numeric",
-                    })
-                  }
-                />
-              )}
+            content={({ label, payload }) => (
+              <ChartTooltipContent
+                label={label}
+                payload={
+                  payload?.map((item) => ({
+                    ...item,
+                    value: new Intl.NumberFormat("en-US", {
+                      style:'currency',
+                      currency:"PHP",
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(Number(item.value)),
+                  })) || []
+                }
+                indicator="dot"
+                labelFormatter={(value) =>
+                  new Date(value as string).toLocaleDateString("en-US", {
+                    month: "short",
+                    year: "numeric",
+                  })
+                }
+              />
+            )}
             />
             <Area
               dataKey="NetPay"
               type="monotone"
               fill="url(#fillNetPay)"
               stroke="#1e90ff"
-              stackId="a"
             />
             <Area
               dataKey="Deductions"
               type="monotone"
               fill="url(#fillDeductions)"
               stroke="violet"
-              stackId="a"
             />
             <Area
               dataKey="GrossPay"
               type="monotone"
               fill="url(#fillGrossPay)"
               stroke="green"
-              stackId="a"
             />
             <Legend content={<ChartLegendContent />} />
-          </AreaChart>
+            </AreaChart>
+          </ResponsiveContainer>
         </ChartContainer>
       </CardContent>
     </Card>

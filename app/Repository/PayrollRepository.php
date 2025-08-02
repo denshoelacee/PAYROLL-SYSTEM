@@ -236,24 +236,30 @@ class PayrollRepository implements IPayrollRepository{
             }); 
    }
 
-   public function geTotalTaxThisMonth()
+    public function geTotalTaxThisMonth()
    {
        return  DB::table('payrolls')
-                    ->selectRaw('
-                        COALESCE(SUM(holding_tax), 0) AS tax,
-                        COALESCE(SUM(tax_bal_due), 0) AS due_tax,
-                        COALESCE(SUM(
-                            policy_loan + consol_loan + emerg_loan +
-                            gel + gfal + mpl + mpl_lite +
-                            loans + housing_loan
-                        ), 0) AS totalLoan
-                    ')
-                    ->where('publish_status', 'publish')
-                    ->whereBetween('created_at', [
-                        now()->startOfMonth(),
-                        now()->endOfMonth()
-                    ])
-                    ->first();
+    ->selectRaw('
+        COALESCE(SUM(holding_tax), 0) AS tax,
+        COALESCE(SUM(tax_bal_due), 0) AS due_tax,
+        COALESCE(SUM(
+            COALESCE(policy_loan, 0) +
+            COALESCE(consol_loan, 0) +
+            COALESCE(emerg_loan, 0) +
+            COALESCE(gel, 0) +
+            COALESCE(gfal, 0) +
+            COALESCE(mpl, 0) +
+            COALESCE(mpl_lite, 0) +
+            COALESCE(loans, 0) +
+            COALESCE(housing_loan, 0)
+        ), 0) AS totalLoan
+    ')
+    ->where('publish_status', 'publish')
+    ->whereBetween('created_at', [
+        now()->startOfMonth(),
+        now()->endOfMonth()
+    ])
+    ->first();
    }
 
    public function getLatestContributionBreakdown()

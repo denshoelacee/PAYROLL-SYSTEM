@@ -74,7 +74,7 @@ export default function Authenticated({
                         <div ref={autoCloseBell} className="pt-7 ">
                             <button
                                 onClick={notifHandler}
-                                className="hover:text-red-600 hover:rounded-full p-2 transition duration-150"
+                                className="hover:text-red-600 hover:rounded-full pt-3 transition duration-150"
                             >
                                 <NotificationBell count={notifications.length} />
                             </button>

@@ -57,4 +57,9 @@ class DashboardService implements IDashboardService{
    {
         return $this->payrollRepository->getLatestGrossPayMonthly();
    }
+
+   public function contributionBreakdown()
+   {
+       return $this->payrollRepository->getContributionsBreakdownMonthly();
+   }
 }

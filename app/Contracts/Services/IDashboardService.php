@@ -9,4 +9,6 @@ interface IDashboardService{
      public function getTaxAndUserSummary();
 
      public function latestGrossPayMonthly();     
+
+     public function contributionBreakdown();
 }

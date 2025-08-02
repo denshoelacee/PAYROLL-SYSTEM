@@ -264,19 +264,41 @@ class PayrollRepository implements IPayrollRepository{
 
    public function getLatestGrossPayMonthly()
    {
-    return Payroll::join('users', 'payrolls.user_id', '=', 'users.user_id')
-        ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
-        ->selectRaw('
-            users.department,
-            SUM(COALESCE(payroll_deductions.total_accrued_period, 0)) as total_gross
-        ')
-        ->where('payrolls.publish_status', 'publish')
-        ->whereBetween('payrolls.created_at', [
-            now()->startOfMonth(),
-            now()->endOfMonth()
-        ])
-        ->groupBy('users.department')
-        ->get();
+        return Payroll::join('users', 'payrolls.user_id', '=', 'users.user_id')
+            ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
+            ->selectRaw('
+                users.department,
+                SUM(COALESCE(payroll_deductions.total_accrued_period, 0)) as total_gross
+            ')
+            ->where('payrolls.publish_status', 'publish')
+            ->whereBetween('payrolls.created_at', [
+                now()->startOfMonth(),
+                now()->endOfMonth()
+            ])
+            ->groupBy('users.department')
+            ->get();
     }
 
+    public function getContributionsBreakdownMonthly()
+    {
+        $data = DB::table('payrolls')
+            ->selectRaw('
+                COALESCE(SUM(rlip), 0) AS gsis,
+                COALESCE(SUM(contributions), 0) AS pagibig,
+                COALESCE(SUM(philhealth),0) AS philhealth      
+            ')
+            ->where('publish_status', 'publish')
+            ->whereBetween('created_at', [
+                now()->startOfMonth(),
+                now()->endOfMonth()
+            ])
+            ->first();
+
+            $data->gsis = (float) $data->gsis;
+            $data->pagibig = (float) $data->pagibig;
+            $data->philhealth = (float) $data->philhealth;
+            
+        return $data;
+
+    }
 }

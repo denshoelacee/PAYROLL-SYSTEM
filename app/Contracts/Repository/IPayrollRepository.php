@@ -23,6 +23,8 @@ interface IPayrollRepository{
       public function geTotalTaxThisMonth();
 
       public function getLatestGrossPayMonthly();
+
+      public function getContributionsBreakdownMonthly();
       
       
       public function getPayrollReportsYearlyView($year,$month);

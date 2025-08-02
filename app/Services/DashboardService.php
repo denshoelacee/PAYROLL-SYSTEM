@@ -42,14 +42,19 @@ class DashboardService implements IDashboardService{
 
    public function getTaxAndUserSummary()
    {
-    $totalUsers = $this->userRepository->countUser();
-    $taxSummary = $this->payrollRepository->geTotalTaxThisMonth();
+        $totalUsers = $this->userRepository->countUser();
+        $taxSummary = $this->payrollRepository->geTotalTaxThisMonth();
 
-    return [
-        'total_users' => $totalUsers,
-        'tax' => $taxSummary->tax ?? 0,
-        'due_tax' => $taxSummary->due_tax ?? 0,
-        'total_loan' => $taxSummary->totalLoan ?? 0,
-    ];
+        return [
+            'total_users' => $totalUsers,
+            'tax' => $taxSummary->tax ?? 0,
+            'due_tax' => $taxSummary->due_tax ?? 0,
+            'total_loan' => $taxSummary->totalLoan ?? 0,
+        ];
+   }
+
+   public function latestGrossPayMonthly()
+   {
+        return $this->payrollRepository->getLatestGrossPayMonthly();
    }
 }

@@ -21,6 +21,9 @@ interface IPayrollRepository{
       public function getPayrollReportsYearly($year);
 
       public function geTotalTaxThisMonth();
+
+      public function getLatestGrossPayMonthly();
+      
       
       public function getPayrollReportsYearlyView($year,$month);
 

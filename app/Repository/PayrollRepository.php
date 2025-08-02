@@ -237,46 +237,46 @@ class PayrollRepository implements IPayrollRepository{
    }
 
     public function geTotalTaxThisMonth()
-   {
-       return  DB::table('payrolls')
-    ->selectRaw('
-        COALESCE(SUM(holding_tax), 0) AS tax,
-        COALESCE(SUM(tax_bal_due), 0) AS due_tax,
-        COALESCE(SUM(
-            COALESCE(policy_loan, 0) +
-            COALESCE(consol_loan, 0) +
-            COALESCE(emerg_loan, 0) +
-            COALESCE(gel, 0) +
-            COALESCE(gfal, 0) +
-            COALESCE(mpl, 0) +
-            COALESCE(mpl_lite, 0) +
-            COALESCE(loans, 0) +
-            COALESCE(housing_loan, 0)
-        ), 0) AS totalLoan
-    ')
-    ->where('publish_status', 'publish')
-    ->whereBetween('created_at', [
-        now()->startOfMonth(),
-        now()->endOfMonth()
-    ])
-    ->first();
-   }
-
-   public function getLatestContributionBreakdown()
-   {
-        return DB::table('payrolls')
-            ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
-            ->selectRaw('
-                SUM(payrolls.rlip) AS gsis,
-                SUM(payrolls.contributions) AS contribution,
-                SUM(payrolls.philhealth) AS phic,
-                MONTH(payrolls.created_at) AS month,
-                YEAR(payrolls.created_at) AS year
+    {
+       return DB::table('payrolls')
+                 ->selectRaw('
+                COALESCE(SUM(holding_tax), 0) AS tax,
+                COALESCE(SUM(tax_bal_due), 0) AS due_tax,
+                COALESCE(SUM(
+                    COALESCE(policy_loan, 0) +
+                    COALESCE(consol_loan, 0) +
+                    COALESCE(emerg_loan, 0) +
+                    COALESCE(gel, 0) +
+                    COALESCE(gfal, 0) +
+                    COALESCE(mpl, 0) +
+                    COALESCE(mpl_lite, 0) +
+                    COALESCE(loans, 0) +
+                    COALESCE(housing_loan, 0)
+                ), 0) AS totalLoan
             ')
-            ->where('payrolls.publish_status', 'publish')
-            ->orderByDesc('payrolls.created_at')
-            ->groupBy(DB::raw('MONTH(payrolls.created_at), YEAR(payrolls.created_at)'))
-            ->get();
+            ->where('publish_status', 'publish')
+            ->whereBetween('created_at', [
+                now()->startOfMonth(),
+                now()->endOfMonth()
+            ])
+            ->first();
+    }
+
+   public function getLatestGrossPayMonthly()
+   {
+    return Payroll::join('users', 'payrolls.user_id', '=', 'users.user_id')
+        ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
+        ->selectRaw('
+            users.department,
+            SUM(COALESCE(payroll_deductions.total_accrued_period, 0)) as total_gross
+        ')
+        ->where('payrolls.publish_status', 'publish')
+        ->whereBetween('payrolls.created_at', [
+            now()->startOfMonth(),
+            now()->endOfMonth()
+        ])
+        ->groupBy('users.department')
+        ->get();
     }
 
 }

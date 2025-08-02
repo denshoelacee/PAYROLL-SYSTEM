@@ -52,6 +52,7 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/updatePositions/{id}', [AdminMetaDataController::class, 'updateJobTitle'])->name('admin.update.position');
     Route::delete('deletePositions/{id}', [AdminMetaDataController::class, 'deleteJobTitle'])->name('admin.delete.position');
     Route::get('/department',[AdminMetaDataController::class,'displayEmpTypeList'])->name('admin.department');
+    Route::post('/department/contribution/create',[AdminMetaDataController::class,'store'])->name('admin.contribution.add');
 
     //Batch Processing Controller
     Route::post('/pending/accounts/batch-approve',[BatchDecissionController::class, 'batchApprove'])->name('admin.users.batch-approve');

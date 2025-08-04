@@ -22,13 +22,14 @@ export default function Payroll({ auth,userPayslip,availableYears,selectedYear,}
     return (
        <>
         <Sidebar auth={auth}/>
-        <EmployeeLayout>
+        <AdminLayout>
             <Head title="Employee" />
                     <EmployeePayrollPartial
                     userPayslip={userPayslip}
                     availableYears={availableYears}
                     selectedYear={selectedYear}/>
-        </EmployeeLayout>
+        </AdminLayout>
+
        </>
     );
 }

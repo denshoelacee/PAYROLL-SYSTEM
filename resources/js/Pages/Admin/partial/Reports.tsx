@@ -98,7 +98,8 @@ import { AiOutlineFundView } from "react-icons/ai";
         ];
         return (
             <>
-                <Dropdown>
+                <div className="w-[200px]">
+                    <Dropdown>
                     <Dropdown.Trigger>
                     <SecondaryButton className="flex w-full justify-between items-center md:w-[200px] border">
                         {<p className="text-sm">{selectedYear || "Select Year"}</p>}
@@ -117,6 +118,7 @@ import { AiOutlineFundView } from "react-icons/ai";
                         ))}
                     </Dropdown.Content>
                 </Dropdown>
+                </div>
                 <div className='py-5'>
                     <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg w-full">
                         <h2 className="text-lg font-semibold my-3 mx-5 text-white">List of Reports</h2>

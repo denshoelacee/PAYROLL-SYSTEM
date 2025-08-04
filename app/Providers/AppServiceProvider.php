@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
             return 'Developed by Deniel D. Ybañez, John Mark G. Tayone, Lanie P. Payot © ' . date('Y');
         });
         */
-          Inertia::share('dev', fn () => config('reverb'));
+          Inertia::share('dev', fn () => config('sogema'));
 
           // Share a secure hash of the team JSON
           Inertia::share('team_hash', fn () => hash('sha256', json_encode(config('team.members'))));

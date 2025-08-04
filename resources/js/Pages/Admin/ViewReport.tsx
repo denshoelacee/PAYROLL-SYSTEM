@@ -1,16 +1,15 @@
 import PrimaryButton from "@/Components/PrimaryButton"
 import Table from "@/Components/Table"
-import AdminLayout from "@/Layouts/AdminLayout"
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout"
-import { router } from "@inertiajs/react"
 import { GridColDef } from "@mui/x-data-grid"
 import { FaArrowLeft } from "react-icons/fa"
-import style from '../../../styles/style.css'
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { UserPayroll } from "@/types"
 import generatemonthlyReport from "./partial/reports/monthlyReport"
 import generateSundry from "./partial/reports/sundry"
+import { LiaPrintSolid } from "react-icons/lia";
+import { Head } from "@inertiajs/react"
+
 type Props  ={
   worksheet2: ExcelJS.Worksheet;
   headerMonthTitle: string;
@@ -18,7 +17,6 @@ type Props  ={
   viewReport: UserPayroll[];
 }
 export default function ViewReport({viewReport,headerMonthTitle,headerYearTitle}:Props){
-    console.log(viewReport)
     const exportToExcel = async () => {
         const workbook = new ExcelJS.Workbook();
 
@@ -97,11 +95,13 @@ export default function ViewReport({viewReport,headerMonthTitle,headerYearTitle}
         },
         {field: 'signature',headerName: 'Signature',flex: 1,align: 'center',headerAlign: 'center',sortable: false,},
     ]
+    
     return(
         <>
-        <div className="bg-mainColor p-5 h-screen">
-            <div className="w-[100px] mb-4">
-                <PrimaryButton onClick={() => window.history.back()}>
+        <Head title={`${headerMonthTitle} Reports`} />  
+        <div className="bg-mainColor p-5 h-screen font-Inter">
+            <div className="w-full mb-4">
+                <PrimaryButton className="w-[150px]" onClick={() => window.history.back()}>
                     <div className="flex justify-center items-center">
                         <FaArrowLeft className="text-xl mx-2" />
                         <p>Back</p>
@@ -109,20 +109,27 @@ export default function ViewReport({viewReport,headerMonthTitle,headerYearTitle}
                 </PrimaryButton>
             </div>
 
-            <p className="text-white mb-4">
+            <div className="flex justify-between w-full mb-4">
+                <p className="text-white ">
                 PAYROLL FOR REGULAR EMPLOYEES FOR {headerMonthTitle} 2025
-            </p>
-        <PrimaryButton onClick={exportToExcel}>Download Excel</PrimaryButton>
+                </p>
+                <PrimaryButton className="w-[250px]" onClick={exportToExcel}>
+                <div className="flex justify-center gap-6 place-items-center">
+                    <LiaPrintSolid className="text-2xl"/>
+                <p>Download Excel</p>
+                </div></PrimaryButton>
+            </div>
 
             {/* Responsive horizontal scroll wrapper */}
-            <div className="overflow-x-auto h-[550px] ">
-                <div className="min-w-[120em] h-[550px]">
+            <div className="overflow-x-auto h-[550px] bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
+                <div className="min-w-[120em] h-[500px]">
                     <Table
                         rows={viewReport}
                         columns={columns}
                         hideFooter={false}
                         pageSize={10}
                         getRowId={(row) => row.user_id}
+                        height={530}
                     />
                 </div>
             </div>

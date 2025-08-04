@@ -12,7 +12,6 @@ import Table from '@/Components/Table';
 import { Popover } from '@mui/material';
 import searchHooks from '@/hooks/searchHooks';
 import { GridColDef } from '@mui/x-data-grid';
-import style from '../../../styles/style.css';
 import { router, useForm } from '@inertiajs/react';
 import Dropdown from '@/Components/Dropdown';
 import { RiArrowDropDownLine } from 'react-icons/ri';
@@ -112,7 +111,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                 setSelectDepartment('Select Department');
                 setSelectDesignation('Select Designation');
                 setSelectRole('Select Role');
-                setSelectEmploymentType('Select Employment Type');
+                setSelectEmploymentType('Select Type');
             }
         }, [editModal, selectedRow]);
 
@@ -125,7 +124,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                     setSelectDepartment('Select Department')
                     setSelectDesignation('Select Designation')
                     setSelectRole('Select Role')
-                    setSelectEmploymentType('Select Employment Type')
+                    setSelectEmploymentType('Select Type')
                 },
             });
         };
@@ -196,14 +195,18 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
 
     return(
     <>
-        <div className="flex justify-between gap-2 sm:justify-end  md:justify-end md:gap-5  ">
-        <Search value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-        <SecondaryButton onClick={() => setAddModal(true)}>
-            <div className="flex items-center gap-2">
-                <IoMdAdd className='text-custom-word-color font-black text-1xl' />
-                <span className="text-sm">New Employee</span>
+        <div className="flex flex-col-reverse sm:justify-end  md:flex-row justify-between gap-2 md:justify-end md:gap-5">
+            <div>
+                <Search value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             </div>
-        </SecondaryButton>
+            <div className="w-full md:w-auto flex justify-end pb-1 md:pb-0">
+                <SecondaryButton className="w-36" onClick={() => setAddModal(true)}>
+                    <div className="flex items-center gap-2">
+                        <IoMdAdd className='text-custom-word-color font-black text-1xl' />
+                        <span className="text-sm">New Employee</span>
+                    </div>
+                </SecondaryButton>
+            </div>
         </div>
         <div className="w-full overflow-x-auto scrollbar-hidden">
             <div className='my-5 min-w-[900px] h-[650px] sm:h-[650px] md:h-[710px] lg:h[800px] overflow-y-auto scrollbar-hidden '>
@@ -222,7 +225,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
             </div>
         </div>
         {/* Add Modal */}
-        <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="2xl" className='h-[600px]' >
+        <Modal show={addModal} onClose={() => setAddModal(false)} maxWidth="2xl" className="h-[600px] scrollbar-hidden" >
             <form onSubmit={addSubmit} >
             <div className="p-6 space-y-4 rounded-lg">
                 <h2 className="text-lg font-bold mb-4 text-white">Add New Employee</h2>
@@ -263,7 +266,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
                             </Dropdown.Trigger> 
-                            <Dropdown.Content ableSearch={true} contentClasses="bg-gray-300 w-full max-h-[200px] overflow-y-auto p-0" align="left">
+                            <Dropdown.Content ableSearch={true} contentClasses=" w-full max-h-[200px] overflow-y-auto p-0" align="left">
                             {jobtitles
                                 .map(dep => dep.department)
                                 .filter(department => department && department.toUpperCase() !== 'NULL') 
@@ -274,7 +277,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     id="department"
                                     name="department"
                                     onClick={() => handleDropdownSelect(name, 'department')}
-                                    className="w-full px-4 py-2 text-left bg-gray-300 hover:bg-[#145858] text-black hover:text-white"
+                                    className="w-full px-4 py-2 text-left  hover:bg-white text-white hover:text-black"
                                 >
                                 {name}
                                 </button>
@@ -291,7 +294,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
                             </Dropdown.Trigger> 
-                            <Dropdown.Content ableSearch={true} contentClasses=" bg-gray-300 p-0 w-full max-h-[200px] overflow-y-auto" align="left">
+                            <Dropdown.Content ableSearch={true} contentClasses=" p-0 w-full max-h-[200px] overflow-y-auto" align="left">
                             {jobtitles
                                 .map(des => des.designation)
                                 .filter(designations => designations && designations.toUpperCase() !== 'NULL') 
@@ -302,7 +305,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     id="designation"
                                     name="designation"
                                     onClick={() => handleDropdownSelect(name, 'designation')}
-                                    className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
+                                    className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
                                 >
                                 {name}
                                 </button>
@@ -330,7 +333,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     <RiArrowDropDownLine className={` text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
                             </Dropdown.Trigger> 
-                            <Dropdown.Content contentClasses="w-full bg-gray-300" align="left" >
+                            <Dropdown.Content ableSearch={true} contentClasses="w-full" align="left" >
                                 {role.map((option, index) => (
                                 <button
                                     key={index}
@@ -340,7 +343,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     onClick={() => {
                                     handleDropdownSelect(option, 'role');
                                     }}
-                                    className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
+                                    className="w-full px-4 py-2 text-left  hover:bg-white text-white hover:text-black"
                                 >
                                     {option}
                                 </button>
@@ -357,7 +360,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
                             </Dropdown.Trigger> 
-                            <Dropdown.Content contentClasses="bg-gray-300 w-full" align="left" >
+                            <Dropdown.Content ableSearch={true} contentClasses=" w-full" align="left" >
                                 {employeeTypes.map((option, index) => (
                                 <button
                                     key={index}
@@ -367,7 +370,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     onClick={() => {
                                     handleDropdownSelect(option.employment_type_list, 'employment_type');
                                     }}
-                                    className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
+                                    className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
                                 >
                                 {option.employment_type_list}
                                 </button>
@@ -425,7 +428,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
                             </Dropdown.Trigger> 
-                            <Dropdown.Content contentClasses="bg-gray-300 w-full max-h-[200px] overflow-y-auto p-0" align="left">
+                            <Dropdown.Content ableSearch={true} contentClasses="w-full max-h-[200px] overflow-y-auto p-0" align="left">
                             {jobtitles
                                 .map(dep => dep.department)
                                 .filter(department => department && department.toUpperCase() !== 'NULL') 
@@ -436,7 +439,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     id="department"
                                     name="department"
                                     onClick={() => handleDropdownSelect(name, 'department')}
-                                    className="w-full px-4 py-2 text-left bg-gray-300 hover:bg-[#145858] text-black hover:text-white"
+                                    className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
                                 >
                                 {name}
                                 </button>
@@ -453,7 +456,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
                             </Dropdown.Trigger> 
-                            <Dropdown.Content contentClasses=" bg-gray-300 p-0 w-full max-h-[200px] overflow-y-auto" align="left">
+                            <Dropdown.Content ableSearch={true} contentClasses=" p-0 w-full max-h-[200px] overflow-y-auto" align="left">
                             {jobtitles
                                 .map(des => des.designation)
                                 .filter(designations => designations && designations.toUpperCase() !== 'NULL') 
@@ -464,7 +467,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     id="designation"
                                     name="designation"
                                     onClick={() => handleDropdownSelect(name, 'designation')}
-                                    className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
+                                    className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
                                 >
                                 {name}
                                 </button>
@@ -492,7 +495,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     <RiArrowDropDownLine className={` text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
                             </Dropdown.Trigger> 
-                            <Dropdown.Content contentClasses="w-full bg-gray-300" align="left" >
+                            <Dropdown.Content contentClasses="w-full" align="left" >
                                 {role.map((option, index) => (
                                 <button
                                     key={index}
@@ -502,7 +505,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     onClick={() => {
                                     handleDropdownSelect(option, 'role');
                                     }}
-                                    className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
+                                    className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
                                 >
                                     {option}
                                 </button>
@@ -519,7 +522,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
                             </Dropdown.Trigger> 
-                            <Dropdown.Content contentClasses="bg-gray-300 w-full" align="left" >
+                            <Dropdown.Content contentClasses=" w-full" align="left" >
                                 {employeeTypes.map((option, index) => (
                                 <button
                                     key={index}
@@ -529,7 +532,7 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
                                     onClick={() => {
                                     handleDropdownSelect(option.employment_type_list, 'employment_type');
                                     }}
-                                    className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
+                                    className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
                                 >
                                     {option.employment_type_list}
                                 </button>

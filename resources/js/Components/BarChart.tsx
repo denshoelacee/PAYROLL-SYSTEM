@@ -12,6 +12,9 @@ type Props = {
 };
 
 export default function BarChart({ departmentsGross }: Props) {
+
+  const isMobile = window.innerWidth <= 768; // or use a library like useMediaQuery
+
     if (!departmentsGross || departmentsGross.length === 0) {
     return (
       <div className="flex items-center justify-center h-96 text-white text-lg">
@@ -47,11 +50,13 @@ export default function BarChart({ departmentsGross }: Props) {
     },
     xAxis: {
       type: 'category',
-      axisLabel: { interval: 0, rotate: 30, color: '#fff' }, // white text on x-axis
+      axisLabel: { interval: 0, rotate: 0, color: '#fff' }, // white text on x-axis
     },
     yAxis: {
       axisLabel: {
         color: '#fff', // white text on y-axis
+         fontSize: isMobile ? 10 : 13,          // smaller font on mobile
+    padding: isMobile ? [0, -10, 0, 0] : [5, 10, 5, 10], // less padding on mobile
         formatter: (value: number) => {
           if (value >= 1_000_000) return `${value / 1_000_000}M`;
           if (value >= 100_000) return `${value / 1_000}k`;

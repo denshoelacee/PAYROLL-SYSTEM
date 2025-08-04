@@ -30,7 +30,7 @@ export default function Register({Jobtitles,employeeTypeList}: Props) {
     const [step, setStep] = useState(1);
     const [validateErrors, setValidationErrors] = useState({
 	employee_id: '',
-        first_name: '',
+first_name: '',
         last_name: '',
         designation: '',
         department: '',
@@ -80,7 +80,18 @@ const nextStep = () => {
     const [selectDesignation, setSelectDesignation] = useState('Select Designation');
     const [selectEmploymentType, setSelectEmploymentType] = useState('Select Employment Type');
 
-    const options = ['What is ROBLOX', 'ADIK BA SI RAYJAY UG GROW A GARDEN?'];
+    const options = [
+     'What is the name of your first pet?',
+     'What was the name of your elementary school?',
+     'In what city were you born?',
+     'What is your mother’s maiden name?',
+     'What was your childhood nickname?',
+     'What was the make and model of your first car?',
+     'What is the name of the street you grew up on?',
+     'What is your favorite teacher’s name from high school?',
+     'What is the name of your favorite childhood friend?',
+     'What was the name of your first employer or job?'
+    ];
 
     const {message}:any = usePage().props;
 
@@ -205,7 +216,7 @@ const nextStep = () => {
                                             <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                         </button>
                                     </Dropdown.Trigger> 
-                                    <Dropdown.Content contentClasses="w-full max-h-[200px]  bg-gray-300 overflow-y-auto p-0 " align="left">
+                                    <Dropdown.Content ableSearch={true} contentClasses="w-full max-h-[200px] overflow-y-auto p-0 " align="left">
                                     {jobtitles
                                         .map(dep => dep.department)
                                         .filter(department => department && department.toUpperCase() !== 'NULL') 
@@ -216,7 +227,7 @@ const nextStep = () => {
                                             id="department"
                                             name="department"
                                             onClick={() => handleDropdownSelect(name, 'department')}
-                                            className="w-full px-4 py-2 text-left bg-gray-300 hover:bg-[#145858] text-black hover:text-white"
+                                            className="w-full px-4 py-2 text-left  hover:bg-white text-white hover:text-black"
                                         >
                                         {name}
                                     </button>
@@ -235,7 +246,7 @@ const nextStep = () => {
                                             <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                         </button>
                                     </Dropdown.Trigger> 
-                                    <Dropdown.Content ableSearch={true} contentClasses=" bg-gray-300 p-0 w-full max-h-[200px] overflow-y-auto" align="left">
+                                    <Dropdown.Content ableSearch={true} contentClasses="p-0 w-full max-h-[200px] overflow-y-auto" align="left">
                                     {jobtitles
                                         .map(des => des.designation)
                                         .filter(designations => designations && designations.toUpperCase() !== 'NULL') 
@@ -246,7 +257,7 @@ const nextStep = () => {
                                             id="designation"
                                             name="designation"
                                             onClick={() => handleDropdownSelect(name, 'designation')}
-                                            className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
+                                            className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
                                         >
                                         {name}
                                     </button>
@@ -265,7 +276,7 @@ const nextStep = () => {
                                             <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                         </button>
                                     </Dropdown.Trigger> 
-                                    <Dropdown.Content ableSearch={true} contentClasses="bg-gray-300 p-0 w-full max-h-[200px] overflow-y-auto" align="left" >
+                                    <Dropdown.Content ableSearch={true} contentClasses=" p-0 w-full max-h-[200px] overflow-y-auto" align="left" >
                                         {employeeTypelist.map((option, index) => (
                                         <button
                                             key={index}
@@ -275,7 +286,7 @@ const nextStep = () => {
                                             onClick={() => {
                                             handleDropdownSelect(option.employment_type_list, 'employment_type');
                                             }}
-                                            className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:bg-[#145858] hover:text-white"
+                                            className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
                                         >
                                             {option.employment_type_list}
                                         </button>
@@ -336,7 +347,7 @@ const nextStep = () => {
                                         <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                     </button>
                                 </Dropdown.Trigger> 
-                                <Dropdown.Content contentClasses="w-full" align="left" >
+                                <Dropdown.Content contentClasses="w-full h-[200px] overflow-auto" align="left" >
                                     {options.map((option, index) => (
                                     <button
                                         key={index}
@@ -346,7 +357,7 @@ const nextStep = () => {
                                         onClick={() => {
                                         handleDropdownSelect(option, 'secret_question');
                                         }}
-                                        className="w-full px-4 py-2 text-left bg-gray-300 text-black"
+                                        className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
                                     >
                                         {option}
                                     </button>

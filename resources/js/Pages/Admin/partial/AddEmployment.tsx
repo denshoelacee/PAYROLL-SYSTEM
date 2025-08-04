@@ -96,6 +96,7 @@ export default function AddEmployment({empTypeList}:Props) {
             </div>
             <div className="h-12 border px-5 flex items-center justify-center">
                 <PrimaryButton  onClick={() => {
+                    reset();  
                     setShowModal(true)
                 }}className="py-1.5">
                     Add New Employment Type

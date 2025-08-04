@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('type')->nullable();
+            $table->string('type');
             $table->morphs('notifiable');
-            $table->text('description')->nullable();
-            $table->string('year')->nullable();
-            $table->string('month')->nullable();
-            $table->enum('status',['markAsRead','markAsUnread', 'markAsNone'])->default('markAsUnread');
+            $table->text('data');
+            $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
     }

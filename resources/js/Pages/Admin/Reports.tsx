@@ -1,6 +1,4 @@
-import React from 'react'
 import { PageProps } from '@/types'
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head } from '@inertiajs/react'
 import Sidebar from '@/Components/Sidebar'
 import AdminLayout from '@/Layouts/AdminLayout'
@@ -24,13 +22,15 @@ export default function Reports({auth,selectedYear,monthlySummary,availableYears
     <>
         
             <Head title="Reports" />
-            <Sidebar auth={auth} />
-            <AdminLayout title="Reports">
-                   <ReportsPartial 
-                   selectedYear={selectedYear} 
-                   monthlySummary={monthlySummary}
-                   availableYears={availableYears}/>
-            </AdminLayout>
+            <div className="font-Inter">
+              <Sidebar auth={auth} />
+              <AdminLayout title="Reports">
+                    <ReportsPartial 
+                    selectedYear={selectedYear} 
+                    monthlySummary={monthlySummary}
+                    availableYears={availableYears}/>
+              </AdminLayout>
+            </div>
 
     </>
   )

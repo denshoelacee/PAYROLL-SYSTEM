@@ -115,13 +115,14 @@ export default function AddDepartment({jobTitleList}:Props) {
             </div>
             <div className="h-12 border px-5 flex items-center justify-center">
                 <PrimaryButton onClick={() => {
-                            setShowModal(true)
-                        }} className="py-1.5">
+                        reset();  
+                        setShowModal(true)
+                    }} className="py-1.5">
                     Add New Department
                 </PrimaryButton>
             </div>
             {/* Modal */}
-            <Modal show={showModal} onClose={() => setShowModal(false)} maxWidth="sm">
+            <Modal show={showModal} onClose={() => {setShowModal(false);}} maxWidth="sm">
                 <div className="p-6">
                     <h2 className="text-lg font-semibold mb-4 text-white">Add Department Type</h2>
                     <TextInputGroup
@@ -133,14 +134,14 @@ export default function AddDepartment({jobTitleList}:Props) {
                         onChange={(e) => setData('department', e.target.value)}
                     />
                     <div className="flex justify-end gap-2 mt-3">
-                        <PrimaryButton onClick={() => setShowModal(false)} className="bg-gray-300 px-4 py-2 rounded">
+                        <PrimaryButton onClick={() => {setShowModal(false); } } className="bg-gray-300 px-4 py-2 rounded">
                         Cancel
                         </PrimaryButton>
                         <PrimaryButton onClick={handleSubmit('toDepartment')}>Submit</PrimaryButton>
                     </div>
                 </div>
             </Modal>
-            <Modal show={editModal} onClose={() => setEditModal(false)} maxWidth="sm">
+            <Modal show={editModal} onClose={() => {setEditModal(false);}} maxWidth="sm">
                 <div className="p-6">
                     <h2 className="text-lg font-semibold mb-4 text-white">Edit Department</h2>
                     <TextInputGroup
@@ -159,7 +160,7 @@ export default function AddDepartment({jobTitleList}:Props) {
                     </div>
                 </div>
             </Modal>
-            <Modal show={deleteModal} onClose={() => setDeleteModal(false)} maxWidth='sm' >
+            <Modal show={deleteModal} onClose={() => {setDeleteModal(false);}} maxWidth='sm' >
                     <div className="p-6">
                     <h2 className="text-lg font-bold mb-4 text-white">
                         Delete Department
@@ -172,7 +173,7 @@ export default function AddDepartment({jobTitleList}:Props) {
                             Confirm
                             </PrimaryButton>
                             <PrimaryButton className="py-2"onClick={() => {
-                                setDeleteModal(false)}}>
+                                setDeleteModal(false); }}>
                             Close
                             </PrimaryButton>
                         </div>

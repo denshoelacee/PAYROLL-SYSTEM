@@ -21,8 +21,6 @@ import { useState } from "react";
     };
 
     export default function EmployeePayrollPartial({selectedYear,availableYears,userPayslip}:Props) {
-        const [selectedRow, setSelectedRow] = useState<UserPayroll | null>(null);
-        console.log(userPayslip)
         const handleChange = (selectedYear:number) => {
             router.get(route("employee.payslip.summary"), { year: selectedYear }, { preserveState: true });
         };
@@ -85,7 +83,7 @@ import { useState } from "react";
                 </Dropdown>
                 <div className='py-5'>
                     <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg w-full">
-                        <h2 className="text-lg font-semibold my-3 mx-5 text-white">List of Reports</h2>
+                        <h2 className="text-lg font-semibold my-3 mx-5 text-white">Payslip available this {selectedYear}</h2>
                         <div className="h-[530px] overflow-auto scrollbar-hidden">
                             <Table
                                 rows={userPayslip}

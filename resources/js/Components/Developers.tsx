@@ -5,6 +5,7 @@ import denshodeveloper from '/resources/images/chatgepetee.png';
 import tayonsdeveloper from '/resources/images/tayons.png';
 import laniedeveloper from '/resources/images/lanie.png';
 import { FaFacebook,FaLinkedin} from "react-icons/fa";
+import { PageProps } from '@/types';
 
 interface TeamMember {
   name: string;
@@ -13,7 +14,7 @@ interface TeamMember {
   github?: string;
 }
 
-interface TeamProps {
+interface TeamProps extends PageProps{
   dev: {
     team_name: string;
     members: TeamMember[];
@@ -21,7 +22,7 @@ interface TeamProps {
    team_hash: string;
 }
 export function Developers() {
-   const { dev, team_hash } = usePage().props as TeamProps;
+   const { dev, team_hash } = usePage<TeamProps>().props
 
   useEffect(() => {
     const localHash = sha256(JSON.stringify(dev.members));
@@ -30,9 +31,11 @@ export function Developers() {
     }
   }, [dev, team_hash]);
 
+  console.log('dev:', dev);
+console.log('team_hash:', team_hash);
   return (
     <div className='flex flex-col md:flex-row justify-evenly items-center gap-12 py-12 w-full'>
-      {dev.members.map((member, index) => {
+      {dev?.members.map((member, index) => {
         const image = [denshodeveloper, tayonsdeveloper ,laniedeveloper,][index];
 
         return (

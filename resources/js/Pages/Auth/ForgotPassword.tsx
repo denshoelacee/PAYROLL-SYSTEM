@@ -22,7 +22,18 @@ export default function ForgotPassword({ status }: { status?: string }) {
     const {message}:any = usePage().props;
     const [selectQuestion, setSelectQuestion] = useState('Select Question');
     
-    const options = ['What is ROBLOX', 'ADIK BA SI RAYJAY UG GROW A GARDEN?'];
+    const options = [
+     'What is the name of your first pet?',
+     'What was the name of your elementary school?',
+     'In what city were you born?',
+     'What is your mother’s maiden name?',
+     'What was your childhood nickname?',
+     'What was the make and model of your first car?',
+     'What is the name of the street you grew up on?',
+     'What is your favorite teacher’s name from high school?',
+     'What is the name of your favorite childhood friend?',
+     'What was the name of your first employer or job?'
+    ];
 
      const handleDropdownSelect = (value: any, field: string) => {
 
@@ -83,7 +94,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
                             </Dropdown.Trigger> 
-                            <Dropdown.Content contentClasses="bg-gray-300 w-full p-0" align="left" >
+                            <Dropdown.Content contentClasses=" w-full p-0 h-[200px] overflow-auto" align="left" >
                                 {options.map((option, index) => (
                                 <button
                                     key={index}
@@ -93,7 +104,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     onClick={() => {
                                     handleDropdownSelect(option, 'secret_question');
                                     }}
-                                    className="w-full px-4 py-2 text-left bg-gray-300 text-black hover:text-white hover:bg-[#145858]"
+                                    className="w-full  px-4 py-2 text-left text-white hover:text-black hover:bg-white"
                                 >
                                     {option}
                                 </button>

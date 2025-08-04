@@ -32,7 +32,7 @@ class AdminDashboardController extends Controller
                 'availableYears'   => range(2024, now()->year),
                 'summaryTotal'     => $summaryTotal,
                 'departmentGross'  => $departmentGross,
-                'contributionBreakdown' => $contributionBreakdown
+                'contributionBreakdown' => $contributionBreakdown,
             ]);
     }
 }

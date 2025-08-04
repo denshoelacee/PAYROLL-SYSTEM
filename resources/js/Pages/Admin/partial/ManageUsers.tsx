@@ -3,10 +3,10 @@ import {Employee, PageProps } from '@/types';
 import Search from '@/Components/Search';
 import PrimaryButton  from '@/Components/PrimaryButton';
 import Modal from '@/Components/Modal';
-import { useState, useEffect, FormEventHandler } from 'react';
+import { useState, useEffect } from 'react';
 import Table from '@/Components/Table';
 import searchHooks from '@/hooks/searchHooks';
-import { GridColDef,GridRowSelectionModel} from '@mui/x-data-grid';
+import { GridColDef} from '@mui/x-data-grid';
 import { useForm } from '@inertiajs/react';
 import { LiaCheckSolid } from 'react-icons/lia';
 import { FaRegTrashCan } from "react-icons/fa6";
@@ -77,6 +77,7 @@ export default function ManageUserPartial({ employees}: Props) {
         
         post(route(routeMap[actionType], selectedRow?.user_id), {
             onSuccess: () => {
+                setApproveModal(false);
                 setSelectedRows([]);
             }
         });
@@ -90,8 +91,8 @@ export default function ManageUserPartial({ employees}: Props) {
         if (submitTrigger && (submitTrigger === 'batch-approve' || submitTrigger === 'batch-reject') && data.user_ids?.length) {
             post(route(routeMap[submitTrigger]), {
                 onSuccess: () => {
-                    setSelectedRows([]);    
                     setBatchSubmit(false);
+                    setSelectedRows([]);    
                     setSubmitTrigger(null); 
                 }
             });
@@ -125,16 +126,20 @@ export default function ManageUserPartial({ employees}: Props) {
                     </div>*/}
                     <div className="flex gap-2 justify-center">
                         <div className=" mt-1 flex flex-col items-center">
-                        <div onClick={(e) => handleOpenPopover(e, data.row, 'approve')} className="group  h-12 w-9 flex flex-col items-center justify-center cursor-pointer px-2 hover:border-green-500">
-                            <LiaCheckSolid className="mb-[5px] w-5 h-5 text-green-500 transition-all duration-300 group-hover:text-green-500 group-hover:hidden group-hover:drop-shadow-[0_0_6px_rgba(34,197,94,0.8)]" />
-                            <p className="absolute text-[11px] text-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ">
-                            Approve
-                            </p>
-                        </div>
+                                <div onClick={(e) => {if (selectedRows.length === 0) handleOpenPopover(e, data.row, 'approve'); }} 
+                                className={`group h-12 w-9 flex flex-col items-center justify-center px-2      
+                                ${selectedRows.length > 0 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-green-500'}`} >                                
+                                <LiaCheckSolid className="mb-[5px] w-5 h-5 text-green-500 transition-all duration-300 group-hover:text-green-500 group-hover:hidden group-hover:drop-shadow-[0_0_6px_rgba(34,197,94,0.8)]" />
+                                <p className="absolute text-[11px] text-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ">
+                                Approve
+                                </p>
+                            </div>
                         </div>
                         <p className='mt-5 h-5 border'></p>
                         <div className=" mt-1 flex flex-col items-center">
-                            <div onClick={(e) => handleOpenPopover(e, data.row, 'reject')} className="group h-12 w-9 flex flex-col items-center justify-center cursor-pointer px-2 hover:border-red-500">
+                                <div onClick={(e) => {     if (selectedRows.length === 0) handleOpenPopover(e, data.row, 'reject'); }}
+                                className={`group h-12 w-9 flex flex-col items-center justify-center px-2 
+                                ${selectedRows.length > 0 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-red-500'}`}>
                                 <FaRegTrashCan  className="mb-[5px] w-5 h-5 text-red-500 transition-all duration-300 group-hover:text-red-500 group-hover:hidden group-hover:drop-shadow-[0_0_6px_rgba(34,197,94,0.8)]" />
                                 <p className="absolute text-[11px] text-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ">
                                 Reject
@@ -151,17 +156,15 @@ export default function ManageUserPartial({ employees}: Props) {
         
     return(
     <>
-        <div className="flex justify-between gap-2 sm:justify-end  md:justify-end md:gap-5 ">
+        <div className="flex flex-col-reverse sm:justify-end  md:flex-row justify-between gap-2  md:justify-end md:gap-5 ">
         <Search value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-            <div className="flex gap-2 w-72">
+            <div className="flex gap-2 w-full md:w-72 pb-2 md:pb-0">
                 <PrimaryButton 
                     onClick={() => handleOpenBatchAction('batch-approve')}
                     disabled={selectedRows.length === 0}
                     className= {selectedRows.length === 0 ? 'opacity-50 cursor-not-allowed ' : ''}
                 >
-                   <div className="w-[100px]">
                      <p className='text-[10px]'>Approve ({selectedRows.length})</p> 
-                   </div>
                 </PrimaryButton>
                 <PrimaryButton 
                     onClick={() => handleOpenBatchAction('batch-reject')}
@@ -175,14 +178,14 @@ export default function ManageUserPartial({ employees}: Props) {
         <div className="w-full overflow-x-auto scrollbar-hidden">
             <div className='my-5 min-w-[900px] h-[650px] sm:h-[650px] md:h-[750px] lg:h[800px] overflow-y-auto scrollbar-hidden '>
                 <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
-                    <div className="text-white px-10 py-3 text-xl">Pending Approval</div>
+                    <div className="text-white px-5 text-lg md:px-10 py-3 md:text-xl">Pending Approval</div>
                     <Table
                     checkboxSelection
                     rows={filteredRows}
                     columns={columns}
                     height={650}
                     pageSize={10}     
-                                        pageSizeOptions={[10]}    
+                    pageSizeOptions={[10]}    
                     getRowId={(row) => {return row.user_id;}}
                     onRowSelectionModelChange={(selection) => {
                     const selectionArray =
@@ -193,7 +196,7 @@ export default function ManageUserPartial({ employees}: Props) {
                     const selected = employees.filter((row) =>
                         selectionArray.includes(row.user_id)
                     );
-
+                    
                     setSelectedRows(selected);
                     }}
                     />

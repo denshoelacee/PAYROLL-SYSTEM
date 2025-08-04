@@ -116,7 +116,8 @@ export default function AddDesignation({jobTitleList}:Props) {
             </div>
             <div className="h-12 border px-5 flex items-center justify-center">
                 <PrimaryButton onClick={() => {
-                        setShowModal(true)
+                        reset();  ;
+                        setShowModal(true);
                     }}className="py-1.5">
                     Add New Designation
                 </PrimaryButton>

@@ -1,4 +1,3 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { PageProps,Employee,UserPayroll} from '@/types';
 import Sidebar from '@/Components/Sidebar';
@@ -27,11 +26,9 @@ export default function Payroll({ auth,thisMonth,newPayroll,payslips,
     return (
         
         <>            
-        <Head title="Employee" />
-            <div className="">
-                <div className="">
-                    <Sidebar auth={auth}/>
-                </div>
+        <Head title="Payroll" />
+            <div className="font-Inter">
+                    <Sidebar auth={auth}/>  
                 <AdminLayout
                     title="Payroll">
                 

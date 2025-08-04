@@ -234,7 +234,7 @@ return (
 <>
 
         <Head title="Payslip" />
-        <div className="">
+        <div className="font-Inter">
             <Sidebar auth={auth} />
             <AdminLayout title="Payslip">   
             <div

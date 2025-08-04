@@ -15,7 +15,7 @@ const echo = new Echo({
     withCredentials: true, 
      headers: {
       'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-    },// <== Important to send cookies for auth
+    },
   },
 });
 

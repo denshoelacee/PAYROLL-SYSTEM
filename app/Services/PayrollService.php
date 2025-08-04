@@ -7,7 +7,9 @@ use App\Contracts\Repository\IPayrollRepository;
 use App\Contracts\Services\IPayrollService;
 use App\Contracts\Repository\IUserRepository;
 use App\Contracts\Repository\IPayrollDeductionRepository;
-use App\Notifications\PayslipReadyNotification;
+use App\Events\PayslipEvent;
+use App\Notifications\NewPayrollNotification;
+use App\Notifications\PayrollGenerated;
 
 class PayrollService implements IPayrollService
 {
@@ -81,20 +83,23 @@ class PayrollService implements IPayrollService
             throw new \Exception('User not found');
           }
        
+          
        $data['rlip'] = $rlipContribution;
        $data['philhealth'] = $philContribution;
        $data['basic_salary'] = $salary;
        $data['publish_status'] = 'publish';
 
+       $payroll = $this->payrollRepo->setPayrollModel($data);   
 
-       $payroll = $this->payrollRepo->setPayrollModel($data);
        $payroll->deduction()->create([
             'total_accrued_period' => $totalAccruedPeriod,
             'total_deduction' => $totalDeduction,
             'net_pay' => $netPay
        ]);
 
-      $user->notify(new PayslipReadyNotification($data));
+              event(new PayslipEvent($user->user_id,$payroll));
+       $user->notify(new NewPayrollNotification($payroll));
+
     }
 
     public function editedPartialPublishPayroll(array $data,$id):void

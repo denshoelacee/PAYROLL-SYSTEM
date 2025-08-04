@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Contracts\Services\IHrMetaDataService;
-use App\Events\countPendingAccount;
 use App\Events\newRegister;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\NewUserApprovalNotification;
+use App\Notifications\NewUserNeedsApproval;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -43,6 +44,7 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        
         $request->validate([
             'employee_id'     => 'required|integer',
             'last_name'       => 'required|string|max:50',
@@ -78,12 +80,12 @@ class RegisteredUserController extends Controller
                 'secret_answer'   => Hash::make(strtolower(trim($request->secret_answer)))
             ]);     
 
-            $user->notifications()->create([
-                'type' =>  'payslip',
-                'year' => now()->year,
-                'month'=> now()->month,
-                'status' => 'markAsUnread',
-                ]); 
+             $hrUsers = User::where('role', 'Admin')->get();
+
+            foreach ($hrUsers as $hrUser) {
+            $hrUser->notify(new NewUserApprovalNotification($user));
+            }
+
             event(new newRegister($user));
             return redirect()->route('login')->with('information','Register successfully, Please wait for approval.');     
             

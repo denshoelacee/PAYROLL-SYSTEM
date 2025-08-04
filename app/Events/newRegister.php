@@ -2,11 +2,8 @@
 
 namespace App\Events;
 
-use App\Contracts\Services\IEventsService;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -28,16 +25,16 @@ class newRegister implements ShouldBroadcast
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-      public function broadcastOn(): Channel
+    public function broadcastOn(): Channel
     {
         return new Channel('hr.notifications');
     }
 
     public function broadcastAs(): string
     {
-    return 'user.created';
+        return 'user.created';
     }
-     public function broadcastWith(): array
+    public function broadcastWith(): array
     {
         return ['user' => $this->user];
     }  

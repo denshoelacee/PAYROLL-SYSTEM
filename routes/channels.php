@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Broadcast;
 */
 
 Broadcast::channel('App.Models.User.{userId}', function ($user, $userId) {
-    return (int) auth()->id() === (int) $userId;
+    return (int) $user->user_id === (int) $userId;
 });
 Broadcast::channel('hr.notifications', function ($user) {
     return $user->role === 'Admin';

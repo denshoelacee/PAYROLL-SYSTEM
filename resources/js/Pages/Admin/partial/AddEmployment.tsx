@@ -104,6 +104,7 @@ export default function AddEmployment({empTypeList}:Props) {
             </div>
 
              {/* Modal */}
+            {showModal && (
             <Modal show={showModal} onClose={() => setShowModal(false)} maxWidth="sm">
                 <form>
                 <div className="p-6">
@@ -125,44 +126,49 @@ export default function AddEmployment({empTypeList}:Props) {
                 </div>
                 </form>
             </Modal>
-             <Modal show={editModal} onClose={() => setEditModal(false)} maxWidth="sm">
-                    <div className="p-6">
-                        <h2 className="text-lg font-semibold mb-4 text-white">Edit Employment Type</h2>
-                        <TextInputGroup
-                            id="employment_type_list"
-                            label="Employment Type"
-                            type="text"
-                            placeholder={`Enter Employment Type`}
-                            value={data.employment_type_list}
-                            onChange={(e) => setData('employment_type_list', e.target.value)}
-                        />
-                        <div className="flex justify-end gap-2 mt-3">
-                            <PrimaryButton onClick={HandleEditSubmit}>Submit</PrimaryButton>
-                            <PrimaryButton onClick={() => setEditModal(false)} className="bg-gray-300 px-4 py-2 rounded">
-                            Cancel
-                            </PrimaryButton>
-                        </div>
+            )}
+            {editModal && (
+            <Modal show={editModal} onClose={() => setEditModal(false)} maxWidth="sm">
+                <div className="p-6">
+                    <h2 className="text-lg font-semibold mb-4 text-white">Edit Employment Type</h2>
+                    <TextInputGroup
+                        id="employment_type_list"
+                        label="Employment Type"
+                        type="text"
+                        placeholder={`Enter Employment Type`}
+                        value={data.employment_type_list}
+                        onChange={(e) => setData('employment_type_list', e.target.value)}
+                    />
+                    <div className="flex justify-end gap-2 mt-3">
+                        <PrimaryButton onClick={HandleEditSubmit}>Submit</PrimaryButton>
+                        <PrimaryButton onClick={() => setEditModal(false)} className="bg-gray-300 px-4 py-2 rounded">
+                        Cancel
+                        </PrimaryButton>
                     </div>
+                </div>
             </Modal>
+            )}
+            {deleteModal && (
             <Modal show={deleteModal} onClose={() => setDeleteModal(false)} maxWidth='sm' >
-                    <div className="p-6">
-                    <h2 className="text-lg font-bold mb-4 text-white">
-                        Delete Employment Type
-                    </h2>
-                    <p className="text-white mb-4">
-                        Are you sure you want to this Delete Employment Type? {selectedRow?.employment_type_list}   
-                    </p>
-                        <div className="flex justify-evenly gap-3 py-3">
-                            <PrimaryButton className="py-2"onClick={deleteSubmit}>
-                            Confirm
-                            </PrimaryButton>
-                            <PrimaryButton className="py-2"onClick={() => {
-                                setDeleteModal(false)}}>
-                            Close
-                            </PrimaryButton>
-                        </div>
+                <div className="p-6">
+                <h2 className="text-lg font-bold mb-4 text-white">
+                    Delete Employment Type
+                </h2>
+                <p className="text-white mb-4">
+                    Are you sure you want to this Delete Employment Type? {selectedRow?.employment_type_list}   
+                </p>
+                    <div className="flex justify-evenly gap-3 py-3">
+                        <PrimaryButton className="py-2"onClick={deleteSubmit}>
+                        Confirm
+                        </PrimaryButton>
+                        <PrimaryButton className="py-2"onClick={() => {
+                            setDeleteModal(false)}}>
+                        Close
+                        </PrimaryButton>
                     </div>
+                </div>
             </Modal>
+            )}
         </>
     );
 }

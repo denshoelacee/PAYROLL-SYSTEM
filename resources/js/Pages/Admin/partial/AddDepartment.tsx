@@ -122,6 +122,7 @@ export default function AddDepartment({jobTitleList}:Props) {
                 </PrimaryButton>
             </div>
             {/* Modal */}
+            {showModal && (
             <Modal show={showModal} onClose={() => {setShowModal(false);}} maxWidth="sm">
                 <div className="p-6">
                     <h2 className="text-lg font-semibold mb-4 text-white">Add Department Type</h2>
@@ -141,6 +142,8 @@ export default function AddDepartment({jobTitleList}:Props) {
                     </div>
                 </div>
             </Modal>
+            )}
+            {editModal && (
             <Modal show={editModal} onClose={() => {setEditModal(false);}} maxWidth="sm">
                 <div className="p-6">
                     <h2 className="text-lg font-semibold mb-4 text-white">Edit Department</h2>
@@ -160,6 +163,8 @@ export default function AddDepartment({jobTitleList}:Props) {
                     </div>
                 </div>
             </Modal>
+            )}
+            {deleteModal && (
             <Modal show={deleteModal} onClose={() => {setDeleteModal(false);}} maxWidth='sm' >
                     <div className="p-6">
                     <h2 className="text-lg font-bold mb-4 text-white">
@@ -179,6 +184,7 @@ export default function AddDepartment({jobTitleList}:Props) {
                         </div>
                     </div>
             </Modal>
+            )}
         </>
     );
 }

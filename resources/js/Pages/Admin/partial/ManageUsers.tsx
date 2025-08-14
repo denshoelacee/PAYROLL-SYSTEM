@@ -164,7 +164,7 @@ export default function ManageUserPartial({ employees}: Props) {
                     disabled={selectedRows.length === 0}
                     className= {selectedRows.length === 0 ? 'opacity-50 cursor-not-allowed ' : ''}
                 >
-                     <p className='text-[10px]'>Approve ({selectedRows.length})</p> 
+                    <p className='text-[10px]'>Approve ({selectedRows.length})</p> 
                 </PrimaryButton>
                 <PrimaryButton 
                     onClick={() => handleOpenBatchAction('batch-reject')}
@@ -203,47 +203,52 @@ export default function ManageUserPartial({ employees}: Props) {
                 </div>
             </div>
         </div>  
-        <Modal show={approveModal} onClose={() => setApproveModal(false)} maxWidth='sm'>
-            {actionType && selectedRow && (
-                <div className="p-6">
-                <h2 className="text-lg font-bold mb-4 text-white">
-                    {actionType === 'approve' ? 'Approve User' : 'Reject User'}
-                </h2>
-                <p className="text-white mb-4">
-                    Are you sure you want to {actionType} this user?    
-                </p>
-                    <div className="flex justify-evenly gap-3 py-3">
-                        <PrimaryButton className="py-2"onClick={handleSubmitAction}>
-                        Confirm
-                    </PrimaryButton>
-                    <PrimaryButton onClick={handleClose}>
-                        Close
-                    </PrimaryButton>
+            {/*Manual Approve and Rejection */}
+            {approveModal && (
+                <Modal show={approveModal} onClose={() => setApproveModal(false)} maxWidth='sm'>
+                {actionType && selectedRow && (
+                    <div className="p-6">
+                    <h2 className="text-lg font-bold mb-4 text-white">
+                        {actionType === 'approve' ? 'Approve User' : 'Reject User'}
+                    </h2>
+                    <p className="text-white mb-4">
+                        Are you sure you want to {actionType} this user?    
+                    </p>
+                        <div className="flex justify-evenly gap-3 py-3">
+                            <PrimaryButton className="py-2"onClick={handleSubmitAction}>
+                            Confirm
+                        </PrimaryButton>
+                        <PrimaryButton onClick={handleClose}>
+                            Close
+                        </PrimaryButton>
+                        </div>
                     </div>
-                </div>
+                )}
+                </Modal>
             )}
-            </Modal>
-
-            <Modal show={batchSubmit} onClose={() => setApproveModal(false)} maxWidth='sm'>
-            {actionType && selectedRows && (
-                <div className="p-6">
-                <h2 className="text-lg font-bold mb-4 text-white">
-                    {actionType === 'batch-approve' ? 'Approve User' : 'Reject User'}
-                </h2>
-                <p className="text-white mb-4">
-                    Are you sure you want to {actionType} this user?    
-                </p>
-                    <div className="flex justify-evenly gap-3 py-3">
-                        <PrimaryButton className="py-2"onClick={handleSubmitAction}>    
-                        Confirm
-                    </PrimaryButton>
-                    <PrimaryButton onClick={handleClose}>
-                        Close
-                    </PrimaryButton>
+            {/* Batch Submission*/}
+            {batchSubmit ?? (
+                <Modal show={batchSubmit} onClose={() => setApproveModal(false)} maxWidth='sm'>
+                {actionType && selectedRows && (
+                    <div className="p-6">
+                    <h2 className="text-lg font-bold mb-4 text-white">
+                        {actionType === 'batch-approve' ? 'Approve User' : 'Reject User'}
+                    </h2>
+                    <p className="text-white mb-4">
+                        Are you sure you want to {actionType} this user?    
+                    </p>
+                        <div className="flex justify-evenly gap-3 py-3">
+                            <PrimaryButton className="py-2"onClick={handleSubmitAction}>    
+                            Confirm
+                        </PrimaryButton>
+                        <PrimaryButton onClick={handleClose}>
+                            Close
+                        </PrimaryButton>
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
             </Modal>
+            )}
     </>
     )
 }

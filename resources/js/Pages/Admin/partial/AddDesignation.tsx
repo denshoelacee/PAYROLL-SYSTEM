@@ -123,6 +123,7 @@ export default function AddDesignation({jobTitleList}:Props) {
                 </PrimaryButton>
             </div>
             {/* Modal */}
+            {showModal && (
             <Modal show={showModal} onClose={() => setShowModal(false)} maxWidth="sm">
                 <form>
                 <div className="p-6">
@@ -144,6 +145,8 @@ export default function AddDesignation({jobTitleList}:Props) {
                 </div>
                 </form>
             </Modal>
+            )}
+            {editModal && (
             <Modal show={editModal} onClose={() => setEditModal(false)} maxWidth="sm">
                 <form>
                 <div className="p-6">
@@ -165,6 +168,8 @@ export default function AddDesignation({jobTitleList}:Props) {
                 </div>
                 </form>
             </Modal>
+            )}
+            {deleteModal && (
             <Modal show={deleteModal} onClose={() => setDeleteModal(false)} maxWidth='sm' >
                     <div className="p-6">
                     <h2 className="text-lg font-bold mb-4 text-white">
@@ -184,6 +189,7 @@ export default function AddDesignation({jobTitleList}:Props) {
                         </div>
                     </div>
             </Modal>
+        )}
         </>
     );
 }

@@ -5,6 +5,7 @@ import SecondaryButton from '@/Components/SecondaryButton'
 import { RiArrowDropDownLine,} from 'react-icons/ri'
 import { router } from "@inertiajs/react";
 import { AiOutlineFundView } from "react-icons/ai";
+import { Popover } from "@mui/material";
     
     type MonthlySummaryRow = {
         month: number;
@@ -111,7 +112,7 @@ import { AiOutlineFundView } from "react-icons/ai";
                             <button
                             key={selectedYear}
                             onClick={() => handleChange(selectedYear)}
-                            className="block w-full text-left px-4 py-1 hover:bg-mainColor"
+                            className="block w-full text-left px-4 py-1 hover:bg-white hover:text-black"
                             >
                             {selectedYear}
                             </button>
@@ -134,6 +135,8 @@ import { AiOutlineFundView } from "react-icons/ai";
                         </div>
                     </div>
                 </div> 
+                
             </>
         );
     }
+    

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 
-use App\Contracts\Services\Auth\IPasswordResetService;
+use App\Contracts\Services\Auth\PasswordResetServiceInterface;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ use Inertia\Response;
 
 class PasswordResetLinkController extends Controller
 {
-    public function __construct(protected IPasswordResetService $passResetService){}
+    public function __construct(protected PasswordResetServiceInterface $passResetService){}
 
     /**
      * Display the password reset link request view.
@@ -39,7 +39,7 @@ class PasswordResetLinkController extends Controller
     ]);
 
     try {
-        
+
         $validated = $request->only(['employee_id', 'secret_question', 'secret_answer']);
         $validated['secret_question'] = strtolower(trim($validated['secret_question']));
         $validated['secret_answer'] = strtolower(trim($validated['secret_answer']));

@@ -4,7 +4,7 @@ namespace App\Contracts\Services;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 
-interface IEmployeeService{
+interface EmployeeServiceInterface{
 
     public function approveAccount($id);
 

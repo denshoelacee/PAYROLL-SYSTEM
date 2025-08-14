@@ -4,7 +4,7 @@ namespace App\Contracts\Repository;
 
 use App\Models\PayrollDeduction;
 
-interface IPayrollDeductionRepository
+interface PayrollDeductionRepositoryInterface
 {
      public function create(array $data): PayrollDeduction;
 

@@ -11,12 +11,8 @@ class NewUserApprovalNotification extends Notification
 {
     use Queueable;
 
-    protected $newUser;
 
-    public function __construct($newUser)
-    {
-        $this->newUser = $newUser;
-    }
+    public function __construct(public $newUser){}
 
     public function via($notifiable)
     {
@@ -30,6 +26,6 @@ class NewUserApprovalNotification extends Notification
             'full_name' => $this->newUser->last_name . ', ' . $this->newUser->first_name,
             'registerMessage' => 'registered! Needs approval.',
         ];
-        
+
     }
 }

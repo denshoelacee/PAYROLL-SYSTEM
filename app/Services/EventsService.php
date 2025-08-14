@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
-use App\Contracts\Repository\IUserRepository;
-use App\Contracts\Services\IEventsService;
+use App\Contracts\Repository\UserRepositoryInterface;
+use App\Contracts\Services\EventsServiceInterface;
 
-class EventsService implements IEventsService
+class EventsService implements EventsServiceInterface
 {
-    public function __construct(protected IUserRepository $userReposiotry){}
+    public function __construct(protected UserRepositoryInterface $userRepository){}
 
 
     public function getCountPendingAccount()
     {
-        return $this->userReposiotry->getPendingUsers();
+        return $this->userRepository->getPendingUsers();
     }
 }

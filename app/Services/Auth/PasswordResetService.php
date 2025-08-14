@@ -2,13 +2,13 @@
 
 namespace App\Services\Auth;
 
-use App\Contracts\Repository\IUserRepository;
-use App\Contracts\Services\Auth\IPasswordResetService;
+use App\Contracts\Repository\UserRepositoryInterface;
+use App\Contracts\Services\Auth\PasswordResetServiceInterface;
 use Illuminate\Support\Facades\Hash;
 
-class PasswordResetService implements IPasswordResetService
+class PasswordResetService implements PasswordResetServiceInterface
 {
-    public function __construct(protected IUserRepository $userRepo) {}
+    public function __construct(protected UserRepositoryInterface $userRepo) {}
 
     public function resetPassword($validateReset)
     {

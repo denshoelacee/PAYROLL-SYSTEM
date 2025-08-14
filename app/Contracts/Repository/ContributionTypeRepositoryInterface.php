@@ -2,7 +2,7 @@
 
 namespace App\Contracts\Repository;
 
-interface IContributionTypeRepository
+interface ContributionTypeRepositoryInterface
 {
        public function getContribution();
 

@@ -4,8 +4,8 @@ namespace App\Contracts\Repository;
 
 use App\Models\Payroll;
 
-interface IPayrollRepository{
-    
+interface PayrollRepositoryInterface{
+
       public function setPayrollModel(array $data):Payroll;
 
       public function getPayrollThisMonth();
@@ -25,11 +25,11 @@ interface IPayrollRepository{
       public function getLatestGrossPayMonthly();
 
       public function getContributionsBreakdownMonthly();
-      
-      
+
+
       public function getPayrollReportsYearlyView($year,$month);
 
       //Employee SQL Request
       public function getEmployeePayslipReports($id, $year);
-      
+
 }

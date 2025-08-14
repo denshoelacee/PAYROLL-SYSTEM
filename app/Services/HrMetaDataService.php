@@ -2,15 +2,15 @@
 
 namespace App\Services;
 
-use App\Contracts\Repository\IContributionTypeRepository;
-use App\Contracts\Repository\IHrMetaDataRepository;
-use App\Contracts\Services\IHrMetaDataService;
+use App\Contracts\Repository\ContributionTypeRepositoryInterface;
+use App\Contracts\Repository\HrMetaDataRepositoryInterface;
+use App\Contracts\Services\HrMetaDataServiceInterface;
 
-class HrMetaDataService implements IHrMetaDataService
+class HrMetaDataService implements HrMetaDataServiceInterface
 {
     public function __construct(
-        protected IHrMetaDataRepository $hrMetaDataRepository,
-        protected IContributionTypeRepository $contributionTypeRepository
+        protected HrMetaDataRepositoryInterface       $hrMetaDataRepository,
+        protected ContributionTypeRepositoryInterface $contributionTypeRepository
     ){}
 
     public function jobTitleList()
@@ -19,7 +19,7 @@ class HrMetaDataService implements IHrMetaDataService
     }
 
     public function addJobTitle(array $data,$checker):void
-    {   
+    {
         //dd($data,$checker);
         if($checker === 'toDepartment')
         {

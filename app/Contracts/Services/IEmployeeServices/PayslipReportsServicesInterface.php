@@ -2,7 +2,7 @@
 
 namespace App\Contracts\Services\IEmployeeServices;
 
-interface IPayslipReportsServices
+interface PayslipReportsServicesInterface
 {
     public function fetchSortedPayslipsByUser($year);
 }

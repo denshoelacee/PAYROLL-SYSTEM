@@ -2,10 +2,10 @@
 
 namespace App\Repository;
 
-use App\Contracts\Repository\IPayrollDeductionRepository;
+use App\Contracts\Repository\PayrollDeductionRepositoryInterface;
 use App\Models\PayrollDeduction;
 
-class PayrollDeductionRepository implements IPayrollDeductionRepository
+class PayrollDeductionRepository implements PayrollDeductionRepositoryInterface
 {
 
     public function create(array $data): PayrollDeduction

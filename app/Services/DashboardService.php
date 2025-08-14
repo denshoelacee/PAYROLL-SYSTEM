@@ -2,18 +2,17 @@
 
 namespace App\Services;
 
-use App\Contracts\Repository\IPayrollRepository;
-use Carbon\Carbon;
-use App\Contracts\Repository\IUserRepository;
-use App\Contracts\Services\IDashboardService;
+use App\Contracts\Repository\PayrollRepositoryInterface;
+use App\Contracts\Repository\UserRepositoryInterface;
+use App\Contracts\Services\DashboardServiceInterface;
 
-class DashboardService implements IDashboardService{
+class DashboardService implements DashboardServiceInterface{
 
      public function __construct(
-                protected IUserRepository $userRepository,
-                protected IPayrollRepository $payrollRepository
+                protected UserRepositoryInterface    $userRepository,
+                protected PayrollRepositoryInterface $payrollRepository
      ) {}
-     
+
    public function getTaxAndUserSummary()
    {
         $totalUsers = $this->userRepository->countUser();

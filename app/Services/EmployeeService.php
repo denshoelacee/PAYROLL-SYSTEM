@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use App\Contracts\Repository\IUserRepository;
-use App\Contracts\Services\IEmployeeService;
+use App\Contracts\Repository\UserRepositoryInterface;
+use App\Contracts\Services\EmployeeServiceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class EmployeeService implements IEmployeeService{
+class EmployeeService implements EmployeeServiceInterface{
 
-    public function __construct(protected IUserRepository $userRepo){}
+    public function __construct(protected UserRepositoryInterface $userRepo){}
 
     public function approveAccount($id)
     {

@@ -2,15 +2,15 @@
 
 namespace App\Services\Auth;
 
-use App\Contracts\Services\Auth\IEditDeleteAccountService;
-use App\Contracts\Repository\IUserRepository;
+use App\Contracts\Services\Auth\EditDeleteAccountServiceInterface;
+use App\Contracts\Repository\UserRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 
 
-class EditDeleteAccountService implements IEditDeleteAccountService
+class EditDeleteAccountService implements EditDeleteAccountServiceInterface
 {
-    
-    public function __construct(protected IUserRepository $userRepo){}
+
+    public function __construct(protected UserRepositoryInterface $userRepo){}
 
     public function deleteAccount(int $user_id): bool
     {
@@ -25,7 +25,7 @@ class EditDeleteAccountService implements IEditDeleteAccountService
          if(!$find)
          {
            return false;
-         }  
+         }
 
           $find->delete();
 
@@ -35,7 +35,7 @@ class EditDeleteAccountService implements IEditDeleteAccountService
     public function editAccount($id,array $data)
     {
       $user = $this->userRepo->findById($id);
-      
+
       $user->update($data);
     }
 }

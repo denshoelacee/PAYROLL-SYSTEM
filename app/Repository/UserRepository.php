@@ -2,12 +2,12 @@
 
 namespace App\Repository;
 
-use App\Contracts\Repository\IUserRepository;
+use App\Contracts\Repository\UserRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
 
-class UserRepository implements IUserRepository{
+class UserRepository implements UserRepositoryInterface{
 
     public function getMonthlyUserStats(int $year): \Illuminate\Support\Collection
     {
@@ -65,7 +65,7 @@ class UserRepository implements IUserRepository{
     }
 
     public function executeBatchDecission(array $user_ids, string $checker): int
-    {  
+    {
         if (empty($user_ids)) {
             return 0;
         }
@@ -82,7 +82,7 @@ class UserRepository implements IUserRepository{
         return User::whereIn('user_id', $user_ids)
                ->update(['status' => $statusMap[$checker]]);
     }
-    
+
     public function batchDeleteAccount(array $user_ids):int
     {
         if (empty($user_ids)) {

@@ -2,15 +2,15 @@
 
 namespace App\Repository;
 
-use App\Contracts\Repository\IHrMetaDataRepository;
+use App\Contracts\Repository\HrMetaDataRepositoryInterface;
 use Illuminate\Validation\ValidationException;
 use App\Models\JobTitle;
 use App\Models\ContributionType;
 use App\Models\EmploymentType;
 
-class HrMetaDataRepository implements IHrMetaDataRepository
+class HrMetaDataRepository implements HrMetaDataRepositoryInterface
 {
- 
+
     public function getJobTitle()
     {
         return JobTitle::SELECT('id','department','designation')->get();
@@ -48,11 +48,11 @@ class HrMetaDataRepository implements IHrMetaDataRepository
     public function deleteJobTitleDepartment($id)
     {
         $find = JobTitle::findOrFail($id);
-        
+
         if($find->designation !== null){
 
             $find ->department = null;
-            $find->save(); 
+            $find->save();
         }else{
 
              $find->delete();
@@ -62,9 +62,9 @@ class HrMetaDataRepository implements IHrMetaDataRepository
     public function deleteJobTitleDesignation($id)
     {
         $find = JobTitle::findOrFail($id);
-        
+
         if($find->department !== null){
-           
+
             $find->designation = null;
             $find->save();
         }else{
@@ -99,8 +99,8 @@ class HrMetaDataRepository implements IHrMetaDataRepository
     public function create(array $data)
     {
         ContributionType::truncate();
-        
+
         return ContributionType::Create($data);
     }
 
-}   
+}

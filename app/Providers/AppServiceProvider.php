@@ -20,14 +20,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-       /* Inertia::share('test', function () {
-            return config('reverb');
-        });
-
-        Inertia::share('app_credit', function () {
-            return 'Developed by Deniel D. Ybañez, John Mark G. Tayone, Lanie P. Payot © ' . date('Y');
-        });
-        */
           Inertia::share('dev', fn () => config('sogema'));
 
           // Share a secure hash of the team JSON

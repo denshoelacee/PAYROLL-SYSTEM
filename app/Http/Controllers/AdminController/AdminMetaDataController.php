@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\AdminController;
-use App\Contracts\Services\IHrMetaDataService;
+use App\Contracts\Services\HrMetaDataServiceInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -9,14 +9,14 @@ use Inertia\Inertia;
 
 class AdminMetaDataController extends Controller
 {
-    public function __construct(protected IHrMetaDataService $metadataService){}
+    public function __construct(protected HrMetaDataServiceInterface $metadataService){}
 
     public function displayEmpTypeList()
     {
        $empTypeList = $this->metadataService->empTypeList();
        $jobTitleList = $this->metadataService->jobTitleList();
        $contributionType = $this->metadataService->displayContributionType();
-    
+
         return Inertia::render('Admin/Department',
                 [
                    'contributionType' => $contributionType,
@@ -28,11 +28,15 @@ class AdminMetaDataController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-        'rlip' => ['nullable', 'regex:/^\d{1,6}(\.\d{1,2})?$/'],
-        'philhealth' => ['nullable', 'regex:/^\d{1,6}(\.\d{1,2})?$/'],
+            'rlip' => ['nullable', 'numeric', 'lt:100', 'regex:/^\d{1,2}(\.\d{1,2})?$/'],
+            'philhealth' => ['nullable', 'numeric', 'lt:100', 'regex:/^\d{1,2}(\.\d{1,2})?$/'],
         ], [
-            'rlip.regex' => 'RLIP must be a number with up to 2 decimal places and max 999999.99.',
-            'philhealth.regex' => 'PhilHealth must be a number with up to 2 decimal places and max 999999.99.',
+            'rlip.numeric' => 'RLIP must be a valid number.',
+            'rlip.lt' => 'RLIP must be less than 100.',
+            'rlip.regex' => 'RLIP can have up to 2 decimal places only.',
+            'philhealth.numeric' => 'PhilHealth must be a valid number.',
+            'philhealth.lt' => 'PhilHealth must be less than 100.',
+            'philhealth.regex' => 'PhilHealth can have up to 2 decimal places only.',
         ]);
         try{
              $this->metadataService->addContributionType($validated);
@@ -42,7 +46,7 @@ class AdminMetaDataController extends Controller
         }
     }
     public function createEmploymentType(Request $request):RedirectResponse
-    {      
+    {
         $data = $request->validate([
             'employment_type_list' => 'nullable|string'
         ]);
@@ -55,11 +59,11 @@ class AdminMetaDataController extends Controller
     }
 
     public function updateEmploymentType(Request $request,int $id):RedirectResponse
-    {   
+    {
         $validated = $request->validate([
         'employment_type_list' => 'required|string'
         ]);
-        
+
         try{
             $this->metadataService->updateEmpType($id,$validated);
             return redirect()->back()->with('success','Employment Type updated Successfully!');
@@ -79,11 +83,11 @@ class AdminMetaDataController extends Controller
     }
 
     public function createPositions(Request $request)
-    {   
+    {
          $data = $request->validate([
             'department' => 'nullable|string|max:50',
             'designation' => 'nullable|string|max:50'
-         ]);       
+         ]);
 
          $checker = $request->input('checker');
 
@@ -110,7 +114,7 @@ class AdminMetaDataController extends Controller
          }
     }
 
-    public function deleteJobTitle(Request $request, $id)   
+    public function deleteJobTitle(Request $request, $id)
     {
          $checker = $request->input('checker');
          //dd($checker);

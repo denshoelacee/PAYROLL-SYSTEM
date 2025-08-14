@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\AdminController;
 
-use App\Contracts\Services\IPayrollReportsServices\IGeneratePayrollsReportService;
+use App\Contracts\Services\IPayrollReportsServices\GeneratePayrollsReportServiceInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,12 +11,12 @@ use Inertia\Inertia;
 class AdminPayrollReportsController extends Controller
 {
 
-    public function __construct(protected IGeneratePayrollsReportService $payrollReportsService){}
+    public function __construct(protected GeneratePayrollsReportServiceInterface $payrollReportsService){}
 
     public function payrollReportsYearly(Request $request)
     {
         $year = $request->year ?? now()->year;
-                    
+
         $monthlySummary = $this->payrollReportsService->generatePayrollReport($year);
 
         return Inertia::render('Admin/Reports',
@@ -25,12 +25,12 @@ class AdminPayrollReportsController extends Controller
             'monthlySummary' => $monthlySummary,
             'availableYears' => range(2025, now()->year),
         ]);
-       
+
     }
 
     public function payrollReportsYearlyView($year,$month)
     {
- 
+
         $details = $this->payrollReportsService->generatePayrollReportYearlyView($year,$month);
 
         $monthName = \Carbon\Carbon::create()->month($month)->format('F');

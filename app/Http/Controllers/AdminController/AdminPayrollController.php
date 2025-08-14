@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\AdminController;
 
-use App\Contracts\Services\IPayrollService;
-use App\Contracts\Services\IPayrollReportsServices\IGeneratePayslipsReportService;
+use App\Contracts\Services\PayrollServiceInterface;
+use App\Contracts\Services\IPayrollReportsServices\GeneratePayslipsReportServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditPublishRequest;
 use Illuminate\Http\Request;
@@ -13,21 +13,21 @@ class AdminPayrollController extends Controller
 {
 
     public function __construct(
-              protected IPayrollService $payrollService,
-              protected IGeneratePayslipsReportService $payslipsReportService
+              protected PayrollServiceInterface                $payrollService,
+              protected GeneratePayslipsReportServiceInterface $payslipsReportService
     ){}
-     
-    
+
+
     public function savePartial(EditPublishRequest $request)
     {
-      
+
        $this->payrollService->storePartial($request->validated());
-      
+
     }
 
      public function publish(EditPublishRequest $request)
-    {  
-      
+    {
+
        try{
          $this->payrollService->publish($request->validated());
          return Redirect()->back()->with("success","Payroll Publish Successfully!");
@@ -41,7 +41,7 @@ class AdminPayrollController extends Controller
       $thisMonth = $this->payrollService->payrollThisMonth();
 
       $newPayroll = $this->payrollService->usersWithoutPayrollForCurrentMonth();
-       
+
       $year = $request->year ?? now()->year;
       $month = $request->month ?? now()->month;
 
@@ -53,7 +53,7 @@ class AdminPayrollController extends Controller
         ];
     });
 
-    
+
       return Inertia::render('Admin/Payroll',
                [
                 'thisMonth' => $thisMonth,
@@ -70,8 +70,8 @@ class AdminPayrollController extends Controller
     public function editedPartialPublish(EditPublishRequest $request,$id)
     {
        $validated = $request->validated();
-       $validated['publish_status'] = $request->input('publish_status'); 
-      
+       $validated['publish_status'] = $request->input('publish_status');
+
        $this->payrollService->editedPartialPublishPayroll($validated,$id);
 
        redirect()->back()->with("success","Payroll Updated Successfully!");

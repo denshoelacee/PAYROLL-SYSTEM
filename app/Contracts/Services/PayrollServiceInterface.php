@@ -2,7 +2,7 @@
 
 namespace App\Contracts\Services;
 
-interface IPayrollService
+interface PayrollServiceInterface
 {
     public function payrollThisMonth();
 

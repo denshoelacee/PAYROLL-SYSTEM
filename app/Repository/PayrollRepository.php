@@ -2,21 +2,21 @@
 
 namespace App\Repository;
 
-use App\Contracts\Repository\IContributionTypeRepository;
-use App\Contracts\Repository\IPayrollDeductionRepository;
-use App\Contracts\Repository\IPayrollRepository;
-use App\Contracts\Repository\IUserRepository;
+use App\Contracts\Repository\ContributionTypeRepositoryInterface;
+use App\Contracts\Repository\PayrollDeductionRepositoryInterface;
+use App\Contracts\Repository\PayrollRepositoryInterface;
+use App\Contracts\Repository\UserRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll;
 use App\Models\User;
 use Carbon\Carbon;
 
-class PayrollRepository implements IPayrollRepository{
-    
+class PayrollRepository implements PayrollRepositoryInterface{
+
     public function __construct(
-        protected IUserRepository $userRepository,
-        protected IPayrollDeductionRepository $payrollDeductionRepo,
-        protected IContributionTypeRepository $contributionTypeRepo
+        protected UserRepositoryInterface             $userRepository,
+        protected PayrollDeductionRepositoryInterface $payrollDeductionRepo,
+        protected ContributionTypeRepositoryInterface $contributionTypeRepo
 
     ){}
 
@@ -27,7 +27,7 @@ class PayrollRepository implements IPayrollRepository{
 
     public function getPayrollThisMonth()
     {
-        
+
        return Payroll::with(['user', 'previousPayroll'])
                     ->whereMonth('created_at', now()->month)
                     ->whereYear('created_at', now()->year)
@@ -43,7 +43,7 @@ class PayrollRepository implements IPayrollRepository{
                         $query->whereBetween('created_at', [$startOfMonth, $endOfMonth]);})
                         ->with(['latestPayroll'])
                         ->get();
-    }  
+    }
 
     public function payrollModel(int $id): ?Payroll
     {
@@ -171,7 +171,7 @@ class PayrollRepository implements IPayrollRepository{
             DB::raw('CAST(payrolls.ucpb AS FLOAT) AS ucpb'),
             DB::raw('CAST((payroll_deductions.total_accrued_period) AS FLOAT) AS gross_salary'),
             DB::raw('CAST((payroll_deductions.total_deduction) AS FLOAT) AS total_deduction'),
-            DB::raw('CAST((payroll_deductions.net_pay) AS FLOAT) AS net_pay'), 
+            DB::raw('CAST((payroll_deductions.net_pay) AS FLOAT) AS net_pay'),
         ])
             ->where('publish_status', 'publish')
             ->whereMonth('payrolls.created_at', $month)
@@ -233,7 +233,7 @@ class PayrollRepository implements IPayrollRepository{
             ->map(function ($item) {
                 $item->month_name = \Carbon\Carbon::create()->month($item->month)->format('F');
                 return $item;
-            }); 
+            });
    }
 
     public function geTotalTaxThisMonth()
@@ -285,7 +285,7 @@ class PayrollRepository implements IPayrollRepository{
             ->selectRaw('
                 COALESCE(SUM(rlip), 0) AS gsis,
                 COALESCE(SUM(contributions), 0) AS pagibig,
-                COALESCE(SUM(philhealth),0) AS philhealth      
+                COALESCE(SUM(philhealth),0) AS philhealth
             ')
             ->where('publish_status', 'publish')
             ->whereBetween('created_at', [
@@ -297,7 +297,7 @@ class PayrollRepository implements IPayrollRepository{
             $data->gsis = (float) $data->gsis;
             $data->pagibig = (float) $data->pagibig;
             $data->philhealth = (float) $data->philhealth;
-            
+
         return $data;
 
     }

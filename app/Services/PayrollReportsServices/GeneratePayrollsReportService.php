@@ -2,13 +2,13 @@
 
 namespace App\Services\PayrollReportsServices;
 
-use App\Contracts\Repository\IPayrollRepository;
-use App\Contracts\Services\IPayrollReportsServices\IGeneratePayrollsReportService;
+use App\Contracts\Repository\PayrollRepositoryInterface;
+use App\Contracts\Services\IPayrollReportsServices\GeneratePayrollsReportServiceInterface;
 
-class GeneratePayrollsReportService implements IGeneratePayrollsReportService
+class GeneratePayrollsReportService implements GeneratePayrollsReportServiceInterface
 {
 
-    public function __construct(protected IPayrollRepository $payrollRepository){}
+    public function __construct(protected PayrollRepositoryInterface $payrollRepository){}
 
 
     public function generatePayrollReport($year)

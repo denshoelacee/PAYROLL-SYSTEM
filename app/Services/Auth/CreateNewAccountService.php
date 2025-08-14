@@ -2,23 +2,23 @@
 
 namespace App\Services\Auth;
 
-use App\Contracts\Repository\ISecretQuestionRepository;
-use App\Contracts\Repository\IUserRepository;
-use App\Contracts\Services\Auth\ICreateNewAccountService;
+use App\Contracts\Repository\SecretQuestionRepositoryInterface;
+use App\Contracts\Repository\UserRepositoryInterface;
+use App\Contracts\Services\Auth\CreateNewAccountServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class CreateNewAccountService implements ICreateNewAccountService
+class CreateNewAccountService implements CreateNewAccountServiceInterface
 {
 
       public function __construct(
-           protected IUserRepository $userRepo,
-           protected ISecretQuestionRepository $secretQuestionRepo
+           protected UserRepositoryInterface           $userRepo,
+           protected SecretQuestionRepositoryInterface $secretQuestionRepo
       ){}
 
 
       public function register(Request $request):void
-      {     
+      {
           $user = $this->userRepo->create([
               'employee_id' => $request->employee_id,
               'last_name'   => $request->last_name,
@@ -29,7 +29,7 @@ class CreateNewAccountService implements ICreateNewAccountService
               'basic_pay' => $request->basic_pay,
               'password'  => Hash::make($request['employee_id']),
               'status' => 'verified',
-              'role'   => $request->role 
+              'role'   => $request->role
           ]);
 
           $request->merge([

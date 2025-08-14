@@ -2,7 +2,7 @@
 
 namespace App\Contracts\Services;
 
-interface IEventsService
+interface EventsServiceInterface
 {
      public function getCountPendingAccount();
 }

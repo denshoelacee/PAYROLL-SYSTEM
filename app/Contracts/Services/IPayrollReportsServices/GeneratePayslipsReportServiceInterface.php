@@ -2,7 +2,7 @@
 
 namespace App\Contracts\Services\IPayrollReportsServices;
 
-interface IGeneratePayslipsReportService
+interface GeneratePayslipsReportServiceInterface
 {
 
      public function UserPayrollMonthly($year,$month);

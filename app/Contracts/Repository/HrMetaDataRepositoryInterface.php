@@ -3,13 +3,13 @@
 namespace App\Contracts\Repository;
 use App\Models\EmploymentType;
 
-interface IHrMetaDataRepository
+interface HrMetaDataRepositoryInterface
 {
     //CRUD JobTitle
     public function getJobTitle();
 
     public function addJobTitleDepartment(array $data);
-    
+
     public function addJobTitleDesignation(array $data);
 
     public function updateJobTitle($id,array $data);
@@ -17,7 +17,7 @@ interface IHrMetaDataRepository
     public function deleteJobTitleDepartment($id);
 
     public function deleteJobTitleDesignation($id);
-    
+
     //CRUD Employment Type
     public function getEmpTypeList();
     public function addEmpType(array $data);
@@ -27,5 +27,5 @@ interface IHrMetaDataRepository
 
     //Contribution
      public function create(array $data);
-    
+
 }

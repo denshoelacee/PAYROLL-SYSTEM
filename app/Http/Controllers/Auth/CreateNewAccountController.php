@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Contracts\Services\Auth\ICreateNewAccountService;
+use App\Contracts\Services\Auth\CreateNewAccountServiceInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class CreateNewAccountController extends Controller
 {
 
-    public function __construct(protected ICreateNewAccountService $createNewAccountService){}
+    public function __construct(protected CreateNewAccountServiceInterface $createNewAccountService){}
     public function store(Request $request):RedirectResponse
     {
        $request->validate([
@@ -23,7 +23,7 @@ class CreateNewAccountController extends Controller
             'basic_pay' => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'role' => 'required|string|max:50',
        ]);
-      
+
        try{
            $this->createNewAccountService->register($request);
            return redirect()->back()->with('success','Added new account successfully.');

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Contracts\Services\IHrMetaDataService;
-use App\Events\newRegister;
+use App\Contracts\Services\HrMetaDataServiceInterface;
+use App\Events\registerEvent;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Notifications\NewUserApprovalNotification;
@@ -18,8 +18,8 @@ use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
-    
-    public function __construct(protected IHrMetaDataService $metaDataService,){}
+
+    public function __construct(protected HrMetaDataServiceInterface $metaDataService,){}
 
     /**
      * Display the registration view.
@@ -33,7 +33,7 @@ class RegisteredUserController extends Controller
             return Inertia::render('Auth/Register',
                 ['Jobtitles' => $data,
                 'employeeTypeList' => $empTypeList]
-                
+
             );
     }
 
@@ -44,7 +44,7 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        
+
         $request->validate([
             'employee_id'     => 'required|integer',
             'last_name'       => 'required|string|max:50',
@@ -78,7 +78,7 @@ class RegisteredUserController extends Controller
             $user->answerQuestion()->create([
                 'secret_question' => $request->secret_question,
                 'secret_answer'   => Hash::make(strtolower(trim($request->secret_answer)))
-            ]);     
+            ]);
 
              $hrUsers = User::where('role', 'Admin')->get();
 
@@ -86,15 +86,14 @@ class RegisteredUserController extends Controller
             $hrUser->notify(new NewUserApprovalNotification($user));
             }
 
-            event(new newRegister($user));
-            return redirect()->route('login')->with('information','Register successfully, Please wait for approval.');     
-            
+            event(new registerEvent($user));
+            return redirect()->route('login')->with('information','Register successfully, Please wait for approval.');
+
         }
        catch(\Exception $e)
        {
             return redirect()->back()->with('error','Employee ID already taken.');
        }
-        
+
     }
 }
-    

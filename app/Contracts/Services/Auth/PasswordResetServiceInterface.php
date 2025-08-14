@@ -2,7 +2,7 @@
 
 namespace App\Contracts\Services\Auth;
 
-interface IPasswordResetService{
+interface PasswordResetServiceInterface{
 
     public function resetPassword($validateReset);
 }

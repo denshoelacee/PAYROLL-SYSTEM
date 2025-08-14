@@ -5,7 +5,7 @@ namespace App\Contracts\Repository;
 use App\Models\User;
 use Illuminate\Support\Collection;
 
-interface IUserRepository{
+interface UserRepositoryInterface{
 
     public function getMonthlyUserStats(int $year): Collection;
 
@@ -26,5 +26,5 @@ interface IUserRepository{
     public function create(array $data):User;
 
     public function findById(int $id): ?User;
-    public function countUser();  
+    public function countUser();
 }

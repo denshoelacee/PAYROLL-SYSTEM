@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\EmployeeController;
 
-use App\Contracts\Services\IEmployeeServices\IPayslipReportsServices;
+use App\Contracts\Services\IEmployeeServices\PayslipReportsServicesInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,7 +11,7 @@ use Inertia\Inertia;
 
 class EmployeeReportsController extends Controller
 {
-    public function __construct(protected IPayslipReportsServices $payslipReportsServices){}
+    public function __construct(protected PayslipReportsServicesInterface $payslipReportsServices){}
 
     public function userPayslipReports(Request $request)
     {

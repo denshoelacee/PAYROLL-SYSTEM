@@ -3,20 +3,14 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 
 class NewPayrollNotification extends Notification
 {
     use Queueable;
 
-  
-    protected $payslip;
 
-    public function __construct($payslip)
-    {
-        $this->payslip = $payslip;
-    }
+    public function __construct(public $payslip){}
 
     public function via($notifiable)
     {

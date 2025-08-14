@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\AdminController;
 
-use App\Contracts\Services\IDashboardService;
-use App\Contracts\Services\IPayrollReportsServices\IGeneratePayrollsReportService;
+use App\Contracts\Services\DashboardServiceInterface;
+use App\Contracts\Services\IPayrollReportsServices\GeneratePayrollsReportServiceInterface;
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class AdminDashboardController extends Controller
-{  
+{
     public function __construct(
-        protected IDashboardService $dashboardService,
-        protected IGeneratePayrollsReportService $payrollReportsService
-        
+        protected DashboardServiceInterface              $dashboardService,
+        protected GeneratePayrollsReportServiceInterface $payrollReportsService
+
     ){}
 
     public function dashboard(Request $request){
@@ -24,7 +24,7 @@ class AdminDashboardController extends Controller
         $summaryTotal = $this->dashboardService->getTaxAndUserSummary();
         $departmentGross = $this->dashboardService->latestGrossPayMonthly();
         $contributionBreakdown = $this->dashboardService->contributionBreakdown();
-        
+
         return Inertia::render('Admin/Dashboard',
             [
                 'yearlyReports'    => $yearlyReports,

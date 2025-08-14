@@ -2,7 +2,7 @@
 
 namespace App\Contracts\Services;
 
-interface IHrMetaDataService
+interface HrMetaDataServiceInterface
 {
     //JOBTITLE CRUD INTERFACE
     public function jobTitleList();
@@ -24,7 +24,7 @@ interface IHrMetaDataService
     //Contribution
     public function addContributionType(array $data);
     public function displayContributionType();
-    
+
 
 
 }

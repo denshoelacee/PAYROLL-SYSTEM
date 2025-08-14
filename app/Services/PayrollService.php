@@ -2,33 +2,32 @@
 
 namespace App\Services;
 
-use App\Contracts\Repository\IContributionTypeRepository;
-use App\Contracts\Repository\IPayrollRepository;
-use App\Contracts\Services\IPayrollService;
-use App\Contracts\Repository\IUserRepository;
-use App\Contracts\Repository\IPayrollDeductionRepository;
+use App\Contracts\Repository\ContributionTypeRepositoryInterface;
+use App\Contracts\Repository\PayrollRepositoryInterface;
+use App\Contracts\Services\PayrollServiceInterface;
+use App\Contracts\Repository\UserRepositoryInterface;
+use App\Contracts\Repository\PayrollDeductionRepositoryInterface;
 use App\Events\PayslipEvent;
 use App\Notifications\NewPayrollNotification;
-use App\Notifications\PayrollGenerated;
 
-class PayrollService implements IPayrollService
+class PayrollService implements PayrollServiceInterface
 {
 
     public function __construct(
-                   protected IPayrollRepository $payrollRepo,
-                   protected IUserRepository $userRepository,
-                   protected IContributionTypeRepository $contributionTypeRepo,
-                   protected IPayrollDeductionRepository $payrollDeductionRepo
+                   protected PayrollRepositoryInterface          $payrollRepository,
+                   protected UserRepositoryInterface             $userRepository,
+                   protected ContributionTypeRepositoryInterface $contributionTypeRepo,
+                   protected PayrollDeductionRepositoryInterface $payrollDeductionRepo
     ){}
 
     public function payrollThisMonth()
     {
-        return $this->payrollRepo->getPayrollThisMonth();
+        return $this->payrollRepository->getPayrollThisMonth();
     }
 
     public function usersWithoutPayrollForCurrentMonth()
     {
-        return $this->payrollRepo->getUsersWithoutPayrollForCurrentMonth();
+        return $this->payrollRepository->getUsersWithoutPayrollForCurrentMonth();
     }
 
 
@@ -39,7 +38,7 @@ class PayrollService implements IPayrollService
 
          $rlipContribution = $this->contributionTypeRepo->rlipDeduction($salary);
          $philContribution = $this->contributionTypeRepo->philDeduction($salary);
-         
+
          $totalContribution = $rlipContribution + $philContribution;
          $totalAccruedPeriod = $salary + ($data['pera'] ?? 0);
          $totalDeduction = $this->payrollDeductionRepo->calculateTotalDeduction($data,$totalContribution);
@@ -49,14 +48,14 @@ class PayrollService implements IPayrollService
            if (!$user){
             throw new \Exception('User not found');
           }
-       
+
        $data['rlip'] = $rlipContribution;
        $data['philhealth'] = $philContribution;
        $data['basic_salary'] = $salary;
        $data['publish_status'] = 'partial';
 
 
-       $payroll = $this->payrollRepo->setPayrollModel($data);
+       $payroll = $this->payrollRepository->setPayrollModel($data);
        $payroll->deduction()->create([
             'total_accrued_period' => $totalAccruedPeriod,
             'total_deduction' => $totalDeduction,
@@ -72,7 +71,7 @@ class PayrollService implements IPayrollService
 
          $rlipContribution = $this->contributionTypeRepo->rlipDeduction($salary);
          $philContribution = $this->contributionTypeRepo->philDeduction($salary);
-         
+
          $totalContribution = $rlipContribution + $philContribution;
          $totalAccruedPeriod = $salary + ($data['pera'] ?? 0);
          $totalDeduction = $this->payrollDeductionRepo->calculateTotalDeduction($data,$totalContribution);
@@ -82,14 +81,14 @@ class PayrollService implements IPayrollService
            if (!$user){
             throw new \Exception('User not found');
           }
-       
-          
+
+
        $data['rlip'] = $rlipContribution;
        $data['philhealth'] = $philContribution;
        $data['basic_salary'] = $salary;
        $data['publish_status'] = 'publish';
 
-       $payroll = $this->payrollRepo->setPayrollModel($data);   
+       $payroll = $this->payrollRepository->setPayrollModel($data);
 
        $payroll->deduction()->create([
             'total_accrued_period' => $totalAccruedPeriod,
@@ -105,11 +104,11 @@ class PayrollService implements IPayrollService
     public function editedPartialPublishPayroll(array $data,$id):void
     {
          if($data['publish_status'] === 'publish'){
-            $this->payrollRepo->updatePublish($data,$id);
+            $this->payrollRepository->updatePublish($data,$id);
          }
          if($data['publish_status'] === 'partial')
          {
-           $this->payrollRepo->updatePartial($data,$id);
+           $this->payrollRepository->updatePartial($data,$id);
          }
 
     }

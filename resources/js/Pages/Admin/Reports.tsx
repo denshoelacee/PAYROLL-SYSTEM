@@ -28,7 +28,8 @@ export default function Reports({auth,selectedYear,monthlySummary,availableYears
                     <ReportsPartial 
                     selectedYear={selectedYear} 
                     monthlySummary={monthlySummary}
-                    availableYears={availableYears}/>
+                    availableYears={availableYears}
+                    />
               </AdminLayout>
             </div>
 

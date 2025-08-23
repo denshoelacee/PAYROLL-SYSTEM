@@ -5,23 +5,27 @@ import SecondaryButton from '@/Components/SecondaryButton'
 import { RiArrowDropDownLine,} from 'react-icons/ri'
 import { router } from "@inertiajs/react";
 import { AiOutlineFundView } from "react-icons/ai";
-import { Popover } from "@mui/material";
-    
-    type MonthlySummaryRow = {
-        month: number;
-        month_name: string;
-        total_gross: number;
-        total_deduction: number;
-        net_pay: number;
-    };
+import {useMemo, useState } from "react";
+import '../../../../styles/style.css';
 
-    type Props = {
-        selectedYear: string;
-        monthlySummary: MonthlySummaryRow[];
-        availableYears: number[];
-    };
+type MonthlySummaryRow = {
+    month: number;
+    month_name: string;
+    total_gross: number;
+    total_deduction: number;
+    net_pay: number;
+};
 
-    export default function ReportsPartial({selectedYear,availableYears,monthlySummary}:Props) {
+type Props = {
+    selectedYear: string;
+    monthlySummary: MonthlySummaryRow[];
+    availableYears: number[];
+};
+
+export default function ReportsPartial({selectedYear,availableYears,monthlySummary}:Props) {
+        const TABS = ["Regular", "Part-Time", "Job-Order"]
+        const [activeTab, setActiveTab] = useState('Regular');
+
         const handleChange = (selectedYear:number) => {
             router.get(route("admin.payroll.summary"), { year: selectedYear }, { preserveState: true });
         };
@@ -29,53 +33,15 @@ import { Popover } from "@mui/material";
         const handleView = (data:MonthlySummaryRow) => {
             router.visit(`payroll/${selectedYear}/${data.month}/view/summary`)
         }
-        const columns: GridColDef[] = [
-        {
-            field: 'month_name',
-            headerName: 'Month',
-            flex: 1,
-            align: 'center',
-            headerAlign: 'center',
-            sortable: false,
+        const columns: GridColDef[]= useMemo(
+        () => [
+        {field: 'month_name',headerName: 'Month',flex: 1,align: 'center',headerAlign: 'center',sortable: false,
         },
-        {
-            field: 'total_gross',
-            headerName: 'Total Gross',
-            flex: 1,
-            align: 'center',
-            headerAlign: 'center',
-            sortable: false,
-            renderCell: (params) => (
-            <span>
-            ₱ {Number(params.value).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
-            </span>
-        )
+        {field: 'total_gross',headerName: 'Total Gross',flex: 1,align: 'center',headerAlign: 'center',sortable: false,renderCell: (params) => (<span>₱ {Number(params.value).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</span>)
         },
-        {
-            field: 'total_deduction',
-            headerName: 'Total Deduction',
-            flex: 1,
-            align: 'center',
-            headerAlign: 'center',
-            sortable: false,
-            renderCell: (params) => (
-            <span>
-            ₱ {Number(params.value).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
-            </span>
-        )
+        {field: 'total_deduction',headerName: 'Total Deduction',flex: 1,align: 'center',headerAlign: 'center',sortable: false,renderCell: (params) => (<span>₱ {Number(params.value).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</span>)
         },
-        {
-            field: 'net_pay',
-            headerName: 'Total Net Pay',
-            flex: 1,
-            align: 'center',
-            headerAlign: 'center',
-            sortable: false,
-            renderCell: (params) => (
-            <span>
-            ₱ {Number(params.value).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
-            </span>
-        )
+        {field: 'net_pay',headerName: 'Total Net Pay',flex: 1,align: 'center',headerAlign: 'center',sortable: false,renderCell: (params) => (<span>₱ {Number(params.value).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</span>)
         },
         {
             field: 'actions',
@@ -96,44 +62,67 @@ import { Popover } from "@mui/material";
             </div>
             ),
         },
-        ];
+        ],[handleView]);
         return (
             <>
-                <div className="w-[200px]">
+                <div className="w-[300px]">
                     <Dropdown>
-                    <Dropdown.Trigger>
-                    <SecondaryButton className="flex w-full justify-between items-center md:w-[200px] border">
-                        {<p className="text-sm">{selectedYear || "Select Year"}</p>}
-                        <RiArrowDropDownLine className="text-2xl transition-transform duration-500 ease-in-out" />
-                    </SecondaryButton>
-                    </Dropdown.Trigger>
-                    <Dropdown.Content contentClasses="w-[200px] bg-[#1B4D4D]" align="left">
-                        {availableYears.map((selectedYear) => (
-                            <button
-                            key={selectedYear}
-                            onClick={() => handleChange(selectedYear)}
-                            className="block w-full text-left px-4 py-1 hover:bg-white hover:text-black"
-                            >
-                            {selectedYear}
-                            </button>
-                        ))}
-                    </Dropdown.Content>
-                </Dropdown>
+                        <Dropdown.Trigger>
+                        <SecondaryButton className="flex w-full justify-between items-center md:w-[200px] border">
+                            {<p className="text-sm">{selectedYear || "Select Year"}</p>}
+                            <RiArrowDropDownLine className="text-2xl transition-transform duration-500 ease-in-out" />
+                        </SecondaryButton>
+                        </Dropdown.Trigger>
+                        <Dropdown.Content contentClasses="w-[200px] bg-[#1B4D4D]" align="left">
+                            {availableYears.map((selectedYear) => (
+                                <button
+                                key={selectedYear}
+                                onClick={() => handleChange(selectedYear)}
+                                className="block w-full text-left px-4 py-1 hover:bg-white hover:text-black"
+                                >
+                                {selectedYear}
+                                </button>
+                            ))}
+                        </Dropdown.Content>
+                    </Dropdown>
+                    <div className="gap-5 flex py-7 w-full">
+                    {TABS.map((tab) => (
+                        <button
+                        key={tab}
+                        type="button"
+                        className={`custom-hover text-white ${
+                            activeTab === tab ? "border-b-2 border-yellow-500" : ""
+                        }`}
+                        onClick={() => setActiveTab(tab)}
+                        >
+                        {tab}
+                        </button>
+                    ))}
                 </div>
-                <div className='py-5'>
-                    <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg w-full">
-                        <h2 className="text-lg font-semibold my-3 mx-5 text-white">List of Reports</h2>
-                        <div className="h-[530px] overflow-auto scrollbar-hidden">
-                            <Table
+                </div>
+                <div>
+                    {TABS.map((tab) => (
+                        <div
+                            key={tab}
+                            className={`${
+                            activeTab === tab ? "block" : "hidden"
+                            } bg-[#16423C] border border-button-border-color rounded-lg w-full`}
+                        >
+                            <h2 className="text-lg font-semibold my-3 mx-5 text-white">
+                            Reports for {tab}
+                            </h2>
+                            <div className="h-[530px] overflow-auto scrollbar-hidden">
+                                <Table
                                 rows={monthlySummary}
                                 columns={columns}
                                 hideFooter={true}
                                 pageSize={12}
                                 getRowId={(row) => row.month}
                                 className="employee-table"
-                            />
+                                />
+                            </div>
                         </div>
-                    </div>
+                        ))}
                 </div> 
                 
             </>

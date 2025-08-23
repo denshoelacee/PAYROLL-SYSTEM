@@ -5,8 +5,8 @@ import { FaArrowLeft } from "react-icons/fa"
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { UserPayroll } from "@/types"
-import generatemonthlyReport from "./partial/reports/regularmonthlyReport"
-import generateSundry from "./partial/reports/regularsundry"
+import generatemonthlyReport from "./partial/reports/reportsexcel/regularmonthlyReport"
+import generateSundry from "./partial/reports/reportsexcel/regularsundry"
 import { LiaPrintSolid } from "react-icons/lia";
 import { Head } from "@inertiajs/react"
 
@@ -93,31 +93,38 @@ export default function ViewReport({viewReport,headerMonthTitle,headerYearTitle}
         {field: 'net_pay',headerName: 'Net Pay',flex: 1,align: 'center',headerAlign: 'center',sortable: false,
             renderCell: (params) => Number(params.value ?? 0)
         },
-        {field: 'signature',headerName: 'Signature',flex: 1,align: 'center',headerAlign: 'center',sortable: false,},
     ]
     
     return(
         <>
         <Head title={`${headerMonthTitle} Reports`} />  
         <div className="bg-mainColor p-5 h-screen font-Inter">
-            <div className="w-full mb-4">
-                <PrimaryButton className="w-[150px]" onClick={() => window.history.back()}>
-                    <div className="flex justify-center items-center">
-                        <FaArrowLeft className="text-xl mx-2" />
-                        <p>Back</p>
-                    </div>
-                </PrimaryButton>
+            <div className="flex justify-between items-center mb-4">
+                <div className="w-[120px] flex justify-between gap-5">
+                    <PrimaryButton className="w-6" onClick={() => window.history.back()}>
+                        <div className="flex justify-center items-center">
+                            <FaArrowLeft className="text-xl mx-2" />
+                            <p>Back</p>
+                        </div>
+                    </PrimaryButton>
+                </div>
+                <div className="w-[300px] flex justify-between gap-5">
+                    <PrimaryButton onClick={exportToExcel}>
+                        <div className="flex justify-center gap-6 place-items-center">
+                            <LiaPrintSolid className="text-2xl"/>
+                        <p>Download Excel</p>
+                        </div>
+                    </PrimaryButton>
+                </div>
             </div>
 
             <div className="flex justify-between w-full mb-4">
-                <p className="text-white ">
-                PAYROLL FOR REGULAR EMPLOYEES FOR {headerMonthTitle} 2025
-                </p>
-                <PrimaryButton className="w-[250px]" onClick={exportToExcel}>
-                <div className="flex justify-center gap-6 place-items-center">
-                    <LiaPrintSolid className="text-2xl"/>
-                <p>Download Excel</p>
-                </div></PrimaryButton>
+                <div className="">
+                    <p className="text-white ">
+                    PAYROLL FOR REGULAR EMPLOYEES FOR {headerMonthTitle} 2025
+                    </p>
+                </div>
+                
             </div>
 
             {/* Responsive horizontal scroll wrapper */}

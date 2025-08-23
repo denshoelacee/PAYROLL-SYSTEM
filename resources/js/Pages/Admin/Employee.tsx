@@ -25,7 +25,6 @@ export default function Employees({ auth, pendingUsers,employeeList,jobtitles,em
                 <Sidebar auth={auth} />
                 <AdminLayout title="Employee Management">
                     <div className="gap-5 flex py-7 sm:py-10 md:py-5 lg:py-2 ">
-
                         <button type="button" className={`custom-hover text-white ${ActiveTab === 'manageusers' && (
                             "border-b-2 border-yellow-500 "
                         )}`}onClick={() => setActiveTab('manageusers')}>

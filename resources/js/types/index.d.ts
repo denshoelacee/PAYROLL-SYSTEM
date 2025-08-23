@@ -10,12 +10,22 @@ export interface User {
     first_name: string;
     last_name: string;
     role: string;
-    user_id: number;
+    user_id: number | string;
+}
+
+export interface filteredSelectedTypeUser{
+    user_id: number | string;
+    employee_id: number;
+    full_name: string;
+    hashid: string;
+
+    payroll?: UserPayroll
 }
 
     export interface Employee{
-        user_id:number;
+        user_id: number |string ;
         employee_id: number;
+        full_name: string;
         first_name:string;
         last_name: string;
         basic_pay:number;
@@ -25,7 +35,7 @@ export interface User {
         role: string;
         status: string;
 
-        latest_payroll?: UserPayroll
+      //  latest_payroll?: UserPayroll
     }
 
 
@@ -36,45 +46,67 @@ export interface User {
     }
 
     export interface UserPayroll extends Employee{
-        payroll_id: number;
-        first_name:string;
-        last_name: string;
-        basic_salary: number | null;
-        pera: number | null;
-        absent: number | null;
-        late: number | null;
-        holding_tax: number | null;
-        tax_bal_due: number | null;
-        rlip: number | null;
-        policy_loan: number | null;
-        consol_loan: number | null;
-        emerg_loan: number | null;
-        gel: number | null;
-        gfal: number | null;
-        mpl: number | null;
-        mpl_lite: number | null;
-        contributions: number | null;
-        loans: number | null;
-        housing_loan: number | null;
-        philhealth: number | null;
-        cfi: number | null;
-        tipid: number | null;
-        city_savings_bank: number | null;
-        fea: number | null;
-        canteen: number | null;
-        disallowance: number | null;
-        unliquidated_ca: number | null;
-        disallowance_honoraria: number | null;
-        coop: number | null;
-        landbank: number | null;
-        ucpb: number | null;
-        publish_status: 'publish' | 'partial' | 'none';
-        created_at: string;
-        updated_at: string;
-
+        user_id: number;
+        basic_pay: number;
+        latest_employment_role:{
+           role_id: number;
+           user_id: number;
+           designation: string;
+           department: string;
+        };
+        latest_payroll:{
+            employee_id: number;
+            payslip_id: number | string;
+            payroll_id: number | null;
+            full_name: string;
+            daily_rate: number | null,
+            duty_count: number | null,
+            hourly_rate: number | null;
+            units: number | null;
+            service_rendered: number | null;
+            basic_salary: number | null;
+            pera: number| null;
+            absent: number | null;
+            late: number | null;
+            holding_tax: number | null;
+            tax_bal_due: number | null;
+            rlip: number | null;
+            policy_loan: number | null;
+            consol_loan: number | null;
+            emerg_loan: number | null;
+            gel: number | null;
+            gfal: number | null;
+            mpl: number | null;
+            mpl_lite: number | null;
+            contributions: number | null;
+            loans: number | null;
+            housing_loan: number | null;
+            philhealth: number | null;
+            cfi: number | null;
+            tipid: number | null;
+            city_savings_bank: number | null;
+            fea: number | null;
+            canteen: number | null;
+            disallowance: number | null;
+            unliquidated_ca: number | null;
+            disallowance_honoraria: number | null;
+            coop: number | null;
+            landbank: number | null;
+            ucpb: number | null;
+            sss: number| null;
+            deduction1: number | null;
+            deduction2: number | null;
+            deduction3: number | null;
+            publish_status: 'publish' | 'partial' | 'none';
+            created_at: string;
+            updated_at: string;
+        };
+       
+      
+        //Payroll Deductions for Regular,Job Order
         total_accrued_period?:number
-        total_deduction?: number; // Optional field for total deductions
-        net_pay?: number; // Optional field for net pay
+        total_deduction?: number; 
+        net_pay?: number; 
 
         users?:Employee
         previousPayroll?: UserPayroll

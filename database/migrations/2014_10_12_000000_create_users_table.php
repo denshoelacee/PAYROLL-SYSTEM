@@ -13,17 +13,16 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('user_id');
-            $table->unsignedBigInteger('employee_id')->unique();
-            $table->string('last_name');
-            $table->string('first_name');
-            $table->string('designation');
-            $table->string('department');
+            $table->unsignedInteger('employee_id')->unique();
+            $table->string('last_name', 50);
+            $table->string('first_name', 50);
+            $table->string('designation', 50);
+            $table->string('department', 50);
             $table->decimal('basic_pay',10,2)->nullable();
             $table->string('password');
-            $table->string('employment_type');
+            $table->string('employment_type', 50);
             $table->enum('status', ['verified', 'rejected', 'pending'])->default('pending');
             $table->enum('role', ['Admin','User'])->default('User');
-            $table->rememberToken();
             $table->timestamps();
         });
         

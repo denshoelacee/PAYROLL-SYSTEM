@@ -66,6 +66,8 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/payroll/updatePartialPublish/{id}', [AdminPayrollController::class, 'editedPartialPublish'])->name('admin.payroll.update-partial-publish');
     Route::get('/reports/summary',[AdminPayrollReportsController::class,'payrollReportsYearly'])->name('admin.payroll.summary');
     Route::get('/reports/payroll/{year}/{month}/view/summary',[AdminPayrollReportsController::class,'payrollReportsYearlyView'])->name('admin.payroll.view.summary');
+    Route::post('/payroll/select/{type}',[AdminPayrollController::class,'payrollThisDay'])->name('admin.payroll.filtered.type');
+    Route::get('/payroll/select/{type}/{id}', [AdminPayrollController::class, 'payrollThisDay']);
 
     //Admin Actions Controller
     Route::post('/added-user',[CreateNewAccountController::class,'store'])->name('add.new.account');

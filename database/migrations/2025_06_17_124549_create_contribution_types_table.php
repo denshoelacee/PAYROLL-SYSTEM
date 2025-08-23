@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('contribution_types', function (Blueprint $table) {
-            $table->bigIncrements('contribution_type_id');
-            $table->decimal('rlip', 8,2);
-            $table->decimal('philhealth',8,2);
+            $table->mediumIncrements('contribution_type_id');
+            $table->decimal('rlip', 8,2)->nullable();
+            $table->decimal('philhealth',8,2)->nullable();
             $table->timestamps(); 
         });
     }

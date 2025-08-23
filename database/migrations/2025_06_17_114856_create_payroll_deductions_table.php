@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payroll_deductions', function (Blueprint $table) {
-            $table->bigIncrements('payroll_deduction_id');
-            $table->unsignedBigInteger('payroll_id')->nullable();
+            $table->integerIncrements('payroll_deduction_id');
+            $table->unsignedInteger('payroll_id')->nullable();
             $table->decimal('total_accrued_period',10,2);
             $table->decimal('total_deduction',10,2);
             $table->decimal('net_pay',10,2);

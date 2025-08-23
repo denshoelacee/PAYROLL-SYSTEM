@@ -8,9 +8,11 @@ interface PayrollRepositoryInterface{
 
       public function setPayrollModel(array $data):Payroll;
 
-      public function getPayrollThisMonth();
+      public function getSelectEmploymentSalaryType($employmentType);
 
-      public function getUsersWithoutPayrollForCurrentMonth();
+    //  public function getPayrollThisMonth();
+
+      public function getUsersWithoutPayrollForCurrentMonth($id);
 
       public function updatePartial(array $data,$id): void;
 

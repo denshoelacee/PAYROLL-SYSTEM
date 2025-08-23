@@ -8,10 +8,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\EditPublishRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\User;
+use App\Traits\Hashable;
 
 class AdminPayrollController extends Controller
 {
-
+    use Hashable;
     public function __construct(
               protected PayrollServiceInterface                $payrollService,
               protected GeneratePayslipsReportServiceInterface $payslipsReportService
@@ -36,36 +38,41 @@ class AdminPayrollController extends Controller
        }
     }
 
-    public function payrollThisDay(Request $request)
-    {
-      $thisMonth = $this->payrollService->payrollThisMonth();
+public function payrollThisDay(Request $request, $type, $hash_id = null)
+{
+  
+    $year = $request->year ?? now()->year;
+    $month = $request->month ?? now()->month;
+    $selectedType = $request->input('employmentType') ?? $type; 
 
-      $newPayroll = $this->payrollService->usersWithoutPayrollForCurrentMonth();
+    $id = $this->decodeHash($hash_id);
 
-      $year = $request->year ?? now()->year;
-      $month = $request->month ?? now()->month;
+    $filteredEmployementType = $this->payrollService->selectEmploymentSalaryType($selectedType);
 
-      $payslips = $this->payslipsReportService->UserPayrollMonthly($year, $month);
-      $months = collect(range(1, 12))->map(function ($m) {
-        return [
+    $newPayroll = $this->payrollService->usersWithoutPayrollForCurrentMonth($id);
+    
+    $payslips = $this->payslipsReportService->UserPayrollMonthly($year, $month);                 
+
+//dd($payslips,$newPayroll);
+
+    $months = collect(range(1, 12))->map(function ($m) {
+        return [    
             'number' => str_pad($m, 2, '0', STR_PAD_LEFT),
             'name' => \Carbon\Carbon::create()->month($m)->format('F'),
         ];
     });
 
+    return Inertia::render('Admin/Payroll', [
+        'newPayroll' => $newPayroll,
+        'filteredEmployementType' => $filteredEmployementType,
+        'payslips' => $payslips,
+        'availableYears' => range(2025, now()->year),
+        'availableMonths' => $months,
+        'selectedYear' => (string)$year,
+        'selectedMonth' => str_pad($month, 2, '0', STR_PAD_LEFT),
+    ]);
+}
 
-      return Inertia::render('Admin/Payroll',
-               [
-                'thisMonth' => $thisMonth,
-                'newPayroll' => $newPayroll,
-                'payslips' => $payslips,
-                'availableYears' => range(2025, now()->year),
-                'availableMonths' => $months,
-                'selectedYear' => (string)$year,
-                'selectedMonth' => str_pad($month, 2, '0', STR_PAD_LEFT),
-                ]
-      );
-    }
 
     public function editedPartialPublish(EditPublishRequest $request,$id)
     {

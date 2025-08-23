@@ -1,5 +1,5 @@
 import SecondaryButton from "@/Components/SecondaryButton";
-import {Employee,UserPayroll } from "@/types"
+import {Employee,UserPayroll , filteredSelectedTypeUser} from "@/types"
 import { GridColDef } from "@mui/x-data-grid";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import Dropdown from "@/Components/Dropdown";
@@ -20,15 +20,15 @@ type MonthOption = {
 
 type Props = {
     payrollthisMonth : UserPayroll[];
-    newPayroll: Employee[];
+    newPayroll: UserPayroll[];
     payslips: UserPayroll[];
     availableYears: number[];
     availableMonths: MonthOption[];
     selectedYear: string;
     selectedMonth: string;
-    
+    filteredEmployementType: filteredSelectedTypeUser[];
 }
-export default function PayrollPartial ({newPayroll,payslips,availableYears,availableMonths,selectedYear,selectedMonth}:Props) {
+export default function PayrollPartial ({newPayroll,payslips,availableYears,availableMonths,selectedYear,selectedMonth,filteredEmployementType}:Props) {
     const [addModal, setAddModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -37,7 +37,7 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
     const filteredRows = useMemo(() => {
     return payslips
         .filter((row) => {
-        const date = new Date(row?.created_at);
+        const date = new Date(row?.latest_payroll?.created_at);
         const yearMatch = date.getFullYear().toString() === selectedYear;
         const monthMatch = (date.getMonth() + 1).toString().padStart(2, '0') === selectedMonth;
         return yearMatch && monthMatch;
@@ -52,7 +52,7 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
         }));
     }, [payslips, selectedYear, selectedMonth, searchQuery]);
 
-
+    console.log(payslips)
     const handleOpenPopover = (event:any, row:UserPayroll) => {
             setAnchorEl(event.currentTarget);
             setSelectedRow(row);
@@ -116,7 +116,7 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
 
     const handleView = (row: UserPayroll) => {
     localStorage.setItem('selectedPayroll', JSON.stringify(row));
-    router.visit(`/admin/payroll/Payslip/${row.payroll_id}`);
+    router.visit(`/admin/payroll/Payslip/${row.latest_payroll.payroll_id}`);
     };
 
     return (
@@ -200,7 +200,7 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
 
             {/*Add Modal*/}
             (addModal && (
-                <PayrollAddModal show={addModal} onClose={() => setAddModal(false)} newPayroll={newPayroll}/>
+                <PayrollAddModal show={addModal} onClose={() => setAddModal(false)} newPayroll={newPayroll} filteredEmployementType={filteredEmployementType}/>
             ))
             {/*Edit Modal */}
             {editModal && selectedRow && (
@@ -218,8 +218,8 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
                 >
                 <div className=" w-48 bg-mainColor shadow-md text-sm text-white">
                     <button
-                        disabled={selectedRow?.publish_status === 'publish'}
-                        className={`${selectedRow?.publish_status === 'publish' ? 'cursor-not-allowed opacity-50' : ''} w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100`}
+                        disabled={selectedRow?.latest_payroll.publish_status === 'publish'}
+                        className={`${selectedRow?.latest_payroll.publish_status === 'publish' ? 'cursor-not-allowed opacity-50' : ''} w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100`}
                         onClick={() => {
                             setAnchorEl(null);
                             setEditModal(true);

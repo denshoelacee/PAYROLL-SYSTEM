@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Payroll;
+use App\Models\UserEmploymentRole;
 
 class User extends Authenticatable
 {
@@ -35,6 +36,11 @@ class User extends Authenticatable
         'role'
     ];
 
+    public function roles(){
+
+        return $this->hasMany(UserEmploymentRole::class, 'user_id');
+    }
+
     public function payrolls(){
 
         return $this->hasMany(Payroll::class,'user_id','user_id');
@@ -47,10 +53,15 @@ class User extends Authenticatable
 
     public function latestPayroll(){
 
-    return $this->hasOne(Payroll::class, 'user_id', 'user_id')
-        ->latest('created_at');
+        return $this->hasOne(Payroll::class, 'user_id', 'user_id')
+                    ->latest('created_at');
     }
 
+    public function latestEmploymentRole(){
+
+        return $this->hasOne(UserEmploymentRole::class, 'user_id')
+                    ->latest('created_at');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -59,7 +70,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -68,7 +78,6 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
 }

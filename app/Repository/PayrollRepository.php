@@ -22,27 +22,56 @@ class PayrollRepository implements PayrollRepositoryInterface{
 
     public function setPayrollModel(array $data):Payroll
     {
-        return $payroll = Payroll::create($data);
+        return Payroll::create($data);
     }
 
-    public function getPayrollThisMonth()
+    public function getSelectEmploymentSalaryType($employmentType)
     {
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
 
-       return Payroll::with(['user', 'previousPayroll'])
-                    ->whereMonth('created_at', now()->month)
-                    ->whereYear('created_at', now()->year)
-                    ->get();
+        $query = User::select([
+            'user_id',
+            'employee_id',
+            DB::raw("CONCAT(first_name, ', ', last_name) AS full_name")
+        ]);
+
+        if ($employmentType === 'Job Order') {
+            $query->whereHas('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
+                $q->whereBetween('created_at', [$startOfMonth, $endOfMonth]);
+            }, '<', 2);
+        } else {
+            $query->whereDoesntHave('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
+                $q->whereBetween('created_at', [$startOfMonth, $endOfMonth]);
+            })
+            ->whereDoesntHave('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
+                $q->whereBetween('created_at', [$startOfMonth, $endOfMonth]);
+            });
+        }
+
+        if ($employmentType === 'Part-Time') {
+            $query->whereIn('users.employment_type', ['Regular', 'Job Order', 'Part-Time']);
+        } else {
+            $query->where('users.employment_type', $employmentType);
+        }
+
+        return $query->get();
     }
 
-    public function getUsersWithoutPayrollForCurrentMonth()
+    public function getUsersWithoutPayrollForCurrentMonth($id)
     {
-         $startOfMonth = Carbon::now()->startOfMonth();
-         $endOfMonth = Carbon::now()->endOfMonth();
+       
+        return User::select([
+            'user_id',
+            'basic_pay',
+        ]) 
+        ->where('user_id', $id)
+        ->with(['latestEmploymentRole' =>function($query){
+           $query->select('user_id','role_id','designation','department');
+          }])
+        ->with(['latestPayroll'])
+        ->first();
 
-        return User::whereDoesntHave('payrolls', function ($query) use ($startOfMonth, $endOfMonth) {
-                        $query->whereBetween('created_at', [$startOfMonth, $endOfMonth]);})
-                        ->with(['latestPayroll'])
-                        ->get();
     }
 
     public function payrollModel(int $id): ?Payroll
@@ -86,25 +115,25 @@ class PayrollRepository implements PayrollRepositoryInterface{
 
     public function getUserPayrollMonthly($year, $month)
     {
-         return  Payroll::join('users', 'payrolls.user_id', '=', 'users.user_id')
-                        ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
+
+         return DB::table('users')
+            ->leftJoin('payrolls', 'users.user_id', '=', 'payrolls.user_id')
+            ->leftJoin('user_employment_roles', 'users.user_id', '=', 'user_employment_roles.user_id')
             ->select([
                 'users.user_id',
-                'users.employee_id as employee_id',
-                'users.last_name as last_name',
-                'users.first_name as first_name',
-                'users.designation as designation',
-                'users.department as department',
-                'users.employment_type as employment_type',
-                'users.basic_pay',
-                'payrolls.*',
-                'payroll_deductions.*'
-            ])
+                'users.employee_id',
+                DB::raw("CONCAT(first_name,', ',last_name) AS full_name"),
+                'user_employment_roles.designation',
+                'user_employment_roles.department',
+                'user_employment_roles.type', 
+                'payrolls.payslip_id',  
+                'payrolls.publish_status'                                                        
+            ]) 
             ->whereMonth('payrolls.created_at', $month)
             ->whereYear('payrolls.created_at', $year)
             ->get();
-
     }
+
 
     public function getPayrollReportsYearly($year)
     {

@@ -9,10 +9,13 @@ use App\Contracts\Repository\UserRepositoryInterface;
 use App\Contracts\Repository\PayrollDeductionRepositoryInterface;
 use App\Events\PayslipEvent;
 use App\Notifications\NewPayrollNotification;
+use App\Traits\Hashable;
+
 
 class PayrollService implements PayrollServiceInterface
 {
 
+    use Hashable;
     public function __construct(
                    protected PayrollRepositoryInterface          $payrollRepository,
                    protected UserRepositoryInterface             $userRepository,
@@ -20,16 +23,25 @@ class PayrollService implements PayrollServiceInterface
                    protected PayrollDeductionRepositoryInterface $payrollDeductionRepo
     ){}
 
-    public function payrollThisMonth()
+    public function usersWithoutPayrollForCurrentMonth($id)
     {
-        return $this->payrollRepository->getPayrollThisMonth();
+        return $this->payrollRepository->getUsersWithoutPayrollForCurrentMonth($id);
     }
 
-    public function usersWithoutPayrollForCurrentMonth()
+    
+    public function selectEmploymentSalaryType($employmentType)
     {
-        return $this->payrollRepository->getUsersWithoutPayrollForCurrentMonth();
+        
+        return $this->payrollRepository->getSelectEmploymentSalaryType($employmentType)
+               ->map(function ($item) {
+            return [
+                'user_id' => $this->encodeHash($item->user_id),
+                'employee_id' => $item->employee_id,
+                'full_name' => $item->full_name,
+            ];
+            });
+        
     }
-
 
     public function storePartial(array $data)
     {
@@ -48,6 +60,7 @@ class PayrollService implements PayrollServiceInterface
            if (!$user){
             throw new \Exception('User not found');
           }
+
 
        $data['rlip'] = $rlipContribution;
        $data['philhealth'] = $philContribution;

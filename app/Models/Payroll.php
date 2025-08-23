@@ -6,19 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;
+use App\Traits\PayrollIdGenerator;
 
 class Payroll extends Model
 {
     use HasFactory,Notifiable;
 
     protected $primaryKey = 'payroll_id';
-    public $incrementing = true; // only if payroll_id is an auto-incrementing int
-    protected $keyType = 'int'; // or 'string' if payroll_id is a string
+    public $incrementing = true; 
+    protected $keyType = 'int';
     
     protected $fillable = [
 
+        'payslip_id',
         'user_id',
+        'role_id',
         'basic_salary',
+        'daily_rate',
+        'duty_count',
+        'units',
         'pera',
         'absent',
         'late',
@@ -48,10 +54,19 @@ class Payroll extends Model
         'landbank',
         'ucpb',
         'sss',
+        'deduction1',
+        'deduction2',
+        'deduction3',
         'publish_status'
         
     ];
 
+    /*
+    public function getRouteKeyName()
+    {
+        return 'payslip_id';
+    }
+*/
     //Belongs to User Model
     public function user(){
 

@@ -12,9 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payrolls', function (Blueprint $table) {
-            $table->bigIncrements('payroll_id');
+            $table->integerIncrements('payroll_id');
+            $table->unsignedBigInteger('payslip_id')->unique()->nullable();
+            $table->unsignedBigInteger('role_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->decimal('basic_salary',10,2)->nullable();
+            $table->decimal('daily_rate',10,2)->nullable();
+            $table->decimal('hourly_rate',10,2)->nullable();
+            $table->unsignedSmallInteger('duty_count')->nullable();
+            $table->unsignedSmallInteger('units')->nullable();
             $table->decimal('pera',10,2)->nullable();
             $table->decimal('absent', 10, 2)->nullable();
             $table->decimal('late', 10, 2)->nullable();
@@ -43,7 +49,10 @@ return new class extends Migration
             $table->decimal('coop', 10, 2)->nullable();
             $table->decimal('landbank', 10, 2)->nullable();
             $table->decimal('ucpb', 10, 2)->nullable();
-            $table->decimal('sss',10, 2)->nullable();      
+            $table->decimal('sss',10, 2)->nullable();   
+            $table->decimal('deduction1',10, 2)->nullable();
+            $table->decimal('deduction2',10, 2)->nullable();
+            $table->decimal('deduction3',10, 2)->nullable();
             $table->enum('publish_status', ['publish','partial','none'])->default('none');
             $table->timestamps();
 
@@ -51,6 +60,11 @@ return new class extends Migration
                   ->references('user_id')
                   ->on('users')
                   ->nullOnDelete();
+
+            $table->foreign('role_id')
+                   ->references('role_id')
+                   ->on('user_employment_roles')
+                   ->nullOnDelete();
         });
     }
 

@@ -51,6 +51,7 @@ class EditPublishRequest extends FormRequest
             'coop' => $monetaryRule,
             'landbank' => $monetaryRule,
             'ucpb' => $monetaryRule,
+            'sss' => $monetaryRule,
         ];
     }
 }

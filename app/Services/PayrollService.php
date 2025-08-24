@@ -32,14 +32,7 @@ class PayrollService implements PayrollServiceInterface
     public function selectEmploymentSalaryType($employmentType)
     {
         
-        return $this->payrollRepository->getSelectEmploymentSalaryType($employmentType)
-               ->map(function ($item) {
-            return [
-                'user_id' => $this->encodeHash($item->user_id),
-                'employee_id' => $item->employee_id,
-                'full_name' => $item->full_name,
-            ];
-            });
+        return $this->payrollRepository->getSelectEmploymentSalaryType($employmentType);
         
     }
 

@@ -33,6 +33,7 @@ export const fieldTitles = [
         title: "OTHER DEDUCTIONS",
         fields: [
         { label: "Philhealth", id: "philhealth", disabled: true },
+        { label: "SSS" , id: "sss"},
         { label: "CFI", id: "cfi" },
         { label: "TIPID", id: "tipid" },
         { label: "CITY BANK SAVINGS", id: "city_savings_bank" },
@@ -44,6 +45,10 @@ export const fieldTitles = [
         { label: "COOP", id: "coop" },
         { label: "LANDBANK", id: "landbank" },
         { label: "UCPB", id: "ucpb" },
+        { label: "Deduction 1", id: "deduction1" },
+        { label: "Deduction 2", id: "deduction2" },
+        { label: "Deduction 3", id: "deduction3" },
+        
         ],
     },
     ];

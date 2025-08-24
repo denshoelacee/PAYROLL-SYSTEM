@@ -6,10 +6,6 @@ import { FiGrid } from "react-icons/fi";
 import { GoPeople } from "react-icons/go";
 import { BiCoinStack } from "react-icons/bi";
 import { PageProps } from '@/types';
-import { RiFolderSettingsLine } from "react-icons/ri"
-import { TbReportSearch } from "react-icons/tb";
-import { User } from '@/types';
-import { PropsWithChildren, ReactNode } from 'react';
 
 export default function Sidebar({auth }: PageProps) {
   return (

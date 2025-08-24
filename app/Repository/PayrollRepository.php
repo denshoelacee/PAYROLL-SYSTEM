@@ -127,7 +127,8 @@ class PayrollRepository implements PayrollRepositoryInterface{
                 'user_employment_roles.department',
                 'user_employment_roles.type', 
                 'payrolls.payslip_id',  
-                'payrolls.publish_status'                                                        
+                'payrolls.publish_status',
+                'payrolls.payroll_id',                                                      
             ]) 
             ->whereMonth('payrolls.created_at', $month)
             ->whereYear('payrolls.created_at', $year)

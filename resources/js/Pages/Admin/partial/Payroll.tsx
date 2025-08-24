@@ -34,6 +34,11 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
     const [searchQuery, setSearchQuery] = useState('');
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedRow, setSelectedRow] = useState<UserPayroll | null>(null);
+
+    //console.log('payslips',payslips)
+    //console.log('newPayroll',newPayroll)
+    //console.log(filteredEmployementType,newPayroll)
+    // Filter rows based on selected year, month, and search query  
     const filteredRows = useMemo(() => {
     return payslips
         .filter((row) => {
@@ -52,7 +57,7 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
         }));
     }, [payslips, selectedYear, selectedMonth, searchQuery]);
 
-    console.log(payslips)
+    //console.log(payslips)
     const handleOpenPopover = (event:any, row:UserPayroll) => {
             setAnchorEl(event.currentTarget);
             setSelectedRow(row);
@@ -65,9 +70,7 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
     const columns: GridColDef[] = [        
         { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center',
         },
-        { field: 'first_name', headerName: 'First name', flex:1, headerAlign: 'center', align: 'center',
-        },
-        { field: 'last_name', headerName: 'Last name',flex:1, headerAlign: 'center', align: 'center',
+        { field: 'full_name', headerName: 'Name', flex:1, headerAlign: 'center', align: 'center',
         },
         { field: 'designation', headerName: 'Designation', flex:1, headerAlign: 'center', align: 'center',
         },
@@ -82,16 +85,17 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
         headerAlign: 'center',
         align: 'center',
         renderCell: (params) => (
-            params?.row.publish_status === 'none' ? (
+            //console.log('waw',params?.row?.publish_status),
+            params?.row?.publish_status === 'none' ? (
             ""
             ) : (
             <span className={`text-center p-2 rounded-full
-                ${params.row.publish_status === 'publish'
+                ${params?.row?.publish_status === 'publish'
                 ? 'text-green-500 border border-emerald-500 '
                 : 'text-yellow-500 border border-yellow-500'
                 }`}
             >       
-            {params.row.publish_status === 'publish' ? 'Published' : 'Partial'}
+            {params?.row?.publish_status === 'publish' ? 'Published' : 'Partial'}
             </span>
             )
         ),
@@ -114,10 +118,10 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
     ];
 
 
-    const handleView = (row: UserPayroll) => {
+    {/*const handleView = (row: UserPayroll) => {
     localStorage.setItem('selectedPayroll', JSON.stringify(row));
-    router.visit(`/admin/payroll/Payslip/${row.latest_payroll.payroll_id}`);
-    };
+    router.visit(`/admin/payroll/Payslip/${row?.latest_payroll?.payroll_id}`);
+    };*/}
 
     return (
         <>
@@ -187,10 +191,10 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
                             <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
                                 <div className="text-white px-10 py-3 text-xl">Payroll Summary</div>
                                 <Table
-                                rows={filteredRows}
+                                rows={payslips}
                                 columns={columns}
                                 height={650}
-                                getRowId={(row) => row.payroll_id}
+                                getRowId={(row) => row?.user_id}
                                 className="employee-table"
                                 pageSize={10}
                             />
@@ -200,7 +204,10 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
 
             {/*Add Modal*/}
             (addModal && (
-                <PayrollAddModal show={addModal} onClose={() => setAddModal(false)} newPayroll={newPayroll} filteredEmployementType={filteredEmployementType}/>
+                <PayrollAddModal show={addModal} onClose={() => {
+                    setAddModal(false);
+                    router.visit(route("admin.payroll"), { replace: true }); 
+                }}  newPayroll={newPayroll} filteredEmployementType={filteredEmployementType}/>
             ))
             {/*Edit Modal */}
             {editModal && selectedRow && (
@@ -218,8 +225,8 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
                 >
                 <div className=" w-48 bg-mainColor shadow-md text-sm text-white">
                     <button
-                        disabled={selectedRow?.latest_payroll.publish_status === 'publish'}
-                        className={`${selectedRow?.latest_payroll.publish_status === 'publish' ? 'cursor-not-allowed opacity-50' : ''} w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100`}
+                        disabled={selectedRow?.latest_payroll?.publish_status === 'publish'}
+                        className={`${selectedRow?.latest_payroll?.publish_status === 'publish' ? 'cursor-not-allowed opacity-50' : ''} w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100`}
                         onClick={() => {
                             setAnchorEl(null);
                             setEditModal(true);
@@ -237,7 +244,7 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
                     >
                         Delete
                     </button>
-                    <button
+                   {/* <button
                         className="w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100 "
                         onClick={() => {
                             handleView(selectedRow as UserPayroll);
@@ -245,7 +252,7 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
                         }}
                     >
                         View
-                    </button>
+                    </button>*/}
                 </div>
             </Popover>
         </>

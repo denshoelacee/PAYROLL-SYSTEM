@@ -38,14 +38,14 @@ class AdminPayrollController extends Controller
        }
     }
 
-public function payrollThisDay(Request $request, $type, $hash_id = null)
+public function payrollThisDay(Request $request, $type, $id = null)
 {
   
     $year = $request->year ?? now()->year;
     $month = $request->month ?? now()->month;
     $selectedType = $request->input('employmentType') ?? $type; 
 
-    $id = $this->decodeHash($hash_id);
+
 
     $filteredEmployementType = $this->payrollService->selectEmploymentSalaryType($selectedType);
 

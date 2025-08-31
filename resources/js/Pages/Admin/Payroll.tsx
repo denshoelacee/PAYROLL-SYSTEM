@@ -25,7 +25,6 @@ export default function Payroll({ auth,thisMonth,newPayroll,payslips,
     selectedMonth,
     filteredEmployementType }:Props) {
              
-        console.log(filteredEmployementType,newPayroll)
     return (
         
         <>            

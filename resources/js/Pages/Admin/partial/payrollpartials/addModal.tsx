@@ -22,7 +22,6 @@ interface Props {
 export default function PayrollAddModal({
     show,
     onClose,
-    newPayroll,
     filteredEmployementType,
 }: Props) {
     const [selectName, setSelectName] = useState("Select Employee");
@@ -90,36 +89,36 @@ export default function PayrollAddModal({
     setData({
         ...data,
         user_id: value.user_id ?? "",
-        basic_pay: value?.payroll?.basic_pay ?? "",
-        pera: value?.payroll?.latest_payroll?.pera ?? "",
-        absent: value?.payroll?.latest_payroll?.absent ?? "",
-        late: value?.payroll?.latest_payroll?.late ?? "",
-        holding_tax: value?.payroll?.latest_payroll?.holding_tax ?? "",
-        tax_bal_due: value?.payroll?.latest_payroll?.tax_bal_due ?? "",
-        rlip: value?.payroll?.latest_payroll?.rlip ?? "",
-        policy_loan: value?.payroll?.latest_payroll?.policy_loan ?? "",
-        consol_loan: value?.payroll?.latest_payroll?.consol_loan ?? "",
-        emerg_loan: value?.payroll?.latest_payroll?.emerg_loan ?? "",
-        gel: value?.payroll?.latest_payroll?.gel ?? "",
-        gfal: value?.payroll?.latest_payroll?.gfal ?? "",
-        mpl: value?.payroll?.latest_payroll?.mpl ?? "",
-        mpl_lite: value?.payroll?.latest_payroll?.mpl_lite ?? "",
-        contributions: value?.payroll?.latest_payroll?.contributions ?? "",
-        loans: value?.payroll?.latest_payroll?.loans ?? "",
-        housing_loan: value?.payroll?.latest_payroll?.housing_loan ?? "",
-        philhealth: value?.payroll?.latest_payroll?.philhealth ?? "",
-        sss: value?.payroll?.latest_payroll?.sss ?? "",
-        cfi: value?.payroll?.latest_payroll?.cfi ?? "",
-        tipid: value?.payroll?.latest_payroll?.tipid ?? "",
-        city_savings_bank: value?.payroll?.latest_payroll?.city_savings_bank ?? "",
-        fea: value?.payroll?.latest_payroll?.fea ?? "",
-        canteen: value?.payroll?.latest_payroll?.canteen ?? "",
-        disallowance: value?.payroll?.latest_payroll?.disallowance ?? "",
-        unliquidated_ca: value?.payroll?.latest_payroll?.unliquidated_ca ?? "",
-        disallowance_honoraria:value?.payroll?.latest_payroll?.disallowance_honoraria ?? "",
-        coop: value?.payroll?.latest_payroll?.coop ?? "",
-        landbank: value?.payroll?.latest_payroll?.landbank ?? "",
-        ucpb: value?.payroll?.latest_payroll?.ucpb ?? "",
+        basic_pay: value?.latest_payroll?.basic_pay ?? "",
+        pera: value?.latest_payroll?.pera ?? "",
+        absent: value?.latest_payroll?.absent ?? "",
+        late: value?.latest_payroll?.late ?? "",
+        holding_tax: value?.latest_payroll?.holding_tax ?? "",
+        tax_bal_due: value?.latest_payroll?.tax_bal_due ?? "",
+        rlip: value?.latest_payroll?.rlip ?? "",
+        policy_loan: value?.latest_payroll?.policy_loan ?? "",
+        consol_loan: value?.latest_payroll?.consol_loan ?? "",
+        emerg_loan: value?.latest_payroll?.emerg_loan ?? "",
+        gel: value?.latest_payroll?.gel ?? "",
+        gfal: value?.latest_payroll?.gfal ?? "",
+        mpl: value?.latest_payroll?.mpl ?? "",
+        mpl_lite: value?.latest_payroll?.mpl_lite ?? "",
+        contributions: value?.latest_payroll?.contributions ?? "",
+        loans: value?.latest_payroll?.loans ?? "",
+        housing_loan: value?.latest_payroll?.housing_loan ?? "",
+        philhealth: value?.latest_payroll?.philhealth ?? "",
+        sss: value?.latest_payroll?.sss ?? "",
+        cfi: value?.latest_payroll?.cfi ?? "",
+        tipid: value?.latest_payroll?.tipid ?? "",
+        city_savings_bank: value?.latest_payroll?.city_savings_bank ?? "",
+        fea: value?.latest_payroll?.fea ?? "",
+        canteen: value?.latest_payroll?.canteen ?? "",
+        disallowance: value?.latest_payroll?.disallowance ?? "",
+        unliquidated_ca: value?.latest_payroll?.unliquidated_ca ?? "",
+        disallowance_honoraria: value?.latest_payroll?.disallowance_honoraria ?? "",
+        coop: value?.latest_payroll?.coop ?? "",
+        landbank: value?.latest_payroll?.landbank ?? "",
+        ucpb: value?.latest_payroll?.ucpb ?? "",
     });
 
     if (value.user_id) {
@@ -156,24 +155,26 @@ export default function PayrollAddModal({
                 sss: newPayroll?.latest_payroll?.sss ?? "",
                 cfi: newPayroll?.latest_payroll?.cfi ?? "",
                 tipid: newPayroll?.latest_payroll?.tipid ?? "",
-                city_savings_bank:newPayroll?.latest_payroll?.city_savings_bank ?? "",
+                city_savings_bank: newPayroll?.latest_payroll?.city_savings_bank ?? "",
                 fea: newPayroll?.latest_payroll?.fea ?? "",
                 canteen: newPayroll?.latest_payroll?.canteen ?? "",
                 disallowance: newPayroll?.latest_payroll?.disallowance ?? "",
-                unliquidated_ca:newPayroll?.latest_payroll?.unliquidated_ca ?? "",
-                disallowance_honoraria:newPayroll?.latest_payroll?.disallowance_honoraria ?? "",
+                unliquidated_ca: newPayroll?.latest_payroll?.unliquidated_ca ?? "",
+                disallowance_honoraria: newPayroll?.latest_payroll?.disallowance_honoraria ?? "",
                 coop: newPayroll?.latest_payroll?.coop ?? "",
                 landbank: newPayroll?.latest_payroll?.landbank ?? "",
                 ucpb: newPayroll?.latest_payroll?.ucpb ?? "",
                 }));
+                    console.log(newPayroll)
                 setLoading(false);
                 setDisableInput(false);
-            },
+            },   
             onError: () => {
                 setLoading(false);
                 setDisableInput(false);
             },
             }
+        
         );
         } else {
         setDisableInput(false);

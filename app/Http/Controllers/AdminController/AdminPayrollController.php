@@ -4,19 +4,21 @@ namespace App\Http\Controllers\AdminController;
 
 use App\Contracts\Services\PayrollServiceInterface;
 use App\Contracts\Services\IPayrollReportsServices\GeneratePayslipsReportServiceInterface;
+use App\Contracts\Services\HrMetaDataServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditPublishRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\User;
-use App\Traits\Hashable;
+
 
 class AdminPayrollController extends Controller
 {
-    use Hashable;
+
     public function __construct(
               protected PayrollServiceInterface                $payrollService,
-              protected GeneratePayslipsReportServiceInterface $payslipsReportService
+              protected GeneratePayslipsReportServiceInterface $payslipsReportService,
+              protected HrMetaDataServiceInterface $metaDataService
+
     ){}
 
 
@@ -27,9 +29,10 @@ class AdminPayrollController extends Controller
 
     }
 
-     public function publish(EditPublishRequest $request)
+    public function publish(EditPublishRequest $request)
     {
 
+         
        try{
          $this->payrollService->publish($request->validated());
          return Redirect()->back()->with("success","Payroll Publish Successfully!");
@@ -40,20 +43,18 @@ class AdminPayrollController extends Controller
 
 public function payrollThisDay(Request $request, $type, $id = null)
 {
-  
+   
     $year = $request->year ?? now()->year;
     $month = $request->month ?? now()->month;
-    $selectedType = $request->input('employmentType') ?? $type; 
+    $selectedType = $request->input('employmentType'); 
 
+    $filteredEmployementType = $this->payrollService->selectEmploymentSalaryType($selectedType); // add modal select Employement type 
 
-
-    $filteredEmployementType = $this->payrollService->selectEmploymentSalaryType($selectedType);
-
-    $newPayroll = $this->payrollService->usersWithoutPayrollForCurrentMonth($id);
+    $newPayroll = $this->payrollService->usersWithoutPayrollForCurrentMonth($id);   //fetch latest Payroll for add Payroll
     
-    $payslips = $this->payslipsReportService->UserPayrollMonthly($year, $month);                 
+    $payslips = $this->payslipsReportService->UserPayrollMonthly($year, $month);   //Year Month Payrolls
 
-//dd($payslips,$newPayroll);
+    $jobLists = $this->metaDataService->jobTitleList();   //Job List -> EMPLOYMENT TYPE (PART-TIME )REGULAR AND JO CAN ASSIGNED MULTITPLE JOB WORK
 
     $months = collect(range(1, 12))->map(function ($m) {
         return [    

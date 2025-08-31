@@ -19,7 +19,7 @@ export interface filteredSelectedTypeUser{
     full_name: string;
     hashid: string;
 
-    payroll?: UserPayroll
+    latest_payroll?: UserPayroll
 }
 
     export interface Employee{
@@ -46,16 +46,10 @@ export interface filteredSelectedTypeUser{
     }
 
     export interface UserPayroll extends Employee{
-        user_id: number;
-        basic_pay: number;
-        latest_employment_role:{
-           role_id: number;
-           user_id: number;
-           designation: string;
-           department: string;
-        };
-        latest_payroll:{
+        latest_payroll: any;
+            user_id: number;
             employee_id: number;
+            basic_pay: number;
             payslip_id: number | string;
             payroll_id: number | null;
             full_name: string;
@@ -97,12 +91,12 @@ export interface filteredSelectedTypeUser{
             deduction1: number | null;
             deduction2: number | null;
             deduction3: number | null;
+            assigned_designation: string | null; //PAYSLIP JOB ASSIGN
+            assigned_department: string | null; //PAYSLIP JOB ASSIGN
+            payslip_type: string | null;    // WHAT PAYSLIP TYPE REGULAR/PART-TIME,JOB ORDER/PART-TIME,REGULAR
             publish_status: 'publish' | 'partial' | 'none';
             created_at: string;
             updated_at: string;
-        };
-       
-      
         //Payroll Deductions for Regular,Job Order
         total_accrued_period?:number
         total_deduction?: number; 

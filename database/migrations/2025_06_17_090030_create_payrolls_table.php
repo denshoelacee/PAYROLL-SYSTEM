@@ -12,9 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payrolls', function (Blueprint $table) {
-            $table->integerIncrements('payroll_id');
-            $table->unsignedBigInteger('payslip_id')->unique()->nullable();
-            $table->unsignedBigInteger('role_id')->nullable();
+            $table->mediumIncrements('payroll_id');
+            $table->string('payslip_id', 50)->unique()->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->decimal('basic_salary',10,2)->nullable();
             $table->decimal('daily_rate',10,2)->nullable();
@@ -53,6 +52,9 @@ return new class extends Migration
             $table->decimal('deduction1',10, 2)->nullable();
             $table->decimal('deduction2',10, 2)->nullable();
             $table->decimal('deduction3',10, 2)->nullable();
+            $table->string('assigned_designation', 50)->nullable();
+            $table->string('assigned_department', 50)->nullable();
+            $table->string('payslip_type', 50)->nullable();
             $table->enum('publish_status', ['publish','partial','none'])->default('none');
             $table->timestamps();
 
@@ -61,10 +63,6 @@ return new class extends Migration
                   ->on('users')
                   ->nullOnDelete();
 
-            $table->foreign('role_id')
-                   ->references('role_id')
-                   ->on('user_employment_roles')
-                   ->nullOnDelete();
         });
     }
 

@@ -9,18 +9,18 @@ use App\Contracts\Repository\UserRepositoryInterface;
 use App\Contracts\Repository\PayrollDeductionRepositoryInterface;
 use App\Events\PayslipEvent;
 use App\Notifications\NewPayrollNotification;
-use App\Traits\Hashable;
+use App\Traits\PayslipIdGenerator;
 
 
 class PayrollService implements PayrollServiceInterface
 {
 
-    use Hashable;
+    use PayslipIdGenerator;
     public function __construct(
                    protected PayrollRepositoryInterface          $payrollRepository,
                    protected UserRepositoryInterface             $userRepository,
-                   protected ContributionTypeRepositoryInterface $contributionTypeRepo,
-                   protected PayrollDeductionRepositoryInterface $payrollDeductionRepo
+                   protected ContributionTypeRepositoryInterface $contributionTypeRepository,
+                   protected PayrollDeductionRepositoryInterface $payrollDeductionRepository
     ){}
 
     public function usersWithoutPayrollForCurrentMonth($id)
@@ -38,21 +38,22 @@ class PayrollService implements PayrollServiceInterface
 
     public function storePartial(array $data)
     {
+      
         $user = $this->userRepository->findById($data["user_id"]);
-         $salary = $user->basic_pay;
+        
+          if (!$user){
+            throw new \Exception('User not found');
+          }
 
-         $rlipContribution = $this->contributionTypeRepo->rlipDeduction($salary);
-         $philContribution = $this->contributionTypeRepo->philDeduction($salary);
+         $salary = $user->basic_pay;
+         $rlipContribution = $this->contributionTypeRepository->rlipDeduction($salary);
+         $philContribution = $this->contributionTypeRepository->philDeduction($salary);
 
          $totalContribution = $rlipContribution + $philContribution;
          $totalAccruedPeriod = $salary + ($data['pera'] ?? 0);
-         $totalDeduction = $this->payrollDeductionRepo->calculateTotalDeduction($data,$totalContribution);
+         $totalDeduction = $this->payrollDeductionRepository->calculateTotalDeduction($data,$totalContribution);
 
          $netPay = $totalAccruedPeriod - $totalDeduction;
-
-           if (!$user){
-            throw new \Exception('User not found');
-          }
 
 
        $data['rlip'] = $rlipContribution;
@@ -73,25 +74,31 @@ class PayrollService implements PayrollServiceInterface
     public function publish(array $data):void
     {
          $user = $this->userRepository->findById($data['user_id']);
-         $salary = $user->basic_pay;
+          $designation = $user->designation;
+          $department = $user->department;
+          $salary = $user->basic_pay;
+         $generateId = $this->generatePayslipId($data['user_id'],$data['employment_type']);
 
-         $rlipContribution = $this->contributionTypeRepo->rlipDeduction($salary);
-         $philContribution = $this->contributionTypeRepo->philDeduction($salary);
-
-         $totalContribution = $rlipContribution + $philContribution;
-         $totalAccruedPeriod = $salary + ($data['pera'] ?? 0);
-         $totalDeduction = $this->payrollDeductionRepo->calculateTotalDeduction($data,$totalContribution);
-
-         $netPay = $totalAccruedPeriod - $totalDeduction;
-
-           if (!$user){
+          if (!$user){
             throw new \Exception('User not found');
           }
 
+         $rlipContribution = $this->contributionTypeRepository->rlipDeduction($salary);
+         $philContribution = $this->contributionTypeRepository->philDeduction($salary);
 
+         $totalContribution = $rlipContribution + $philContribution;
+         $totalAccruedPeriod = $salary + ($data['pera'] ?? 0);
+         $totalDeduction = $this->payrollDeductionRepository->calculateTotalDeduction($data,$totalContribution);
+
+         $netPay = $totalAccruedPeriod - $totalDeduction;
+
+       $data['payslip_id'] = $generateId[0];
+       $data['payslip_type'] = $generateId[1];
        $data['rlip'] = $rlipContribution;
        $data['philhealth'] = $philContribution;
        $data['basic_salary'] = $salary;
+       $data['assigned_designation'] = $designation;
+       $data['assigned_department'] = $department;
        $data['publish_status'] = 'publish';
 
        $payroll = $this->payrollRepository->setPayrollModel($data);

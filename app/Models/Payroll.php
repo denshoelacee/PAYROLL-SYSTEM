@@ -57,17 +57,15 @@ class Payroll extends Model
         'deduction1',
         'deduction2',
         'deduction3',
+        'assigned_designation',
+        'assigned_department',
+        'payslip_type',
         'publish_status'
         
     ];
 
-    /*
-    public function getRouteKeyName()
-    {
-        return 'payslip_id';
-    }
-*/
-    //Belongs to User Model
+    
+
     public function user(){
 
         return $this->belongsTo(User::class,'user_id','user_id');

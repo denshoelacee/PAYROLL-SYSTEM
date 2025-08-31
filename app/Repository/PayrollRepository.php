@@ -13,6 +13,8 @@ use Carbon\Carbon;
 
 class PayrollRepository implements PayrollRepositoryInterface{
 
+
+    protected $type;
     public function __construct(
         protected UserRepositoryInterface             $userRepository,
         protected PayrollDeductionRepositoryInterface $payrollDeductionRepo,
@@ -27,50 +29,109 @@ class PayrollRepository implements PayrollRepositoryInterface{
 
     public function getSelectEmploymentSalaryType($employmentType)
     {
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth = Carbon::now()->endOfMonth();
-
-        $query = User::select([
-            'user_id',
-            'employee_id',
-            DB::raw("CONCAT(first_name, ', ', last_name) AS full_name")
-        ]);
-
-        if ($employmentType === 'Job Order') {
-            $query->whereHas('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
-                $q->whereBetween('created_at', [$startOfMonth, $endOfMonth]);
-            }, '<', 2);
-        } else {
-            $query->whereDoesntHave('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
-                $q->whereBetween('created_at', [$startOfMonth, $endOfMonth]);
-            })
-            ->whereDoesntHave('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
-                $q->whereBetween('created_at', [$startOfMonth, $endOfMonth]);
-            });
-        }
-
-        if ($employmentType === 'Part-Time') {
-            $query->whereIn('users.employment_type', ['Regular', 'Job Order', 'Part-Time']);
-        } else {
-            $query->where('users.employment_type', $employmentType);
-        }
-
-        return $query->get();
+        if (empty($employmentType) || !in_array($employmentType, ['Regular', 'Job Order', 'Part-Time'])) {
+        return collect();
     }
 
+    $this->type = $employmentType;
+    $startOfMonth = Carbon::now()->startOfMonth();
+    $endOfMonth = Carbon::now()->endOfMonth();
+
+    $query = User::select([
+        'user_id',
+        'employee_id', 
+        DB::raw("CONCAT(first_name, ', ', last_name) AS full_name")
+    ]);
+
+    switch ($employmentType) {
+        case 'Regular':
+            $query->where('employment_type', 'Regular')
+                  ->whereDoesntHave('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
+                      $q->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                        ->where('payslip_type', 'Regular');
+                  });
+            break;
+
+        case 'Job Order':
+            $query->where('employment_type', 'Job Order')
+                  ->whereHas('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
+                      $q->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                        ->where('payslip_type', 'Job Order');
+                  }, '<', 2);
+            break;
+
+        case 'Part-Time':
+            $query->whereIn('employment_type', ['Regular', 'Job Order', 'Part-Time'])
+                  ->whereDoesntHave('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
+                      $q->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                        ->whereIn('payslip_type', ['Part-Time', 'Regular/Part-Time', 'Job Order/Part-Time']);
+                  });
+            break;
+    }
+
+    return $query->get();
+
+    }
+
+    public function getTheEmployementRoleType()
+    {
+        return $this->type;
+    }
+    
     public function getUsersWithoutPayrollForCurrentMonth($id)
     {
-       
-        return User::select([
-            'user_id',
-            'basic_pay',
-        ]) 
+         $selectedType = $this->type;
+    
+    $user = User::select(['user_id', 'basic_pay', 'employment_type']) 
         ->where('user_id', $id)
-        ->with(['latestEmploymentRole' =>function($query){
-           $query->select('user_id','role_id','designation','department');
-          }])
-        ->with(['latestPayroll'])
         ->first();
+
+    if (!$user || !str_contains($user->employment_type, $selectedType)) {
+        return null;
+    }
+
+    // Determine what payroll employment type to look for
+    if ($selectedType === 'Part-Time' && $user->employment_type !== 'Part-Time') {
+        $payrollType = $user->employment_type . '/Part-Time';
+    } else {
+        $payrollType = $selectedType;
+    }
+
+    // Get latest payroll for this specific type manually
+    $latestPayroll = Payroll::where('user_id', $id)
+        ->where('payslip_type', $payrollType)
+        ->latest('created_at')
+        ->first();
+
+    // If no specific payroll type found, get any latest payroll for reference
+    if (!$latestPayroll) {
+        $latestPayroll = Payroll::where('user_id', $id)
+            ->latest('created_at')
+            ->first();
+    }
+
+    // Set the relationship manually
+    $user->setRelation('latestPayroll', $latestPayroll);
+    
+    return $user;
+}
+
+private function getPayrollEmploymentType($selectedType, $userEmploymentType)
+{
+    // Determine the correct payroll employment type based on selection and user's permanent type
+    if ($selectedType === 'Part-Time') {
+        // For part-time work, determine the combined type
+        if ($userEmploymentType === 'Regular') {
+            return 'Regular/Part-Time';
+        } elseif ($userEmploymentType === 'Job Order') {
+            return 'Job Order/Part-Time';
+        } else {
+            return 'Part-Time'; // Pure part-time employee
+        }
+    } else {
+        // For Regular or Job Order, use the selected type directly
+        return $selectedType;
+    }
 
     }
 
@@ -118,14 +179,13 @@ class PayrollRepository implements PayrollRepositoryInterface{
 
          return DB::table('users')
             ->leftJoin('payrolls', 'users.user_id', '=', 'payrolls.user_id')
-            ->leftJoin('user_employment_roles', 'users.user_id', '=', 'user_employment_roles.user_id')
             ->select([
                 'users.user_id',
                 'users.employee_id',
                 DB::raw("CONCAT(first_name,', ',last_name) AS full_name"),
-                'user_employment_roles.designation',
-                'user_employment_roles.department',
-                'user_employment_roles.type', 
+                'payrolls.assigned_designation',
+                'payrolls.assigned_department',
+                'payrolls.payslip_type', 
                 'payrolls.payslip_id',  
                 'payrolls.publish_status',
                 'payrolls.payroll_id',                                                      

@@ -67,15 +67,15 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
     };
 
     const columns: GridColDef[] = [        
-        { field: 'employee_id', headerName: ' ID', flex:1, headerAlign: 'center', align: 'center',
+        { field: 'payslip_id', headerName: ' Payslip ID', flex:1, headerAlign: 'center', align: 'center',
         },
         { field: 'full_name', headerName: 'Name', flex:1, headerAlign: 'center', align: 'center',
         },
-        { field: 'designation', headerName: 'Designation', flex:1, headerAlign: 'center', align: 'center',
+        { field: 'assigned_designation', headerName: 'Designation', flex:1, headerAlign: 'center', align: 'center',
         },
-        { field: 'department', headerName: 'Department', flex:1, headerAlign: 'center', align: 'center',
+        { field: 'assigned_department', headerName: 'Department', flex:1, headerAlign: 'center', align: 'center',
         },
-        { field: 'employment_type', headerName: 'Type', flex:1, headerAlign: 'center', align: 'center',
+        { field: 'payslip_type', headerName: 'Payslip Type', flex:1, headerAlign: 'center', align: 'center',
         },
         {
         field: 'publish_status',

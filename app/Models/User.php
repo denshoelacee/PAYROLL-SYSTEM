@@ -20,26 +20,23 @@ class User extends Authenticatable
      * @var array<int, string>
      */
 
-    protected $primaryKey = 'user_id';
-    public $incrementing = true;
-    protected $keyType = 'int';
-    protected $fillable = [
-        'employee_id',
-        'last_name',
-        'first_name',
-        'designation',
-        'department',
-        'basic_pay',
-        'password',
-        'employment_type',
-        'status',
-        'role'
-    ];
+        protected $primaryKey = 'user_id';
+        public $incrementing = true;
+        protected $keyType = 'int';
+        protected $fillable = [
+            'employee_id',
+            'last_name',
+            'first_name',
+            'designation',
+            'department',
+            'basic_pay',
+            'password',
+            'employment_type',
+            'status',
+            'role'
+        ];
 
-    public function roles(){
 
-        return $this->hasMany(UserEmploymentRole::class, 'user_id');
-    }
 
     public function payrolls(){
 
@@ -51,16 +48,10 @@ class User extends Authenticatable
         return $this->hasOne(SecretQuestion::class,'user_id','user_id');
     }
 
-    public function latestPayroll(){
-
-        return $this->hasOne(Payroll::class, 'user_id', 'user_id')
-                    ->latest('created_at');
-    }
-
-    public function latestEmploymentRole(){
-
-        return $this->hasOne(UserEmploymentRole::class, 'user_id')
-                    ->latest('created_at');
+   public function latestPayroll()
+   {
+     return $this->hasOne(Payroll::class, 'user_id', 'user_id')
+                ->latest('created_at');
     }
 
     /**

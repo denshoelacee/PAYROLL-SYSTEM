@@ -22,10 +22,16 @@ class EditPublishRequest extends FormRequest
     public function rules(): array
     {
         $monetaryRule = ['sometimes', 'nullable', 'numeric', 'regex:/^\d+(\.\d{1,2})?$/'];
+        $stringRule = ['sometimes', 'nullable', 'string'];
+        $wholeNumberRule = ['sometimes', 'nullable', 'numeric', 'regex:/^\d+$/'];
 
         return [
             'user_id' => ['required', 'exists:users,user_id'],
             'pera' => $monetaryRule,
+            'daily_rate' => $monetaryRule,
+            'hourly_rate' => $monetaryRule,
+            'duty_count' => $monetaryRule,
+            'units' => $wholeNumberRule,
             'absent' => $monetaryRule,
             'late' => $monetaryRule,
             'holding_tax' => $monetaryRule,
@@ -52,6 +58,12 @@ class EditPublishRequest extends FormRequest
             'landbank' => $monetaryRule,
             'ucpb' => $monetaryRule,
             'sss' => $monetaryRule,
+            'deduction1' => $monetaryRule,
+            'deduction2' => $monetaryRule,
+            'deduction3' => $monetaryRule,
+            'assinged_designation' => $stringRule,
+            'assigned_department' => $stringRule,
+            'payslip_type' => $stringRule
         ];
     }
 }

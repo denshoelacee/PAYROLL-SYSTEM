@@ -82,7 +82,7 @@ export default function AdminLayout({ title, children }: PropsWithChildren) {
             <InfoMessage severity="info" info={message.information} onClose={() => setDismissed(false)} />
           )}
           {message.error && (
-            <InfoMessage severity="error" info={message.error} onClose={() => setDismissed(false)} />
+            <InfoMessage severity="error" info={message.error} onClose={() => setDismissed(true)} />
           )}
           {message.success && (
             <InfoMessage severity="success" info={message.success} onClose={() => setDismissed(false)} />

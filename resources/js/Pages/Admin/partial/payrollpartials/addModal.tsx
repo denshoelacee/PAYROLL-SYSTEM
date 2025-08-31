@@ -85,7 +85,7 @@ export default function PayrollAddModal({
     const handleDropdownSelect = (value: filteredSelectedTypeUser) => {
         setSelectName(`${value.employee_id} - ${value.full_name}`);
         setDisableInput(true);
-
+  const currentEmploymentType = data.employment_type;
     setData({
         ...data,
         user_id: value.user_id ?? "",
@@ -119,6 +119,7 @@ export default function PayrollAddModal({
         coop: value?.latest_payroll?.coop ?? "",
         landbank: value?.latest_payroll?.landbank ?? "",
         ucpb: value?.latest_payroll?.ucpb ?? "",
+        employment_type: currentEmploymentType,
     });
 
     if (value.user_id) {
@@ -164,6 +165,7 @@ export default function PayrollAddModal({
                 coop: newPayroll?.latest_payroll?.coop ?? "",
                 landbank: newPayroll?.latest_payroll?.landbank ?? "",
                 ucpb: newPayroll?.latest_payroll?.ucpb ?? "",
+                employment_type: currentEmploymentType,
                 }));
                     console.log(newPayroll)
                 setLoading(false);

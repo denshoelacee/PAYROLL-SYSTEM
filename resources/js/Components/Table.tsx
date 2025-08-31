@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { DataGrid, GridColDef,GridRowSelectionModel } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 
@@ -60,7 +59,6 @@ export default function Table({
                 }}
                 getRowId={getRowId}
                 sx={{
-                    mb: 8,
                     backgroundColor: tableColor,
                     borderRadius: '0.375rem',
                     backgroundClip: 'padding-box',

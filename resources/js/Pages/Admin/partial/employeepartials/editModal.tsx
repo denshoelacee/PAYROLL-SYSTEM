@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "@inertiajs/react";
 import { Employee, JobTitles, EmploymentTypes } from "@/types";
 
-
+    //created_at not in query!!
 interface Props {
     show: boolean;
     onClose: () => void;
@@ -209,12 +209,12 @@ export default function EditEmployeeModal({
         />
         </InputWrapper>
 
-            <InputWrapper className=" p-3 gap-4 flex">
+            <InputWrapper className=" p-3 gap-4 flex flex-wrap md:flex-nowrap">
                     <div className="w-full">
                         <InputLabel htmlFor="role" value="Role *" className='text-white' />
                         <Dropdown>
                             <Dropdown.Trigger>
-                                <button type="button" className="bg-transparent border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                <button type="button" className="w-full bg-transparent border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center ">
                                     <p className='text-sm'>{selectRole}</p>
                                     <RiArrowDropDownLine className={` text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>
@@ -241,7 +241,7 @@ export default function EditEmployeeModal({
                         <InputLabel htmlFor="employment_type" value="Employment Type *" className='text-white' />
                         <Dropdown>
                             <Dropdown.Trigger>
-                                <button type="button" className="bg-transparent border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                <button type="button" className="w-full bg-transparent border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center">
                                     <p className='text-sm'>{selectEmploymentType}</p>
                                     <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                 </button>

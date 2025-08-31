@@ -28,6 +28,7 @@ import {
 } from "@/Components/ui/chart"
 import { router } from "@inertiajs/react"
 import { RiArrowDropDownLine } from "react-icons/ri"
+import PrimaryButton from "./PrimaryButton"
 
 type DataPoint = {
   date: string
@@ -78,7 +79,7 @@ export function ChartAreaInteractive({
           rgba(115, 210, 159, 0) 134.85%
         )`,
       }}className="pt-0 w-full border border-white">
-      <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+      <CardHeader className="flex gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
           <CardTitle className="text-white">Area Chart - Interactive</CardTitle>
           <CardDescription className="text-white">
@@ -87,7 +88,7 @@ export function ChartAreaInteractive({
         </div>
         <Dropdown>
           <Dropdown.Trigger>
-            <SecondaryButton className="flex w-full justify-between items-center md:w-[200px] border">
+            <SecondaryButton className="flex justify-between items-center w-[200px] border">
               <p className="text-sm">{year}</p>
               <RiArrowDropDownLine className="text-2xl" />
             </SecondaryButton>

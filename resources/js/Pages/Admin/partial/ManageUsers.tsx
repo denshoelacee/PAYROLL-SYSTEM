@@ -19,13 +19,13 @@ type Props = PageProps <{
 export default function ManageUserPartial({ employees}: Props) {
     const [actionType, setActionType] = useState<'approve' | 'reject' | 'batch-approve' | 'batch-reject' | null>(null);
     const [approveModal, setApproveModal] = useState(false);
+    const [batchSubmit, setBatchSubmit] = useState(false)
     const [selectedRow, setSelectedRow] = useState<Employee | null>(null);
     const [selectedRows, setSelectedRows] = useState<Employee[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const filteredRows = searchHooks(searchQuery, employees);
-    const [batchSubmit, setBatchSubmit] = useState(false)
     const [submitTrigger, setSubmitTrigger] = useState<'batch-approve' | 'batch-reject' | null>(null);
-
+        
     const routeMap = {
             'approve': 'admin.approve',
             'reject': 'admin.reject',
@@ -34,8 +34,8 @@ export default function ManageUserPartial({ employees}: Props) {
         };  
     // Handle batch action opening
     const handleOpenBatchAction = (action: 'batch-approve' | 'batch-reject') => {
-        setActionType(action);
         setBatchSubmit(true);
+        setActionType(action); 
     };
 
     // Handle single row action opening (existing)
@@ -101,6 +101,7 @@ export default function ManageUserPartial({ employees}: Props) {
 
         const handleClose = () => {
             setApproveModal(false)
+            setBatchSubmit(false)
         }
 
         const columns: GridColDef[] = [
@@ -176,16 +177,15 @@ export default function ManageUserPartial({ employees}: Props) {
             </div>
         </div>
         <div className="w-full overflow-x-auto scrollbar-hidden">
-            <div className='my-5 min-w-[900px] h-[650px] sm:h-[650px] md:h-[750px] lg:h[800px] overflow-y-auto scrollbar-hidden '>
+            <div className='my-5 min-w-[900px] h-auto overflow-y-auto scrollbar-hidden '>
                 <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
                     <div className="text-white px-5 text-lg md:px-10 py-3 md:text-xl">Pending Approval</div>
                     <Table
                     checkboxSelection
                     rows={filteredRows}
                     columns={columns}
-                    height={650}
                     pageSize={10}     
-                    pageSizeOptions={[10]}    
+                    pageSizeOptions={[10,20,50]}    
                     getRowId={(row) => {return row.user_id;}}
                     onRowSelectionModelChange={(selection) => {
                     const selectionArray =
@@ -227,7 +227,7 @@ export default function ManageUserPartial({ employees}: Props) {
                 </Modal>
             )}
             {/* Batch Submission*/}
-            {batchSubmit ?? (
+            {batchSubmit && (
                 <Modal show={batchSubmit} onClose={() => setApproveModal(false)} maxWidth='sm'>
                 {actionType && selectedRows && (
                     <div className="p-6">

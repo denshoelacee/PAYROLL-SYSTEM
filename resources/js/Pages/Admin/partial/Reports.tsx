@@ -65,20 +65,20 @@ export default function ReportsPartial({selectedYear,availableYears,monthlySumma
         ],[handleView]);
         return (
             <>
-                <div className="w-[300px]">
+                <div className="w-full">
                     <Dropdown>
                         <Dropdown.Trigger>
-                        <SecondaryButton className="flex w-full justify-between items-center md:w-[200px] border">
+                        <SecondaryButton className="flex w-full md:w-[14rem]  justify-between items-center border">
                             {<p className="text-sm">{selectedYear || "Select Year"}</p>}
                             <RiArrowDropDownLine className="text-2xl transition-transform duration-500 ease-in-out" />
                         </SecondaryButton>
                         </Dropdown.Trigger>
-                        <Dropdown.Content contentClasses="w-[200px] bg-[#1B4D4D]" align="left">
+                        <Dropdown.Content contentClasses="w-full md:w-[14rem] bg-[#1B4D4D]" align="left">
                             {availableYears.map((selectedYear) => (
                                 <button
                                 key={selectedYear}
                                 onClick={() => handleChange(selectedYear)}
-                                className="block w-full text-left px-4 py-1 hover:bg-white hover:text-black"
+                                className="block w-auto text-left px-4 py-1 hover:bg-white hover:text-black"
                                 >
                                 {selectedYear}
                                 </button>
@@ -98,33 +98,32 @@ export default function ReportsPartial({selectedYear,availableYears,monthlySumma
                         {tab}
                         </button>
                     ))}
+                    </div>
                 </div>
-                </div>
-                <div>
                     {TABS.map((tab) => (
                         <div
-                            key={tab}
-                            className={`${
+                        key={tab}
+                        className={`${
                             activeTab === tab ? "block" : "hidden"
-                            } bg-[#16423C] border border-button-border-color rounded-lg w-full`}
+                        } bg-[#16423C] border border-button-border-color rounded-lg`}
                         >
-                            <h2 className="text-lg font-semibold my-3 mx-5 text-white">
+                        <h2 className="text-lg font-semibold my-3 mx-5 text-white">
                             Reports for {tab}
-                            </h2>
-                            <div className="h-[530px] overflow-auto scrollbar-hidden">
+                        </h2>
+                            <div className="h-auto max-h-[530px] w-full overflow-x-auto overflow-y-auto scrollbar-hidden">
+                                <div className="min-w-[900px]"> 
                                 <Table
-                                rows={monthlySummary}
-                                columns={columns}
-                                hideFooter={true}
-                                pageSize={12}
-                                getRowId={(row) => row.month}
-                                className="employee-table"
+                                    rows={monthlySummary}
+                                    columns={columns}
+                                    hideFooter={true}
+                                    pageSize={12}
+                                    getRowId={(row) => row.month}
+                                    className="employee-table"
                                 />
+                                </div>
                             </div>
                         </div>
-                        ))}
-                </div> 
-                
+                    ))}
             </>
         );
     }

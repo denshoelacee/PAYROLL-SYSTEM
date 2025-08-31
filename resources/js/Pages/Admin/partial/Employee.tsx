@@ -97,17 +97,16 @@ export default function EmployeePartial({ userList,jobtitles,employeeTypeList}: 
             </div>
         </div>
         <div className="w-full overflow-x-auto scrollbar-hidden">
-            <div className='my-5 min-w-[900px] h-[650px] sm:h-[650px] md:h-[710px] lg:h[800px] overflow-y-auto scrollbar-hidden '>
+            <div className='my-5 min-w-[900px] h-auto overflow-y-auto scrollbar-hidden '>
                 <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
                     <div className="text-white px-10 py-3 text-xl">Employee List</div>
                     <Table
                     rows={filteredRows}
                     columns={columns}
-                    height={630}
                     getRowId={(row) => row.employee_id}
                     className="employee-table"
                     pageSize={10}     
-                    pageSizeOptions={[10]}     
+                    pageSizeOptions={[10,20,50]}     
                 />
                 </div>
             </div>

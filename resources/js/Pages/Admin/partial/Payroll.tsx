@@ -48,7 +48,7 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
         return yearMatch && monthMatch;
         })
         .filter((row) => {
-        const fullName = `${row.first_name ?? ''} ${row.last_name ?? ''}`.toLowerCase();
+        const fullName = (row.full_name ?? '').toLowerCase();
         return fullName.includes(searchQuery.toLowerCase());
         })
         .map((row, idx) => ({
@@ -56,7 +56,6 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
         id: idx,
         }));
     }, [payslips, selectedYear, selectedMonth, searchQuery]);
-
     //console.log(payslips)
     const handleOpenPopover = (event:any, row:UserPayroll) => {
             setAnchorEl(event.currentTarget);

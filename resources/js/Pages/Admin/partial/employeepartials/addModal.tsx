@@ -123,12 +123,12 @@ export default function EmployeeAddModal({ show, onClose,jobtitles,employeeTypeL
                             />
                         </div>
                     </InputWrapper>
-                    <InputWrapper className="p-3 flex gap-4">
+                    <InputWrapper className="p-3 flex gap-4 flex-wrap md:flex-nowrap ">
                         <div className='w-full'>
                             <InputLabel htmlFor="department" value="Department *"  className='text-white'/>
                             <Dropdown>
                                 <Dropdown.Trigger>
-                                    <button type="button" className="bg-transparent w-full border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                    <button type="button" className="bg-transparent w-full border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center ">
                                         <p className='text-sm'>{selectDepartment}</p>
                                         <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                     </button>
@@ -161,7 +161,7 @@ export default function EmployeeAddModal({ show, onClose,jobtitles,employeeTypeL
                                         <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                     </button>
                                 </Dropdown.Trigger> 
-                                <Dropdown.Content ableSearch={true} contentClasses=" p-0 w-full max-h-[200px] overflow-y-auto" align="left">
+                                <Dropdown.Content ableSearch={true} contentClasses="p-0 max-h-[200px] overflow-y-auto" align="left">
                                 {jobtitles
                                     .map(des => des.designation)
                                     .filter(designations => designations && designations.toUpperCase() !== 'NULL') 
@@ -172,7 +172,7 @@ export default function EmployeeAddModal({ show, onClose,jobtitles,employeeTypeL
                                         id="designation"
                                         name="designation"
                                         onClick={() => handleDropdownSelect(name, 'designation')}
-                                        className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
+                                        className=" w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
                                     >
                                     {name}
                                     </button>
@@ -190,12 +190,12 @@ export default function EmployeeAddModal({ show, onClose,jobtitles,employeeTypeL
                             onChange={handleInputChange}
                         />
                     </InputWrapper>
-                    <InputWrapper className=" p-3 gap-4 flex">
+                    <InputWrapper className=" p-3 gap-4 flex flex-wrap md:flex-nowrap">
                         <div className="w-full">
                             <InputLabel htmlFor="role" value="Role *" className='text-white' />
                             <Dropdown>
                                 <Dropdown.Trigger>
-                                    <button type="button" className="bg-transparent border       text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                    <button type="button" className="bg-transparent border w-full text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
                                         <p className='text-sm'>{selectRole}</p>
                                         <RiArrowDropDownLine className={` text-2xl transition-transform duration-500 ease-in-out`}/>
                                     </button>
@@ -222,7 +222,7 @@ export default function EmployeeAddModal({ show, onClose,jobtitles,employeeTypeL
                             <InputLabel htmlFor="employment_type" value="Employment Type *" className='text-white' />
                             <Dropdown>
                                 <Dropdown.Trigger>
-                                    <button type="button" className="bg-transparent border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                    <button type="button" className="bg-transparent border w-full text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
                                         <p className='text-sm'>{selectEmploymentType}</p>
                                         <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
                                     </button>

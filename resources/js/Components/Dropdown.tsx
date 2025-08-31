@@ -12,55 +12,57 @@ import {
     useMemo,
     Children,
     cloneElement,
-    isValidElement
+    isValidElement,
+    useRef,
+    useLayoutEffect,
 } from 'react';
 import { Link, InertiaLinkProps } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-
 
 const DropDownContext = createContext<{
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
     toggleOpen: () => void;
-}>({
-    open: false,
-    setOpen: () => {},
-    toggleOpen: () => {},
-});
+    triggerRef: React.RefObject<HTMLDivElement>;
+}>(null as any);
 
 const Dropdown = ({ children }: PropsWithChildren) => {
     const [open, setOpen] = useState(false);
+    const triggerRef = useRef<HTMLDivElement>(null);
 
     const toggleOpen = () => setOpen(prev => !prev);
 
     return (
-        <DropDownContext.Provider value={{ open, setOpen, toggleOpen }}>
+        <DropDownContext.Provider value={{ open, setOpen, toggleOpen, triggerRef }}>
             <div className="relative">{children}</div>
         </DropDownContext.Provider>
     );
 };
 
-//  Updated Trigger to support children as a function
 const Trigger = ({
     children,
 }: {
     children: ReactNode | ((open: boolean) => ReactNode);
 }) => {
-    const { open, setOpen, toggleOpen } = useContext(DropDownContext);
+    const { open, setOpen, toggleOpen, triggerRef } = useContext(DropDownContext);
+    const child = typeof children === 'function' ? children(open) : children;
 
+    if (!isValidElement(child)) return null;
     return (
-        <>
-            <div onClick={toggleOpen}>
-                {typeof children === 'function' ? children(open) : children}
-            </div>
-
+        <div ref={triggerRef} className="inline-block w-full">
+            {cloneElement(child, {
+                onClick: (e: any) => {
+                    child.props.onClick?.(e);
+                    toggleOpen();
+                },
+            })}
             {open && (
                 <div
                     className="fixed inset-0 z-40"
                     onClick={() => setOpen(false)}
-                ></div>
+                />
             )}
-        </>
+        </div>
     );
 };
 
@@ -74,8 +76,15 @@ const Content = ({
     contentClasses?: string;
     ableSearch?: boolean;
 }>) => {
-    const { open, setOpen } = useContext(DropDownContext);
+    const { open, setOpen, triggerRef } = useContext(DropDownContext);
     const [search, setSearch] = useState('');
+    const [width, setWidth] = useState<number>();
+
+    useLayoutEffect(() => {
+        if (triggerRef.current) {
+            setWidth(triggerRef.current.offsetWidth);
+        }
+    }, [open]);
 
     let alignmentClasses = 'origin-top';
     if (align === 'left') {
@@ -85,8 +94,8 @@ const Content = ({
     }
 
     const filteredChildren = useMemo(() => {
-    const processChild = (child: ReactNode) => {
-        if (!isValidElement(child)) return child;
+        const processChild = (child: ReactNode) => {
+            if (!isValidElement(child)) return child;
 
             const shouldInclude =
                 !search.trim() ||
@@ -97,7 +106,6 @@ const Content = ({
 
             if (!shouldInclude) return null;
 
-            // Clone the child to inject onClick
             return cloneElement(child, {
                 ...child.props,
                 onClick: (e: any) => {
@@ -126,27 +134,24 @@ const Content = ({
         >
             <div
                 className={`absolute z-50 rounded-md shadow-lg ${alignmentClasses}`}
+                style={{ width }}
                 onClick={(e) => e.stopPropagation()}
             >
                 <div
-                    className={`text-white bg-[#1B4D4E]  p-2 rounded-md border border-button-border-color ${contentClasses}`}
+                    className={`text-white bg-[#1B4D4E] p-2 rounded-md border border-button-border-color ${contentClasses}`}
                 >
                     {ableSearch && (
-                    <>
-                    {/* 🔍 Search Input */}
-                    <input
-                        type="text"
-                        className="bg-transparent border-button-border-color w-full px-3 py-1 mb-2 text-white rounded focus:outline-none 
-             focus:border-white"
-                        placeholder="Search..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                    
-                    {/* 🎯 Filtered Children */}
-                    </>
+                        <>
+                            <input
+                                type="text"
+                                className="bg-transparent border-button-border-color w-full px-3 py-1 mb-2 text-white rounded focus:outline-none focus:border-white"
+                                placeholder="Search..."
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        </>
                     )}
-                    <div className="max-h-30 overflow-auto">
+                    <div className="max-h-30 w-full overflow-auto">
                         {filteredChildren}
                     </div>
                 </div>

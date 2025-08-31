@@ -1,3 +1,4 @@
+
 import { Head, usePage } from '@inertiajs/react'
 import Sidebar from '@/Components/Sidebar'
 import AdminLayout from '@/Layouts/AdminLayout'
@@ -26,35 +27,34 @@ type DataPoint = {
 }
 
 type SummaryTotal = {
-    total_users:number
-    tax :number
-    due_tax:number
-    total_loan:number
+  total_users: number
+  tax: number
+  due_tax: number
+  total_loan: number
 }
 
-type DepartmentsGross ={
-    department:string
-    total_gross:number
+type DepartmentsGross = {
+  department: string
+  total_gross: number
 }
 
 type ContributionBreakdown = {
-    gsis:number
-    pagibig:number
-    philhealth:number
+  gsis: number
+  pagibig: number
+  philhealth: number
 }
+
 export default function Dashboard({ auth }: PageProps) {
-  const { yearlyReports, availableYears, selectedYear, summaryTotal,departmentGross,contributionBreakdown} =
+  const { yearlyReports, availableYears, selectedYear, summaryTotal, departmentGross, contributionBreakdown } =
     usePage<PageProps<{
       yearlyReports: ChartDatum[]
       availableYears: number[]
       selectedYear: string
       summaryTotal: SummaryTotal
       departmentGross: DepartmentsGross[]
-      contributionBreakdown:ContributionBreakdown
+      contributionBreakdown: ContributionBreakdown
     }>>().props
 
-
-    //console.log(departmentGross)
   const sampleData: DataPoint[] = Array.from({ length: 12 }, (_, index) => {
     const month = index + 1
     const found = yearlyReports.find((item) => item.month === month)
@@ -68,12 +68,13 @@ export default function Dashboard({ auth }: PageProps) {
   })
 
   function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-PH', {
-    style: 'currency',
-    currency: 'PHP',
-    minimumFractionDigits: 2,
-  }).format(amount);
-}
+    return new Intl.NumberFormat('en-PH', {
+      style: 'currency',
+      currency: 'PHP',
+      minimumFractionDigits: 2,
+    }).format(amount);
+  }
+
   return (
     <>
       <Head title="Dashboard" />
@@ -81,74 +82,91 @@ export default function Dashboard({ auth }: PageProps) {
         <Sidebar auth={auth} />
         <AdminLayout title="Dashboard">
           <div className="space-y-4 pb-10">
+
+            {/* Summary Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <CardWrapper 
-                    label={"Total Employees"} 
-                    data={summaryTotal.total_users}
-                    icon={
-                    <div className='rounded-full border-white bg-emerald-600 border h-14 w-14 place-items-center justify-center flex'>
-                        <FiUsers className='text-3xl text-white' />
-                    </div>
-                    }
-                    className='w-full h-40 p-5'
-                />
+              <CardWrapper
+                label={"Total Employees"}
+                data={summaryTotal.total_users}
+                icon={
+                  <div className='rounded-full border-white bg-emerald-600 border h-14 w-14 place-items-center justify-center flex'>
+                    <FiUsers className='text-3xl text-white' />
+                  </div>
+                }
+                className='w-full h-40 p-5'
+              />
 
-                <CardWrapper 
-                    fontsize='text-sm'
-                    label={"Total Tax This Month"} 
-                    data={formatCurrency(summaryTotal.tax)}
-                    icon={
-                    <div className='rounded-full border-white bg-amber-200 border h-14 w-14 place-items-center justify-center flex'>
-                        <TbTax className='text-4xl text-yellow-400' />
-                    </div>
-                    }
-                    className='w-full h-40 p-5'
-                />
+              <CardWrapper
+                fontsize='text-sm'
+                label={"Total Tax This Month"}
+                data={formatCurrency(summaryTotal.tax)}
+                icon={
+                  <div className='rounded-full border-white bg-amber-200 border h-14 w-14 place-items-center justify-center flex'>
+                    <TbTax className='text-4xl text-yellow-400' />
+                  </div>
+                }
+                className='w-full h-40 p-5'
+              />
 
-                <CardWrapper 
-                    fontsize='text-sm'
-                    label={"Total Due Tax This Month"} 
-                    data={formatCurrency(summaryTotal.due_tax)}
-                    icon={
-                    <div className='rounded-full border-white bg-rose-400 border h-14 w-14 place-items-center justify-center flex'>
-                        <TbTax className='text-4xl text-white' />
-                    </div>
-                    }
-                    className='w-full h-40 p-5'
-                />
+              <CardWrapper
+                fontsize='text-sm'
+                label={"Total Due Tax This Month"}
+                data={formatCurrency(summaryTotal.due_tax)}
+                icon={
+                  <div className='rounded-full border-white bg-rose-400 border h-14 w-14 place-items-center justify-center flex'>
+                    <TbTax className='text-4xl text-white' />
+                  </div>
+                }
+                className='w-full h-40 p-5'
+              />
 
-                <CardWrapper 
-                    fontsize='text-sm'
-                    label={"Total Loans This Month"} 
-                    data={formatCurrency(summaryTotal.total_loan)}
-                    icon={
-                    <div className='rounded-full border-white bg-emerald-800 border h-14 w-14 place-items-center justify-center flex'>
-                        <HiOutlineBanknotes className='text-5xl text-white' />
-                    </div>
-                    }
-                    className='w-full h-40 p-5'
-                />
-                </div>
-            <div className="flex w-full  flex-wrap">
-              <ChartAreaInteractive
-                data={sampleData}
-                selectedYear={selectedYear}
-                availableYears={availableYears}
+              <CardWrapper
+                fontsize='text-sm'
+                label={"Total Loans This Month"}
+                data={formatCurrency(summaryTotal.total_loan)}
+                icon={
+                  <div className='rounded-full border-white bg-emerald-800 border h-14 w-14 place-items-center justify-center flex'>
+                    <HiOutlineBanknotes className='text-5xl text-white' />
+                  </div>
+                }
+                className='w-full h-40 p-5'
               />
             </div>
+
+            {/* Interactive Area Chart */}
+            <div className="flex w-full overflow-x-auto">
+              <div className="min-w-[1230px]"> {/* adjust width as needed */}
+                <ChartAreaInteractive
+                  data={sampleData}
+                  selectedYear={selectedYear}
+                  availableYears={availableYears}
+                />
+              </div>
+            </div>
+
+            {/* Bar + Pie Charts */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
-                <CardWrapper className='w-full'>
-                    <div className="flex items-center h-full border py-3 rounded-t-lg">
-                        <p className="text-white pl-4 text-sm">Gross Pay Breakdown by Department this Month</p>
-                    </div>
-                    <BarChart departmentsGross={departmentGross}/>
-                </CardWrapper> 
-                <CardWrapper className='w-full'>
-                    <div className="flex items-center h-full border py-3 rounded-t-lg">
-                        <p className="text-white pl-4 text-sm">Contributions Breakdown for this Month</p>
-                    </div>
-                    <PieChart contributionBreakdown={contributionBreakdown}/>
-                </CardWrapper>
+              <CardWrapper className='w-full overflow-x-auto'>
+                <div className="h-full w-full py-3 rounded-t-lg">
+                  <p className="text-white pl-4 text-sm w-full">
+                    Gross Pay Breakdown by Department this Month
+                  </p>
+                </div>
+                <div className="min-w-[600px]">
+                  <BarChart departmentsGross={departmentGross} />
+                </div>
+              </CardWrapper>
+
+              <CardWrapper className='w-full overflow-x-auto'>
+                <div className="flex items-center h-full py-3 rounded-t-lg">
+                  <p className="text-white pl-4 text-sm">
+                    Contributions Breakdown for this Month
+                  </p>
+                </div>
+                <div className="min-w-[600px]">
+                  <PieChart contributionBreakdown={contributionBreakdown} />
+                </div>
+              </CardWrapper>
             </div>
           </div>
         </AdminLayout>

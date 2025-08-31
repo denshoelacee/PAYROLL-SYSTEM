@@ -188,6 +188,8 @@ export default function EmployeeAddModal({ show, onClose,jobtitles,employeeTypeL
                             type='text' 
                             value={data.basic_pay}
                             onChange={handleInputChange}
+                            disabled={data.employment_type === "Part Time" || data.employment_type === "Job Order" || data.employment_type === ""}
+
                         />
                     </InputWrapper>
                     <InputWrapper className=" p-3 gap-4 flex flex-wrap md:flex-nowrap">

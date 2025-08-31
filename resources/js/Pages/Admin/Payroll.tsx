@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import { PageProps,Employee,UserPayroll,filteredSelectedTypeUser} from '@/types';
+import { PageProps,JobTitles,UserPayroll,filteredSelectedTypeUser} from '@/types';
 import Sidebar from '@/Components/Sidebar';
 import AdminLayout from '@/Layouts/AdminLayout';
 import PayrollPartial from './partial/Payroll';
@@ -17,13 +17,15 @@ type Props = PageProps<{
     selectedYear: string;
     selectedMonth: string;
     filteredEmployementType: filteredSelectedTypeUser[];
+    jobLists: JobTitles[];
 }>;
 export default function Payroll({ auth,thisMonth,newPayroll,payslips,
     availableYears,
     availableMonths,
     selectedYear,
     selectedMonth,
-    filteredEmployementType }:Props) {
+    filteredEmployementType,
+    jobLists}:Props) {
              
     return (
         
@@ -43,7 +45,8 @@ export default function Payroll({ auth,thisMonth,newPayroll,payslips,
                     availableMonths={availableMonths}
                     availableYears={availableYears}
                     selectedMonth={selectedMonth}
-                    selectedYear={selectedYear}/>
+                    selectedYear={selectedYear}
+                    jobLists={jobLists}/>
                 </div>
                 </AdminLayout>
             </div>

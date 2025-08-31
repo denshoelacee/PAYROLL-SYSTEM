@@ -1,5 +1,5 @@
 import SecondaryButton from "@/Components/SecondaryButton";
-import {Employee,UserPayroll , filteredSelectedTypeUser} from "@/types"
+import {JobTitles,UserPayroll , filteredSelectedTypeUser} from "@/types"
 import { GridColDef } from "@mui/x-data-grid";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import Dropdown from "@/Components/Dropdown";
@@ -27,8 +27,9 @@ type Props = {
     selectedYear: string;
     selectedMonth: string;
     filteredEmployementType: filteredSelectedTypeUser[];
+    jobLists: JobTitles[];
 }
-export default function PayrollPartial ({newPayroll,payslips,availableYears,availableMonths,selectedYear,selectedMonth,filteredEmployementType}:Props) {
+export default function PayrollPartial ({jobLists,newPayroll,payslips,availableYears,availableMonths,selectedYear,selectedMonth,filteredEmployementType}:Props) {
     const [addModal, setAddModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -193,7 +194,7 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
                                 rows={payslips}
                                 columns={columns}
                                 height={650}
-                                getRowId={(row) => row?.user_id}
+                                getRowId={(row) => row?.employee_id}
                                 className="employee-table"
                                 pageSize={10}
                             />
@@ -206,7 +207,10 @@ export default function PayrollPartial ({newPayroll,payslips,availableYears,avai
                 <PayrollAddModal show={addModal} onClose={() => {
                     setAddModal(false);
                     router.visit(route("admin.payroll"), { replace: true }); 
-                }}  newPayroll={newPayroll} filteredEmployementType={filteredEmployementType}/>
+                }}  
+                newPayroll={newPayroll} 
+                filteredEmployementType={filteredEmployementType}
+                jobLists={jobLists}/>
             ))
             {/*Edit Modal */}
             {editModal && selectedRow && (

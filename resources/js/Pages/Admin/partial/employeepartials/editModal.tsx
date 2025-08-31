@@ -43,6 +43,8 @@ export default function EditEmployeeModal({
     const [selectDesignation, setSelectDesignation] = useState("Select Designation");
     const [selectRole, setSelectRole] = useState("Select Role");
     const [selectEmploymentType, setSelectEmploymentType] = useState("Select Employment Type");
+    const [isDisableInput, setDisableInput] = useState(true);
+
 
     useEffect(() => {
         if (show && row) {

@@ -57,5 +57,7 @@ export const validFieldIds = [
 "pera",
 "daily_rate",
 "hourly_rate",
+"duty_count",
+"units",
 ...fieldTitles.flatMap((s) => s.fields.map((f) => f.id)),
 ];

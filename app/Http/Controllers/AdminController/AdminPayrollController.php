@@ -72,6 +72,7 @@ public function payrollThisDay(Request $request, $type, $id = null)
         'availableMonths' => $months,
         'selectedYear' => (string)$year,
         'selectedMonth' => str_pad($month, 2, '0', STR_PAD_LEFT),
+        'jobLists' => $jobLists,
     ]);
 }
 

@@ -7,4 +7,6 @@ interface GeneratePayslipsReportServiceInterface
 
      public function UserPayrollMonthly($year,$month);
 
+      public function viewPayslipByPayrollId($payslip_id);
+
 }

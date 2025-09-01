@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('hourly_rate',10,2)->nullable();
             $table->unsignedSmallInteger('duty_count')->nullable();
             $table->unsignedSmallInteger('units')->nullable();
+            $table->decimal('service_rendered',10,2)->nullable();
             $table->decimal('pera',10,2)->nullable();
             $table->decimal('absent', 10, 2)->nullable();
             $table->decimal('late', 10, 2)->nullable();

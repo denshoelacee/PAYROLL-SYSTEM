@@ -73,24 +73,19 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/added-user',[CreateNewAccountController::class,'store'])->name('add.new.account');
     Route::delete('/account/delete/{id}',[EditDeleteAccountController::class, 'deleteAccount'])->name('delete.account');
     Route::patch('/account/update/{id}', [EditDeleteAccountController::class, 'editAccount'])->name('update.account');
-
-    Route::get('/payroll/Payslip/{id}', function () {
-        return Inertia::render('Admin/ViewPayslip');
-    });
+    
 });
 
 Route::prefix('employee')->middleware(['auth', 'role:User'])->group(function () {
     Route::get('/dashboard', [EmployeeDashboardController::class, 'dashboard'])->name('employee.dashboard');
     Route::get('/payslip/summary',[EmployeeReportsController::class,'userPayslipReports'])->name('employee.payslip.summary');
     Route::get('/payslip/reports/{year}/summary',[EmployeeReportsController::class,'userPayslipReports'])->name('employee.payslip.reports');
-
-    Route::get('/payroll/Payslip/{id}', function () {
-        return Inertia::render('Employee/ViewPayslip');
-    });
 });
 
 Route::middleware(['auth', 'role:Admin,User'])->group(function () {
-    // shared routes or can access admin,user
+    
+       //View Payslip By Payslip Id
+    Route::get('/view/payroll/Payslip/{id}',[AdminPayrollController::class,'viewPayslipById']);
 });
 
 require __DIR__.'/auth.php';

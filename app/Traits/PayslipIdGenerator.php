@@ -44,7 +44,7 @@ trait PayslipIdGenerator
                          ->exists();
 
         $suffix = $exists ? '02' : '01';
-        return [$idPrefix . $suffix, 'Job-Order'];
+        return [$idPrefix . $suffix, 'Job Order'];
     }
 
     private function handlePartTime($user, $idPrefix)

@@ -14,6 +14,8 @@ interface PayrollRepositoryInterface{
 
       public function getUsersWithoutPayrollForCurrentMonth($id);
 
+      public function getViewPayslipByPayslipId($payslip_id);
+
       public function updatePartial(array $data,$id): void;
 
       public function updatePublish(array $data,$id): void;

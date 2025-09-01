@@ -53,8 +53,8 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
         return fullName.includes(searchQuery.toLowerCase());
         })
         .map((row, idx) => ({
-        ...row,
-        id: idx,
+         ...row,
+       id: row.payslip_id, // Use payslip_id instead of index
         }));
     }, [payslips, selectedYear, selectedMonth, searchQuery]);
     //console.log(payslips)
@@ -68,6 +68,8 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
     };
 
     const columns: GridColDef[] = [        
+        { field: 'employee_id', headerName: 'Employee ID', flex:1, headerAlign: 'center', align: 'center',
+        },
         { field: 'payslip_id', headerName: ' Payslip ID', flex:1, headerAlign: 'center', align: 'center',
         },
         { field: 'full_name', headerName: 'Name', flex:1, headerAlign: 'center', align: 'center',
@@ -194,7 +196,7 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
                                 rows={payslips}
                                 columns={columns}
                                 height={650}
-                                getRowId={(row) => row?.employee_id}
+                                getRowId={(row) => row?.payslip_id}
                                 className="employee-table"
                                 pageSize={10}
                             />
@@ -247,15 +249,21 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
                     >
                         Delete
                     </button>
-                   {/* <button
-                        className="w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100 "
+                    <button
+                     className="w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100 "
                         onClick={() => {
-                            handleView(selectedRow as UserPayroll);
+                            if (selectedRow?.payslip_id) {
+                                localStorage.setItem('selectedPayroll', JSON.stringify(selectedRow));
+                                window.open(`/view/payroll/Payslip/${selectedRow.payslip_id}`, '_blank');
+                            } else {
+                                // Handle case where payroll_id is missing
+                                alert('Payslip ID not found');
+                            }
                             setAnchorEl(null);
                         }}
                     >
                         View
-                    </button>*/}
+                    </button>
                 </div>
             </Popover>
         </>

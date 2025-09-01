@@ -20,10 +20,10 @@ class Payroll extends Model
 
         'payslip_id',
         'user_id',
-        'role_id',
         'basic_salary',
         'daily_rate',
         'duty_count',
+        'service_rendered',
         'units',
         'pera',
         'absent',

@@ -32,6 +32,7 @@ class EditPublishRequest extends FormRequest
             'hourly_rate' => $monetaryRule,
             'duty_count' => $monetaryRule,
             'units' => $wholeNumberRule,
+            'service_rendered' => $monetaryRule,
             'absent' => $monetaryRule,
             'late' => $monetaryRule,
             'holding_tax' => $monetaryRule,

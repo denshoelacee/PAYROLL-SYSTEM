@@ -17,7 +17,7 @@ class AdminPayrollController extends Controller
     public function __construct(
               protected PayrollServiceInterface                $payrollService,
               protected GeneratePayslipsReportServiceInterface $payslipsReportService,
-              protected HrMetaDataServiceInterface $metaDataService
+              protected HrMetaDataServiceInterface             $metaDataService
 
     ){}
 
@@ -56,7 +56,7 @@ public function payrollThisDay(Request $request, $type, $id = null)
     $payslips = $this->payslipsReportService->UserPayrollMonthly($year, $month);   //Year Month Payrolls
 
     $jobLists = $this->metaDataService->jobTitleList();   //Job List -> EMPLOYMENT TYPE (PART-TIME )REGULAR AND JO CAN ASSIGNED MULTITPLE JOB WORK
-
+//dd($payslips);
     $months = collect(range(1, 12))->map(function ($m) {
         return [    
             'number' => str_pad($m, 2, '0', STR_PAD_LEFT),
@@ -85,5 +85,15 @@ public function payrollThisDay(Request $request, $type, $id = null)
        $this->payrollService->editedPartialPublishPayroll($validated,$id);
 
        redirect()->back()->with("success","Payroll Updated Successfully!");
+    }
+
+    public function ViewPayslipById($payslip_id)
+    {
+
+       $payslip = $this->payslipsReportService->viewPayslipByPayrollId($payslip_id);
+      // dd($payslip);
+       return Inertia::render('Admin/ViewPayslip',[
+           'payslip' => $payslip
+       ]);
     }
 }

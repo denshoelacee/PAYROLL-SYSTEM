@@ -128,22 +128,23 @@ class AdminPayrollController extends Controller
 
     public function getUpdatePayroll($payroll_id, $payslip_type)
     {
-        try {
-            $editPayroll = $this->payrollService->updatePayslipById($payroll_id, $payslip_type);
-            
-            if (!$editPayroll) {
-                return response()->json(['error' => 'Payroll not found'], 404);
-            }
-
-            return response()->json([
-                'success' => true,
-                'editPayroll' => $editPayroll
+    try {
+        $editPayroll = $this->payrollService->updatePayslipById($payroll_id, $payslip_type);
+        
+        if (!$editPayroll) {
+            return Inertia::render('Admin/Payroll', [
+                'error' => 'Payroll not found'
             ]);
+        }
+
+        return Inertia::render('Admin/Payroll', [
+            'editPayroll' => $editPayroll
+        ]);
         } catch (\Exception $e) {
-            return response()->json([
+            return Inertia::render('Admin/Payroll', [
                 'error' => 'Failed to load payroll data',
-                'message' => $e->getMessage()
-            ], 500);
+                'message' => $e->getMessage(),  
+            ]);
         }
     }
 }

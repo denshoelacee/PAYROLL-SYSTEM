@@ -35,13 +35,11 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
     const [searchQuery, setSearchQuery] = useState('');
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedRow, setSelectedRow] = useState<UserPayroll | null>(null);
-
-    //console.log('payslips',payslips)
-    //console.log('newPayroll',newPayroll)
-    //console.log(filteredEmployementType,newPayroll)
-    // Filter rows based on selected year, month, and search query  
+    if (!availableMonths) return null;
+    if (!availableYears) return null;
+    if (!payslips) return null;
     const filteredRows = useMemo(() => {
-    return payslips
+    return (payslips)
         .filter((row) => {
         const date = new Date(row?.latest_payroll?.created_at);
         const yearMatch = date.getFullYear().toString() === selectedYear;
@@ -52,12 +50,12 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
         const fullName = (row.full_name ?? '').toLowerCase();
         return fullName.includes(searchQuery.toLowerCase());
         })
-        .map((row, idx) => ({
+        .map((row) => ({
          ...row,
        id: row.payslip_id, // Use payslip_id instead of index
         }));
     }, [payslips, selectedYear, selectedMonth, searchQuery]);
-    //console.log(payslips)
+
     const handleOpenPopover = (event:any, row:UserPayroll) => {
             setAnchorEl(event.currentTarget);
             setSelectedRow(row);
@@ -87,7 +85,6 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
         headerAlign: 'center',
         align: 'center',
         renderCell: (params) => (
-            //console.log('waw',params?.row?.publish_status),
             params?.row?.publish_status === 'none' ? (
             ""
             ) : (
@@ -216,7 +213,10 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
             ))
             {/*Edit Modal */}
             {editModal && selectedRow && (
-                <PayrollEditModal show={editModal} onClose={() => setEditModal(false)} row={selectedRow as any} />
+                <PayrollEditModal show={editModal} onClose={() => {setEditModal(false)
+                    router.visit(route("admin.payroll"), { replace: true }); 
+                }
+                } row={selectedRow as any} />
             )}
 
                 <Popover
@@ -233,21 +233,12 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
                         disabled={selectedRow?.latest_payroll?.publish_status === 'publish'}
                         className={`${selectedRow?.latest_payroll?.publish_status === 'publish' ? 'cursor-not-allowed opacity-50' : ''} w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100`}
                         onClick={() => {
-                            setAnchorEl(null);
+                            setAnchorEl(null)
                             setEditModal(true);
                         }}
 
                     >
                         Edit
-                    </button>
-                    <button
-                        className="w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100 "
-                        onClick={() => {
-                            console.log("Delete employee:", selectedRow);
-                            setAnchorEl(null);
-                        }}
-                    >
-                        Delete
                     </button>
                     <button
                      className="w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100 "
@@ -256,7 +247,6 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
                                 localStorage.setItem('selectedPayroll', JSON.stringify(selectedRow));
                                 window.open(`/view/payroll/Payslip/${selectedRow.payslip_id}`, '_blank');
                             } else {
-                                // Handle case where payroll_id is missing
                                 alert('Payslip ID not found');
                             }
                             setAnchorEl(null);

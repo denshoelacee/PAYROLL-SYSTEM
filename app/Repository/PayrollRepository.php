@@ -289,8 +289,8 @@ class PayrollRepository implements PayrollRepositoryInterface{
      */
     public function getUpdatePayslipById(string $payroll_id,string $type)
     {
-         $payroll = Payroll::with(
-            'user:user_id,last_name,first_name,employee_id)'
+        $payroll = Payroll::with(
+            'user:user_id,last_name,first_name,employee_id'
         )
         ->select([
             'payroll_id','payslip_id', 'user_id', 'basic_salary', 'daily_rate',

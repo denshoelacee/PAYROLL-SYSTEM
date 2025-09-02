@@ -83,7 +83,20 @@ export default function PayrollAddModal({
     assigned_designation: "",
     });
 
-    const isSalaryZero = Number(data.basic_pay) === 0;
+    const isInvalid =
+    (activeTab === "Regular" && Number(data.basic_pay) === 0) ||
+    (activeTab === "Part-Time" &&
+        (
+        !data.hourly_rate?.trim() ||
+        !data.units?.trim() ||
+        !data.duty_count?.trim() ||
+        !data.assigned_department?.trim() ||
+        !data.assigned_designation?.trim()
+        )
+    ) ||
+    (activeTab === "Job Order" && !data.daily_rate?.trim());
+
+
     const employeeOptions = useMemo(
         () => filteredEmployementType || [],
         [filteredEmployementType]
@@ -302,14 +315,14 @@ const handleEmploymentType = (field: string) => {
     const renderFooter = () => (
         <div className="flex gap-4">
         <PrimaryButton
-            disabled={disableInput || isSalaryZero || loading}
+            disabled={disableInput  || isInvalid || loading }
             onClick={handleSubmit("publish")}
             className="text-md mt-4 py-2 hover:bg-yellow-600"
         >
             {loading ? "Loading..." : "Publish"}
         </PrimaryButton>
         <PrimaryButton
-            disabled={disableInput || isSalaryZero || loading}
+            disabled={disableInput  || isInvalid || loading}
             onClick={handleSubmit("partial")}
             className="text-md mt-4 hover:bg-yellow-600"
         >
@@ -502,9 +515,9 @@ const handleEmploymentType = (field: string) => {
                     disabled={disableInput}
                     />
                     <TextInputGroup
-                    name="duty_count"
-                    label="Duty Count"
-                    id="duty_count"
+                    name="service_rendered"
+                    label="Service Rendered"
+                    id="service_rendered"
                     onChange={handleInputChange}
                     disabled={disableInput}
                     />
@@ -536,6 +549,13 @@ const handleEmploymentType = (field: string) => {
                     label="Daily Rate"
                     id="daily_rate"
                     name="daily_rate"
+                    onChange={handleInputChange}
+                    disabled={disableInput}
+                    />
+                    <TextInputGroup
+                    label="Duty Count"
+                    id="duty_count"
+                    name="duty_count"
                     onChange={handleInputChange}
                     disabled={disableInput}
                     />

@@ -230,8 +230,8 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
                 >
                 <div className=" w-48 bg-mainColor shadow-md text-sm text-white">
                     <button
-                        disabled={selectedRow?.latest_payroll?.publish_status === 'publish'}
-                        className={`${selectedRow?.latest_payroll?.publish_status === 'publish' ? 'cursor-not-allowed opacity-50' : ''} w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100`}
+                        disabled={selectedRow?.publish_status === 'publish'}
+                        className={`${selectedRow?.publish_status === 'publish' ? 'cursor-not-allowed opacity-50' : ''} w-full text-left px-4 py-2 hover:text-mainColor hover:bg-green-100`}
                         onClick={() => {
                             setAnchorEl(null)
                             setEditModal(true);

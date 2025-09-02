@@ -60,7 +60,7 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/pending/accounts/batch-delete', [BatchDecissionController::class, 'batchDelete'])->name('admin.users.batch-delete');
 
     //Admin Payroll Controller
-    Route::get('/payroll', [AdminPayrollController::class, 'payrollThisDay'])->name('admin.payroll');
+        Route::get('/payroll', [AdminPayrollController::class, 'payrollThisDay'])->name('admin.payroll');
     Route::post('/payroll/store', [AdminPayrollController::class, 'savePartial'])->name('admin.store.partial');
     Route::post('/payroll/publish', [AdminPayrollController::class, 'publish'])->name('admin.store.publish');
     Route::post('/payroll/updatePartialPublish/{id}', [AdminPayrollController::class, 'editedPartialPublish'])->name('admin.payroll.update-partial-publish');
@@ -69,7 +69,7 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
   //  Route::post('/payroll/select/{type}',[AdminPayrollController::class,'payrollThisDay'])->name('admin.payroll.filtered.type');
     Route::match(['GET','POST'],'/payroll/select/{type}/{id?}', [AdminPayrollController::class, 'payrollThisDay'])->name('admin.payroll.filtered.type');
  
-    Route::get('/payroll/edit/{payroll_id}/{payslip_type}', [AdminPayrollController::class, 'payrollThisDay'])->name('admin.payroll.edit.data');
+    Route::get('/payroll/edit/{payroll_id}/{payslip_type}', [AdminPayrollController::class, 'getUpdatePayroll'])->name('admin.payroll.edit.data');
 
     //Admin Actions Controller
     Route::post('/added-user',[CreateNewAccountController::class,'store'])->name('add.new.account');

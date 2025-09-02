@@ -55,7 +55,7 @@ class AdminPayrollController extends Controller
      * @param int|null $id Optional ID filter
      * @return \Inertia\Response Payroll management page
      */
-    public function payrollThisDay(Request $request, $type, $id = null, $payroll_id = null, $payslip_type = null)
+    public function payrollThisDay(Request $request, $type, $id = null)
     {
     
         $year = $request->year ?? now()->year;
@@ -65,11 +65,6 @@ class AdminPayrollController extends Controller
         $filteredEmployementType = $this->payrollService->selectEmploymentSalaryType($selectedType);
 
         $newPayroll = $this->payrollService->usersWithoutPayrollForCurrentMonth($id,$type); 
-
-        // EDIT PAYROLL send payroll_id, empType(payslip_type)
-        // Note: edit modal (Group: Part-Time,Regular/Part-Time,Job Order/Part-Time)
-        // If error contact Developers and send cashG 10k petot
-        $editPayroll = $this->payrollService->updatePayslipById($payroll_id,$payslip_type); 
         
         $payslips = $this->payslipsReportService->UserPayrollMonthly($year, $month); 
 
@@ -131,4 +126,24 @@ class AdminPayrollController extends Controller
        ]);
     }
 
+    public function getUpdatePayroll($payroll_id, $payslip_type)
+    {
+        try {
+            $editPayroll = $this->payrollService->updatePayslipById($payroll_id, $payslip_type);
+            
+            if (!$editPayroll) {
+                return response()->json(['error' => 'Payroll not found'], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'editPayroll' => $editPayroll
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to load payroll data',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

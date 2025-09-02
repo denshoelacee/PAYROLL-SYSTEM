@@ -59,5 +59,6 @@ export const validFieldIds = [
 "hourly_rate",
 "duty_count",
 "units",
+"service_rendered",
 ...fieldTitles.flatMap((s) => s.fields.map((f) => f.id)),
 ];

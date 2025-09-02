@@ -12,7 +12,6 @@ import { fieldTitles, validFieldIds } from "./fieldTitles";
 import type { UserPayroll, filteredSelectedTypeUser } from "@/types";
 import { router } from "@inertiajs/react";
 import { JobTitles } from "@/types";
-import Department from "../../Department";
 
 interface Props {
     show: boolean;
@@ -76,6 +75,7 @@ export default function PayrollAddModal({
     employment_type: "",
     // For Part-Time & Job Order
     hourly_rate: "",
+    service_rendered:"",
     units: "",
     duty_count: "",
     daily_rate: "",
@@ -89,12 +89,17 @@ export default function PayrollAddModal({
         (
         !data.hourly_rate?.trim() ||
         !data.units?.trim() ||
-        !data.duty_count?.trim() ||
+        !data.service_rendered?.trim() ||
         !data.assigned_department?.trim() ||
         !data.assigned_designation?.trim()
         )
     ) ||
-    (activeTab === "Job Order" && !data.daily_rate?.trim());
+    (activeTab === "Job Order" && 
+        (
+        !data.daily_rate?.trim() || 
+        !data.duty_count?.trim()
+        )
+    );
 
 
     const employeeOptions = useMemo(
@@ -231,6 +236,8 @@ const handleEmploymentType = (field: string) => {
     reset();
 
     setSelectName("Select Employee"); 
+    setselectDepartment("Select Department"); 
+    setselectDesignation("Select Designation"); 
     setDisableInput(true);
     setData("employment_type", field);
     setActiveTab(field);
@@ -505,6 +512,7 @@ const handleEmploymentType = (field: string) => {
                     id="hourly_rate"
                     name="hourly_rate"
                     onChange={handleInputChange}
+                    value={data.hourly_rate}
                     disabled={disableInput}
                     />
                     <TextInputGroup 
@@ -512,12 +520,14 @@ const handleEmploymentType = (field: string) => {
                     label="Units" 
                     id="units" 
                     onChange={handleInputChange} 
+                    value={data.units}
                     disabled={disableInput}
                     />
                     <TextInputGroup
                     name="service_rendered"
                     label="Service Rendered"
                     id="service_rendered"
+                    value={data.service_rendered}
                     onChange={handleInputChange}
                     disabled={disableInput}
                     />
@@ -549,6 +559,7 @@ const handleEmploymentType = (field: string) => {
                     label="Daily Rate"
                     id="daily_rate"
                     name="daily_rate"
+                    value={data.daily_rate}
                     onChange={handleInputChange}
                     disabled={disableInput}
                     />
@@ -556,6 +567,7 @@ const handleEmploymentType = (field: string) => {
                     label="Duty Count"
                     id="duty_count"
                     name="duty_count"
+                    value={data.duty_count}
                     onChange={handleInputChange}
                     disabled={disableInput}
                     />

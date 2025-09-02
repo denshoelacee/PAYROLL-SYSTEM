@@ -26,4 +26,11 @@ class PayrollDeduction extends Model
         
         return $this->belongsTo(Payroll::class,'payroll_id');
     }
+
+    protected $casts = [
+     
+        'total_accrued_period' => 'float',
+        'total_deduction' => 'float',
+        'net_pay' => 'float',
+    ];
 }

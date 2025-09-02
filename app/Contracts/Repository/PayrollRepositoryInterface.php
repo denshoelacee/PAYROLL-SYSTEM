@@ -12,7 +12,10 @@ interface PayrollRepositoryInterface{
 
     //  public function getPayrollThisMonth();
 
-      public function getUsersWithoutPayrollForCurrentMonth($id);
+      public function getUsersWithoutPayrollForCurrentMonth($id,$selectedType);
+
+      // Fetch the selected payroll to Update
+      public function getUpdatePayslipById(string $payroll_id,string $type);
 
       public function getViewPayslipByPayslipId($payslip_id);
 

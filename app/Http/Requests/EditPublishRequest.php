@@ -62,9 +62,9 @@ class EditPublishRequest extends FormRequest
             'deduction1' => $monetaryRule,
             'deduction2' => $monetaryRule,
             'deduction3' => $monetaryRule,
-            'assinged_designation' => $stringRule,
+            'assigned_designation' => $stringRule,
             'assigned_department' => $stringRule,
-            'employment_type' => $stringRule
+            'employment_type' => $stringRule,
         ];
     }
 }

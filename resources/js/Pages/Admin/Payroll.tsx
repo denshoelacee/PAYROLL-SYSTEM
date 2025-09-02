@@ -19,6 +19,7 @@ type Props = PageProps<{
     filteredEmployementType: filteredSelectedTypeUser[];
     jobLists: JobTitles[];
 }>;
+
 export default function Payroll({ auth,thisMonth,newPayroll,payslips,
     availableYears,
     availableMonths,

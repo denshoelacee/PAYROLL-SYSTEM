@@ -73,67 +73,51 @@ class PayrollRepository implements PayrollRepositoryInterface{
 
     }
 
-    public function getTheEmployementRoleType()
+    /**
+     * Summary of getUsersWithoutPayrollForCurrentMonth
+     * 
+     * @param mixed $id  User id
+     * @param mixed $selectedType  Employment Type (Regular,JO,Part-Time)
+     * @return object|User|\Illuminate\Database\Eloquent\Model|null
+     */
+    public function getUsersWithoutPayrollForCurrentMonth($id, $selectedType)
     {
-        return $this->type;
-    }
-    
-    public function getUsersWithoutPayrollForCurrentMonth($id)
-    {
-         $selectedType = $this->type;
-    
-    $user = User::select(['user_id', 'basic_pay', 'employment_type']) 
-        ->where('user_id', $id)
-        ->first();
+        $user = User::select(['user_id', 'basic_pay', 'employment_type']) 
+            ->where('user_id', $id)
+            ->first();
 
-    if (!$user || !str_contains($user->employment_type, $selectedType)) {
-        return null;
-    }
+        if (!$user) {
+            return null;
+        }
 
-    // Determine what payroll employment type to look for
-    if ($selectedType === 'Part-Time' && $user->employment_type !== 'Part-Time') {
-        $payrollType = $user->employment_type . '/Part-Time';
-    } else {
-        $payrollType = $selectedType;
-    }
+        // Check if the selected type is valid for this user
+        $canWorkSelectedType = ($selectedType === 'Part-Time') 
+            ? in_array($user->employment_type, ['Regular', 'Job Order', 'Part-Time'])
+            : str_contains($user->employment_type, $selectedType);
+            
+        if (!$canWorkSelectedType) {
+            return null;
+        }
 
-    // Get latest payroll for this specific type manually
-    $latestPayroll = Payroll::where('user_id', $id)
-        ->where('payslip_type', $payrollType)
-        ->latest('created_at')
-        ->first();
+        // Determine what payroll employment type to look for
+        if ($selectedType === 'Part-Time' && $user->employment_type !== 'Part-Time') {
+            $payrollType = $user->employment_type . '/Part-Time';
+        } else {
+            $payrollType = $selectedType;
+        }
 
-    // If no specific payroll type found, get any latest payroll for reference
-    if (!$latestPayroll) {
+        // Get latest payroll for this EXACT specific type only
         $latestPayroll = Payroll::where('user_id', $id)
+            ->where('payslip_type', $payrollType)
             ->latest('created_at')
             ->first();
+
+        // Set the relationship manually
+        $user->setRelation('latestPayroll', $latestPayroll);
+        
+        return $user;
     }
 
-    // Set the relationship manually
-    $user->setRelation('latestPayroll', $latestPayroll);
-    
-    return $user;
-}
-
-private function getPayrollEmploymentType($selectedType, $userEmploymentType)
-{
-    // Determine the correct payroll employment type based on selection and user's permanent type
-    if ($selectedType === 'Part-Time') {
-        // For part-time work, determine the combined type
-        if ($userEmploymentType === 'Regular') {
-            return 'Regular/Part-Time';
-        } elseif ($userEmploymentType === 'Job Order') {
-            return 'Job Order/Part-Time';
-        } else {
-            return 'Part-Time'; // Pure part-time employee
-        }
-    } else {
-        // For Regular or Job Order, use the selected type directly
-        return $selectedType;
-    }
-
-    }
 
     public function payrollModel(int $id): ?Payroll
     {
@@ -196,7 +180,12 @@ private function getPayrollEmploymentType($selectedType, $userEmploymentType)
             ->get();
     }
 
-    
+    /**
+     * View the specified payslip
+     * 
+     * @param mixed $payslip_id
+     * 
+     */
     public function getViewPayslipByPayslipId($payslip_id)
     {
         $payroll = Payroll::with([
@@ -204,15 +193,14 @@ private function getPayrollEmploymentType($selectedType, $userEmploymentType)
             'deduction:payroll_id,total_accrued_period,total_deduction,net_pay'
         ])
         ->select([
-            'payslip_id', 'user_id', 'basic_salary', 'daily_rate', 'duty_count',
-            'service_rendered','units', 'pera', 'absent', 'late', 'holding_tax',
-            'tax_bal_due', 'rlip', 'policy_loan', 'consol_loan', 'emerg_loan',
-            'gel', 'gfal', 'mpl', 'mpl_lite', 'contributions', 'loans',
-            'housing_loan', 'philhealth', 'cfi', 'tipid', 'city_savings_bank',
-            'fea', 'canteen', 'disallowance', 'unliquidated_ca',
-            'disallowance_honoraria', 'coop', 'landbank', 'ucpb', 'sss',
-            'deduction1', 'deduction2', 'deduction3', 'assigned_designation',
-            'assigned_department', 'payslip_type', 'created_at'
+            'payroll_id','payslip_id', 'user_id', 'basic_salary', 'daily_rate',
+            'duty_count', 'service_rendered','units', 'pera', 'absent', 'late',
+            'holding_tax', 'tax_bal_due', 'rlip', 'policy_loan', 'consol_loan',
+            'emerg_loan', 'gel', 'gfal', 'mpl', 'mpl_lite', 'contributions',
+            'loans', 'housing_loan', 'philhealth', 'cfi', 'tipid', 'city_savings_bank',
+            'fea', 'canteen', 'disallowance', 'unliquidated_ca', 'disallowance_honoraria',
+            'coop', 'landbank', 'ucpb', 'sss', 'deduction1', 'deduction2','deduction3',
+            'assigned_designation', 'assigned_department', 'payslip_type', 'created_at'
         ])
         ->where('payslip_id', $payslip_id)
         ->first();
@@ -229,56 +217,58 @@ private function getPayrollEmploymentType($selectedType, $userEmploymentType)
 
         // Transform the single model instance
         return [
+            'payroll_id' => $payroll->payroll_id,
             'payslip_id' => $payroll->payslip_id,
             'user_id' => $payroll->user->user_id,
             'full_name' => $payroll->user->last_name . ', ' . $payroll->user->first_name,
-            'basic_salary' => (float) $payroll->basic_salary,
-            'daily_rate' => (float) $payroll->daily_rate,
-            'duty_count' => (float) $payroll->duty_count,
-            'service_rendered' => (float) $payroll->duty_count,
-            'units' => (float) $payroll->units,
-            'pera' => (float) $payroll->pera,
-            'absent' => (float) $payroll->absent,
-            'late' => (float) $payroll->late,
-            'holding_tax' => (float) $payroll->holding_tax,
-            'tax_bal_due' => (float) $payroll->tax_bal_due,
-            'rlip' => (float) $payroll->rlip,
-            'policy_loan' => (float) $payroll->policy_loan,
-            'consol_loan' => (float) $payroll->consol_loan,
-            'emerg_loan' => (float) $payroll->emerg_loan,
-            'gel' => (float) $payroll->gel,
-            'gfal' => (float) $payroll->gfal,
-            'mpl' => (float) $payroll->mpl,
-            'mpl_lite' => (float) $payroll->mpl_lite,
-            'contributions' => (float) $payroll->contributions,
-            'loans' => (float) $payroll->loans,
-            'housing_loan' => (float) $payroll->housing_loan,
-            'philhealth' => (float) $payroll->philhealth,
-            'cfi' => (float) $payroll->cfi,
-            'tipid' => (float) $payroll->tipid,
-            'city_savings_bank' => (float) $payroll->city_savings_bank,
-            'fea' => (float) $payroll->fea,
-            'canteen' => (float) $payroll->canteen,
-            'disallowance' => (float) $payroll->disallowance,
-            'unliquidated_ca' => (float) $payroll->unliquidated_ca,
-            'disallowance_honoraria' => (float) $payroll->disallowance_honoraria,
-            'coop' => (float) $payroll->coop,
-            'landbank' => (float) $payroll->landbank,
-            'ucpb' => (float) $payroll->ucpb,
-            'sss' => (float) $payroll->sss,
-            'deduction1' => (float) $payroll->deduction1,
-            'deduction2' => (float) $payroll->deduction2,
-            'deduction3' => (float) $payroll->deduction3,
+            'basic_salary' => $payroll->basic_salary,
+            'daily_rate' => $payroll->daily_rate,
+            'duty_count' => $payroll->duty_count,
+            'service_rendered' => $payroll->duty_count,
+            'units' => $payroll->units,
+            'pera' => $payroll->pera,
+            'absent' => $payroll->absent,
+            'late' => $payroll->late,
+            'holding_tax' => $payroll->holding_tax,
+            'tax_bal_due' => $payroll->tax_bal_due,
+            'rlip' => $payroll->rlip,
+            'policy_loan' => $payroll->policy_loan,
+            'consol_loan' => $payroll->consol_loan,
+            'emerg_loan' => $payroll->emerg_loan,
+            'gel' => $payroll->gel,
+            'gfal' => $payroll->gfal,
+            'mpl' => $payroll->mpl,
+            'mpl_lite' => $payroll->mpl_lite,
+            'contributions' => $payroll->contributions,
+            'loans' => $payroll->loans,
+            'housing_loan' => $payroll->housing_loan,
+            'philhealth' => $payroll->philhealth,
+            'cfi' => $payroll->cfi,
+            'tipid' => $payroll->tipid,
+            'city_savings_bank' => $payroll->city_savings_bank,
+            'fea' => $payroll->fea,
+            'canteen' => $payroll->canteen,
+            'disallowance' => $payroll->disallowance,
+            'unliquidated_ca' => $payroll->unliquidated_ca,
+            'disallowance_honoraria' => $payroll->disallowance_honoraria,
+            'coop' => $payroll->coop,
+            'landbank' => $payroll->landbank,
+            'ucpb' => $payroll->ucpb,
+            'sss' => $payroll->sss,
+            'deduction1' => $payroll->deduction1,
+            'deduction2' => $payroll->deduction2,
+            'deduction3' => $payroll->deduction3,
             'assigned_designation' => $payroll->assigned_designation,
             'assigned_department' => $payroll->assigned_department,
             'payslip_type' => $payroll->payslip_type,
             // Safe access to deduction properties with null coalescing
-            'gross_salary' => (float) ($payroll->deduction->total_accrued_period ?? 0),
-            'total_deduction' => (float) ($payroll->deduction->total_deduction ?? 0),
-            'net_pay' => (float) ($payroll->deduction->net_pay ?? 0),
+            'gross_salary' => $payroll->deduction->total_accrued_period ?? 0,
+            'total_deduction' => $payroll->deduction->total_deduction ?? 0,
+            'net_pay' => $payroll->deduction->net_pay ?? 0,
             'date' => $payroll->created_at
         ];
     }
+
 
     private function formatPayrollPeriod($date)
     {
@@ -288,6 +278,92 @@ private function getPayrollEmploymentType($selectedType, $userEmploymentType)
         $lastDay = $carbonDate->endOfMonth()->format('j'); // Last day of month
         
         return "{$month} 1–{$lastDay}, {$year}";
+    }
+     
+    /**
+     * Update the specified payroll  
+     * 
+     * @param string $payroll_id payroll unique id(PK)
+     * @param string $type payslip type (Regular,JO,Part-Time,Regular/Part-Time,JO/Part-Time)
+     * 
+     */
+    public function getUpdatePayslipById(string $payroll_id,string $type)
+    {
+         $payroll = Payroll::with(
+            'user:user_id,last_name,first_name,employee_id)'
+        )
+        ->select([
+            'payroll_id','payslip_id', 'user_id', 'basic_salary', 'daily_rate',
+            'duty_count', 'service_rendered','units', 'pera', 'absent', 'late',
+            'holding_tax', 'tax_bal_due', 'rlip', 'policy_loan', 'consol_loan',
+            'emerg_loan', 'gel', 'gfal', 'mpl', 'mpl_lite', 'contributions',
+            'loans', 'housing_loan', 'philhealth', 'cfi', 'tipid', 'city_savings_bank',
+            'fea', 'canteen', 'disallowance', 'unliquidated_ca', 'disallowance_honoraria',
+            'coop', 'landbank', 'ucpb', 'sss', 'deduction1', 'deduction2','deduction3',
+            'assigned_designation', 'assigned_department', 'payslip_type', 'created_at'
+        ])
+        ->where('payroll_id', $payroll_id)
+        ->where('payslip_type', $type)
+        ->first();
+
+        // Return null if payslip not found
+        if (!$payroll) {
+            return null;
+        }
+
+        // Check if user relationship exists
+        if (!$payroll->user) {
+            return null;
+        }
+
+        // Transform the single model instance
+       return [
+            'payroll_id' => $payroll->payroll_id,
+            'payslip_id' => $payroll->payslip_id,
+            'employee_id' =>$payroll->user->employee_id,
+            'user_id' => $payroll->user->user_id,
+            'full_name' => $payroll->user->last_name . ', ' . $payroll->user->first_name,
+            'basic_salary' => $payroll->basic_salary,
+            'daily_rate' => $payroll->daily_rate,
+            'duty_count' => $payroll->duty_count,
+            'service_rendered' => $payroll->duty_count,
+            'units' => $payroll->units,
+            'pera' => $payroll->pera,
+            'absent' => $payroll->absent,
+            'late' => $payroll->late,
+            'holding_tax' => $payroll->holding_tax,
+            'tax_bal_due' => $payroll->tax_bal_due,
+            'rlip' => $payroll->rlip,
+            'policy_loan' => $payroll->policy_loan,
+            'consol_loan' => $payroll->consol_loan,
+            'emerg_loan' => $payroll->emerg_loan,
+            'gel' => $payroll->gel,
+            'gfal' => $payroll->gfal,
+            'mpl' => $payroll->mpl,
+            'mpl_lite' => $payroll->mpl_lite,
+            'contributions' => $payroll->contributions,
+            'loans' => $payroll->loans,
+            'housing_loan' => $payroll->housing_loan,
+            'philhealth' => $payroll->philhealth,
+            'cfi' => $payroll->cfi,
+            'tipid' => $payroll->tipid,
+            'city_savings_bank' => $payroll->city_savings_bank,
+            'fea' => $payroll->fea,
+            'canteen' => $payroll->canteen,
+            'disallowance' => $payroll->disallowance,
+            'unliquidated_ca' => $payroll->unliquidated_ca,
+            'disallowance_honoraria' => $payroll->disallowance_honoraria,
+            'coop' => $payroll->coop,
+            'landbank' => $payroll->landbank,
+            'ucpb' => $payroll->ucpb,
+            'sss' => $payroll->sss,
+            'deduction1' => $payroll->deduction1,
+            'deduction2' => $payroll->deduction2,
+            'deduction3' => $payroll->deduction3,
+            'assigned_designation' => $payroll->assigned_designation,
+            'assigned_department' => $payroll->assigned_department,
+            'payslip_type' => $payroll->payslip_type,
+        ];
     }
 
     public function getPayrollReportsYearly($year)

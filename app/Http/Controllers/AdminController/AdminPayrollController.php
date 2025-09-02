@@ -6,6 +6,7 @@ use App\Contracts\Services\PayrollServiceInterface;
 use App\Contracts\Services\IPayrollReportsServices\GeneratePayslipsReportServiceInterface;
 use App\Contracts\Services\HrMetaDataServiceInterface;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\EditPublishRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -22,6 +23,9 @@ class AdminPayrollController extends Controller
     ){}
 
 
+    /**
+     * Partially publish payroll (selected employees or departments)
+     */
     public function savePartial(EditPublishRequest $request)
     {
 
@@ -29,71 +33,102 @@ class AdminPayrollController extends Controller
 
     }
 
+    /**
+     * Finalize and publish payroll for the specified period
+     */
     public function publish(EditPublishRequest $request)
     {
-
-         
+     
        try{
          $this->payrollService->publish($request->validated());
-       //  dd($request->validated());
          return Redirect()->back()->with("success","Payroll Publish Successfully!");
        }catch(\Exception $e){
          return redirect()->back()->with("error", $e->getMessage());
        }
     }
 
-public function payrollThisDay(Request $request, $type, $id = null)
-{
-   
-    $year = $request->year ?? now()->year;
-    $month = $request->month ?? now()->month;
-    $selectedType = $request->input('employmentType'); 
-
-    $filteredEmployementType = $this->payrollService->selectEmploymentSalaryType($selectedType); // add modal select Employement type 
-
-    $newPayroll = $this->payrollService->usersWithoutPayrollForCurrentMonth($id);   //fetch latest Payroll for add Payroll
-    
-    $payslips = $this->payslipsReportService->UserPayrollMonthly($year, $month);   //Year Month Payrolls
-
-    $jobLists = $this->metaDataService->jobTitleList();   //Job List -> EMPLOYMENT TYPE (PART-TIME )REGULAR AND JO CAN ASSIGNED MULTITPLE JOB WORK
-//dd($payslips);
-    $months = collect(range(1, 12))->map(function ($m) {
-        return [    
-            'number' => str_pad($m, 2, '0', STR_PAD_LEFT),
-            'name' => \Carbon\Carbon::create()->month($m)->format('F'),
-        ];
-    });
-
-    return Inertia::render('Admin/Payroll', [
-        'newPayroll' => $newPayroll,
-        'filteredEmployementType' => $filteredEmployementType,
-        'payslips' => $payslips,
-        'availableYears' => range(2025, now()->year),
-        'availableMonths' => $months,
-        'selectedYear' => (string)$year,
-        'selectedMonth' => str_pad($month, 2, '0', STR_PAD_LEFT),
-        'jobLists' => $jobLists,
-    ]);
-}
-
-
-    public function editedPartialPublish(EditPublishRequest $request,$id)
+    /**
+     * Display payroll management dashboard with monthly data
+     * 
+     * @param Request $request Filter parameters (year, month, employmentType)
+     * @param string $type Employment type filter
+     * @param int|null $id Optional ID filter
+     * @return \Inertia\Response Payroll management page
+     */
+    public function payrollThisDay(Request $request, $type, $id = null, $payroll_id = null, $payslip_type = null)
     {
-       $validated = $request->validated();
-       $validated['publish_status'] = $request->input('publish_status');
+    
+        $year = $request->year ?? now()->year;
+        $month = $request->month ?? now()->month;
+        $selectedType = $request->input('employmentType'); 
 
-       $this->payrollService->editedPartialPublishPayroll($validated,$id);
+        $filteredEmployementType = $this->payrollService->selectEmploymentSalaryType($selectedType);
 
-       redirect()->back()->with("success","Payroll Updated Successfully!");
+        $newPayroll = $this->payrollService->usersWithoutPayrollForCurrentMonth($id,$type); 
+
+        // EDIT PAYROLL send payroll_id, empType(payslip_type)
+        // Note: edit modal (Group: Part-Time,Regular/Part-Time,Job Order/Part-Time)
+        // If error contact Developers and send cashG 10k petot
+        $editPayroll = $this->payrollService->updatePayslipById($payroll_id,$payslip_type); 
+        
+        $payslips = $this->payslipsReportService->UserPayrollMonthly($year, $month); 
+
+        $jobLists = $this->metaDataService->jobTitleList();   
+
+        $months = array_map(function ($m) {
+            return [
+                'number' => str_pad($m, 2, '0', STR_PAD_LEFT),
+                'name' => date('F', mktime(0, 0, 0, $m, 1)),
+            ];}, range(1, 12));
+
+        return Inertia::render('Admin/Payroll', [
+            'newPayroll' => $newPayroll,
+            'filteredEmployementType' => $filteredEmployementType,
+            'payslips' => $payslips,
+            'availableYears' => range(2025, now()->year),
+            'availableMonths' => $months,
+            'selectedYear' => (string)$year,
+            'selectedMonth' => str_pad($month, 2, '0', STR_PAD_LEFT),
+            'jobLists' => $jobLists,
+        ]);
     }
 
+
+    /**
+     * Publish selected/partial payroll data
+     * 
+     * @param EditPublishRequest $request Validated payroll data
+     * @param int $id Payroll ID to publish
+     * @return RedirectResponse
+     */
+    public function editedPartialPublish(EditPublishRequest $request, $id): RedirectResponse
+    {
+        $validated = $request->validated();
+        $validated['publish_status'] = $request->input('publish_status');
+        
+        try {
+            $this->payrollService->editedPartialPublishPayroll($validated, $id);
+            return redirect()->back()->with("success", "Payroll published successfully!");
+        } catch(\Exception $e) {
+            return redirect()->back()->with("error", $e->getMessage());
+        }
+    }
+
+
+    /**
+     * Display the specified payslip
+     * 
+     * @param int $payslipId
+     * @return \Illuminate\View\View|\Inertia\Response
+     */
     public function ViewPayslipById($payslip_id)
     {
 
        $payslip = $this->payslipsReportService->viewPayslipByPayrollId($payslip_id);
-      // dd($payslip);
+
        return Inertia::render('Admin/ViewPayslip',[
            'payslip' => $payslip
        ]);
     }
+
 }

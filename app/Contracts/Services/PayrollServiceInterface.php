@@ -4,9 +4,9 @@ namespace App\Contracts\Services;
 
 interface PayrollServiceInterface
 {
-   // public function payrollThisMonth();
+    public function updatePayslipById(string $payslip_id,string $type);
 
-    public function usersWithoutPayrollForCurrentMonth($id);
+    public function usersWithoutPayrollForCurrentMonth($id,$type);
     
     public function selectEmploymentSalaryType($employmentType);
     

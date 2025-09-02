@@ -9,6 +9,7 @@ use App\Contracts\Repository\UserRepositoryInterface;
 use App\Contracts\Repository\PayrollDeductionRepositoryInterface;
 use App\Events\PayslipEvent;
 use App\Notifications\NewPayrollNotification;
+use App\Traits\JobWorkPayrollAssigned;
 use App\Traits\PayslipIdGenerator;
 
 
@@ -16,6 +17,7 @@ class PayrollService implements PayrollServiceInterface
 {
 
     use PayslipIdGenerator;
+    use JobWorkPayrollAssigned;
     public function __construct(
                    protected PayrollRepositoryInterface          $payrollRepository,
                    protected UserRepositoryInterface             $userRepository,
@@ -23,9 +25,12 @@ class PayrollService implements PayrollServiceInterface
                    protected PayrollDeductionRepositoryInterface $payrollDeductionRepository
     ){}
 
-    public function usersWithoutPayrollForCurrentMonth($id)
+    public function usersWithoutPayrollForCurrentMonth($id,$type)
     {
-        return $this->payrollRepository->getUsersWithoutPayrollForCurrentMonth($id);
+         $selectedType = ucwords($type, " \t\r\n\f\v-"); 
+
+        return $this->payrollRepository->getUsersWithoutPayrollForCurrentMonth($id,$selectedType);
+        
     }
 
     
@@ -36,16 +41,22 @@ class PayrollService implements PayrollServiceInterface
         
     }
 
+    public function updatePayslipById(string $payslip_id,string $type)
+    {
+       return $this->payrollRepository->getUpdatePayslipById($payslip_id,$type);
+    }
+
     public function storePartial(array $data)
     {
       
         $user = $this->userRepository->findById($data["user_id"]);
+           $salary = $user->basic_pay;
+        $generateId = $this->generatePayslipId($data['user_id'],$data['employment_type']);
         
           if (!$user){
             throw new \Exception('User not found');
           }
 
-         $salary = $user->basic_pay;
          $rlipContribution = $this->contributionTypeRepository->rlipDeduction($salary);
          $philContribution = $this->contributionTypeRepository->philDeduction($salary);
 
@@ -55,10 +66,13 @@ class PayrollService implements PayrollServiceInterface
 
          $netPay = $totalAccruedPeriod - $totalDeduction;
 
-
+       $data['payslip_id'] = $generateId[0];
+       $data['payslip_type'] = $generateId[1];
        $data['rlip'] = $rlipContribution;
        $data['philhealth'] = $philContribution;
        $data['basic_salary'] = $salary;
+       $data['assigned_designation'] = '';
+       $data['assigned_department'] = '';
        $data['publish_status'] = 'partial';
 
 
@@ -74,9 +88,8 @@ class PayrollService implements PayrollServiceInterface
     public function publish(array $data):void
     {
          $user = $this->userRepository->findById($data['user_id']);
-          $designation = $user->designation;
-          $department = $user->department;
           $salary = $user->basic_pay;
+         $jobAssigned = $this->jobWorkAssigned($data['user_id'],$data['employment_type'],$data['assigned_designation'],$data['assigned_department']);
          $generateId = $this->generatePayslipId($data['user_id'],$data['employment_type']);
 
           if (!$user){
@@ -97,8 +110,8 @@ class PayrollService implements PayrollServiceInterface
        $data['rlip'] = $rlipContribution;
        $data['philhealth'] = $philContribution;
        $data['basic_salary'] = $salary;
-       $data['assigned_designation'] = $designation;
-       $data['assigned_department'] = $department;
+       $data['assigned_designation'] = $jobAssigned[0];
+       $data['assigned_department'] = $jobAssigned[1];
        $data['publish_status'] = 'publish';
 
        $payroll = $this->payrollRepository->setPayrollModel($data);

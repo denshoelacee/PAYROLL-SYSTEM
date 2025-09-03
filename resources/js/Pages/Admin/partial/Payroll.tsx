@@ -5,13 +5,14 @@ import { HiOutlineDotsVertical } from "react-icons/hi";
 import Dropdown from "@/Components/Dropdown";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import Table from "@/Components/Table";
-import {useState,useMemo } from "react";
+import {useState,useMemo, Suspense } from "react";
 import Search from "@/Components/Search";
 import { IoMdAdd } from "react-icons/io";
 import { Popover } from "@mui/material";
 import { router } from "@inertiajs/react";
 import PayrollAddModal from "./payrollpartials/addModal";
 import PayrollEditModal from "./payrollpartials/editModal";
+
 
 type MonthOption = {
     number: string;
@@ -29,15 +30,13 @@ type Props = {
     filteredEmployementType: filteredSelectedTypeUser[];
     jobLists: JobTitles[];
 }
-export default function PayrollPartial ({jobLists,newPayroll,payslips,availableYears,availableMonths,selectedYear,selectedMonth,filteredEmployementType}:Props) {
+export default function PayrollPartial ({jobLists,newPayroll,payslips=[],availableYears=[],availableMonths=[],selectedYear,selectedMonth,filteredEmployementType=[]}:Props) {
     const [addModal, setAddModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedRow, setSelectedRow] = useState<UserPayroll | null>(null);
-    if (!availableMonths) return null;
-    if (!availableYears) return null;
-    if (!payslips) return null;
+    
     const filteredRows = useMemo(() => {
     return (payslips)
         .filter((row) => {
@@ -47,12 +46,12 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
         return yearMatch && monthMatch;
         })
         .filter((row) => {
-        const fullName = (row.full_name ?? '').toLowerCase();
+        const fullName = (row?.full_name ?? '').toLowerCase();
         return fullName.includes(searchQuery.toLowerCase());
         })
         .map((row) => ({
          ...row,
-       id: row.payslip_id, // Use payslip_id instead of index
+       id: row?.payslip_id, // Use payslip_id instead of index
         }));
     }, [payslips, selectedYear, selectedMonth, searchQuery]);
 
@@ -102,7 +101,7 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
         ,
         {
         field: 'action',
-        headerName: 'Actions',
+        headerName: 'Actions',  
         headerAlign: 'center',
         align: 'center',
         sortable: false,
@@ -189,14 +188,16 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
                         <div className='my-5 min-w-[900px] h-auto overflow-y-auto scrollbar-hidden '>
                             <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
                                 <div className="text-white px-10 py-3 text-xl">Payroll Summary</div>
-                                <Table
-                                rows={filteredRows}
-                                columns={columns}
-                                getRowId={(row) => row?.payslip_id}
-                                className="employee-table"
-                                pageSize={10}
-                                pageSizeOptions={[10,20,50]}  
-                            />
+                                    <Suspense fallback={<div className="text-white">Loading payroll data...</div>}>
+                                        <Table
+                                            rows={filteredRows}
+                                            columns={columns}
+                                            getRowId={(row) => row?.payslip_id}
+                                            className="employee-table"
+                                            pageSize={10}
+                                            pageSizeOptions={[10,20,50]}  
+                                        />
+                                    </Suspense>
                             </div>
                         </div>
                     </div>   

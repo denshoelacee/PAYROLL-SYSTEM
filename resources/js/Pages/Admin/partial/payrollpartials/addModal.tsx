@@ -21,22 +21,7 @@ interface Props {
     jobLists: JobTitles[];
 }
 
-export default function PayrollAddModal({
-    show,
-    onClose,
-    filteredEmployementType,
-    jobLists
-}: Props) {
-    const [selectName, setSelectName] = useState("Select Employee");
-    const [disableInput, setDisableInput] = useState(true);
-    const [loading, setLoading] = useState(false);
-    const [activeTab, setActiveTab] = useState("Select Employment Type");
-    const [selectDepartment, setselectDepartment] = useState("Select Department");
-    const [selectDesignation, setselectDesignation] = useState("Select Designation");
-    const [autoPhilhealthChecked, setAutoPhilhealthChecked] = useState(false);
-    const [autoRlipChecked, setAutoRlipChecked] = useState(false);
-    
-    const { data, setData, post, reset } = useForm<any>({
+const fillable = {
     payroll_id: "",
     user_id: "",
     basic_pay: "",
@@ -57,7 +42,7 @@ export default function PayrollAddModal({
     contributions: "",
     loans: "",
     housing_loan: "",
-    philhealth: "",
+    philhealth: "" ,
     sss: "",
     cfi: "",
     tipid: "",
@@ -83,7 +68,25 @@ export default function PayrollAddModal({
     daily_rate: "",
     assigned_department: "",
     assigned_designation: "",
-    });
+    philhealth_auto:false,
+    rlip_auto:false
+}
+export default function PayrollAddModal({
+    show,
+    onClose,
+    filteredEmployementType,
+    jobLists
+}: Props) {
+    const [selectName, setSelectName] = useState("Select Employee");
+    const [disableInput, setDisableInput] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState("Select Employment Type");
+    const [selectDepartment, setselectDepartment] = useState("Select Department");
+    const [selectDesignation, setselectDesignation] = useState("Select Designation");
+    const [autoPhilhealthChecked, setAutoPhilhealthChecked] = useState(false);
+    const [autoRlipChecked, setAutoRlipChecked] = useState(false);
+    
+    const { data, setData, post, reset } = useForm<any>(fillable);
 
     const isInvalid =
     (activeTab === "Regular" && Number(data.basic_pay) === 0) ||
@@ -226,8 +229,8 @@ export default function PayrollAddModal({
         
         const requestPayload = {
         ...data,
-        philhealth: autoPhilhealthChecked,
-        rlip: autoRlipChecked,
+        philhealth_auto: autoPhilhealthChecked,
+        rlip_auto: autoRlipChecked,
         };
 
         post(url, {

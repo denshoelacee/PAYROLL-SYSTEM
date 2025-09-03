@@ -1,11 +1,12 @@
-import { usePage } from "@inertiajs/react";
-import { PropsWithChildren, useEffect, useState } from "react";
+import { usePage, router } from "@inertiajs/react";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import echo from "@/echo";
 import NotificationSound from "../../sound/notification.mp3";
 import { createAvatar } from "@dicebear/core";
 import { initials } from "@dicebear/collection";
 import Authenticated from "./AuthenticatedLayout";
 import { InfoMessage } from "@/Components/Alert";
+import Loader from "@/Components/Loader"; // 👈 import loader
 
 //@ts-ignore
 export default function AdminLayout({ title, children }: PropsWithChildren) {
@@ -14,6 +15,8 @@ export default function AdminLayout({ title, children }: PropsWithChildren) {
   const [toastUser, setToastUser] = useState<string | null>(null);
   const [avatarSvg, setAvatarSvg] = useState<string | null>(null);
   const [dismissed, setDismissed] = useState(true);
+  const [loading, setLoading] = useState(false);
+
   const getInitials = (first: string, last: string) =>
     `${first?.[0]?.toUpperCase() ?? ""}${last?.[0]?.toUpperCase() ?? ""}`;
 
@@ -47,6 +50,15 @@ export default function AdminLayout({ title, children }: PropsWithChildren) {
     };
   }, []);
 
+  useEffect(() => {
+    router.on("start", () => setLoading(true));
+    router.on("finish", () => setLoading(false));
+
+    return () => {
+      router.on("start", null as any);
+      router.on("finish", null as any);
+    };
+  }, []);
 
   const hasMessages = message?.information || message?.error || message?.success;
 
@@ -55,13 +67,14 @@ export default function AdminLayout({ title, children }: PropsWithChildren) {
       setDismissed(true);
       const timer = setTimeout(() => {
         setDismissed(false);
-      }, 2000);
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [message]);
 
   return (
     <>
+      {loading && <Loader />}
 
       {hasMessages && dismissed && (
         <div className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center z-50">

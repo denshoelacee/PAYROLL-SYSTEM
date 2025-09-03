@@ -41,7 +41,7 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
     const filteredRows = useMemo(() => {
     return (payslips)
         .filter((row) => {
-        const date = new Date(row?.latest_payroll?.created_at);
+        const date = new Date(row?.created_at);
         const yearMatch = date.getFullYear().toString() === selectedYear;
         const monthMatch = (date.getMonth() + 1).toString().padStart(2, '0') === selectedMonth;
         return yearMatch && monthMatch;
@@ -186,23 +186,23 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
                         </div>
                     </div>
                     <div className="w-full overflow-x-auto scrollbar-hidden">
-                        <div className='my-5 min-w-[900px] h-[650px] sm:h-[650px] md:h-[750px] lg:h[800px] overflow-y-auto scrollbar-hidden '>
+                        <div className='my-5 min-w-[900px] h-auto overflow-y-auto scrollbar-hidden '>
                             <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg">
                                 <div className="text-white px-10 py-3 text-xl">Payroll Summary</div>
                                 <Table
-                                rows={payslips}
+                                rows={filteredRows}
                                 columns={columns}
-                                height={650}
                                 getRowId={(row) => row?.payslip_id}
                                 className="employee-table"
                                 pageSize={10}
+                                pageSizeOptions={[10,20,50]}  
                             />
                             </div>
                         </div>
                     </div>   
 
             {/*Add Modal*/}
-            (addModal && (
+            {addModal && (
                 <PayrollAddModal show={addModal} onClose={() => {
                     setAddModal(false);
                     router.visit(route("admin.payroll"), { replace: true }); 
@@ -210,7 +210,7 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips,availableY
                 newPayroll={newPayroll} 
                 filteredEmployementType={filteredEmployementType}
                 jobLists={jobLists}/>
-            ))
+            )}
             {/*Edit Modal */}
             {editModal && selectedRow && (
                 <PayrollEditModal show={editModal} onClose={() => {setEditModal(false)

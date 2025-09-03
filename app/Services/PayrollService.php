@@ -27,7 +27,7 @@ class PayrollService implements PayrollServiceInterface
 
     public function usersWithoutPayrollForCurrentMonth($id,$type)
     {
-         $selectedType = ucwords($type, " \t\r\n\f\v-"); 
+         $selectedType = ucwords($type, " \t\r\n\f\v|"); 
 
         return $this->payrollRepository->getUsersWithoutPayrollForCurrentMonth($id,$selectedType);
         
@@ -87,8 +87,10 @@ class PayrollService implements PayrollServiceInterface
 
     public function publish(array $data):void
     {
+
          $user = $this->userRepository->findById($data['user_id']);
           $salary = $user->basic_pay;
+
          $jobAssigned = $this->jobWorkAssigned($data['user_id'],$data['employment_type'],$data['assigned_designation'],$data['assigned_department']);
          $generateId = $this->generatePayslipId($data['user_id'],$data['employment_type']);
 

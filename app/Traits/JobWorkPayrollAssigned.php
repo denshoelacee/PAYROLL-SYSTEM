@@ -17,28 +17,14 @@ trait JobWorkPayrollAssigned
      * @return array [designation, department]
      * @throws ModelNotFoundException
      */
-    public function jobWorkAssigned(int $id, string $type, string $designation = null, string $department = null): array
+    public function jobWorkAssigned($id, $type, $designation, $department)
     {
-        // Define employment types that use database values
-        $useDbValues = ['Regular', 'Job Order'];
-        
-        try {
-            $user = User::select('designation', 'department', 'employment_type')
-                ->where('user_id', $id)
-                ->where('employment_type', $type)
-                ->firstOrFail();
+        $user = User::select('designation', 'department', 'employment_type')
+                    ->where('user_id', $id)
+                    ->first();
 
-            // Use database values for Regular and Job Order employees
-            if (in_array($user->employment_type, $useDbValues, true)) {
-                return [$user->designation, $user->department];
-            }
-            
-            // Use provided fallback values for other employment types
-            return [$designation, $department];
-            
-        } catch (ModelNotFoundException $e) {
-            // Handle case where user is not found
-            throw new ModelNotFoundException("User with ID {$id} and employment type '{$type}' not found.");
-        }
+        return ($user && $type === $user->employment_type) 
+            ? [$user->designation, $user->department]
+            : [$designation, $department];
     }
 }

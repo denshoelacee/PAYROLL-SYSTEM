@@ -64,7 +64,7 @@ class PayrollRepository implements PayrollRepositoryInterface{
             $query->whereIn('employment_type', ['Regular', 'Job Order', 'Part-Time'])
                   ->whereDoesntHave('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
                       $q->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-                        ->whereIn('payslip_type', ['Part-Time', 'Regular/Part-Time', 'Job Order/Part-Time']);
+                        ->whereIn('payslip_type', ['Part-Time', 'Regular|Part-Time', 'Job Order|Part-Time']);
                   });
             break;
     }
@@ -101,7 +101,7 @@ class PayrollRepository implements PayrollRepositoryInterface{
 
         // Determine what payroll employment type to look for
         if ($selectedType === 'Part-Time' && $user->employment_type !== 'Part-Time') {
-            $payrollType = $user->employment_type . '/Part-Time';
+            $payrollType = $user->employment_type . '|Part-Time';
         } else {
             $payrollType = $selectedType;
         }
@@ -121,14 +121,17 @@ class PayrollRepository implements PayrollRepositoryInterface{
 
     public function payrollModel(int $id): ?Payroll
     {
+
         return Payroll::where('payroll_id', $id)->firstOrFail();
 
     }
 
     public function updatePartial(array $data,$id): void
     {
+
        $payroll = $this->payrollModel($id);
        $payroll->update($data);
+
     }
 
     public function updatePublish(array $data,$id): void

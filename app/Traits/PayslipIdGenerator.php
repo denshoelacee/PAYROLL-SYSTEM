@@ -50,8 +50,8 @@ trait PayslipIdGenerator
     private function handlePartTime($user, $idPrefix)
     {
         return match ($user->employment_type) {
-            'Regular'    => [$idPrefix . '-2', 'Regular/Part-Time'],
-            'Job Order'  => [$idPrefix . '-2', 'Job Order/Part-Time'],
+            'Regular'    => [$idPrefix . '-2', 'Regular|Part-Time'],
+            'Job Order'  => [$idPrefix . '-2', 'Job Order|Part-Time'],
             'Part-Time'  => [$idPrefix . '01', 'Part-Time'],
             default      => [$idPrefix . '00', 'Unknown Part-Time Type'],
         };

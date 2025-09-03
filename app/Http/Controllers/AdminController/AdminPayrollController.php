@@ -38,7 +38,7 @@ class AdminPayrollController extends Controller
      */
     public function publish(EditPublishRequest $request)
     {
-     
+    // dd($request->validated());
        try{
          $this->payrollService->publish($request->validated());
          return Redirect()->back()->with("success","Payroll Publish Successfully!");

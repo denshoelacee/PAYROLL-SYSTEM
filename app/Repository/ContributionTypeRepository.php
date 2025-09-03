@@ -14,6 +14,7 @@ class ContributionTypeRepository implements ContributionTypeRepositoryInterface
         return ContributionType::first();
     }
 
+
     public function rlipDeduction($salary)
     {
         $contribution = $this->getContribution();
@@ -25,6 +26,7 @@ class ContributionTypeRepository implements ContributionTypeRepositoryInterface
         return $salary * $contribution->rlip / 100;
     }
 
+    
     public function philDeduction($salary)
     {
     $minSalary = 10000.00;

@@ -22,7 +22,7 @@
 
     export default function PayrollEditModal({ show, onClose, row}: Props) {
         const [submitTrigger, setSubmitTrigger] = useState<"partial" | "publish" | null>(null);
-        console.log("row ni",row);
+        //console.log("row ni",row);
         const { data, setData, post } = useForm<any>({
             payroll_id: "",
             user_id: "",
@@ -58,7 +58,13 @@
             publish_status: "",
             deduction1:"",
             deduction2:"",
-            deduction3:""
+            deduction3:"",
+            // For Part-Time & Job Order
+            hourly_rate: "",
+            service_rendered:"",
+            units: "",
+            duty_count: "",
+            daily_rate: "",
         });
         useEffect(() => {
             if (show && row?.payroll_id && row?.payslip_type) {
@@ -78,6 +84,7 @@
                                     ...prev,
                                     ...page.props.editPayroll,
                                 }));
+                                console.log(page.props?.editPayroll);
                             }
                         },
                     }
@@ -161,15 +168,23 @@
                 </div>
 
                 <InputWrapper className="flex gap-4 p-3">
-                    <TextInputGroup label="Basic Salary" id="basic_salary" name="basic_salary" value={data?.basic_salary} disabled />
-                    {row?.payslip_type === "Part-Time" && (
-                    <><TextInputGroup label="Hourly Rate" id="hourly_rate" name="hourly_rate" onChange={handleInputChange} />
-                    <TextInputGroup name="units" label="Units" id="units" onChange={handleInputChange} />
-                    <TextInputGroup name="duty_count" label="Duty Count" id="duty_count" onChange={handleInputChange} />
-                    </>
-                    )}
-                    <TextInputGroup name="pera" label="PERA" id="PERA" value={data?.pera} onChange={handleInputChange} />
-                    
+                {row?.payslip_type === "Regular" && (
+                <TextInputGroup label="Basic Salary" id="basic_salary" name="basic_salary" value={data?.basic_salary} disabled />
+                )}
+                {(row?.payslip_type === "Regular|Part-Time" || row?.payslip_type === "Part-Time" )&& (
+                <>
+                <TextInputGroup label="Hourly Rate" id="hourly_rate" name="hourly_rate" value={data?.hourly_rate} onChange={handleInputChange} />
+                <TextInputGroup name="units" label="Units" id="units" value={data?.units} onChange={handleInputChange} />
+                <TextInputGroup name="service_rendered" label="Service Rendered" id="service_rendered" value={data?.service_rendered}  onChange={handleInputChange} />
+                </>
+                )}
+                {(row?.payslip_type === "Job Order|Part-Time" || row?.payslip_type === "Job Order") && (
+                <>
+                <TextInputGroup name="daily_rate" label="Daily Rate" id="daily_rate" onChange={handleInputChange} />
+                <TextInputGroup name="daily_count" label="Daily Count" id="daily_count" onChange={handleInputChange} />
+                </>
+                )}
+                <TextInputGroup name="pera" label="PERA" id="PERA" value={data?.pera} onChange={handleInputChange} />
                 </InputWrapper>
                 {renderSectionFields()}
                 {renderFooter()}

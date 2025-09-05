@@ -41,7 +41,7 @@ class AdminPayrollController extends Controller
     // dd($request->validated());
        try{
          $this->payrollService->publish($request->validated());
-         return Redirect()->back()->with("success","Payroll Publish Successfully!");
+         return redirect()->back()->with("success","Payroll Publish Successfully!");
        }catch(\Exception $e){
          return redirect()->back()->with("error", $e->getMessage());
        }

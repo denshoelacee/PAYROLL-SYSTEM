@@ -1,14 +1,11 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import DeleteUserForm from './Partials/DeleteUserForm';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
-import NavLink from '@/Components/NavLink';
-import { BiLeftArrow } from 'react-icons/bi';
-import { FaLessThan } from 'react-icons/fa6';
 import Sidebar from '@/Components/Sidebar';
 import AdminLayout from '@/Layouts/AdminLayout';
+import UpdateSecretPassword from './Partials/UpdateSecretPassword';
 
 
 
@@ -29,8 +26,13 @@ export default function Edit({ auth, mustVerifyEmail, status }: PageProps<{ must
                         />
                     </div>
 
-                    <div className="p-4 sm:p-8 bg-green-100 rounded-md bg-clip-padding bg-opacity-10 border border-button-border-color sm:rounded-lg">
-                        <UpdatePasswordForm className="max-w-xl" />
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
+                        <div className=" sm:p-8 gap-5  p-4  bg-green-100 rounded-md bg-clip-padding bg-opacity-10 border border-button-border-color sm:rounded-lg">
+                        <UpdatePasswordForm className="w-full" />
+                        </div>
+                    <div className=" sm:p-8 gap-5 p-4  bg-green-100 rounded-md bg-clip-padding bg-opacity-10 border border-button-border-color sm:rounded-lg">
+                        <UpdateSecretPassword className="w-full" />
+                    </div>
                     </div>
 
                     <div className="p-4 sm:p-8 bg-green-100 rounded-md bg-clip-padding bg-opacity-10 border border-button-border-color sm:rounded-lg">
@@ -41,3 +43,4 @@ export default function Edit({ auth, mustVerifyEmail, status }: PageProps<{ must
             </>
     );
 }
+

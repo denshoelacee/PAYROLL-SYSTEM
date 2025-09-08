@@ -12,6 +12,7 @@ use App\Http\Controllers\EmployeeController\EmployeeDashboardController;
 use App\Http\Controllers\EmployeeController\EmployeeReportsController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\Auth\SecretQAController;
 
 
 
@@ -34,6 +35,7 @@ Route::get('/', function () {
     ]);
 });
 
+Route::post('/editsecretquestion', [SecretQAController::class,'store'])->name('user.updatesecretanswer');
 Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
 
     //Admin Dashboard Controller
@@ -60,7 +62,7 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/pending/accounts/batch-delete', [BatchDecissionController::class, 'batchDelete'])->name('admin.users.batch-delete');
 
     //Admin Payroll Controller
-        Route::get('/payroll', [AdminPayrollController::class, 'payrollThisDay'])->name('admin.payroll');
+    Route::get('/payroll', [AdminPayrollController::class, 'payrollThisDay'])->name('admin.payroll');
     Route::post('/payroll/store', [AdminPayrollController::class, 'savePartial'])->name('admin.store.partial');
     Route::post('/payroll/publish', [AdminPayrollController::class, 'publish'])->name('admin.store.publish');
     Route::post('/payroll/updatePartialPublish/{id}', [AdminPayrollController::class, 'editedPartialPublish'])->name('admin.payroll.update-partial-publish');

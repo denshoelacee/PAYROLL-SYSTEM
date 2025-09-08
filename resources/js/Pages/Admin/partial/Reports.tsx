@@ -113,7 +113,7 @@ export default function ReportsPartial({selectedYear,availableYears,monthlySumma
                             <div className="h-auto max-h-[530px] w-full overflow-x-auto overflow-y-auto scrollbar-hidden">
                                 <div className="min-w-[900px]"> 
                                 <Table
-                                    rows={monthlySummary}
+                                    rows={activeTab === "Regular" ? monthlySummary : []}
                                     columns={columns}
                                     hideFooter={true}
                                     pageSize={12}

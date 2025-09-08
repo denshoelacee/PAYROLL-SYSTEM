@@ -2,58 +2,58 @@
 
 namespace App\Traits;
 
-use App\Models\User;
-use App\Models\Payroll;
+use App\Contracts\Repository\PayrollRepositoryInterface;
+use App\Contracts\Repository\UserRepositoryInterface;
 use Illuminate\Support\Carbon;
 
 trait PayslipIdGenerator
 {
-    public function generatePayslipId($user_id, $type )
+    public function generatePayslipId($user_id, $type)
     {
-        $user = User::select('employee_id', 'employment_type')
-                    ->where('user_id', $user_id)
-                    ->firstOrFail();
+
+        $user = $this->userRepository->findEmploymeeIdAndEmployementTypeById($user_id);
 
         $date = now();
         $idPrefix = $this->generateIdPrefix($date, $user->employee_id);
 
         return match ($type) {
-            'Regular'   => [$idPrefix, 'Regular'],
+            'Regular'   => ['id' => $idPrefix, 'type' => 'Regular'],
             'Job Order' => $this->handleJobOrder($user_id, $idPrefix),
             'Part-Time' => $this->handlePartTime($user, $idPrefix),
-            default     => [$idPrefix . '00', 'Unknown Type'],
+            default     => ['id' => $idPrefix . '00', 'type' => 'Unknown Type'],
         };
+
     }
 
     private function generateIdPrefix(Carbon $date, $employeeId)
     {
+
         $yearMonth = $date->format('Ym');            
         $paddedEmployeeId = str_pad($employeeId, 8, '0', STR_PAD_LEFT);
 
         return $yearMonth . $paddedEmployeeId;
+
     }
 
     private function handleJobOrder($user_id, $idPrefix)
     {
-        $date = now();
-        $exists = Payroll::where('user_id', $user_id)
-                         ->whereBetween('created_at', [
-                             $date->copy()->startOfMonth(),
-                             $date->copy()->endOfMonth()
-                         ])
-                         ->exists();
+
+        $exists = $this->payrollRepository->findHasPayrollForJobOrder($user_id);
 
         $suffix = $exists ? '02' : '01';
-        return [$idPrefix . $suffix, 'Job Order'];
+        return ['id' => $idPrefix . $suffix, 'type' => 'Job Order'];
+
     }
 
     private function handlePartTime($user, $idPrefix)
     {
+
         return match ($user->employment_type) {
-            'Regular'    => [$idPrefix . '-2', 'Regular|Part-Time'],
-            'Job Order'  => [$idPrefix . '-2', 'Job Order|Part-Time'],
-            'Part-Time'  => [$idPrefix . '01', 'Part-Time'],
-            default      => [$idPrefix . '00', 'Unknown Part-Time Type'],
+            'Regular'    => ['id' => $idPrefix . '-2', 'type' => 'Regular|Part-Time'],
+            'Job Order'  => ['id' => $idPrefix . '-2', 'type' => 'Job Order|Part-Time'],
+            'Part-Time'  => ['id' => $idPrefix . '01', 'type' => 'Part-Time'],
+            default      => ['id' => $idPrefix . '00', 'type' => 'Unknown Part-Time Type'],
         };
+        
     }
 }

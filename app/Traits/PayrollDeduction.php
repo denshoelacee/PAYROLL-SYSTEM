@@ -2,15 +2,39 @@
 
 namespace App\Traits;
 
-use App\Contracts\Repository\ContributionTypeRepositoryInterface;
-use App\Repository\ContributionTypeRepository;
-
+use InvalidArgumentException; 
 trait PayrollDeduction
 {
-    
-    public function __construct(protected ContributionTypeRepositoryInterface $contributionTypeRepository){}
-    
-    public function calculateTotalDeduction(array $data, float $totalContribution):float
+        
+    public function calculateSalaryAndDeduction($data, $totalContributionDeduction)
+    {
+        $totalDeduction = $this->calculateTotalDeduction($data, $totalContributionDeduction);
+        
+        switch($data['employment_type']) {
+            case 'Regular':
+                $grossPay = $data['salary'] + ($data['pera'] ?? 0);
+                break;
+                
+            case 'Job Order':
+                $grossPay = $this->calculateDailyWork($data['daily_rate'], $data['duty_count']);
+                break;
+                
+            case 'Part-Time':
+                $grossPay = $this->calculateHourlyWork($data['hourly_rate'], $data['service_rendered']);
+                break;
+                
+            default:
+                throw new InvalidArgumentException("Unsupported employment type: {$data['employment_type']}");
+        }
+        
+        return [
+            'grossPay' => $grossPay,
+            'totalDeduction' => $totalDeduction,
+            'netPay' => $grossPay - $totalDeduction
+        ];
+    }
+
+    private function calculateTotalDeduction(array $data, float $totalContribution):float
     {
          $deductionFields = [
             'absent',
@@ -46,7 +70,7 @@ trait PayrollDeduction
 
         $total = 0;
 
-        foreach ($deductionFields as $field) {
+        foreach ($deductionFields as $field){
             $value = isset($data[$field]) ? floatval($data[$field]) : 0;
             $total += $value;
         }
@@ -57,51 +81,22 @@ trait PayrollDeduction
     }
 
 
-    public function calculateDailyWork($daily_rate, $duty_count )
+    private function calculateDailyWork($daily_rate, $duty_count)
     {
-          return $daily_rate * $duty_count;
-    }
-
-
-    public function calculateHourlyWork($hourly_rate, $service_rendered)
-    {
-          return $hourly_rate * $service_rendered;
-    }
-
-
-    public function rlipDeduction($salary)
-    {
-        $contribution = $this->contributionTypeRepository->getContribution();
-
-        if (!$contribution || !isset($contribution->rlip)) {
-            return 0;
+        if ($daily_rate < 0 || $duty_count < 0) {
+            throw new InvalidArgumentException('Daily rate and duty count must be non-negative');
         }
-
-        return $salary * $contribution->rlip / 100;
+        
+        return $daily_rate * $duty_count;
     }
 
-    public function philDeduction($salary)
+
+    private function calculateHourlyWork($hourly_rate, $service_rendered)
     {
-        $minSalary = 10000.00;
-        $maxSalary = 100000.00;
-
-        $contribution = $this->contributionTypeRepository->getContribution();
-
-
-        if (!$contribution || !isset($contribution->philhealth)) {
-            return 0;
+        if ($hourly_rate < 0 || $service_rendered < 0) {
+            throw new InvalidArgumentException('Hourly rate and service rendered must be non-negative');
         }
-    
-        $rate = $contribution->philhealth / 100;
-
-        if ($salary <= $minSalary) {
-            return 250.00;
-        } elseif ($salary > $minSalary && $salary <= $maxSalary) {
-            return $salary * $rate;
-        } else {
-            return $maxSalary * $rate;
-        }
+        
+        return $hourly_rate * $service_rendered;
     }
-
-    
 }   

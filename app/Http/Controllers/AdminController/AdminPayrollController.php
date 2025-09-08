@@ -100,7 +100,7 @@ class AdminPayrollController extends Controller
     {
         $validated = $request->validated();
         $validated['publish_status'] = $request->input('publish_status');
-        
+
         try {
             $this->payrollService->editedPartialPublishPayroll($validated, $id);
             return redirect()->back()->with("success", "Payroll published successfully!");

@@ -22,54 +22,75 @@ class PayrollRepository implements PayrollRepositoryInterface{
 
     ){}
 
+
+
+    public function findHasPayrollForJobOrder($id)
+    {
+
+        $date = now();
+
+        return Payroll::where('user', $id)
+                      ->whereBetween('created_at', [
+                             $date->copy()->startOfMonth(),
+                             $date->copy()->endOfMonth()
+                         ])
+                         ->exists();
+    }
+     
     public function setPayrollModel(array $data):Payroll
     {
+
         return Payroll::create($data);
+
     }
 
     public function getSelectEmploymentSalaryType($employmentType)
     {
-        if (empty($employmentType) || !in_array($employmentType, ['Regular', 'Job Order', 'Part-Time'])) {
-        return collect();
-    }
 
-    $this->type = $employmentType;
-    $startOfMonth = Carbon::now()->startOfMonth();
-    $endOfMonth = Carbon::now()->endOfMonth();
+        if(empty($employmentType) || !in_array($employmentType, ['Regular', 'Job Order', 'Part-Time']))
+        {
 
-    $query = User::select([
-        'user_id',
-        'employee_id', 
-        DB::raw("CONCAT(first_name, ', ', last_name) AS full_name")
-    ]);
+            return collect();
 
-    switch ($employmentType) {
-        case 'Regular':
-            $query->where('employment_type', 'Regular')
-                  ->whereDoesntHave('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
-                      $q->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-                        ->where('payslip_type', 'Regular');
-                  });
-            break;
+        }
 
-        case 'Job Order':
-            $query->where('employment_type', 'Job Order')
-                  ->whereHas('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
-                      $q->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-                        ->where('payslip_type', 'Job Order');
-                  }, '<', 2);
-            break;
+        $this->type = $employmentType;
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
 
-        case 'Part-Time':
-            $query->whereIn('employment_type', ['Regular', 'Job Order', 'Part-Time'])
-                  ->whereDoesntHave('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
-                      $q->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-                        ->whereIn('payslip_type', ['Part-Time', 'Regular|Part-Time', 'Job Order|Part-Time']);
-                  });
-            break;
-    }
+        $query = User::select([
+            'user_id',
+            'employee_id', 
+            DB::raw("CONCAT(first_name, ', ', last_name) AS full_name")
+        ]);
 
-    return $query->get();
+        switch ($employmentType) {
+            case 'Regular':
+                $query->where('employment_type', 'Regular')
+                    ->whereDoesntHave('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
+                        $q->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                            ->where('payslip_type', 'Regular');
+                    });
+                break;
+
+            case 'Job Order':
+                $query->where('employment_type', 'Job Order')
+                    ->whereHas('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
+                        $q->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                            ->where('payslip_type', 'Job Order');
+                    }, '<', 2);
+                break;
+
+            case 'Part-Time':
+                $query->whereIn('employment_type', ['Regular', 'Job Order', 'Part-Time'])
+                    ->whereDoesntHave('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
+                        $q->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                            ->whereIn('payslip_type', ['Part-Time', 'Regular|Part-Time', 'Job Order|Part-Time']);
+                    });
+                break;
+        }
+
+        return $query->get();
 
     }
 

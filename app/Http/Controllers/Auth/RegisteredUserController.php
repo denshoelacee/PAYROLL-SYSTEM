@@ -52,7 +52,7 @@ class RegisteredUserController extends Controller
             'designation'     => 'required|string|max:50',
             'department'      => 'required|string|max:50',
             'basic_pay'       => 'nullable|numeric',
-            'password'        => ['required', 'confirmed', Rules\Password::defaults()],
+            'password'        => ['required', 'confirmed', Rules\Password::min(8)->numbers()->symbols(),],
             'employment_type' => 'required|string|max:50',
             'secret_question' => 'required|string|max:100',
             'secret_answer'   => 'required|string|max:50',
@@ -66,13 +66,13 @@ class RegisteredUserController extends Controller
        try
         {
             $user = User::create([
-                'employee_id'    => $request->employee_id,
-                'last_name'      => $request->last_name,
+                'employee_id'    => ucwords($request['employee_id']),
+                'last_name'      => ucwords($request['last_name']),
                 'first_name'     => $request->first_name,
                 'designation'    => $request->designation,
                 'department'     => $request->department,
                 'basic_pay'      => $request->basic_pay,
-                'password'       => Hash::make($request->password),
+                'password'       => Hash::make($request['password']),
                 'employment_type'=> $request->employment_type,
             ]);
             $user->answerQuestion()->create([
@@ -92,8 +92,11 @@ class RegisteredUserController extends Controller
         }
        catch(\Exception $e)
        {
+
             return redirect()->back()->with('error','Employee ID already taken.');
+
        }
+
 
     }
 }

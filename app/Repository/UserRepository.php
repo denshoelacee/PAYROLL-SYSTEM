@@ -36,16 +36,58 @@ class UserRepository implements UserRepositoryInterface{
 
      public function getPendingUsers()
      {
-         return User::SELECT('user_id','employee_id','last_name','first_name','designation','department','employment_type')
-                    ->WHERE('status','pending')
-                    ->orderBy('created_at','desc')
-                    ->get(10);
+         return User::select(
+                'user_id',
+                'employee_id',
+                'last_name',
+                'first_name',
+                'designation',
+                'department',
+                'employment_type')
+            ->where('status','pending')
+            ->orderBy('created_at','desc')
+            ->get(10);
+    }
+
+    public function findRoleDetailsById($id)
+    {
+
+        return User::select(
+                'designation',
+                'department',
+                'employment_type'
+              )
+              ->where('user_id', $id)
+              ->firstorFail();
+
+    }
+
+    public function findEmploymeeIdAndEmployementTypeById($id)
+    {
+
+        return User::select(
+            'employee_id',
+            'employment_type'
+          )
+          ->where('user_id', $id)
+          ->firstOrFail();
     }
 
     public function getEmployeeList()
     {
-        return User::SELECT('user_id','employee_id','last_name','first_name','designation','department','basic_pay','employment_type','status','role')
-                   ->get();
+        return User::SELECT(
+            'user_id',
+            'employee_id',
+            'last_name',
+            'first_name',
+            'designation',
+            'department',
+            'basic_pay',
+            'employment_type',
+            'status',
+            'role'
+            )
+            ->get();
     }
 
     public function getResetPassword($validateReset)

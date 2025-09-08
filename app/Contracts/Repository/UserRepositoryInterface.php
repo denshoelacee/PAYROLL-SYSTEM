@@ -15,6 +15,11 @@ interface UserRepositoryInterface{
 
     public function getPendingUsers();
 
+    public function findRoleDetailsById($id);
+
+
+    public function findEmploymeeIdAndEmployementTypeById($id);
+
     public function getEmployeeList();
 
     public function getResetPassword($validateReset);

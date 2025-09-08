@@ -23,7 +23,8 @@ class CreateNewAccountController extends Controller
             'basic_pay' => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'role' => 'required|string|max:50',
        ]);
-
+       
+       
        try{
            $this->createNewAccountService->register($request);
            return redirect()->back()->with('success','Added new account successfully.');

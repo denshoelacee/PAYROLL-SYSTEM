@@ -6,6 +6,10 @@ use App\Models\Payroll;
 
 interface PayrollRepositoryInterface{
 
+      public function findHasPayrollForJobOrder($id);
+
+      public function payrollModel(int $id): ?Payroll;
+
       public function setPayrollModel(array $data):Payroll;
 
       public function getSelectEmploymentSalaryType($employmentType);

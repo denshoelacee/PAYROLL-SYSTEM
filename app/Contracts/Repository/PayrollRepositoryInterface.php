@@ -29,17 +29,6 @@ interface PayrollRepositoryInterface{
 
       public function getUserPayrollMonthly($year, $month);
 
-      public function getPayrollReportsYearly($year);
-
-      public function geTotalTaxThisMonth();
-
-      public function getLatestGrossPayMonthly();
-
-      public function getContributionsBreakdownMonthly();
-
-
-      public function getPayrollReportsYearlyView($year,$month);
-
       //Employee SQL Request
       public function getEmployeePayslipReports($id, $year);
 

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Contracts\Repository\PayrollReportsRepositoryInterface;
+use App\Repository\PayrollReportsRepository;
 use Illuminate\Support\ServiceProvider;
 
 // Repositories
@@ -60,6 +62,7 @@ class DependencyInjectionProvider extends ServiceProvider
         $this->app->bind(PayrollRepositoryInterface::class, PayrollRepository::class);
         $this->app->bind(SecretQuestionRepositoryInterface::class, SecretQuestionRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(PayrollReportsRepositoryInterface::class, PayrollReportsRepository::class);
 
         // Service Bindings
         $this->app->bind(DashboardServiceInterface::class, DashboardService::class);

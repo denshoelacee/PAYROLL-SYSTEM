@@ -12,6 +12,7 @@ class BatchDecissionController extends Controller
 
     public function batchApprove(Request $request)
     {
+        
        $validated = $request->validate([
                 'user_ids' => 'required|array',
                 'user_ids.*' =>'integer|exists:users,user_id'
@@ -25,6 +26,7 @@ class BatchDecissionController extends Controller
       catch(\Exception $e){
             return redirect()->back()->with('error', 'Something went wrong.');
       }
+
     }
 
     public function batchReject(Request $request)
@@ -46,6 +48,7 @@ class BatchDecissionController extends Controller
 
     public function batchDelete(Request $request)
     {
+
         $validated = $request->validate([
                 'user_ids' => 'required|array',
                 'user_ids.*' =>'integer|exists:users,user_id'
@@ -55,7 +58,8 @@ class BatchDecissionController extends Controller
             $this->batchDecissionService->handleDeleteBatch($validated['user_ids']);
             return redirect()->back()->with('success','Selected users have been deleted successfully.');
         }catch(\Exception $e){
-            return redirect()->back()->with('error', 'Something went Wrong.');
+            return redirect()->back()->with('error', $e->getMessage());
         }
+
     }
 }

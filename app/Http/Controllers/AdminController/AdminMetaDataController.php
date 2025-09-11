@@ -13,8 +13,8 @@ class AdminMetaDataController extends Controller
 
     public function displayEmpTypeList()
     {
-       $empTypeList = $this->metadataService->empTypeList();
-       $jobTitleList = $this->metadataService->jobTitleList();
+       $empTypeList      = $this->metadataService->empTypeList();
+       $jobTitleList     = $this->metadataService->jobTitleList();
        $contributionType = $this->metadataService->displayContributionType();
 
         return Inertia::render('Admin/Department',

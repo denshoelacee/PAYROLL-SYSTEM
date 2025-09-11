@@ -81,7 +81,7 @@ export function ChartAreaInteractive({
       }}className="pt-0 w-full border border-white">
       <CardHeader className="flex gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
-          <CardTitle className="text-white">Area Chart - Interactive</CardTitle>
+          <CardTitle className="text-white">Payroll Summary Yealy</CardTitle>
           <CardDescription className="text-white">
             Showing total data for {year}
           </CardDescription>

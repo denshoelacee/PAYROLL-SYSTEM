@@ -22,15 +22,16 @@ class AdminEmployeeController extends Controller
      */
     public function employee()
     {
-            $jobtitles = $this->metaDataService->jobTitleList();
-            $pendings = $this->employeeService->pendingUsers();
+            $jobtitles    = $this->metaDataService->jobTitleList();
+            $pendings     = $this->employeeService->pendingUsers();
             $employeelist = $this->employeeService->employeeList();
-            $empTypeList = $this->metaDataService->empTypeList();
+            $empTypeList  = $this->metaDataService->empTypeList();
 
              return Inertia::render('Admin/Employee',
-                ['pendingUsers' => $pendings,
-                 'employeeList'  => $employeelist,
-                 'jobtitles' => $jobtitles,
+                [
+                 'pendingUsers'     => $pendings,
+                 'employeeList'     => $employeelist,
+                 'jobtitles'        => $jobtitles,
                  'employeeTypeList' => $empTypeList
                 ]
         );

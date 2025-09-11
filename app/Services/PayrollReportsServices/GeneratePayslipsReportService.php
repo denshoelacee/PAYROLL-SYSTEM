@@ -7,16 +7,20 @@ use App\Contracts\Services\IPayrollReportsServices\GeneratePayslipsReportService
 
 class GeneratePayslipsReportService implements GeneratePayslipsReportServiceInterface {
 
-    public function __construct(protected PayrollRepositoryInterface $payrollRepository){}
+   public function __construct(protected PayrollRepositoryInterface $payrollRepository){}
 
-    public function UserPayrollMonthly($year,$month)
-    {
-       return $this->payrollRepository->getUserPayrollMonthly($year,$month);
-    }
+   public function UserPayrollMonthly($year,$month)
+   {
 
-    public function viewPayslipByPayrollId($payslip_id)
-    {
-       return $this->payrollRepository->getViewPayslipByPayslipId($payslip_id);
-    }
+      return $this->payrollRepository->getUserPayrollMonthly($year,$month);
+
+   }
+
+   public function viewPayslipByPayrollId($payslip_id)
+   {
+
+      return $this->payrollRepository->getViewPayslipByPayslipId($payslip_id);
+
+   }
 
 }

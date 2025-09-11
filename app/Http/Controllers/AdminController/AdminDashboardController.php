@@ -20,9 +20,10 @@ class AdminDashboardController extends Controller
 
         $year = $request->year ?? now()->year;
 
-        $yearlyReports = $this->payrollReportsService->generatePayrollReport($year);
-        $summaryTotal = $this->dashboardService->getTaxAndUserSummary();
-        $departmentGross = $this->dashboardService->latestGrossPayMonthly();
+
+        $yearlyReports         = $this->payrollReportsService->generatePayrollReport($year, 'All');
+        $summaryTotal          = $this->dashboardService->getTaxAndUserSummary();
+        $departmentGross       = $this->dashboardService->latestGrossPayMonthly();
         $contributionBreakdown = $this->dashboardService->contributionBreakdown();
 
         return Inertia::render('Admin/Dashboard',

@@ -6,7 +6,7 @@ type GenerateSundryParams  ={
   headerYearTitle: string;
   viewReport: UserPayroll[];
 }
-export default function generateRegularSundry({ worksheet2, headerMonthTitle, headerYearTitle, viewReport }:GenerateSundryParams) {
+export default function generatePartTimeSundry({ worksheet2, headerMonthTitle, headerYearTitle, viewReport }:GenerateSundryParams) {
     worksheet2.pageSetup = {
         paperSize: 5, // Legal
         orientation: 'landscape',

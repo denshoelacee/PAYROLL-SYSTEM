@@ -1,13 +1,12 @@
     import Table from "@/Components/Table";
     import { GridColDef } from "@mui/x-data-grid";
-    import Search from '@/Components/Search'
     import Dropdown from '@/Components/Dropdown'
     import SecondaryButton from '@/Components/SecondaryButton'
-    import { RiArrowDropDownLine, RiContactsBookLine } from 'react-icons/ri'
+    import { RiArrowDropDownLine } from 'react-icons/ri'
     import { router } from "@inertiajs/react";
     import { AiOutlineFundView } from "react-icons/ai";
     import { UserPayroll } from "@/types";
-import { useState } from "react";
+
 
     type MonthlySummaryRow = {
         month: number;
@@ -21,13 +20,17 @@ import { useState } from "react";
     };
 
     export default function EmployeePayrollPartial({selectedYear,availableYears,userPayslip}:Props) {
+        console.log(userPayslip)
         const handleChange = (selectedYear:number) => {
             router.get(route("employee.payslip.summary"), { year: selectedYear }, { preserveState: true });
         };
-
         const handleView = (row: UserPayroll) => {
-            localStorage.setItem('selectedPayroll', JSON.stringify(row));
-            router.visit(`/employee/payroll/Payslip/${row.user_id}`);
+            if (row?.payslip_id) {
+                    localStorage.setItem('selectedPayroll', JSON.stringify(row));
+                    window.open(`/view/payroll/Payslip/${row.payslip_id}`, '_blank');
+                } else {
+                    alert('Payslip ID not found');
+                }
             };
 
 
@@ -85,7 +88,7 @@ import { useState } from "react";
                     <div className="bg-[#16423C] border-[1px] border-button-border-color rounded-lg w-full">
                         <h2 className="text-lg font-semibold my-3 mx-5 text-white">Payslip available this {selectedYear}</h2>
                         <div className="h-[530px] overflow-auto scrollbar-hidden">
-                            <Table
+                                <Table
                                 rows={userPayslip}
                                 columns={columns}
                                 hideFooter={true}

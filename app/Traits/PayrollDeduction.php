@@ -12,7 +12,7 @@ trait PayrollDeduction
         
         switch($data['employment_type']) {
             case 'Regular':
-                $grossPay = $data['salary'] + ($data['pera'] ?? 0);
+                $grossPay = $data['basic_pay'] + ($data['pera'] ?? 0);
                 break;
                 
             case 'Job Order':

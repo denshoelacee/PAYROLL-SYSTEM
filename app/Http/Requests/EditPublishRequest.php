@@ -27,6 +27,7 @@ class EditPublishRequest extends FormRequest
 
         return [
             'user_id' => ['required', 'exists:users,user_id'],
+            'basic_pay' => $monetaryRule,
             'pera' => $monetaryRule,
             'daily_rate' => $monetaryRule,
             'hourly_rate' => $monetaryRule,

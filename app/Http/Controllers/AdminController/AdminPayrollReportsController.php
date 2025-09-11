@@ -50,6 +50,7 @@ class AdminPayrollReportsController extends Controller
             'viewReport'       => $details,
             'headerYearTitle'  => $year,
             'headerMonthTitle' => $monthName,
+            'activePayrollType'=> $payslipType,
         ]);
 
     }

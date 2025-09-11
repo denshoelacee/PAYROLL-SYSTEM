@@ -208,6 +208,8 @@ export default function EditEmployeeModal({
             type="text"
             value={data.basic_pay}
             onChange={handleInputChange}
+            disabled={data.employment_type === "Part-Time" || data.employment_type === "Job Order" || data.employment_type === ""}
+
         />
         </InputWrapper>
 

@@ -102,7 +102,13 @@ class DatabaseSeeder extends Seeder
 foreach ($users as $user) {
     User::create($user);
 }  
-/*
+
+$EmploymentTypes =[
+ ['employment_type_list' => 'Regular'],['employment_type_list' => 'Job Order'],['employment_type_list' => 'Part-Time']
+];
+foreach($EmploymentTypes as $employmentType) {
+ EmploymentType::create($employmentType);
+}/*
 // Employment Types
 $EmploymentTypes =[
  ['employment_type_list' => 'Regular'],['employment_type_list' => 'Job Order'],['employment_type_list' => 'Part-Time']

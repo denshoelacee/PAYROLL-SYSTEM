@@ -6,7 +6,7 @@ type GeneratemonthyReportParams  ={
   headerYearTitle: string;
   viewReport: UserPayroll[];
 }
-export default function generatemonthlyReport({worksheet,headerMonthTitle,headerYearTitle,viewReport}:GeneratemonthyReportParams) {
+export default function generateregularmonthlyReport({worksheet,headerMonthTitle,headerYearTitle,viewReport}:GeneratemonthyReportParams) {
         worksheet.pageSetup = {
             paperSize: 5, // legal
             orientation: 'landscape', 

@@ -19,6 +19,8 @@ interface PayslipData {
     daily_rate: number;
     duty_count: number;
     units: number;
+    service_rendered:number;
+    hourly_rate:number;
     pera: number;
     absent: number;
     late: number;
@@ -65,6 +67,7 @@ interface PayslipPageProps extends PageProps {
 
 export default function Payslip({ auth, payslip }: PayslipPageProps) {
     // Only render if payslip data exists
+    console.log(payslip)
     if (!payslip) {
         return (
             <>
@@ -169,12 +172,23 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
 
         // Earning
         addSectionTitle("Earning");
-        addText("Salaries & Wages", payslip.basic_salary ?? 0);
+        
+        addText("Salaries & Wages", payslip.payslip_type === "Part-Time"
+                                    ? (Number(payslip.gross_salary) || 0)
+                                    : payslip.payslip_type === "Job Order"
+                                    ? (Number(payslip.gross_salary) || 0)
+                                    : (Number(payslip.basic_salary) || 0) + (Number(payslip.pera) || 0)
+                                    );
         addText("OTHERS: PERA", payslip.pera ?? 0);
         
         y += 10;
         doc.setFont("helvetica", "bold");
-        addText("TOTAL", (Number(payslip.basic_salary) || 0) + (Number(payslip.pera) || 0));
+        addText("TOTAL",payslip.payslip_type === "Part-Time"
+                        ? (Number(payslip.gross_salary) || 0)
+                        : payslip.payslip_type === "Job Order"
+                        ? (Number(payslip.gross_salary) || 0)
+                        : (Number(payslip.basic_salary) || 0) + (Number(payslip.pera) || 0)
+                        );
         y -= 15;
         doc.setFont("helvetica", "normal");
         
@@ -206,6 +220,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
         y -= 10;
 
         addSectionTitle("OTHER DEDUCTIONS");
+        if (shouldDisplay(payslip.sss)) addText("SSS", payslip.sss ?? 0);
         if (shouldDisplay(payslip.philhealth)) addText("Philhealth", payslip.philhealth ?? 0);
         if (shouldDisplay(payslip.cfi)) addText("CFI", payslip.cfi ?? 0);
         if (shouldDisplay(payslip.tipid)) addText("TIPID", payslip.tipid ?? 0);
@@ -333,13 +348,22 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                                     <p>TOTAL</p>
                                 </div>
                                 <div className="text-right">
-                                    <p>{format(payslip.basic_salary)}</p>
+                                    {payslip.payslip_type === "Regular" && 
+                                        <p>{format(payslip.basic_salary)}</p>   
+                                    }
+                                    {(payslip.payslip_type === "Part-Time" || payslip.payslip_type === "Job Order") && (
+                                        <p>{format(payslip.gross_salary || 0)}</p>
+                                    )}
                                     <p>{format(payslip.pera)}</p>
                                     <br />
                                     <p>
-                                        {format(
-                                            (Number(payslip.basic_salary) || 0) + (Number(payslip.pera) || 0)
-                                        )}
+                                    {format(
+                                    payslip.payslip_type === "Part-Time"
+                                        ? (Number(payslip.gross_salary) || 0)
+                                        : payslip.payslip_type === "Job Order"
+                                        ? (Number(payslip.gross_salary) || 0)
+                                        : (Number(payslip.basic_salary) || 0) + (Number(payslip.pera) || 0)
+                                    )}
                                     </p>
                                 </div>
                             </div>
@@ -392,6 +416,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                         <div className="mx-5 w-full rounded-lg h-full text-white">
                             <p className="text-md md:text-lg">OTHER DEDUCTIONS</p>
                             <div className="flex flex-col w-full justify-between text-sm lg:text-md">
+                                {shouldDisplay(payslip.sss) && <DisplayItem label="SSS" value={format(payslip.sss)} />}
                                 {shouldDisplay(payslip.philhealth) && <DisplayItem label="Philhealth" value={format(payslip.philhealth)} />}
                                 {shouldDisplay(payslip.cfi) && <DisplayItem label="CFI" value={format(payslip.cfi)} />}
                                 {shouldDisplay(payslip.tipid) && <DisplayItem label="TIPID" value={format(payslip.tipid)} />}

@@ -5,26 +5,37 @@ import { FaArrowLeft } from "react-icons/fa"
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { UserPayroll } from "@/types"
-import generatemonthlyReport from "./partial/reports/reportsexcel/regularmonthlyReport"
-import generateSundry from "./partial/reports/reportsexcel/regularsundry"
+import generateregularmonthlyReport from "./partial/reports/reportsexcel/regularmonthlyReport"
+import generateRegularSundry from "./partial/reports/reportsexcel/regularsundry"
 import { LiaPrintSolid } from "react-icons/lia";
 import { Head } from "@inertiajs/react"
+import generateparttimemonthlyReport from "./partial/reports/reportsexcel/parttimereports";
+import generatePartTimeSundry from "./partial/reports/reportsexcel/parttimesundry";
 
 type Props  ={
   worksheet2: ExcelJS.Worksheet;
   headerMonthTitle: string;
   headerYearTitle: string;
   viewReport: UserPayroll[];
+  activePayrollType:string;
 }
-export default function ViewReport({viewReport,headerMonthTitle,headerYearTitle}:Props){
+export default function ViewReport({viewReport,headerMonthTitle,headerYearTitle,activePayrollType}:Props){
+
+    console.log(viewReport)
     const exportToExcel = async () => {
         const workbook = new ExcelJS.Workbook();
 
         const worksheet = workbook.addWorksheet(`${headerMonthTitle}`);
         const worksheet2 = workbook.addWorksheet('sundry');
 
-        generatemonthlyReport({worksheet,headerMonthTitle,headerYearTitle,viewReport})
-        generateSundry({worksheet2,headerMonthTitle,headerYearTitle,viewReport})
+        {activePayrollType == 'Regular' && 
+            generateregularmonthlyReport({worksheet,headerMonthTitle,headerYearTitle,viewReport})
+            generateRegularSundry({worksheet2,headerMonthTitle,headerYearTitle,viewReport})
+        }
+        {activePayrollType == 'Part-Time' &&
+            generateparttimemonthlyReport({worksheet,headerMonthTitle,headerYearTitle,viewReport})
+            generatePartTimeSundry({worksheet2,headerMonthTitle,headerYearTitle,viewReport})
+        }
         // Download
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], {
@@ -36,8 +47,18 @@ export default function ViewReport({viewReport,headerMonthTitle,headerYearTitle}
     const columns:GridColDef[] = [
         {field: 'user_id',headerName: 'No.',flex: 1,align: 'center',headerAlign: 'center',sortable: false,},
         {field: 'employee_name',headerName: 'Name',flex: 1,align: 'center',headerAlign: 'center',sortable: false,},
-        {field: 'basic_salary',headerName: 'Monthly Rate',flex: 1,align: 'center',headerAlign: 'center',sortable: false,
-            renderCell: (params) => Number(params.value ?? 0)
+        {field: activePayrollType === "Regular" ? 'basic_salary' : activePayrollType === 'Job Order' ? 'daily_rate' : 'hourly_rate',headerName: 
+    activePayrollType === "Part-Time"
+      ? "Hourly Rate"
+      : activePayrollType === "Job Order"
+        ? "Daily Rate"
+        : "Monthly Rate",flex: 1,align: 'center',headerAlign: 'center',sortable: false,
+           renderCell: (params) => 
+        activePayrollType === "Part-Time"
+            ? Number(params.row.hourly_rate ?? 0)
+            : activePayrollType === "Job Order"
+                ? Number(params.row.daily_rate ?? 0)
+                : Number(params.row.basic_salary ?? 0),
         },
         {field: 'pera',headerName: 'PERA',flex: 1,align: 'center',headerAlign: 'center',sortable: false,
             renderCell: (params) => Number(params.value ?? 0)
@@ -121,7 +142,7 @@ export default function ViewReport({viewReport,headerMonthTitle,headerYearTitle}
             <div className="flex justify-between w-full mb-4">
                 <div className="">
                     <p className="text-white ">
-                    PAYROLL FOR REGULAR EMPLOYEES FOR {headerMonthTitle} 2025
+                    PAYROLL FOR {activePayrollType} EMPLOYEES FOR {headerMonthTitle} 2025
                     </p>
                 </div>
                 

@@ -51,7 +51,7 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips=[],availab
         })
         .map((row) => ({
          ...row,
-       id: row?.payslip_id, // Use payslip_id instead of index
+       id: row?.payslip_id, 
         }));
     }, [payslips, selectedYear, selectedMonth, searchQuery]);
 

@@ -20,7 +20,7 @@ class EmployeeReportsController extends Controller
         $sortedPayslip = $this->payslipReportsServices->fetchSortedPayslipsByUser($year);
 
         return Inertia::render('Employee/Payroll',[
-            'availableYears' => range(2023, now()->year),
+            'availableYears' => range(2025, now()->year),
             'selectedYear' => (string)$year,
             'userPayslip' => $sortedPayslip
         ]);

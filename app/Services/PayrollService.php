@@ -55,8 +55,8 @@ class PayrollService implements PayrollServiceInterface
 
     public function storePartial(array $data)
     {
-      
-        $user = $this->userRepository->findById($data["user_id"]);
+
+        $user = $this->userRepository->findById($data['user_id']);
            $salary = $user->basic_pay;
 
         $jobAssigned = $this->jobWorkAssigned(
@@ -79,8 +79,8 @@ class PayrollService implements PayrollServiceInterface
 
          $payData = $this->calculateSalaryAndDeduction($data, $contribution['totalContribution']);
 
-       $data['payslip_id'] = $generateId[0];
-       $data['payslip_type'] = $generateId[1];
+       $data['payslip_id'] = $generateId['id'];
+       $data['payslip_type'] = $generateId['type'];
        $data['rlip'] = $contribution['rlip'];      
        $data['philhealth'] = $contribution['philhealth'];
        $data['basic_salary'] = $salary;

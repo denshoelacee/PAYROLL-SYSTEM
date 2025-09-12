@@ -11,6 +11,9 @@
     type MonthlySummaryRow = {
         month: number;
         month_name: string;
+        assigned_designation: string;
+        assigned_department: string;
+        payslip_type: string;
     };
 
     type Props = {
@@ -20,7 +23,7 @@
     };
 
     export default function EmployeePayrollPartial({selectedYear,availableYears,userPayslip}:Props) {
-        console.log(userPayslip)
+
         const handleChange = (selectedYear:number) => {
             router.get(route("employee.payslip.summary"), { year: selectedYear }, { preserveState: true });
         };
@@ -38,6 +41,38 @@
         {
             field: 'month_name',
             headerName: 'Month',
+            flex: 1,
+            align: 'center',
+            headerAlign: 'center',
+            sortable: false,
+        },
+           {
+            field: 'payslip_id',
+            headerName: 'Payslip ID',
+            flex: 1,
+            align: 'center',
+            headerAlign: 'center',
+            sortable: false,
+        },
+         {
+            field: 'assigned_designation',
+            headerName: 'Designation',
+            flex: 1,
+            align: 'center',
+            headerAlign: 'center',
+            sortable: false,
+        },
+         {
+            field: 'assigned_department',
+            headerName: 'Department',
+            flex: 1,
+            align: 'center',
+            headerAlign: 'center',
+            sortable: false,
+        },
+         {
+            field: 'payslip_type',
+            headerName: 'Payslip Type',
             flex: 1,
             align: 'center',
             headerAlign: 'center',
@@ -93,7 +128,7 @@
                                 columns={columns}
                                 hideFooter={true}
                                 pageSize={12}
-                                getRowId={(row) => row.month}
+                                getRowId={(row) => row.payslip_id}
                             />
                         </div>
                     </div>

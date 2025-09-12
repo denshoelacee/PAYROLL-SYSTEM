@@ -17,7 +17,7 @@ trait PayslipTypeMapping
             'Regular'   => ['Regular'],
             'Job Order' => ['Job Order'],
             'Part-Time' => ['Part-Time', 'Regular|Part-Time', 'Job Order|Part-Time'],
-            'All'   => ['Regular', 'Job Order', 'Part-Time', 'Regular|Part-Time', 'Job Order|Part-Time'],
+            'All'       => ['Regular', 'Job Order', 'Part-Time', 'Regular|Part-Time', 'Job Order|Part-Time'],
             default     => throw new InvalidArgumentException("Invalid payslip type: $payslipType")
         
         };

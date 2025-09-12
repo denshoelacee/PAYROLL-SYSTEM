@@ -22,6 +22,7 @@ class Payroll extends Model
         'user_id',
         'basic_salary',
         'daily_rate',
+        'hourly_rate',
         'duty_count',
         'service_rendered',
         'units',

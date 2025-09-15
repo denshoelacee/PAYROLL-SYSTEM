@@ -29,9 +29,12 @@ class EmployeeDashboardController extends Controller
 
         $taxAndLoan = $this->payrollReportsService->generateLoanAndTaxThisMonthById();
 
-  dd($taxAndLoan);
+  //dd($yearlyReports);
+  //dd($contributions);
+  //dd($taxAndLoan);
         return Inertia::render('Employee/Dashboard',
-                [
+                [   
+                    'selectedYear'   => (string)$year,
                     'availableYears' => $availableYears,
                     'yearReports'    => $yearlyReports,
                     'contributions'  => $contributions,

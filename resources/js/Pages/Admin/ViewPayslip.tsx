@@ -284,10 +284,29 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
         const lastDay = new Date(year, month + 1, 0).getDate();
         return [
             `${monthName} 1–15, ${year}:`,
-            `${monthName} 16–${lastDay}, ${year}:`,
+            `${monthName} 16–${lastDay}, ${year}:`, 
         ];
     };
 
+    const renderJobOrderPayslipRange = (netPay: number, payslipId?: string | number) => {
+        const ranges = getHalfMonthRanges();
+
+        if (payslipId?.toString().endsWith("01")) {
+            return (
+                <p className="text-end text-sm">
+                    {ranges[0]} {netPay}
+                </p>
+            );
+        }
+        if (payslipId?.toString().endsWith("02")) {
+            return (
+                <p className="text-end text-sm">
+                    {ranges[1]} {netPay}
+                </p>
+            );
+        }
+        return null;
+    };
     const format = (val: any) =>
         Number(val || 0).toLocaleString('en-PH', {
             minimumFractionDigits: 2,
@@ -437,7 +456,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                         <div className="flex flex-col w-full justify-between text-sm lg:text-md px-5 pb-5 text-white">
                             <p className="text-end text-md font-semibold">TOTAL DEDUCTIONS: {format(payslip.total_deduction)}</p>
                             <p className="text-end text-md font-semibold">NET PAY: {format(payslip.net_pay)}</p>
-                            {payslip.payslip_type === "Regular" || payslip.payslip_type === "Part-Time" && (
+                            {payslip.payslip_type === "Regular" || payslip.payslip_type === "Part-Time" ? (
                                 <>
                                 {getHalfMonthRanges().map((range, index) => (
                                 <p key={index} className="text-end text-sm">
@@ -445,7 +464,9 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                                 </p>
                                 ))}
                                 </>
-                            )}
+                            ):
+                            renderJobOrderPayslipRange(payslip.net_pay, payslip.payslip_id)
+                            }
                         </div>
                     </div>
                     <div className="w-32 py-2">

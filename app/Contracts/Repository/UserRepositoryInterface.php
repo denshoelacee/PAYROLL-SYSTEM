@@ -7,8 +7,6 @@ use Illuminate\Support\Collection;
 
 interface UserRepositoryInterface{
 
-    public function getMonthlyUserStats(int $year): Collection;
-
     public function setApproveAccount($id);
 
     public function setRejectAccount($id);

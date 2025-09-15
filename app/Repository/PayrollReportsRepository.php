@@ -17,7 +17,7 @@ class PayrollReportsRepository implements PayrollReportsRepositoryInterface
             CAST(COALESCE(SUM(rlip), 0) AS DECIMAL(10,2)) AS gsis,
             CAST(COALESCE(SUM(contributions), 0) AS DECIMAL(10,2)) AS pagibig,
             CAST(COALESCE(SUM(philhealth), 0) AS DECIMAL(10,2)) AS philhealth
-        ')
+           ')
             ->where('publish_status', 'publish')
             ->whereBetween('created_at',
                 [
@@ -53,15 +53,22 @@ class PayrollReportsRepository implements PayrollReportsRepositoryInterface
                 COALESCE(SUM(holding_tax), 0) AS tax,
                 COALESCE(SUM(tax_bal_due), 0) AS due_tax,
                 COALESCE(SUM(
-                    COALESCE(policy_loan, 0) +
-                    COALESCE(consol_loan, 0) +
-                    COALESCE(emerg_loan, 0) +
-                    COALESCE(gel, 0) +
-                    COALESCE(gfal, 0) +
-                    COALESCE(mpl, 0) +
-                    COALESCE(mpl_lite, 0) +
-                    COALESCE(loans, 0) +
-                    COALESCE(housing_loan, 0)
+                    COALESCE(policy_loan, 0) + 
+                    COALESCE(consol_loan, 0) + 
+                    COALESCE(emerg_loan, 0) + 
+                    COALESCE(gel, 0) + 
+                    COALESCE(gfal, 0) + 
+                    COALESCE(mpl, 0) + 
+                    COALESCE(mpl_lite, 0) + 
+                    COALESCE(loans, 0) + 
+                    COALESCE(housing_loan, 0) + 
+                    COALESCE(city_savings_bank, 0) + 
+                    COALESCE(fea, 0) + 
+                    COALESCE(coop, 0) + 
+                    COALESCE(landbank, 0) + 
+                    COALESCE(ucpb, 0) + 
+                    COALESCE(cfi, 0) + 
+                    COALESCE(tipid, 0)
                 ), 0) AS totalLoan
             ')
             ->where('publish_status', 'publish')
@@ -101,6 +108,7 @@ class PayrollReportsRepository implements PayrollReportsRepositoryInterface
             });
 
     }
+
     public function getPayrollReportsYearlyView($year, $month, $payslipType)
     {
 
@@ -132,7 +140,7 @@ class PayrollReportsRepository implements PayrollReportsRepositoryInterface
                 'payroll_deductions.net_pay'
             ])
             ->where('payrolls.publish_status', 'publish')
-            ->whereIn('payrolls.payslip_type', $payslipType)
+            ->where('payrolls.payslip_type', $payslipType)
             ->where(DB::raw('YEAR(payrolls.created_at)'), $year)
             ->where(DB::raw('MONTH(payrolls.created_at)'), $month)
             ->orderBy('users.last_name')
@@ -141,7 +149,7 @@ class PayrollReportsRepository implements PayrollReportsRepositoryInterface
     }
 
 
-    public function getContributionThisMonthById($payroll_id)
+    public function getContributionThisMonthById($userId)
     {
 
         $status = 'publish'; //publish, partial, none
@@ -149,11 +157,15 @@ class PayrollReportsRepository implements PayrollReportsRepositoryInterface
 
         return Payroll::select(
              'payroll_id',
-              DB::raw('(rlip + contributions + philhealth) as total_contributions')  
+            DB::raw('(
+            COALESCE(rlip, 0) +
+            COALESCE(contributions, 0) +
+            COALESCE(philhealth, 0)
+            ) AS total_contributions')
             )
             ->where('publish_status', $status)
-            ->where('payroll_id', $payroll_id)
             ->where('payslip_type', $type)
+            ->where('user_id', $userId)
             ->whereBetween('created_at', [
                 now()->startOfMonth(),
                 now()->endOfMonth()
@@ -161,6 +173,73 @@ class PayrollReportsRepository implements PayrollReportsRepositoryInterface
             ->latest('created_at')
             ->first();
 
+    }
+
+    public function getLoanAndTaxThisMonthById($userId)
+    {
+
+        $status = 'publish'; //publish, partial, none
+
+        return DB::table('payrolls')
+                 ->selectRaw('
+                COALESCE(SUM(holding_tax), 0) AS tax,
+                COALESCE(SUM(tax_bal_due), 0) AS due_tax,
+                COALESCE(SUM(
+                    COALESCE(policy_loan, 0) + 
+                    COALESCE(consol_loan, 0) + 
+                    COALESCE(emerg_loan, 0) + 
+                    COALESCE(gel, 0) + 
+                    COALESCE(gfal, 0) + 
+                    COALESCE(mpl, 0) + 
+                    COALESCE(mpl_lite, 0) + 
+                    COALESCE(loans, 0) + 
+                    COALESCE(housing_loan, 0) + 
+                    COALESCE(city_savings_bank, 0) + 
+                    COALESCE(fea, 0) + 
+                    COALESCE(coop, 0) + 
+                    COALESCE(landbank, 0) + 
+                    COALESCE(ucpb, 0) + 
+                    COALESCE(cfi, 0) + 
+                    COALESCE(tipid, 0)
+                ), 0) AS loan
+             ')
+            ->where('user_id', $userId)
+            ->where('publish_status', $status)
+            ->whereBetween('created_at', [
+                now()->startOfMonth(),
+                now()->endOfMonth()
+               ])
+            ->first();
+
+    }
+
+    public function findPayrollReportsYearlyById($year, $id)
+    {  
+
+        $status = 'publish'; //publish, partial, none
+
+        return DB::table('payrolls')
+            ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
+
+            ->selectRaw('
+                MONTH(payrolls.created_at) as month,
+                SUM(payroll_deductions.total_accrued_period) as total_gross,
+                SUM(payroll_deductions.total_deduction) as total_deduction,
+                SUM(payroll_deductions.net_pay) as net_pay
+            ')
+            ->where('publish_status', $status)
+            ->where('user_id', $id)
+            ->whereYear('payrolls.created_at', $year)
+            ->groupBy(DB::raw('MONTH(payrolls.created_at)'))
+            ->orderBy('month')
+            ->get()
+            ->map(function ($item) {
+                $item->month_name = Carbon::create()->month($item->month)->format('F');
+                $item->total_gross = (float) $item->total_gross;
+                $item->total_deduction = (float) $item->total_deduction;
+                $item->net_pay = (float) $item->net_pay;
+                return $item;
+            });
     }
     
 }

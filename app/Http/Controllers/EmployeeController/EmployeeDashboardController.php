@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\EmployeeController;
 
+use App\Traits\YearRange;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
@@ -10,17 +11,32 @@ use App\Contracts\Services\IPayrollReportsServices\GeneratePayrollsReportService
 class EmployeeDashboardController extends Controller
 {
 
+    use YearRange;
     public function __construct(
-         protected GeneratePayrollsReportServiceInterface $payrollReportsService
+         protected GeneratePayrollsReportServiceInterface $payrollReportsService,
     ){}
     public function dashboard(Request $request){
 
         $year = $request->year ?? now()->year;
 
-         $payslipType = 'All';
+        $availableYears = $this->yearRange();
 
-        $yearlyReports  = $this->payrollReportsService->generatePayrollReport($year, $payslipType);
-        
-        return Inertia::render('Employee/Dashboard');
+        $yearlyReports = $this->payrollReportsService->generatedPayrollReportsYearlyById($year);
+
+        // Total contribution rlip,contributions,philhealth -> intended to regular employee's
+        // Return null if not Regular Employee's
+        $contributions = $this->payrollReportsService->generateContributionThisMonthById(); 
+
+        $taxAndLoan = $this->payrollReportsService->generateLoanAndTaxThisMonthById();
+
+  dd($taxAndLoan);
+        return Inertia::render('Employee/Dashboard',
+                [
+                    'availableYears' => $availableYears,
+                    'yearReports'    => $yearlyReports,
+                    'contributions'  => $contributions,
+                    'taxAndLoans'    => $taxAndLoan,
+                    
+                ]);
     }
 }

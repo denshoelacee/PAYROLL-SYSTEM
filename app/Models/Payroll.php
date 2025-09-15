@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;
-use App\Traits\PayrollIdGenerator;
 
 class Payroll extends Model
 {

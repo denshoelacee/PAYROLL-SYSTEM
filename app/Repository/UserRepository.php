@@ -9,30 +9,31 @@ use App\Models\User;
 
 class UserRepository implements UserRepositoryInterface{
 
-    public function getMonthlyUserStats(int $year): \Illuminate\Support\Collection
+   
+    public function findById(int $id): ?User
     {
-        return DB::table('users')
-        ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
-        ->whereYear('created_at', $year)
-        ->groupBy('month')
-        ->orderBy('month')
-        ->get()
-        ->mapWithKeys(fn($item) => [$item->month => $item->count]);
-    }
+ 
+        return User::findorFail($id);
 
-     public function setApproveAccount($id)
-     {
-        $user = User::findOrFail($id);
+    }
+    
+    public function setApproveAccount($userId)
+    {
+
+        $user = $this->findById($userId);
         $user->status = 'verified';
         return $user->save();
-     }
 
-     public function setRejectAccount($id)
+    }
+
+    public function setRejectAccount($userId)
      {
-        $user = User::findOrFail($id);
+
+        $user = $this->findById($userId);
         $user->status = 'rejected';
         return $user->save();
-     }
+
+    }
 
      public function getPendingUsers()
      {
@@ -92,7 +93,9 @@ class UserRepository implements UserRepositoryInterface{
 
     public function getResetPassword($validateReset)
     {
-        $user = User::with('answerQuestion')->where('employee_id', $validateReset['employee_id'])->first();
+        $user = User::with('answerQuestion')
+                  ->where('employee_id', $validateReset['employee_id'])
+                  ->first();
 
         if (!$user) {
             return null;
@@ -101,10 +104,6 @@ class UserRepository implements UserRepositoryInterface{
         return $user;
     }
 
-    public function findById(int $id): ?User
-    {
-       return User::find($id);
-    }
 
     public function executeBatchDecission(array $user_ids, string $checker): int
     {

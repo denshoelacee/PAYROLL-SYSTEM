@@ -14,4 +14,10 @@ interface PayrollReportsRepositoryInterface
     public function getPayrollReportsYearly($year, $payslipTypes);
 
     public function getPayrollReportsYearlyView($year, $month, $payslipType);
+
+    public function findPayrollReportsYearlyById($year, $id);
+
+    public function getContributionThisMonthById($userId);
+
+    public function getLoanAndTaxThisMonthById($userId);
 }

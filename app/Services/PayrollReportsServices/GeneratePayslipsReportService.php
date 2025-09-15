@@ -7,7 +7,9 @@ use App\Contracts\Services\IPayrollReportsServices\GeneratePayslipsReportService
 
 class GeneratePayslipsReportService implements GeneratePayslipsReportServiceInterface {
 
-   public function __construct(protected PayrollRepositoryInterface $payrollRepository){}
+   public function __construct(
+           protected PayrollRepositoryInterface $payrollRepository
+      ){}
 
    public function UserPayrollMonthly($year,$month)
    {

@@ -137,7 +137,7 @@ export default function ReportsPartial({ selectedYear, availableYears, monthlySu
                             <button
                                 key={year}
                                 onClick={() => handleChangeYear(year)}
-                                className="block w-auto text-left px-4 py-1 hover:bg-white hover:text-black"
+                                className="block w-full text-left px-4 py-1 hover:bg-mainColor hover:text-white"
                             >
                                 {year}
                             </button>

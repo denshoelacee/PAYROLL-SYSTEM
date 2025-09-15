@@ -44,30 +44,41 @@ export default function ViewReport({viewReport,headerMonthTitle,headerYearTitle,
         saveAs(blob, `Payroll_Report_${headerMonthTitle}_${headerYearTitle}.xlsx`);
     };
 
-    const columns:GridColDef[] = [
+    const columns = [
         {field: 'user_id',headerName: 'No.',flex: 1,align: 'center',headerAlign: 'center',sortable: false,},
         {field: 'employee_name',headerName: 'Name',flex: 1,align: 'center',headerAlign: 'center',sortable: false,},
-        {field: activePayrollType === "Regular" ? 'basic_salary' : activePayrollType === 'Job Order' ? 'daily_rate' : 'hourly_rate',headerName: 
-    activePayrollType === "Part-Time"
-      ? "Hourly Rate"
-      : activePayrollType === "Job Order"
-        ? "Daily Rate"
-        : "Monthly Rate",flex: 1,align: 'center',headerAlign: 'center',sortable: false,
-           renderCell: (params) => 
-        activePayrollType === "Part-Time"
-            ? Number(params.row.hourly_rate ?? 0)
-            : activePayrollType === "Job Order"
-                ? Number(params.row.daily_rate ?? 0)
-                : Number(params.row.basic_salary ?? 0),
+        {field: activePayrollType === "Regular" 
+                ? 'basic_salary' 
+                : activePayrollType === 'Job Order' 
+                ? 'daily_rate' 
+                : 'hourly_rate',headerName: 
+                activePayrollType === "Part-Time"
+                ? "Hourly Rate"
+                : activePayrollType === "Job Order"
+                ? "Daily Rate"
+                : "Monthly Rate"
+        ,flex: 1,align: 'center',headerAlign: 'center',sortable: false,
+            renderCell: (params:any) => 
+            activePayrollType === "Part-Time"
+                ? Number(params.row.hourly_rate ?? 0)
+                : activePayrollType === "Job Order"
+                    ? Number(params.row.daily_rate ?? 0)
+                    : Number(params.row.basic_salary ?? 0),
         },
-        {field: 'pera',headerName: 'PERA',flex: 1,align: 'center',headerAlign: 'center',sortable: false,
-            renderCell: (params) => Number(params.value ?? 0)
+        activePayrollType === "Regular" && {
+            field: "pera",
+            headerName: "PERA",
+            flex: 1,
+            align: "center",
+            headerAlign: "center",
+            sortable: false,
+            renderCell: (params:any) => Number(params.value ?? 0),
         },
         {field: 'gross_salary', headerName:'Gross Salary',flex:1, align: 'center', headerAlign:'center',sortable:false,
-            renderCell: (params) => Number(params.value ?? 0)
+            renderCell: (params:any) => Number(params.value ?? 0)
         },
         {field: 'absentandLate', headerName:'Late/Absent',flex:1, align: 'center', headerAlign:'center',sortable:false,
-            renderCell: (params) => {
+            renderCell: (params:any) => {
                 const {absent,late} = params.row
                 return [absent,late]
                 .map(Number)
@@ -76,13 +87,13 @@ export default function ViewReport({viewReport,headerMonthTitle,headerYearTitle,
             }
         },
         {field: 'holding_tax',headerName: 'W/Holding Tax',flex: 1,align: 'center',headerAlign: 'center',sortable: false,
-            renderCell: (params) => Number(params.value ?? 0)
+            renderCell: (params:any) => Number(params.value ?? 0)
         },
         {field: 'tax_bal_due',headerName: 'Tax Balance Due',flex: 1,align: 'center',headerAlign: 'center',sortable: false,
-            renderCell: (params) => Number(params.value ?? 0)
+            renderCell: (params:any) => Number(params.value ?? 0)
         },
         {field: 'gsis_total',headerName: 'GSIS',flex: 1,align: 'center',headerAlign: 'center',sortable: false,
-            renderCell : (params) => {
+            renderCell : (params:any) => {
                 const {rlip,policy_loan,emerg_loan,gel,gfal,mpl,mpl_lite} = params.row
                 return [rlip, policy_loan, emerg_loan, gel, gfal, mpl, mpl_lite]
                 .map(Number)
@@ -90,18 +101,32 @@ export default function ViewReport({viewReport,headerMonthTitle,headerYearTitle,
             }
         },
         {field: 'hdmf',headerName: 'HDMF',flex: 1,align: 'center',headerAlign: 'center',sortable: false,
-            renderCell: (params) => {
+            renderCell: (params:any) => {
                 const {contributions,loans,housing_loan} = params.row
                 return [contributions,loans,housing_loan]
                 .map(Number)
                 .reduce((sum,val) => + sum + (isNaN(val) ? 0 : val), 0);
             }
         },
-        {field: 'philhealth',headerName: 'PHIC',flex: 1,align: 'center',headerAlign: 'center',sortable: false,
-            renderCell: (params) => Number(params.value ?? 0)
+        activePayrollType === "Regular" ? {
+            field: "philhealth",
+            headerName: "Philhealth",
+            flex: 1,
+            align: "center",
+            headerAlign: "center",
+            sortable: false,
+            renderCell: (params:any) => Number(params.value ?? 0),
+        }: {
+            field: "sss",
+            headerName: "SSS",
+            flex: 1,
+            align: "center",
+            headerAlign: "center",
+            sortable: false,
+            renderCell: (params:any) => Number(params.value ?? 0),
         },
         {field: 'other_deductions',headerName: 'Other Deductions',flex: 1,align: 'center',headerAlign: 'center',sortable: false,
-            renderCell: (params) => {
+            renderCell: (params:any) => {
                 const {cfi,tipid,city_savings_bank,fea,canteen,disallowance,unliquidated_ca,disallowance_honoraria,coop,landbank,ucpb} = params.row
                 return [cfi,tipid,city_savings_bank,fea,canteen,disallowance,unliquidated_ca,disallowance_honoraria,coop,landbank,ucpb]
                 .map(Number)
@@ -109,12 +134,12 @@ export default function ViewReport({viewReport,headerMonthTitle,headerYearTitle,
             }
         },
         {field: 'total_deduction',headerName: 'Total Deductions',flex: 1,align: 'center',headerAlign: 'center',sortable: false,
-            renderCell: (params) => Number(params.value ?? 0)
+            renderCell: (params:any) => Number(params.value ?? 0)
         },
         {field: 'net_pay',headerName: 'Net Pay',flex: 1,align: 'center',headerAlign: 'center',sortable: false,
-            renderCell: (params) => Number(params.value ?? 0)
+            renderCell: (params:any) => Number(params.value ?? 0)
         },
-    ]
+    ].filter(Boolean) as GridColDef[]
     
     return(
         <>

@@ -68,16 +68,16 @@ function Department({ auth, empTypeList, jobTitleList, contributionType }: Props
                             <AddDesignation jobTitleList={jobTitleList} />
                         </div>
 
-                        {/* Employment Type Section */}
+                        {/* Employment Type Section 
                         <div className="bg-[#16423C] border border-button-border-color rounded-lg w-full sm:w-[48%] lg:w-[32%] my-4">
                             <h2 className="text-lg font-semibold my-3 mx-5 text-white">
                                 Employment Type
                             </h2>
                             <AddEmployment empTypeList={empTypeList} />
                         </div>
-
+                            */}
                         {/* Fixed Payroll Settings */}
-                        <form onSubmit={handleSubmit} className="w-full sm:w-[48%] lg:w-[32%]">
+                        <form onSubmit={handleSubmit} className="w-full sm:w-[48%] lg:w-[32%] my-4">
                             <InputWrapper className="p-4">
                                 <p className="text-white mb-4 font-semibold">
                                     Fixed Payroll Settings Input

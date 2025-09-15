@@ -1,14 +1,16 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { PageProps,Employee,UserPayroll} from '@/types';
+import { PageProps} from '@/types';
 import Sidebar from '@/Components/Sidebar';
 import AdminLayout from '@/Layouts/AdminLayout';
 import EmployeePayrollPartial from '../Employee/partial/Payroll';
-import EmployeeLayout from '@/Layouts/EmployeeLayout';
+
 type MonthlySummaryRow = {
-        month: number;
-        month_name: string;
-    };
+    month: number;
+    month_name: string;
+    assigned_designation: string;
+    assigned_department: string;
+    payslip_type: string;
+};
 
 type Props = PageProps<{
 

@@ -437,11 +437,15 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                         <div className="flex flex-col w-full justify-between text-sm lg:text-md px-5 pb-5 text-white">
                             <p className="text-end text-md font-semibold">TOTAL DEDUCTIONS: {format(payslip.total_deduction)}</p>
                             <p className="text-end text-md font-semibold">NET PAY: {format(payslip.net_pay)}</p>
-                            {getHalfMonthRanges().map((range, index) => (
+                            {payslip.payslip_type === "Regular" || payslip.payslip_type === "Part-Time" && (
+                                <>
+                                {getHalfMonthRanges().map((range, index) => (
                                 <p key={index} className="text-end text-sm">
                                     {range} {(Number(payslip.net_pay) / 2).toFixed(2)}
                                 </p>
-                            ))}
+                                ))}
+                                </>
+                            )}
                         </div>
                     </div>
                     <div className="w-32 py-2">

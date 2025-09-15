@@ -51,8 +51,8 @@ export default function ManageUserPartial({ employees}: Props) {
 
     // Form handling
     const { data, setData, post } = useForm<{
-        user_id?: number;
-        user_ids?: number[];
+        user_id?: number|string;
+        user_ids?: any;
     }>({
         user_id: undefined,
         user_ids: [],

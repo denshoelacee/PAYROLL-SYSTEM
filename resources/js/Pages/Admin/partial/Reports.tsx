@@ -28,11 +28,7 @@ export default function ReportsPartial({ selectedYear, availableYears, monthlySu
     const [activeTab, setActiveTab] = useState("Regular");
 
     const reloadReports = (year: string | number, tab: string) => {
-        router.get(
-            route("admin.payroll.summary"),
-            { year, payrollType: tab },
-            { preserveState: true }
-        );
+        router.get(route("admin.payroll.summary"),{ year, payrollType: tab },{ preserveState: true });
     };
 
     const handleChangeYear = (year: number) => {

@@ -214,9 +214,7 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips=[],availab
             )}
             {/*Edit Modal */}
             {editModal && selectedRow && (
-                <PayrollEditModal show={editModal} onClose={() => {setEditModal(false)
-                    router.visit(route("admin.payroll"), { replace: true }); 
-                }
+                <PayrollEditModal show={editModal} onClose={() => {setEditModal(false); router.visit(route("admin.payroll"), { replace: true }); }
                 } row={selectedRow as any} />
             )}
 

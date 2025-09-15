@@ -23,7 +23,7 @@
     const fillable = {
         payroll_id: "",
         user_id: "",
-        basic_salary: "",
+        basic_pay: "",
         pera: "",
         absent: "",
         late: "",
@@ -62,13 +62,10 @@
         units: "",
         duty_count: "",
         daily_rate: "",
-        philhealth_auto:false,
-        rlip_auto:false
+        employment_type:""
     }
     export default function PayrollEditModal({ show, onClose, row}: Props) {
         const [submitTrigger, setSubmitTrigger] = useState<"partial" | "publish" | null>(null);
-        const [autoPhilhealthChecked, setAutoPhilhealthChecked] = useState(false);
-        const [autoRlipChecked, setAutoRlipChecked] = useState(false);
         //console.log("row ni",row);
         const { data, setData, post } = useForm<any>(fillable);
         useEffect(() => {
@@ -108,6 +105,7 @@
         const handleEdit = (actionType: "partial" | "publish") => (e: React.FormEvent) => {
             e.preventDefault();
             setData("publish_status", actionType);
+            setData("employment_type",row.payslip_type);
             setSubmitTrigger(actionType);
         };
 
@@ -115,8 +113,6 @@
             if (submitTrigger && data.publish_status === submitTrigger) {
             const requestPayload = {
                 ...data,
-                philhealth_auto: autoPhilhealthChecked,
-                rlip_auto: autoRlipChecked,
             };
             post(route("admin.payroll.update-partial-publish", data.payroll_id), {
                 data:requestPayload,
@@ -218,9 +214,9 @@
                     </span>
                 </div>
 
-                <InputWrapper className="flex gap-4 p-3">
+                <InputWrapper className="p-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
                 {row?.payslip_type === "Regular" && (
-                <TextInputGroup label="Basic Salary" id="basic_salary" name="basic_salary" value={data?.basic_salary} disabled />
+                <TextInputGroup label="Basic Salary" id="basic_pay" name="basic_pay" value={data?.basic_salary} disabled />
                 )}
                 {(row?.payslip_type === "Regular|Part-Time" || row?.payslip_type === "Part-Time" )&& (
                 <>

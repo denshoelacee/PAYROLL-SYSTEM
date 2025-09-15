@@ -40,7 +40,7 @@ trait PayslipIdGenerator
 
         $exists = $this->payrollRepository->findHasPayrollForJobOrder($user_id);
 
-        $suffix = $exists ? '02' : '01';
+        $suffix = $exists ? '-02' : '-01';
         return ['id' => $idPrefix . $suffix, 'type' => 'Job Order'];
 
     }
@@ -49,9 +49,9 @@ trait PayslipIdGenerator
     {
 
         return match ($user->employment_type) {
-            'Regular'    => ['id' => $idPrefix . '-2', 'type' => 'Regular|Part-Time'],
-            'Job Order'  => ['id' => $idPrefix . '-2', 'type' => 'Job Order|Part-Time'],
-            'Part-Time'  => ['id' => $idPrefix . '01', 'type' => 'Part-Time'],
+            'Regular'    => ['id' => $idPrefix . '-003', 'type' => 'Regular|Part-Time'],
+            'Job Order'  => ['id' => $idPrefix . '-002', 'type' => 'Job Order|Part-Time'],
+            'Part-Time'  => ['id' => $idPrefix . '-001', 'type' => 'Part-Time'],
             default      => ['id' => $idPrefix . '00', 'type' => 'Unknown Part-Time Type'],
         };
         

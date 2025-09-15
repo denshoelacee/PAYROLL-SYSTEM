@@ -34,16 +34,29 @@ class Handler extends ExceptionHandler
     
     public function render($request, Throwable $exception)
     {
-        if($exception instanceof NotFoundHttpException && $request->expectsJson() === false) {
-            return Inertia::render('Errors/Error404')->toResponse($request)->setStatusCode(404);
+        
+        if ($exception instanceof NotFoundHttpException && $request->expectsJson() === false){
+            return Inertia::render('Errors/Error404')
+              ->toResponse($request)
+              ->setStatusCode(404);
         }
 
         if ($exception instanceof TokenMismatchException){
-            return Inertia::render('Errors/419')->toResponse($request)->setStatusCode(419);
+            return Inertia::render('Errors/419')
+              ->toResponse($request)
+              ->setStatusCode(419);
         }
         
-        if ($exception instanceof HttpException && $exception->getStatusCode() === 419) {
-            return Inertia::render('Errors/419')->toResponse($request)->setStatusCode(419);
+        if ($exception instanceof HttpException && $exception->getStatusCode() === 419){
+            return Inertia::render('Errors/419')
+              ->toResponse($request)
+              ->setStatusCode(419);
+        }
+
+        if ($exception instanceof HttpException && $exception->getStatusCode() === 403){
+            return Inertia::render('Errors/Error403')
+              ->toResponse($request)
+              ->setStatusCode(403);
         }
 
         return parent::render($request, $exception);

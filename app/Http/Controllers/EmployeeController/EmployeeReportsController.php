@@ -11,7 +11,10 @@ use Inertia\Inertia;
 
 class EmployeeReportsController extends Controller
 {
-    public function __construct(protected PayslipReportsServicesInterface $payslipReportsServices){}
+    public function __construct(
+         protected PayslipReportsServicesInterface $payslipReportsServices,
+         
+    ){}
 
     public function userPayslipReports(Request $request)
     {

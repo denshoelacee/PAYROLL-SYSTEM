@@ -119,11 +119,13 @@ class AdminPayrollController extends Controller
     public function ViewPayslipById($payslip_id)
     {
 
-       $payslip = $this->payslipsReportService->viewPayslipByPayrollId($payslip_id);
+       
+        $payslip = $this->payslipsReportService->viewPayslipByPayrollId($payslip_id);
+        
+        return Inertia::render('Admin/ViewPayslip', [
+            'payslip' => $payslip
+        ]);
 
-       return Inertia::render('Admin/ViewPayslip',[
-           'payslip' => $payslip
-       ]);
     }
 
     public function getUpdatePayroll($payroll_id, $payslip_type)

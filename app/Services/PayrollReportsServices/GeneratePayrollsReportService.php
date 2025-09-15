@@ -5,10 +5,12 @@ namespace App\Services\PayrollReportsServices;
 use App\Contracts\Repository\PayrollReportsRepositoryInterface;
 use App\Contracts\Repository\PayrollRepositoryInterface;
 use App\Contracts\Services\IPayrollReportsServices\GeneratePayrollsReportServiceInterface;
+use App\Traits\PayslipTypeMapping;
 
 class GeneratePayrollsReportService implements GeneratePayrollsReportServiceInterface
 {
 
+    use PayslipTypeMapping;
     public function __construct(
               protected PayrollRepositoryInterface $payrollRepository,
               protected PayrollReportsRepositoryInterface $payrollReportRepository,
@@ -23,7 +25,9 @@ class GeneratePayrollsReportService implements GeneratePayrollsReportServiceInte
     public function generatePayrollReport($year, $payslipType)
     {
 
-        return $this->payrollReportRepository->getPayrollReportsYearly($year, $payslipType);
+         $payslipTypes = $this->typeMapping($payslipType);
+         
+        return $this->payrollReportRepository->getPayrollReportsYearly($year, $payslipTypes);
 
     }
 

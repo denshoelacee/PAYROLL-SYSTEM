@@ -4,15 +4,12 @@ namespace App\Repository;
 
 use App\Models\Payroll;
 use App\Contracts\Repository\PayrollReportsRepositoryInterface;
-use App\Traits\PayslipTypeMapping;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class PayrollReportsRepository implements PayrollReportsRepositoryInterface
 {
 
-    use PayslipTypeMapping;
-  
     public function getContributionsBreakdownMonthly()
     {
 
@@ -50,6 +47,7 @@ class PayrollReportsRepository implements PayrollReportsRepositoryInterface
 
     public function geTotalTaxThisMonth()
     {
+
        return DB::table('payrolls')
                  ->selectRaw('
                 COALESCE(SUM(holding_tax), 0) AS tax,
@@ -75,10 +73,8 @@ class PayrollReportsRepository implements PayrollReportsRepositoryInterface
     }
 
     
-    public function getPayrollReportsYearly($year, $payslipType)
-    {
-
-        $payslipTypes = $this->typeMapping($payslipType);   
+    public function getPayrollReportsYearly($year, $payslipTypes)
+    {  
 
         return DB::table('payrolls')
             ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
@@ -103,62 +99,68 @@ class PayrollReportsRepository implements PayrollReportsRepositoryInterface
 
                 return $item;
             });
-    }
 
-    public function getPayrollReportsYearlyView($year, $month, $payrollType)
+    }
+    public function getPayrollReportsYearlyView($year, $month, $payslipType)
     {
-        
-          $payslipTypes = $this->typeMapping($payrollType);   
 
-        return  DB::table('payrolls')
-        ->join('users', 'payrolls.user_id', '=', 'users.user_id')
-        ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
-        ->select([
-            'users.user_id',
-            DB::raw("CONCAT(users.last_name, ', ', users.first_name) AS employee_name"),
-            'payrolls.basic_salary', 'payrolls.pera', 'payrolls.daily_rate',
-            'payrolls.hourly_rate', 'payrolls.duty_count', 'payrolls.units',
-            'payrolls.service_rendered', 'payrolls.absent', 'payrolls.late',
-            'payrolls.holding_tax', 'payrolls.tax_bal_due', 'payrolls.rlip',
-            'payrolls.policy_loan', 'payrolls.consol_loan', 'payrolls.emerg_loan',
-            'payrolls.gel', 'payrolls.gfal', 'payrolls.mpl', 'payrolls.mpl_lite',
-            'payrolls.contributions', 'payrolls.loans', 'payrolls.housing_loan',
-            'payrolls.philhealth', 'payrolls.cfi', 'payrolls.tipid',
-            'payrolls.city_savings_bank', 'payrolls.fea', 'payrolls.canteen',
-            'payrolls.disallowance', 'payrolls.unliquidated_ca',
-            'payrolls.disallowance_honoraria', 'payrolls.coop',
-            'payrolls.landbank', 'payrolls.ucpb',
-            'payroll_deductions.total_accrued_period as gross_salary',
-            'payroll_deductions.total_deduction', 'payroll_deductions.net_pay'
-        ])
-            ->where('publish_status', 'publish')
-            ->whereIn('payslip_type', $payslipTypes)
-            ->whereMonth('payrolls.created_at', $month)
-            ->whereYear('payrolls.created_at', $year)
-            ->orderBy(DB::raw("CONCAT(users.last_name, ', ', users.first_name)"), 'asc')
-            ->get()
-            ->map(function ($item) {
-            $numericFields = [
-                'basic_salary', 'pera', 'daily_rate', 'hourly_rate', 'duty_count', 
-                'units', 'service_rendered', 'absent', 'late', 'holding_tax', 
-                'tax_bal_due', 'rlip', 'policy_loan', 'consol_loan', 'emerg_loan', 
-                'gel', 'gfal', 'mpl', 'mpl_lite', 'contributions', 'loans', 
-                'housing_loan', 'philhealth', 'cfi', 'tipid', 'city_savings_bank', 
-                'fea', 'canteen', 'disallowance', 'unliquidated_ca', 
-                'disallowance_honoraria', 'coop', 'landbank', 'ucpb', 
-                'gross_salary', 'total_deduction', 'net_pay'
-            ];
-            
-            $result = (array) $item;
-            foreach ($numericFields as $field) {
-                if (isset($result[$field])) {
-                    $result[$field] = (float) $result[$field];
-                }
-            }
-            return (object) $result;
-        });
+        return DB::table('payrolls')
+            ->join('users', 'payrolls.user_id', '=', 'users.user_id')
+            ->join('payroll_deductions', 'payrolls.payroll_id', '=', 'payroll_deductions.payroll_id')
+            ->select([
+                'users.user_id',
+                DB::raw("CONCAT(users.last_name, ', ', users.first_name) AS employee_name"),
+                // Salary components
+                'payrolls.basic_salary', 'payrolls.pera', 'payrolls.daily_rate',
+                'payrolls.hourly_rate', 'payrolls.duty_count', 'payrolls.units',
+                'payrolls.service_rendered', 'payrolls.absent', 'payrolls.late',
+                // Tax and deductions
+                'payrolls.holding_tax', 'payrolls.tax_bal_due', 'payrolls.rlip',
+                // Loans
+                'payrolls.policy_loan', 'payrolls.consol_loan', 'payrolls.emerg_loan',
+                'payrolls.gel', 'payrolls.gfal', 'payrolls.mpl', 'payrolls.mpl_lite',
+                // Other deductions
+                'payrolls.contributions', 'payrolls.loans', 'payrolls.housing_loan',
+                'payrolls.philhealth', 'payrolls.cfi', 'payrolls.tipid',
+                'payrolls.city_savings_bank', 'payrolls.fea', 'payrolls.canteen',
+                'payrolls.disallowance', 'payrolls.unliquidated_ca',
+                'payrolls.disallowance_honoraria', 'payrolls.coop',
+                'payrolls.landbank', 'payrolls.ucpb',
+                // Totals
+                'payroll_deductions.total_accrued_period as gross_salary',
+                'payroll_deductions.total_deduction', 
+                'payroll_deductions.net_pay'
+            ])
+            ->where('payrolls.publish_status', 'publish')
+            ->whereIn('payrolls.payslip_type', $payslipType)
+            ->where(DB::raw('YEAR(payrolls.created_at)'), $year)
+            ->where(DB::raw('MONTH(payrolls.created_at)'), $month)
+            ->orderBy('users.last_name')
+            ->orderBy('users.first_name')
+            ->get();
     }
 
 
+    public function getContributionThisMonthById($payroll_id)
+    {
+
+        $status = 'publish'; //publish, partial, none
+        $type = 'Regular'; //Regular,Job Order, Part-Time
+
+        return Payroll::select(
+             'payroll_id',
+              DB::raw('(rlip + contributions + philhealth) as total_contributions')  
+            )
+            ->where('publish_status', $status)
+            ->where('payroll_id', $payroll_id)
+            ->where('payslip_type', $type)
+            ->whereBetween('created_at', [
+                now()->startOfMonth(),
+                now()->endOfMonth()
+            ])
+            ->latest('created_at')
+            ->first();
+
+    }
     
 }

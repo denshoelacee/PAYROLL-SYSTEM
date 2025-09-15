@@ -19,9 +19,10 @@ class AdminDashboardController extends Controller
     public function dashboard(Request $request){
 
         $year = $request->year ?? now()->year;
+        
+        $payslipType = 'All';
 
-
-        $yearlyReports         = $this->payrollReportsService->generatePayrollReport($year, 'All');
+        $yearlyReports         = $this->payrollReportsService->generatePayrollReport($year, $payslipType);
         $summaryTotal          = $this->dashboardService->getTaxAndUserSummary();
         $departmentGross       = $this->dashboardService->latestGrossPayMonthly();
         $contributionBreakdown = $this->dashboardService->contributionBreakdown();

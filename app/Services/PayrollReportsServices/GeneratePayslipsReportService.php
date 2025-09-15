@@ -19,8 +19,18 @@ class GeneratePayslipsReportService implements GeneratePayslipsReportServiceInte
    public function viewPayslipByPayrollId($payslip_id)
    {
 
-      return $this->payrollRepository->getViewPayslipByPayslipId($payslip_id);
+      $user = auth()->user();
+        $payroll = $this->payrollRepository->getViewPayslipByPayslipId($payslip_id);
 
+         if (!$payroll) {
+            abort(404);
+         }
+
+         if ($user->role !== 'Admin' && $payroll['user_id'] !== $user->user_id){
+            abort(403);
+         }
+
+         return $payroll;
    }
 
 }

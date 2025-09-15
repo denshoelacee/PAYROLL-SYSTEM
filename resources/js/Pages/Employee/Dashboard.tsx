@@ -1,4 +1,5 @@
 import React from 'react'
+import { Head } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { PageProps } from '@/types'
 import Sidebar from '@/Components/Sidebar'
@@ -11,6 +12,7 @@ export default function Dashboard({ auth}: PageProps) {
     
        <Sidebar auth={auth}/> 
       <AdminLayout>
+        <Head title = "Dashboard" />
 
      </AdminLayout>
      

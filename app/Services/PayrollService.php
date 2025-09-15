@@ -149,19 +149,32 @@ class PayrollService implements PayrollServiceInterface
     public function editedPartialPublishPayroll(array $data,$id):void
     {
 
+         if($data['publish_status'] === 'publish'){
+            $this->updatePublish($data,$id);
+         }
+         if($data['publish_status'] === 'partial')
+         {
+           $this->payrollRepository->updatePartial($data,$id);
+         }
+
+    }
+
+    private function updatePublish(array $data,$id): void
+    {
+
         $user = $this->userRepository->findById($data['user_id']);
-             $salary = $user->basic_pay;
+        $salary = $user->basic_pay;
 
           $contribution = $this->calculateContributionDeduction($salary, $data['employment_type']);
 
-         $payData = $this->calculateSalaryAndDeduction($data, $contribution['totalContribution']);
+            $payData = $this->calculateSalaryAndDeduction($data, $contribution['totalContribution']);
 
            $data['rlip'] = $contribution['rlip'];
            $data['philhealth'] = $contribution['philhealth'];
            $data['basic_salary'] = $salary;
 
-          $payroll = $this->payrollRepository->PayrollModel($id);
-          $payroll->deduction()->update([
+        $payroll = $this->payrollRepository->payrollModel($id);
+        $payroll->deduction()->update([
             'total_accrued_period' => $payData['grossPay'],
             'total_deduction' => $payData['totalDeduction'],
             'net_pay' => $payData['netPay']
@@ -169,6 +182,7 @@ class PayrollService implements PayrollServiceInterface
        $payroll->update($data);
 
     }
+
 
 }
 

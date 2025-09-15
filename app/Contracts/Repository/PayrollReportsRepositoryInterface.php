@@ -11,7 +11,7 @@ interface PayrollReportsRepositoryInterface
 
     public function geTotalTaxThisMonth();
 
-    public function getPayrollReportsYearly($year, $payslipType);
+    public function getPayrollReportsYearly($year, $payslipTypes);
 
-    public function getPayrollReportsYearlyView($year, $month, $payrollType);
+    public function getPayrollReportsYearlyView($year, $month, $payslipType);
 }

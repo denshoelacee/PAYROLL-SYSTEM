@@ -14,7 +14,6 @@ use Carbon\Carbon;
 class PayrollRepository implements PayrollRepositoryInterface{
 
 
-    protected $type;
     public function __construct(
         protected UserRepositoryInterface             $userRepository,
         protected PayrollDeductionRepositoryInterface $payrollDeductionRepo,
@@ -53,8 +52,7 @@ class PayrollRepository implements PayrollRepositoryInterface{
             return collect();
 
         }
-
-        $this->type = $employmentType;
+       
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
 
@@ -74,11 +72,14 @@ class PayrollRepository implements PayrollRepositoryInterface{
                 break;
 
             case 'Job Order':
+                $currentDay = Carbon::now()->day;
+                $maxPayrolls = ($currentDay >= 25) ? 2 : 1;
+                
                 $query->where('employment_type', 'Job Order')
                     ->whereHas('payrolls', function ($q) use ($startOfMonth, $endOfMonth) {
                         $q->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-                            ->where('payslip_type', 'Job Order');
-                    }, '<', 2);
+                        ->where('payslip_type', 'Job Order');
+                    }, '<', $maxPayrolls);
                 break;
 
             case 'Part-Time':
@@ -180,7 +181,7 @@ class PayrollRepository implements PayrollRepositoryInterface{
             ->select([
                 'users.user_id',
                 'users.employee_id',
-                DB::raw("CONCAT(first_name,', ',last_name) AS full_name"),
+                DB::raw("CONCAT(last_name,', ',first_name) AS full_name"),
                 'payrolls.assigned_designation',
                 'payrolls.assigned_department',
                 'payrolls.payslip_type', 

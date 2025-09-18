@@ -5,8 +5,9 @@ type GeneratemonthyReportParams  ={
   headerMonthTitle: string;
   headerYearTitle: string;
   viewReport: UserPayroll[];
+  activePayrollType:string;
 }
-export default function generateregularmonthlyReport({worksheet,headerMonthTitle,headerYearTitle,viewReport}:GeneratemonthyReportParams) {
+export default function generateregularmonthlyReport({activePayrollType,worksheet,headerMonthTitle,headerYearTitle,viewReport}:GeneratemonthyReportParams) {
         worksheet.pageSetup = {
             paperSize: 5, // legal
             orientation: 'landscape', 
@@ -30,7 +31,7 @@ export default function generateregularmonthlyReport({worksheet,headerMonthTitle
             //HEADER TITLE
             // Add title row if you want to display the selected month
             worksheet.mergeCells('A1:O1');
-            worksheet.getCell('A1').value = `PAYROLL FOR REGULAR EMPLOYEES FOR ${headerMonthTitle}, ${headerYearTitle}`;
+            worksheet.getCell('A1').value = `PAYROLL FOR ${activePayrollType} EMPLOYEES FOR ${headerMonthTitle}, ${headerYearTitle}`;
             worksheet.getCell('A1').alignment = { horizontal: 'center', vertical: 'middle' };
             worksheet.getCell('A1').font = { bold: true, size: 14, name:'Cambria'};
             worksheet.getCell('A2').value = ''

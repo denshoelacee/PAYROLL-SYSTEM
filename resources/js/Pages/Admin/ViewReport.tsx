@@ -9,8 +9,7 @@ import generateregularmonthlyReport from "./partial/reports/reportsexcel/regular
 import generateRegularSundry from "./partial/reports/reportsexcel/regularsundry"
 import { LiaPrintSolid } from "react-icons/lia";
 import { Head } from "@inertiajs/react"
-import generateparttimemonthlyReport from "./partial/reports/reportsexcel/parttimereports";
-import generatePartTimeSundry from "./partial/reports/reportsexcel/parttimesundry";
+
 
 type Props  ={
   worksheet2: ExcelJS.Worksheet;
@@ -21,27 +20,22 @@ type Props  ={
 }
 export default function ViewReport({viewReport,headerMonthTitle,headerYearTitle,activePayrollType}:Props){
 
-    console.log(viewReport)
     const exportToExcel = async () => {
         const workbook = new ExcelJS.Workbook();
 
         const worksheet = workbook.addWorksheet(`${headerMonthTitle}`);
         const worksheet2 = workbook.addWorksheet('sundry');
 
-        {activePayrollType == 'Regular' && 
-            generateregularmonthlyReport({worksheet,headerMonthTitle,headerYearTitle,viewReport})
-            generateRegularSundry({worksheet2,headerMonthTitle,headerYearTitle,viewReport})
-        }
-        {activePayrollType == 'Part-Time' &&
-            generateparttimemonthlyReport({worksheet,headerMonthTitle,headerYearTitle,viewReport})
-            generatePartTimeSundry({worksheet2,headerMonthTitle,headerYearTitle,viewReport})
-        }
+        generateregularmonthlyReport({activePayrollType,worksheet,headerMonthTitle,headerYearTitle,viewReport})
+        generateRegularSundry({activePayrollType,worksheet2,headerMonthTitle,headerYearTitle,viewReport})
+
+
         // Download
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         });
-        saveAs(blob, `Payroll_Report_${headerMonthTitle}_${headerYearTitle}.xlsx`);
+        saveAs(blob, `Payroll_Report_For_${activePayrollType}_${headerMonthTitle}_${headerYearTitle}.xlsx`);
     };
 
     const columns = [

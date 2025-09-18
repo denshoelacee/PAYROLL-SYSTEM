@@ -5,8 +5,9 @@ type GenerateSundryParams  ={
   headerMonthTitle: string;
   headerYearTitle: string;
   viewReport: UserPayroll[];
+  activePayrollType:string;
 }
-export default function generateRegularSundry({ worksheet2, headerMonthTitle, headerYearTitle, viewReport }:GenerateSundryParams) {
+export default function generateRegularSundry({ activePayrollType,worksheet2, headerMonthTitle, headerYearTitle, viewReport }:GenerateSundryParams) {
     worksheet2.pageSetup = {
         paperSize: 5, // Legal
         orientation: 'landscape',
@@ -16,13 +17,13 @@ export default function generateRegularSundry({ worksheet2, headerMonthTitle, he
         },
     };
     // ===== Titles =====
-    worksheet2.mergeCells('A1:W1');
+    worksheet2.mergeCells('A1:X1');
     worksheet2.getCell('A1').value = 'ABSTRACT OF OTHER DEDUCTIONS';
     worksheet2.getCell('A1').alignment = { horizontal: 'center' };
     worksheet2.getCell('A1').font = { bold: true, name: 'Cambria' };
 
-    worksheet2.mergeCells('A2:W2');
-    worksheet2.getCell('A2').value = `ATTACHMENT OF PAYROLL FOR REGULAR EMPLOYEES FOR ${headerMonthTitle}, ${headerYearTitle}`;
+    worksheet2.mergeCells('A2:X2');
+    worksheet2.getCell('A2').value = `ATTACHMENT OF PAYROLL FOR ${activePayrollType} EMPLOYEES FOR ${headerMonthTitle}, ${headerYearTitle}`;
     worksheet2.getCell('A2').alignment = { horizontal: 'center' };
     worksheet2.getCell('A2').font = { bold: true, name: 'Cambria' };
 
@@ -31,8 +32,8 @@ export default function generateRegularSundry({ worksheet2, headerMonthTitle, he
     worksheet2.mergeCells('B3:B4'); // Name
     worksheet2.mergeCells('C3:I3'); // GSIS
     worksheet2.mergeCells('J3:K3'); // HDMF
-    worksheet2.mergeCells('L3:V3'); // Other Deductions
-    worksheet2.mergeCells('W3:W4'); // OTHER DEDUCTION TOTAL
+    worksheet2.mergeCells('L3:W3'); // Other Deductions
+    worksheet2.mergeCells('X3:X4'); // OTHER DEDUCTION TOTAL
 
     worksheet2.getCell('A3').value = 'No.';
     worksheet2.getCell('B3').value = 'Name';
@@ -47,7 +48,7 @@ export default function generateRegularSundry({ worksheet2, headerMonthTitle, he
         "LOANS", "Housing Loan",                                         // J to L
         "CFI", "TIPID", "CITY BANK SAVINGS", "FEA", "CANTEEN",                                 // M to Q
         "Disallowance", "Unliquidated Cash", "Disallowance (COA)",                        // R to T
-        "COOP", "LAND BANK", "UCPB","OTHER DEDUCTIONS"                                                 // U to W
+        "COOP", "LAND BANK", "UCPB","SSS","OTHER DEDUCTIONS"                                                 // U to W
     ];
 
     let colIndex = 3; // Column C
@@ -82,11 +83,12 @@ export default function generateRegularSundry({ worksheet2, headerMonthTitle, he
             { width: 10 },   // U: "COOP"
             { width: 10 },   // V: "LandBank"
             { width: 10 },   // W: "UCPB"
-            { width: 15 },   // X: "OTHER DEDUCTION"
+            { width: 10 },   // X: "SSS"
+            { width: 15 },   // Y: "OTHER DEDUCTION"
             ];
     
     // ===== Format Header Rows =====
-    const headerRange = { fromCol: 1, toCol: 23, rows: [3, 4] }; // A (1) to X (24), rows 3 & 4
+    const headerRange = { fromCol: 1, toCol: 24, rows: [3, 4] }; // A (1) to X (24), rows 3 & 4
     for (let rowNum of headerRange.rows) {
         const row = worksheet2.getRow(rowNum);
         for (let col = headerRange.fromCol; col <= headerRange.toCol; col++) {
@@ -104,7 +106,7 @@ export default function generateRegularSundry({ worksheet2, headerMonthTitle, he
 
     viewReport.forEach((row:any,index:number)=>{
         const otherdeductiontotal = [
-            row.loans,row.housing_loan,row.policy_loan,row.consol_loan,row.emerg_loan,row.gel,row.gfal,row.mpl,row.mpl_lite,row.cfi,row.tipid,row.city_savings_bank,row.fea,row.canteen,row.disallowance,row.unliquidated_ca,row.disallowance_honoraria,row.coop,row.landbank,row.ucpb
+            row.loans,row.housing_loan,row.policy_loan,row.consol_loan,row.emerg_loan,row.gel,row.gfal,row.mpl,row.mpl_lite,row.cfi,row.tipid,row.city_savings_bank,row.fea,row.canteen,row.disallowance,row.unliquidated_ca,row.disallowance_honoraria,row.coop,row.landbank,row.ucpb,row.sss
         ].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
         const excelRow = worksheet2.addRow([
             index + 1,
@@ -129,6 +131,7 @@ export default function generateRegularSundry({ worksheet2, headerMonthTitle, he
             row.coop ?? 0,
             row.landbank ?? 0,
             row.ucpb?? 0,
+            row.sss ?? 0,
             otherdeductiontotal
             ]);
 
@@ -196,6 +199,7 @@ export default function generateRegularSundry({ worksheet2, headerMonthTitle, he
             coop:0,
             landbank:0,
             ucpb:0,
+            sss:0,
             otherdeducTotal:0
         };
     
@@ -220,7 +224,8 @@ export default function generateRegularSundry({ worksheet2, headerMonthTitle, he
             footerTotals.coop               += parseFloat(row.coop ?? 0);
             footerTotals.landbank           += parseFloat(row.landbank ?? 0);
             footerTotals.ucpb               += parseFloat(row.ucpb ?? 0);
-            footerTotals.otherdeducTotal    += [row.loans,row.housing_loan,row.policy_loan,row.consol_loan,row.emerg_loan,row.gel,row.gfal,row.mpl,row.mpl_lite,row.cfi,row.tipid,row.city_savings_bank,row.fea,row.canteen,row.disallowance,row.unliquidated_ca,row.disallowance_honoraria,row.coop,row.landbank,row.ucpb].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
+            footerTotals.sss                += parseFloat(row.sss ?? 0)
+            footerTotals.otherdeducTotal    += [row.loans,row.housing_loan,row.policy_loan,row.consol_loan,row.emerg_loan,row.gel,row.gfal,row.mpl,row.mpl_lite,row.cfi,row.tipid,row.city_savings_bank,row.fea,row.canteen,row.disallowance,row.unliquidated_ca,row.disallowance_honoraria,row.coop,row.landbank,row.ucpb,row.sss].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
         });
     
         const footerRow = worksheet2.addRow([
@@ -246,6 +251,7 @@ export default function generateRegularSundry({ worksheet2, headerMonthTitle, he
             footerTotals.coop               ,
             footerTotals.landbank           ,
             footerTotals.ucpb               ,
+            footerTotals.sss                ,
             footerTotals.otherdeducTotal    ,
         ]); 
         // Style the footer row

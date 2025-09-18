@@ -42,7 +42,7 @@ function Department({ auth, empTypeList, jobTitleList, contributionType }: Props
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post(route("admin.contribution.add"));
-    };
+        };
 
 
     return (

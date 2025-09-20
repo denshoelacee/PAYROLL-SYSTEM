@@ -1,10 +1,7 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import Sidebar from '@/Components/Sidebar';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { useEffect, useRef, useState } from 'react';
-import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import CTULOGO from '../../../images/CTULOGO.png';
 import DisplayItem from '@/Components/payslipDisplay';
@@ -67,7 +64,8 @@ interface PayslipPageProps extends PageProps {
 
 export default function Payslip({ auth, payslip }: PayslipPageProps) {
     // Only render if payslip data exists
-    console.log(payslip)
+    const isRegularOrPart = payslip.payslip_type.includes("Regular") || payslip.payslip_type.includes("Part-Time");
+    const isJobOrder = payslip.payslip_type.includes("Job Order");
     if (!payslip) {
         return (
             <>
@@ -173,7 +171,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
         // Earning
         addSectionTitle("Earning");
         
-        addText("Salaries & Wages", payslip.payslip_type === "Part-Time"
+        addText("Salaries & Wages", payslip.payslip_type === "Part-Time" || payslip.payslip_type === "Regular|Part-Time" || payslip.payslip_type === "Job Order|Part-Time"
                                     ? (Number(payslip.gross_salary) || 0)
                                     : payslip.payslip_type === "Job Order"
                                     ? (Number(payslip.gross_salary) || 0)
@@ -183,7 +181,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
         
         y += 10;
         doc.setFont("helvetica", "bold");
-        addText("TOTAL",payslip.payslip_type === "Part-Time"
+        addText("TOTAL",payslip.payslip_type === "Part-Time" || payslip.payslip_type === "Regular|Part-Time" || payslip.payslip_type === "Job Order|Part-Time"
                         ? (Number(payslip.gross_salary) || 0)
                         : payslip.payslip_type === "Job Order"
                         ? (Number(payslip.gross_salary) || 0)
@@ -260,9 +258,22 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
         addText2("NET PAY:", payslip.net_pay?? 0);
 
         doc.setFont("helvetica", "normal");
-        halfMonths.forEach((label) => {
-            addText2(label, (Number(payslip.net_pay) / 2).toFixed(2));
-        });
+        if (isRegularOrPart) {
+            const halfMonths = getHalfMonthRanges();
+            halfMonths.forEach((label) => {
+                addText2(label, (Number(payslip.net_pay) / 2).toFixed(2));
+            });
+        } else if (isJobOrder) {
+            const halfMonths = getHalfMonthRanges();
+            if (payslip.payslip_id?.toString().endsWith("-01")) {
+                addText2(halfMonths[0], (Number(payslip.net_pay)).toFixed(2));
+            }
+            if (payslip.payslip_id?.toString().endsWith("-02")) {
+                addText2(halfMonths[1], (Number(payslip.net_pay)).toFixed(2));
+            }
+        }
+
+        
         
         doc.save('PAYSLIP.pdf');
     };
@@ -291,19 +302,21 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
     const renderJobOrderPayslipRange = (netPay: number, payslipId?: string | number) => {
         const ranges = getHalfMonthRanges();
 
-        if (payslipId?.toString().endsWith("01")) {
+        if(payslip?.payslip_type === 'Job Order'){
+            if (payslipId?.toString().endsWith("-01")) {
             return (
                 <p className="text-end text-sm">
                     {ranges[0]} {netPay}
                 </p>
             );
-        }
-        if (payslipId?.toString().endsWith("02")) {
-            return (
-                <p className="text-end text-sm">
-                    {ranges[1]} {netPay}
-                </p>
-            );
+            }
+            if (payslipId?.toString().endsWith("-02")) {
+                return (
+                    <p className="text-end text-sm">
+                        {ranges[1]} {netPay}
+                    </p>
+                );
+            }
         }
         return null;
     };
@@ -370,14 +383,14 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                                     {payslip.payslip_type === "Regular" && 
                                         <p>{format(payslip.basic_salary)}</p>   
                                     }
-                                    {(payslip.payslip_type === "Part-Time" || payslip.payslip_type === "Job Order") && (
+                                    {(payslip.payslip_type === "Part-Time" || payslip.payslip_type === "Job Order" || payslip.payslip_type === "Regular|Part-Time" || payslip.payslip_type === "Job Order|Part-Time") && (
                                         <p>{format(payslip.gross_salary || 0)}</p>
                                     )}
                                     <p>{format(payslip.pera)}</p>
                                     <br />
                                     <p>
                                     {format(
-                                    payslip.payslip_type === "Part-Time"
+                                    payslip.payslip_type === "Part-Time" || payslip.payslip_type === "Regular|Part-Time" || payslip.payslip_type === "Job Order|Part-Time"
                                         ? (Number(payslip.gross_salary) || 0)
                                         : payslip.payslip_type === "Job Order"
                                         ? (Number(payslip.gross_salary) || 0)
@@ -456,17 +469,16 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                         <div className="flex flex-col w-full justify-between text-sm lg:text-md px-5 pb-5 text-white">
                             <p className="text-end text-md font-semibold">TOTAL DEDUCTIONS: {format(payslip.total_deduction)}</p>
                             <p className="text-end text-md font-semibold">NET PAY: {format(payslip.net_pay)}</p>
-                            {payslip.payslip_type === "Regular" || payslip.payslip_type === "Part-Time" ? (
-                                <>
-                                {getHalfMonthRanges().map((range, index) => (
-                                <p key={index} className="text-end text-sm">
-                                    {range} {(Number(payslip.net_pay) / 2).toFixed(2)}
-                                </p>
-                                ))}
-                                </>
-                            ):
-                            renderJobOrderPayslipRange(payslip.net_pay, payslip.payslip_id)
-                            }
+                            {isRegularOrPart ? (
+                                getHalfMonthRanges().map((range, i) => (
+                                    <p key={i} className="text-end text-sm">
+                                        {range} {(Number(payslip.net_pay) / 2).toFixed(2)}
+                                    </p>
+                                ))
+                            ) : isJobOrder ? (
+                                renderJobOrderPayslipRange(payslip.net_pay, payslip.payslip_id)
+                            ) : null}
+                            
                         </div>
                     </div>
                     <div className="w-32 py-2">

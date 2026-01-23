@@ -175,7 +175,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                                     ? (Number(payslip.gross_salary) || 0)
                                     : payslip.payslip_type === "Job Order"
                                     ? (Number(payslip.gross_salary) || 0)
-                                    : (Number(payslip.basic_salary) || 0) + (Number(payslip.pera) || 0)
+                                    : (Number(payslip.basic_salary) || 0)
                                     );
         addText("OTHERS: PERA", payslip.pera ?? 0);
         
@@ -343,15 +343,15 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                             <div className="flex flex-col w-full text-white">
                                 <div className="flex justify-between">
                                     <div className="flex place-items-center">
-                                        <img src={CTULOGO} className="w-14" alt="CTU Logo" />
-                                        <p className="px-2 text-sm md:px-3 lg:text-lg">CTU - DANAO</p>
+                                        <img src={CTULOGO} className="w-10 lg:w-14" alt="CTU Logo" />
+                                        <p className="px-2 text-xs md:px-3 lg:text-lg">CTU - DANAO</p>
                                     </div>
-                                    <div className="text-xs md:text-sm ">
+                                    <div className="text-[10px] md:text-sm ">
                                         <p>PAYSLIP #{payslip.payslip_id}</p>                    
                                         <p className="">Date: {getCurrentDate()}</p>
                                     </div>
                                 </div>
-                                <div className="flex-col  text-xs md:text-sm">
+                                <div className="flex-col text-xs md:text-sm">
                                     <p>Sabang, Danao City, 6004</p>
                                     <p>accountingdanao@ctu.edu.ph</p>
                                     <p>(032) 354-3660</p>
@@ -361,7 +361,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
 
                         <p className="w-full border-b mx-5 border-white"></p>
 
-                        <div className="px-5 text-white text-sm lg:text-md">
+                        <div className="px-5 text-white text-xs lg:text-[14px]">
                             <p className="text-md md:text-xl">Billing Address</p>
                             <p>{payslip.full_name}</p>
                             <p>Designation: {payslip.assigned_designation}</p>
@@ -372,7 +372,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
 
                         <div className="mx-5 w-full rounded-lg h-full text-white">
                             <p className="text-md md:text-lg">Earning</p>
-                            <div className="flex justify-between text-sm lg:text-md">
+                            <div className="flex justify-between text-xs lg:text-[14px]">
                                 <div>
                                     <p>Salaries & Wages</p>
                                     <p>OTHERS: PERA</p>
@@ -406,7 +406,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                         {/* Deductions */}
                         <div className="mx-5 w-full rounded-lg h-full text-white">
                             <p className="text-md md:text-lg">Deductions</p>
-                            <div className="w-full flex flex-col justify-between text-sm lg:text-md">
+                            <div className="w-full flex flex-col justify-between text-xs lg:text-[14px]">
                                 {shouldDisplay(payslip.absent) && <DisplayItem label="Absences w/o pay" value={format(payslip.absent)} />}
                                 {shouldDisplay(payslip.holding_tax) && <DisplayItem label="W/holding Tax" value={format(payslip.holding_tax)} />}
                                 {shouldDisplay(payslip.late) && <DisplayItem label="Late/Undertime" value={format(payslip.late)} />}
@@ -418,7 +418,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                         {/* GSIS */}
                         <div className="mx-5 w-full rounded-lg h-full text-white">
                             <p className="text-md md:text-lg">GSIS</p>
-                            <div className="w-full flex flex-col justify-between text-sm lg:text-md">
+                            <div className="w-full flex flex-col justify-between text-xs lg:text-[14px]">
                                 {shouldDisplay(payslip.rlip) && <DisplayItem label="RLIP" value={format(payslip.rlip)} />}
                                 {shouldDisplay(payslip.policy_loan) && <DisplayItem label="Policy Loan" value={format(payslip.policy_loan)} />}
                                 {shouldDisplay(payslip.consol_loan) && <DisplayItem label="Consol Loan" value={format(payslip.consol_loan)} />}
@@ -435,7 +435,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                         {/* HDMF */}
                         <div className="mx-5 w-full rounded-lg h-full text-white">
                             <p className="text-md md:text-lg">HDMF</p>
-                            <div className="flex flex-col w-full justify-between text-sm lg:text-md">
+                            <div className="flex flex-col w-full justify-between text-xs lg:text-[14px]">
                                 {shouldDisplay(payslip.contributions) && <DisplayItem label="Contributions" value={format(payslip.contributions)} />}
                                 {shouldDisplay(payslip.loans) && <DisplayItem label="LOANS" value={format(payslip.loans)} />}
                                 {shouldDisplay(payslip.housing_loan) && <DisplayItem label="Housing Loan" value={format(payslip.housing_loan)} />}
@@ -447,7 +447,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                         {/* Other Deductions */}
                         <div className="mx-5 w-full rounded-lg h-full text-white">
                             <p className="text-md md:text-lg">OTHER DEDUCTIONS</p>
-                            <div className="flex flex-col w-full justify-between text-sm lg:text-md">
+                            <div className="flex flex-col w-full justify-between text-xs lg:text-[14px]">
                                 {shouldDisplay(payslip.sss) && <DisplayItem label="SSS" value={format(payslip.sss)} />}
                                 {shouldDisplay(payslip.philhealth) && <DisplayItem label="Philhealth" value={format(payslip.philhealth)} />}
                                 {shouldDisplay(payslip.cfi) && <DisplayItem label="CFI" value={format(payslip.cfi)} />}
@@ -466,12 +466,12 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
 
                         <p className="w-full border-b mx-5 border-white"></p>
 
-                        <div className="flex flex-col w-full justify-between text-sm lg:text-md px-5 pb-5 text-white">
+                        <div className="flex flex-col w-full justify-between text-xs lg:text-[14px] px-5 pb-5 text-white">
                             <p className="text-end text-md font-semibold">TOTAL DEDUCTIONS: {format(payslip.total_deduction)}</p>
                             <p className="text-end text-md font-semibold">NET PAY: {format(payslip.net_pay)}</p>
                             {isRegularOrPart ? (
                                 getHalfMonthRanges().map((range, i) => (
-                                    <p key={i} className="text-end text-sm">
+                                    <p key={i} className="text-end text-xs lg:text-[14px]">
                                         {range} {(Number(payslip.net_pay) / 2).toFixed(2)}
                                     </p>
                                 ))

@@ -149,29 +149,35 @@ class PayrollReportsRepository implements PayrollReportsRepositoryInterface
     }
 
 
-    public function getContributionThisMonthById($userId)
+ public function getContributionThisMonthById($userId)
     {
 
-        $status = 'publish'; //publish, partial, none
-        $type = 'Regular'; //Regular,Job Order, Part-Time
+        $status = 'publish';
+        $type = 'Regular';
 
-        return Payroll::select(
-             'payroll_id',
+        $result = Payroll::select(
+            'payroll_id',
             DB::raw('(
-            COALESCE(rlip, 0) +
-            COALESCE(contributions, 0) +
-            COALESCE(philhealth, 0)
+                COALESCE(rlip, 0) +
+                COALESCE(contributions, 0) +
+                COALESCE(philhealth, 0)
             ) AS total_contributions')
-            )
-            ->where('publish_status', $status)
-            ->where('payslip_type', $type)
-            ->where('user_id', $userId)
-            ->whereBetween('created_at', [
-                now()->startOfMonth(),
-                now()->endOfMonth()
-            ])
-            ->latest('created_at')
-            ->first();
+        )
+        ->where('publish_status', $status)
+        ->where('payslip_type', $type)
+        ->where('user_id', $userId)
+        ->whereBetween('created_at', [
+            now()->startOfMonth(),
+            now()->endOfMonth()
+        ])
+        ->latest('created_at')
+        ->first();
+
+        // Return default values if no record found
+        return $result ?? (object)[
+            'payroll_id' => null,
+            'total_contributions' => 0
+        ];
 
     }
 

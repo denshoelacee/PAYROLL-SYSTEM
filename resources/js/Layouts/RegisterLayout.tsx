@@ -24,12 +24,12 @@ export default function LoginLayout({ children }: PropsWithChildren) {
                         }}/>
                     )}
                     {message.error && (
-                        <InfoMessage title="Error mani bords"  severity="error" info={message.error} onClose={() => {
+                        <InfoMessage title="Error"  severity="error" info={message.error} onClose={() => {
                             setDismissed(false)
                         }}/>
                     )}
                     {message.success && (
-                        <InfoMessage title="Sumakses!"  severity="success" info={message.success} onClose={() => {
+                        <InfoMessage title="Success"  severity="success" info={message.success} onClose={() => {
                             setDismissed(false)
                         }}/>
                     )}

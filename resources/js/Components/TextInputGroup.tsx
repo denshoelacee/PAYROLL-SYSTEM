@@ -19,7 +19,7 @@ export default function TextInputGroup({
   name,
   type = "text",
   disabled = false,
-  value,
+  value ='',
   inputMode,
   placeholder = "", // Default to empty string if not provided
   onChange= () =>{}
@@ -35,7 +35,7 @@ export default function TextInputGroup({
         name={name || id}
         type={type}
         disabled={disabled}
-        value={value}
+        value={value||''}
         inputMode={inputMode}
         onChange={onChange}
         className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1 "

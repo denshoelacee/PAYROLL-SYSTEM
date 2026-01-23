@@ -27,77 +27,77 @@ export default function Authenticated({user, children, notifications, setNotific
   const [isOpen, setIsOpen] = React.useState(false);
   const autoCloseBell = useRef<HTMLDivElement>(null);
   const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
-  const [toastUser, setToastUser] = useState<string | null>(null);
-  const sortedNotifications = [...notifications].sort((a, b) =>
-    dayjs(b.created_at).diff(dayjs(a.created_at))
-  );
+//   const [toastUser, setToastUser] = useState<string | null>(null);
+//   const sortedNotifications = [...notifications].sort((a, b) =>
+//     dayjs(b.created_at).diff(dayjs(a.created_at))
+//   );
 
   const finalInitials = `${user.first_name?.[0]?.toUpperCase() ?? ''}${user.last_name?.[0]?.toUpperCase() ?? ''}`;
   const svg = createAvatar(initials, { seed: finalInitials, size: 35, radius: 50 }).toString();
 
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (autoCloseBell.current && !autoCloseBell.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, []);
+//   useEffect(() => {
+//     const handler = (e: MouseEvent) => {
+//       if (autoCloseBell.current && !autoCloseBell.current.contains(e.target as Node)) {
+//         setIsOpen(false);
+//       }
+//     };
+//     document.addEventListener('mousedown', handler);
+//     return () => document.removeEventListener('mousedown', handler);
+//   }, []);
 
-    const notifHandler = () => {
-        setIsOpen(prev => !prev);
-        };
+    // const notifHandler = () => {
+    //     setIsOpen(prev => !prev);
+    //     };
 
-    const now = new Date();
-    const formattedDate = now.toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric',
-    });
-    if(user.role){
-        useEffect(() => {
-        if (!user) return;
+    // const now = new Date();
+    // const formattedDate = now.toLocaleDateString('en-US', {
+    //     month: 'long',
+    //     year: 'numeric',
+    // });
+    // if(user.role){
+    //     useEffect(() => {
+    //     if (!user) return;
 
-            const channel = echo.private(`App.Models.User.${user.user_id}`)
-            .listen('.PayslipPublished', (e: any) => {
-            setToastUser(`${user.last_name}, ${user.first_name}`);
+    //         const channel = echo.private(`App.Models.User.${user.user_id}`)
+    //         .listen('.PayslipPublished', (e: any) => {
+    //         setToastUser(`${user.last_name}, ${user.first_name}`);
 
-            setNotifications(prev => [
-                ...prev,
-                {
-                id: `payslip_${Date.now()}`,
-                data: {
-                    message: `Your payslip for ${formattedDate} is now available.` ,
-                },
-                created_at: new Date().toISOString(),
-                }
-            ]);
+    //         setNotifications(prev => [
+    //             ...prev,
+    //             {
+    //             id: `payslip_${Date.now()}`,
+    //             data: {
+    //                 message: `Your payslip for ${formattedDate} is now available.` ,
+    //             },
+    //             created_at: new Date().toISOString(),
+    //             }
+    //         ]);
 
-            new Audio(NotificationSound).play();
-            });
-            setTimeout(() => {
-            setToastUser(null);
-        }, 5000);
-        return () => {
-            echo.leave(`private-App.Models.User.${user.user_id}`);
-        };
-        }, [user.user_id]);
-    }
+    //         new Audio(NotificationSound).play();
+    //         });
+    //         setTimeout(() => {
+    //         setToastUser(null);
+    //     }, 5000);
+    //     return () => {
+    //         echo.leave(`private-App.Models.User.${user.user_id}`);
+    //     };
+    //     }, [user.user_id]);
+    // }
 
     return (
         <div className="min-h-screen bg-mainColor">
             <nav className="bg-mainColor px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-end h-16">
-                    <div ref={autoCloseBell} className="pt-7 hidden sm:flex sm:items-center sm:ms-6">
-                        <button
+                    {/*<div ref={autoCloseBell} className="pt-7 hidden sm:flex sm:items-center sm:ms-6">
+                        {/* <button
                             onClick={notifHandler}
                             className="hover:text-red-600 hover:rounded-full pt-3 transition duration-150"
                         >
                             <NotificationBell count={notifications.length} />
-                        </button>
+                        </button> */}
 
                         {/* Notification Stack */}
-                        {isOpen && (
+                        {/* {isOpen && (
                             <div className="absolute top-16 right-10 md:right-52 w-80 bg-[#1B4D4E] rounded-lg shadow-lg z-50 animate-fade-in">
                             <div className="p-4 border-b font-bold text-white">Notifications</div>
                             <ul className="max-h-60 overflow-y-auto divide-y divide-gray-200">
@@ -129,8 +129,8 @@ export default function Authenticated({user, children, notifications, setNotific
                                 )}
                                 </ul>
                         </div>
-                        )}
-                    </div>
+                        )} 
+                    </div>*/}
                     <div className="hidden sm:flex sm:items-center sm:ms-6">
                         <div className="pt-10 relative">
                             <Dropdown>
@@ -190,7 +190,7 @@ export default function Authenticated({user, children, notifications, setNotific
                                 />
                             </svg>
                         </button>
-                        <div ref={autoCloseBell} className="flex items-center sm:hidden space-x-4 relative">
+                        {/* <div ref={autoCloseBell} className="flex items-center sm:hidden space-x-4 relative">
                             <button
                                 onClick={notifHandler}
                                 className="hover:text-red-600 hover:rounded-full pt-3 transition duration-150"
@@ -227,7 +227,7 @@ export default function Authenticated({user, children, notifications, setNotific
                                     </ul>
                             </div>
                             )}
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 
@@ -345,7 +345,7 @@ export default function Authenticated({user, children, notifications, setNotific
                 </div>
                 )}
             </nav>
-            {user.role === 'User' && toastUser && (
+            {/* {user.role === 'User' && toastUser && (
                 <div className="fixed bottom-2 right-5 z-50 bg-gray-800 text-white px-4 py-5 rounded-lg shadow-lg animate-slide-in w-[400px] h-[115px]">
                     <p className="text-sm text-gray-200 mb-1">Heads up, {toastUser}!</p>
                     <div className="flex gap-4 items-center">
@@ -355,7 +355,7 @@ export default function Authenticated({user, children, notifications, setNotific
                         </div>
                     </div>
                 </div>
-            )}
+            )} */}
         <main>{children}</main>
         </div>
     );

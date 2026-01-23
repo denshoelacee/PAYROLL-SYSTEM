@@ -60,7 +60,7 @@ class PayrollRepository implements PayrollRepositoryInterface{
             'user_id',
             'employee_id', 
             DB::raw("CONCAT(first_name, ', ', last_name) AS full_name")
-        ]);
+        ])->where('status','verified');
 
         switch ($employmentType) {
             case 'Regular':
@@ -308,7 +308,7 @@ class PayrollRepository implements PayrollRepositoryInterface{
             'user:user_id,last_name,first_name,employee_id'
         )
         ->select([
-            'payroll_id','payslip_id', 'user_id', 'basic_salary', 'daily_rate',
+            'payroll_id','payslip_id', 'user_id', 'basic_salary', 'daily_rate','hourly_rate',
             'duty_count', 'service_rendered','units', 'pera', 'absent', 'late',
             'holding_tax', 'tax_bal_due', 'rlip', 'policy_loan', 'consol_loan',
             'emerg_loan', 'gel', 'gfal', 'mpl', 'mpl_lite', 'contributions',
@@ -341,7 +341,8 @@ class PayrollRepository implements PayrollRepositoryInterface{
             'basic_salary' => $payroll->basic_salary,
             'daily_rate' => $payroll->daily_rate,
             'duty_count' => $payroll->duty_count,
-            'service_rendered' => $payroll->duty_count,
+            'hourly_rate' => $payroll->hourly_rate,
+            'service_rendered' => $payroll->service_rendered,
             'units' => $payroll->units,
             'pera' => $payroll->pera,
             'absent' => $payroll->absent,

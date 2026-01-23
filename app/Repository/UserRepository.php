@@ -87,7 +87,7 @@ class UserRepository implements UserRepositoryInterface{
             'employment_type',
             'status',
             'role'
-            )
+            )->where('status','verified')
             ->get();
     }
 

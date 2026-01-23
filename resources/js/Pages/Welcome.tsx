@@ -66,7 +66,7 @@ export default function Welcome({ auth }: PageProps) {
                             </p>
                             <div className="pt-5 md:pt-6 w-full md:w-[70%]">
                                 <p className="text-xl text-white">
-                                    Our platform is designed to simplify your leave management and payroll processing, ensuring efficiency, accuracy, and convenience for both employees and employers.
+                                    Our platform is designed to simplify your payroll processing, ensuring efficiency, accuracy, and convenience for both employees and employers.
                                 </p>
                             </div>
                         </div>

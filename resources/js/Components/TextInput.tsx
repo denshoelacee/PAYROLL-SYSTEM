@@ -14,6 +14,7 @@ import { IoEyeOutline, IoEyeOffOutline, IoLockClosedOutline } from "react-icons/
         type = 'text',
         className = '',         
         isFocused = false,
+        value = '',
         ...props
     }: InputHTMLAttributes<HTMLInputElement> & { isFocused?: boolean },
     ref
@@ -56,6 +57,7 @@ import { IoEyeOutline, IoEyeOffOutline, IoLockClosedOutline } from "react-icons/
                 rounded-xl outline-none border-none shadow-sm 
                 focus:ring-0 focus:border-transparent ${className}
             `}
+            value={value||''}
             ref={localRef}
             />
     

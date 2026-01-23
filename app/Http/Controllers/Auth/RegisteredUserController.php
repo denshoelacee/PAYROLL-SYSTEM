@@ -82,18 +82,18 @@ class RegisteredUserController extends Controller
 
              $hrUsers = User::where('role', 'Admin')->get();
 
-            foreach ($hrUsers as $hrUser) {
-            $hrUser->notify(new NewUserApprovalNotification($user));
-            }
+            //foreach ($hrUsers as $hrUser) {
+            //$hrUser->notify(new NewUserApprovalNotification($user));
+            //}
 
-            event(new registerEvent($user));
+            //event(new registerEvent($user));
             return redirect()->route('login')->with('information','Register successfully, Please wait for approval.');
 
         }
        catch(\Exception $e)
        {
 
-            return redirect()->back()->with('error','Employee ID already taken.');
+            return redirect()->back()->with('error','Something went wrong. Please try again later.');
 
        }
 

@@ -150,7 +150,7 @@ class PayrollService implements PayrollServiceInterface
     {
 
          if($data['publish_status'] === 'publish'){
-            $this->updatePublish($data,$id);
+            $this->payrollRepository->updatePublish($data,$id);
          }
          if($data['publish_status'] === 'partial')
          {

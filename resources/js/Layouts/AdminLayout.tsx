@@ -12,43 +12,43 @@ import Loader from "@/Components/Loader"; // 👈 import loader
 export default function AdminLayout({ title, children }: PropsWithChildren) {
   const { auth, notif, message }: any = usePage().props;
   const [notifications, setNotifications] = useState<any[]>(notif || []);
-  const [toastUser, setToastUser] = useState<string | null>(null);
-  const [avatarSvg, setAvatarSvg] = useState<string | null>(null);
+  //const [toastUser, setToastUser] = useState<string | null>(null);
+  //const [avatarSvg, setAvatarSvg] = useState<string | null>(null);
   const [dismissed, setDismissed] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const getInitials = (first: string, last: string) =>
-    `${first?.[0]?.toUpperCase() ?? ""}${last?.[0]?.toUpperCase() ?? ""}`;
+  // const getInitials = (first: string, last: string) =>
+  //   `${first?.[0]?.toUpperCase() ?? ""}${last?.[0]?.toUpperCase() ?? ""}`;
 
-  useEffect(() => {
-    const channel = echo.channel("hr.notifications").listen(".user.created", (e: any) => {
-      const { first_name, last_name } = e.user;
-      const fullName = `${last_name}, ${first_name}`;
-      setNotifications((prev) => [
-        ...prev,
-        {
-          id: e.user.id + "_" + Date.now(),
-          data: { user_id: e.user.id, full_name: fullName, message: "registered! Needs approval." },
-        },
-      ]);
+  // useEffect(() => {
+  //   const channel = echo.channel("hr.notifications").listen(".user.created", (e: any) => {
+  //     const { first_name, last_name } = e.user;
+  //     const fullName = `${last_name}, ${first_name}`;
+  //     setNotifications((prev) => [
+  //       ...prev,
+  //       {
+  //         id: e.user.id + "_" + Date.now(),
+  //         data: { user_id: e.user.id, full_name: fullName, message: "registered! Needs approval." },
+  //       },
+  //     ]);
 
-      setToastUser(fullName);
-      new Audio(NotificationSound).play();
+  //     //setToastUser(fullName);
+  //     //new Audio(NotificationSound).play();
 
-      const seed = getInitials(first_name, last_name);
-      const avatar = createAvatar(initials, { seed, size: 50, radius: 50 });
-      setAvatarSvg(avatar.toString());
+  //     const seed = getInitials(first_name, last_name);
+  //     const avatar = createAvatar(initials, { seed, size: 50, radius: 50 });
+  //     setAvatarSvg(avatar.toString());
 
-      setTimeout(() => {
-        setToastUser(null);
-        setAvatarSvg(null);
-      }, 5000);
-    });
+  //     setTimeout(() => {
+  //       setToastUser(null);
+  //       setAvatarSvg(null);
+  //     }, 5000);
+  //   });
 
-    return () => {
-      echo.leaveChannel("hr.notifications");
-    };
-  }, []);
+  //   return () => {
+  //     echo.leaveChannel("hr.notifications");
+  //   };
+  // }, []);
 
   useEffect(() => {
     router.on("start", () => setLoading(true));
@@ -90,7 +90,7 @@ export default function AdminLayout({ title, children }: PropsWithChildren) {
         </div>
       )}
 
-      {toastUser && (
+      {/* {toastUser && (
         <div className="fixed bottom-2 right-5 z-50 bg-gray-800 text-white px-4 py-5 rounded-lg shadow-lg animate-slide-in w-[400px] h-[115px]">
           <p className="text-sm text-gray-400 mb-1">New Notification</p>
           <div className="flex gap-4 items-center">
@@ -101,7 +101,7 @@ export default function AdminLayout({ title, children }: PropsWithChildren) {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       <Authenticated user={auth.user} notifications={notifications} setNotifications={setNotifications}>
         <div className="w-full mx-auto px-3 sm:px-5 md:pl-[150px] md:pr-[50px] lg:pl-[170px] lg:pr-[70px]">

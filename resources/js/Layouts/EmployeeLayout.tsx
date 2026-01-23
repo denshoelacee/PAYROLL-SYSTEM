@@ -23,15 +23,15 @@ export default function EmployeeLayout({ title, children }: PropsWithChildren) {
     return `${firstInitial}${lastInitial}`;
   }
 
-  useEffect(() => {
-    if (hasMessages) {
-      setDismissed(true);
-      const timer = setTimeout(() => {
-        setDismissed(false);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [message]);
+  // useEffect(() => {
+  //   if (hasMessages) {
+  //     setDismissed(true);
+  //     const timer = setTimeout(() => {
+  //       setDismissed(false);
+  //     }, 2000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [message]);
 
   
   return (
@@ -52,7 +52,7 @@ export default function EmployeeLayout({ title, children }: PropsWithChildren) {
       )}
 
       {/* Toast popup */}
-      {notification && (
+      {/* {notification && (
         <div className="fixed bottom-2 right-5 z-50 bg-gray-800 text-white px-4 py-5 rounded-lg shadow-lg animate-slide-in w-[400px] h-[115px]">
           <p className="text-sm text-gray-400 mb-1">New Notification</p>
           <div className="flex gap-4 items-center">
@@ -68,7 +68,7 @@ export default function EmployeeLayout({ title, children }: PropsWithChildren) {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Render Authenticated layout and pass props */}
       <Authenticated

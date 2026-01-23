@@ -12,7 +12,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
         first_name: user.first_name,
-        email: user.last_name,
+        last_name: user.last_name,
     });
 
     const submit: FormEventHandler = (e) => {
@@ -50,19 +50,19 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 </div>
 
                 <div className='w-full'>
-                    <InputLabel htmlFor="email" value="Last Name" className='text-white' />
+                    <InputLabel htmlFor="last_name" value="Last Name" className='text-white' />
 
                     <TextInput
-                        id="email"
-                        type="email"
+                        id="last_name"
+                        type="text"
                         className=" block w-full bg-transparent text-white"
-                        value={data.email}
-                        onChange={(e) => setData('email', e.target.value)}
+                        value={data.last_name}
+                        onChange={(e) => setData('last_name', e.target.value)}
                         required
-                        autoComplete="username"
+                        autoComplete="last_name"
                     />
 
-                    <InputError className="mt-2" message={errors.email} />
+                    <InputError className="mt-2" message={errors.last_name} />
                 </div>
                 </div>
 

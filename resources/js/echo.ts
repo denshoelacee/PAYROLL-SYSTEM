@@ -12,7 +12,6 @@ const echo = new Echo({
   forceTLS: false,
   enabledTransports: ['ws'],
   auth: {
-    withCredentials: true, 
      headers: {
       'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
     },

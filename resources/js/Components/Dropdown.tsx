@@ -18,12 +18,16 @@ import {
 } from 'react';
 import { Link, InertiaLinkProps } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
+type ClickableElement = React.ReactElement<{
+    onClick?: React.MouseEventHandler;
+}>;
 
 const DropDownContext = createContext<{
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
     toggleOpen: () => void;
     triggerRef: React.RefObject<HTMLDivElement>;
+    onClick?: () => void
 }>(null as any);
 
 const Dropdown = ({ children }: PropsWithChildren) => {
@@ -46,16 +50,16 @@ const Trigger = ({
 }) => {
     const { open, setOpen, toggleOpen, triggerRef } = useContext(DropDownContext);
     const child = typeof children === 'function' ? children(open) : children;
-
     if (!isValidElement(child)) return null;
     return (
         <div ref={triggerRef} className="inline-block w-full">
-            {cloneElement(child, {
+            {cloneElement(child as any, {
                 onClick: (e: any) => {
                     child.props.onClick?.(e);
                     toggleOpen();
                 },
             })}
+
             {open && (
                 <div
                     className="fixed inset-0 z-40"
@@ -112,7 +116,7 @@ const Content = ({
                     if (typeof child.props.onClick === 'function') {
                         child.props.onClick(e);
                     }
-                    setOpen(false); 
+                    setOpen(false);
                 },
             });
         };

@@ -214,7 +214,7 @@
                     </span>
                 </div>
 
-                <InputWrapper className="p-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                <InputWrapper className="p-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 text-white">
                 {row?.payslip_type === "Regular" && (
                 <TextInputGroup label="Basic Salary" id="basic_pay" name="basic_pay" value={data?.basic_salary} disabled />
                 )}

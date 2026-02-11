@@ -78,7 +78,7 @@ function Department({ auth, empTypeList, jobTitleList, contributionType }: Props
                             */}
                         {/* Fixed Payroll Settings */}
                         <form onSubmit={handleSubmit} className="w-full sm:w-[48%] lg:w-[32%] my-4">
-                            <InputWrapper className="p-4">
+                            <InputWrapper className="p-4 text-white">
                                 <p className="text-white mb-4 font-semibold">
                                     Fixed Payroll Settings Input
                                 </p>

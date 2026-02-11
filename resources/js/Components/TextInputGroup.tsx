@@ -11,6 +11,10 @@ interface TextInputGroupProps {
   inputMode?: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string; // Optional placeholder prop
+  step?:any
+  min?:any
+  max?:any
+  className?:string
 }
 
 export default function TextInputGroup({
@@ -22,8 +26,11 @@ export default function TextInputGroup({
   value ='',
   inputMode,
   placeholder = "", // Default to empty string if not provided
-  onChange= () =>{}
-  
+  onChange= () =>{},
+  step,
+  min,
+  max,
+  className
 }: TextInputGroupProps) {
   return (
     <div className="w-full">
@@ -38,8 +45,11 @@ export default function TextInputGroup({
         value={value||''}
         inputMode={inputMode}
         onChange={onChange}
-        className="text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1 "
+        className={`${className}text-white bg-transparent border-1 border-gray-200 focus:outline-offset-1 `}
         placeholder={placeholder} // Use the placeholder prop here
+        step={step}
+        min={min}
+        max={max}
       />
     </div>
   );

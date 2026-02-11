@@ -140,7 +140,7 @@ class PayrollReportsRepository implements PayrollReportsRepositoryInterface
                 'payroll_deductions.net_pay'
             ])
             ->where('payrolls.publish_status', 'publish')
-            ->where('payrolls.payslip_type', $payslipType)
+            ->whereIn('payrolls.payslip_type', $payslipType)
             ->where(DB::raw('YEAR(payrolls.created_at)'), $year)
             ->where(DB::raw('MONTH(payrolls.created_at)'), $month)
             ->orderBy('users.last_name')

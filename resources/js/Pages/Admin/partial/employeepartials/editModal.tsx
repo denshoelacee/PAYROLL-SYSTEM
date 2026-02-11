@@ -107,7 +107,7 @@ export default function EditEmployeeModal({
                 </span>
             </div>
 
-            <InputWrapper className="justify-between p-3 gap-4">
+            <InputWrapper className="justify-between p-3 gap-4 text-white">
             <TextInputGroup
                 label="Employee ID*"
                 id="employee_id"
@@ -138,7 +138,7 @@ export default function EditEmployeeModal({
             </div>
         </InputWrapper>
 
-        <InputWrapper className="p-3 flex gap-4">
+        <InputWrapper className="p-3 flex gap-4 text-white">
             <div className="w-full">
                 <InputLabel htmlFor="department" value="Department *" className="text-white" />
                 <Dropdown>
@@ -169,7 +169,7 @@ export default function EditEmployeeModal({
                 </Dropdown>
             </div>
                     
-            <div className="w-full">
+            <div className="w-full text-white">
                 <InputLabel htmlFor="designation" value="Designation *" className="text-white" />
                 <Dropdown>
                 <Dropdown.Trigger>
@@ -200,7 +200,7 @@ export default function EditEmployeeModal({
             </div>
         </InputWrapper>
                 
-        <InputWrapper className="flex justify-between p-3 gap-4 w-full">
+        <InputWrapper className="flex justify-between p-3 gap-4 w-full text-white">
         <TextInputGroup
             label="Basic Pay*"
             id="basic_pay"

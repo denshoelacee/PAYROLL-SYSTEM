@@ -38,7 +38,6 @@ class AdminPayrollReportsController extends Controller
 
     public function payrollReportsYearlyView(Request $request, $year, $month)
     {
-
         $payslipType = $request->payrollType ?? 'Regular'; //PLEASE SEND REQUEST PARAMETER 'payrollType' THAT CONTENT 'Regular', 'Job Order', 'Part-Time'
 
         $details = $this->payrollReportsService->generatePayrollReportYearlyView($year,$month, $payslipType);
@@ -52,6 +51,5 @@ class AdminPayrollReportsController extends Controller
             'headerMonthTitle' => $monthName,
             'activePayrollType'=> $payslipType,
         ]);
-
     }
 }

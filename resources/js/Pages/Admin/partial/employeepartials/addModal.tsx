@@ -96,7 +96,7 @@ export default function EmployeeAddModal({ show, onClose,jobtitles,employeeTypeL
                 <form onSubmit={addSubmit} >
                 <div className="p-6 space-y-4 rounded-lg">
                     <h2 className="text-lg font-bold mb-4 text-white">Add New Employee</h2>
-                        <InputWrapper className="justify-between p-3 gap-4">
+                        <InputWrapper className="justify-between p-3 gap-4 text-white">
                             <TextInputGroup 
                                 label='Employee ID*' 
                                 id='employee_id' 

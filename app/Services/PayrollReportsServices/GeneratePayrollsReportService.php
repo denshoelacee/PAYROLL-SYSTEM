@@ -38,8 +38,9 @@ class GeneratePayrollsReportService implements GeneratePayrollsReportServiceInte
 
     public function generatePayrollReportYearlyView($year, $month, $payrollType )
     {
-
-        return $this->payrollReportRepository->getPayrollReportsYearlyView($year, $month, $payrollType);
+        $payrollMapping = $this->typeMapping($payrollType);
+       //
+        return $this->payrollReportRepository->getPayrollReportsYearlyView($year, $month, $payrollMapping);
 
     }
 

@@ -249,7 +249,7 @@ export default function EmployeeAddModal({ show, onClose,jobtitles,employeeTypeL
                         </div>
                     </InputWrapper>
                     <div className="flex gap-2">
-                        <PrimaryButton disabled={!data.employee_id || !data.first_name || !data.last_name}className='text-md mt-1 py-2'>Save</PrimaryButton>
+                        <PrimaryButton disabled={!data.employee_id || !data.first_name || !data.last_name || !data.employment_type || !data.role || !data.department || !data.designation}className='text-md mt-1 py-2'>Save</PrimaryButton>
                         <PrimaryButton onClick={onClose}className='text-md mt-1'>Close</PrimaryButton>
                     </div>
 

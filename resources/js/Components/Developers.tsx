@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { sha256 } from 'js-sha256';
 import { usePage } from '@inertiajs/react';
-import denshodeveloper from '/resources/images/chatgepetee.png';
+import denshodeveloper from '/resources/images/denshow.png';
 import tayonsdeveloper from '/resources/images/tayons.png';
 import laniedeveloper from '/resources/images/lanie.png';
 import { FaFacebook,FaLinkedin} from "react-icons/fa";
@@ -21,7 +21,7 @@ interface TeamProps extends PageProps{
   };
    team_hash: string;
 }
-export function Developers() {
+export function  Developers() {
    const { dev, team_hash } = usePage<TeamProps>().props
 
   useEffect(() => {

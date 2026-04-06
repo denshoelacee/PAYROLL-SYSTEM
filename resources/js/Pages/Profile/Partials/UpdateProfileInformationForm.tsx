@@ -43,6 +43,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         onChange={(e) => setData('first_name', e.target.value)}
                         required
                         isFocused
+                        disabled={true}
                         autoComplete="first_name"
                     />
 
@@ -59,6 +60,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         value={data.last_name}
                         onChange={(e) => setData('last_name', e.target.value)}
                         required
+                        disabled={true}
                         autoComplete="last_name"
                     />
 
@@ -66,7 +68,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 </div>
                 </div>
 
-                <div className="flex items-center gap-4">
+                {/* <div className="flex items-center gap-4">
                     <PrimaryButton disabled={processing}>Save</PrimaryButton>
 
                     <Transition
@@ -78,7 +80,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                     >
                         <p className="text-sm text-gray-600">Saved.</p>
                     </Transition>
-                </div>
+                </div> */}
             </form>
         </section>
     );

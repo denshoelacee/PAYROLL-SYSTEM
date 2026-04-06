@@ -327,7 +327,8 @@ export default function PayrollAddModal({
                                 value={data[id]}
                                 onChange={handleInputChange}
                                 disabled={
-                                    activeTab === 'Regular'
+                                    activeTab === 'Regular' &&
+                                    (id === 'rlip' || id === 'philhealth')
                                     ? true
                                     : false
                                 }

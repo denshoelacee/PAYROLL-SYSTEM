@@ -1,18 +1,22 @@
 import { Link, InertiaLinkProps } from '@inertiajs/react';
 
-export default function NavLink({ active = false, className = '', children, ...props }: InertiaLinkProps & { active: boolean }) {
-    return (
-        <Link
-            {...props}
-            className={
-                'inline-flex items-center px-3 py-2 rounded-lg  text-sm font-medium leading-5 transition duration-300 ease-in-out focus:outline-none ' +
-                (active
-                    ? 'bg-[#006654] hover:bg-[#006654]'
-                    : ' hover:bg-[#006654] hover:border-[#006654]') +
-                className
-            }
-        >
-            {children}
-        </Link>
-    );
+interface NavLinkProps extends Omit<InertiaLinkProps, 'as'> {
+  active?: boolean;
+}
+
+export default function NavLink({ active = false, className = '', children, href }: NavLinkProps) {
+  return (
+    <Link
+      href={href}
+      className={
+        'inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition duration-300 ease-in-out ' +
+        (active
+          ? 'bg-[#006654] hover:bg-[#006654]'
+          : 'hover:bg-[#006654] hover:border-[#006654]') +
+        ' ' + className
+      }
+    >
+      {children}
+    </Link>
+  );
 }

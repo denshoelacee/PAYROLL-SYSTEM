@@ -181,14 +181,14 @@ export default function EmployeeAddModal({ show, onClose,jobtitles,employeeTypeL
                             </Dropdown>
                         </div>
                     </InputWrapper>
-                    <InputWrapper className="flex justify-between p-3 gap-4 w-full">
+                    <InputWrapper className="flex justify-between p-3 gap-4 w-full text-white">
                         <TextInputGroup 
                             label='Basic Pay' 
                             id='basic_pay' 
                             type='text' 
                             value={data.basic_pay}
                             onChange={handleInputChange}
-                            disabled={data.employment_type === "Part Time" || data.employment_type === "Job Order" || data.employment_type === ""}
+                            disabled={data.employment_type === "Part-Time" || data.employment_type === "Job Order" || data.employment_type === ""}
 
                         />
                     </InputWrapper>
@@ -249,7 +249,7 @@ export default function EmployeeAddModal({ show, onClose,jobtitles,employeeTypeL
                         </div>
                     </InputWrapper>
                     <div className="flex gap-2">
-                        <PrimaryButton className='text-md mt-1 py-2'>Save</PrimaryButton>
+                        <PrimaryButton disabled={!data.employee_id || !data.first_name || !data.last_name}className='text-md mt-1 py-2'>Save</PrimaryButton>
                         <PrimaryButton onClick={onClose}className='text-md mt-1'>Close</PrimaryButton>
                     </div>
 

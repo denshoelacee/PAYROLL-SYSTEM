@@ -145,7 +145,7 @@ export default function AddDepartment({jobTitleList}:Props) {
             )}
             {editModal && (
             <Modal show={editModal} onClose={() => {setEditModal(false);}} maxWidth="sm">
-                <div className="p-6">
+                <div className="p-6 text-white">
                     <h2 className="text-lg font-semibold mb-4 text-white">Edit Department</h2>
                     <TextInputGroup
                         id="department"

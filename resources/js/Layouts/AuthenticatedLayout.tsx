@@ -251,13 +251,13 @@ export default function Authenticated({user, children, notifications, setNotific
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink href={route('admin.dashboard')} active={route().current('admin.dashboard')}>
                         <FiGrid className={`text-2xl 
-                            ${route().current('admin.dashboard') ? 'bg-white text-black' : 'text-white'} rounded p-1`}
+                            ${route().current('admin.dashboard') ? 'bg-white text-white' : 'text-white'} rounded p-1`}
                             />                            
                             Dashboard
                         </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('admin.employee')} active={route().current('admin.employee')}>
                         <GoPeople className={`text-2xl 
-                            ${route().current('admin.employee') ? 'bg-white text-black' : 'text-white'} rounded p-1`}
+                            ${route().current('admin.employee') ? 'bg-white text-white' : 'text-white'} rounded p-1`}
                         />          
                             Employee
                         </ResponsiveNavLink>

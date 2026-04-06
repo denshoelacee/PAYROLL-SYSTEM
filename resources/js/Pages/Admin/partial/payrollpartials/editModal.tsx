@@ -207,7 +207,7 @@
                 <div className="p-6 space-y-4 border rounded-lg">
                 <div className="flex justify-between">
                     <h2 className="text-lg font-bold mb-4 text-white">
-                    Edit Employee's Payroll
+                    Edit Employee's Payroll - {row?.full_name}
                     </h2>
                     <span onClick={onClose}>
                     <IoMdClose color="white" className="cursor-pointer text-2xl" />

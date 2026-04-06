@@ -206,7 +206,7 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips=[],availab
             {addModal && (
                 <PayrollAddModal show={addModal} onClose={() => {
                     setAddModal(false);
-                    router.visit(route("admin.payroll"), { replace: true }); 
+                    router.replace(route("admin.payroll")); 
                 }}  
                 newPayroll={newPayroll} 
                 filteredEmployementType={filteredEmployementType}
@@ -214,7 +214,7 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips=[],availab
             )}
             {/*Edit Modal */}
             {editModal && selectedRow && (
-                <PayrollEditModal show={editModal} onClose={() => {setEditModal(false); router.visit(route("admin.payroll"), { replace: true }); }
+                <PayrollEditModal show={editModal} onClose={() => {setEditModal(false); router.replace(route("admin.payroll")); }
                 } row={selectedRow as any} />
             )}
 

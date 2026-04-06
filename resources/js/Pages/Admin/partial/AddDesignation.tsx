@@ -149,7 +149,7 @@ export default function AddDesignation({jobTitleList}:Props) {
             {editModal && (
             <Modal show={editModal} onClose={() => setEditModal(false)} maxWidth="sm">
                 <form>
-                <div className="p-6">
+                <div className="p-6 text-white">
                     <h2 className="text-lg font-semibold mb-4 text-white">Edit Designation</h2>
                     <TextInputGroup
                         id="designation"

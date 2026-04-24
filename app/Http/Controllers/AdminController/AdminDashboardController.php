@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\AdminController;
 
-use App\Contracts\Services\DashboardServiceInterface;
-use App\Contracts\Services\IPayrollReportsServices\GeneratePayrollsReportServiceInterface;
+use App\Services\DashboardService;
 use App\Traits\YearRange;
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
@@ -14,9 +13,7 @@ class AdminDashboardController extends Controller
     use YearRange;
 
     public function __construct(
-        protected DashboardServiceInterface              $dashboardService,
-        protected GeneratePayrollsReportServiceInterface $payrollReportsService
-
+        protected DashboardService  $dashboardService,
     ){}
 
     public function dashboard(Request $request){
@@ -25,7 +22,7 @@ class AdminDashboardController extends Controller
 
         $availableYears = $this->yearRange();
         
-        $yearlyReports         = $this->payrollReportsService->generatePayrollReport($year, 'All');
+        $yearlyReports         = $this->dashboardService->generatePayrollReport($year, 'All');
         $summaryTotal          = $this->dashboardService->getTaxAndUserSummary();
         $departmentGross       = $this->dashboardService->latestGrossPayMonthly();
         $contributionBreakdown = $this->dashboardService->contributionBreakdown();

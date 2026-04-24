@@ -9,7 +9,7 @@ use App\Contracts\Services\IPayrollReportsServices\GeneratePayrollsReportService
 use App\Traits\GetAuthId;
 use App\Traits\PayslipTypeMapping;
 
-class GeneratePayrollsReportService implements GeneratePayrollsReportServiceInterface
+class GeneratePayrollsReportService
 {
 
     use PayslipTypeMapping;
@@ -39,7 +39,7 @@ class GeneratePayrollsReportService implements GeneratePayrollsReportServiceInte
     public function generatePayrollReportYearlyView($year, $month, $payrollType )
     {
         $payrollMapping = $this->typeMapping($payrollType);
-       //
+       
         return $this->payrollReportRepository->getPayrollReportsYearlyView($year, $month, $payrollMapping);
 
     }
@@ -77,6 +77,8 @@ class GeneratePayrollsReportService implements GeneratePayrollsReportServiceInte
         return $this->payrollReportRepository->getLoanAndTaxThisMonthById($userId);
 
     }
+
+    
 
 
     

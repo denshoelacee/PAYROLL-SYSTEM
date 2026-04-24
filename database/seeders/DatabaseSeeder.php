@@ -6,9 +6,6 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\EmploymentType;
-use App\Models\JobTitle;
-use App\Models\PartTimePayroll;
-use App\Models\Payroll;
 
 class DatabaseSeeder extends Seeder
 {

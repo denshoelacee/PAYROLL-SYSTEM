@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Contracts\Services\HrMetaDataServiceInterface;
+use App\Services\HrMetaDataService;
 use App\Events\registerEvent;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -19,7 +19,7 @@ use Inertia\Response;
 class RegisteredUserController extends Controller
 {
 
-    public function __construct(protected HrMetaDataServiceInterface $metaDataService,){}
+    public function __construct(protected HrMetaDataService $metaDataService,){}
 
     /**
      * Display the registration view.

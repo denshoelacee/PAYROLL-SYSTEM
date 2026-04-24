@@ -7,7 +7,7 @@ use App\Contracts\Services\Auth\SecretQAServiceInterface;
 use Illuminate\Support\Facades\Auth;
 
 
-class SecretQAService implements SecretQAServiceInterface
+class SecretQAService
 {
 
     public function __construct(protected SecretQuestionRepositoryInterface $secretQARepository){}

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\AdminController;
 
-use App\Contracts\Services\IPayrollReportsServices\GeneratePayrollsReportServiceInterface;
+use App\Services\PayrollReportsServices\GeneratePayrollsReportService;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ class AdminPayrollReportsController extends Controller
 {
 
     public function __construct(
-         protected GeneratePayrollsReportServiceInterface $payrollReportsService,
+         protected GeneratePayrollsReportService $payrollReportsService,
 
     ){}
 
@@ -23,7 +23,7 @@ class AdminPayrollReportsController extends Controller
 
         $year = $request->year ?? now()->year;
 
-        $payslipType = $request->payrollType ?? 'Regular';   //PLEASE SEND REQUEST PARAMETER 'payrollType' THAT CONTENT 'Regular', 'Job Order', 'Part-Time'
+        $payslipType = $request->payrollType ?? 'Regular';
 
         $monthlySummary = $this->payrollReportsService->generatePayrollReport($year, $payslipType);
 
@@ -38,8 +38,7 @@ class AdminPayrollReportsController extends Controller
 
     public function payrollReportsYearlyView(Request $request, $year, $month)
     {
-        $payslipType = $request->payrollType ?? 'Regular'; //PLEASE SEND REQUEST PARAMETER 'payrollType' THAT CONTENT 'Regular', 'Job Order', 'Part-Time'
-
+        $payslipType = $request->payrollType ?? 'Regular'; 
         $details = $this->payrollReportsService->generatePayrollReportYearlyView($year,$month, $payslipType);
 
         $monthName = Carbon::create()->month($month)->format('F');

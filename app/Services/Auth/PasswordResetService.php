@@ -6,7 +6,7 @@ use App\Contracts\Repository\UserRepositoryInterface;
 use App\Contracts\Services\Auth\PasswordResetServiceInterface;
 use Illuminate\Support\Facades\Hash;
 
-class PasswordResetService implements PasswordResetServiceInterface
+class PasswordResetService
 {
     public function __construct(protected UserRepositoryInterface $userRepo) {}
 

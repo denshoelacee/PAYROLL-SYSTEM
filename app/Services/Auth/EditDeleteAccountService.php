@@ -7,7 +7,7 @@ use App\Contracts\Repository\UserRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 
 
-class EditDeleteAccountService implements EditDeleteAccountServiceInterface
+class EditDeleteAccountService
 {
 
     public function __construct(protected UserRepositoryInterface $userRepo){}

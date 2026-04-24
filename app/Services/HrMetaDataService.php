@@ -6,7 +6,7 @@ use App\Contracts\Repository\ContributionTypeRepositoryInterface;
 use App\Contracts\Repository\HrMetaDataRepositoryInterface;
 use App\Contracts\Services\HrMetaDataServiceInterface;
 
-class HrMetaDataService implements HrMetaDataServiceInterface
+class HrMetaDataService
 {
     public function __construct(
         protected HrMetaDataRepositoryInterface       $hrMetaDataRepository,

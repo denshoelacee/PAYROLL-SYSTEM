@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\AdminController;
 
-use App\Contracts\Services\PayrollServiceInterface;
-use App\Contracts\Services\IPayrollReportsServices\GeneratePayslipsReportServiceInterface;
-use App\Contracts\Services\HrMetaDataServiceInterface;
+use App\Services\PayrollService;
+use App\Services\PayrollReportsServices\GeneratePayslipsReportService;
+use App\Services\HrMetaDataService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\EditPublishRequest;
+use App\Models\ContributionType;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -16,9 +17,9 @@ class AdminPayrollController extends Controller
 {
 
     public function __construct(
-              protected PayrollServiceInterface                $payrollService,
-              protected GeneratePayslipsReportServiceInterface $payslipsReportService,
-              protected HrMetaDataServiceInterface             $metaDataService
+              protected PayrollService                $payrollService,
+              protected GeneratePayslipsReportService $payslipsReportService,
+              protected HrMetaDataService             $metaDataService
 
     ){}
 
@@ -76,6 +77,9 @@ class AdminPayrollController extends Controller
                 'name' => date('F', mktime(0, 0, 0, $m, 1)),
             ];}, range(1, 12));
 
+        $statutoryDeductions = ContributionType::select('contribution_type_id', 'rlip', 'philhealth')
+                                ->first();
+
         return Inertia::render('Admin/Payroll', [
             'newPayroll' => $newPayroll,
             'filteredEmployementType' => $filteredEmployementType,
@@ -85,6 +89,7 @@ class AdminPayrollController extends Controller
             'selectedYear' => (string)$year,
             'selectedMonth' => str_pad($month, 2, '0', STR_PAD_LEFT),
             'jobLists' => $jobLists,
+            'statutoryDeductions' => $statutoryDeductions
         ]);
     }
 
@@ -110,12 +115,7 @@ class AdminPayrollController extends Controller
     }
 
 
-    /**
-     * Display the specified payslip
-     * 
-     * @param int $payslipId
-     * @return \Illuminate\View\View|\Inertia\Response
-     */
+  
     public function ViewPayslipById($payslip_id)
     {
 

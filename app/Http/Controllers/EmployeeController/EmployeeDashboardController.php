@@ -6,14 +6,14 @@ use App\Traits\YearRange;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
-use App\Contracts\Services\IPayrollReportsServices\GeneratePayrollsReportServiceInterface;
+use App\Services\PayrollReportsServices\GeneratePayrollsReportService;
 
 class EmployeeDashboardController extends Controller
 {
 
     use YearRange;
     public function __construct(
-         protected GeneratePayrollsReportServiceInterface $payrollReportsService,
+         protected GeneratePayrollsReportService $payrollReportsService,
     ){}
     public function dashboard(Request $request){
 

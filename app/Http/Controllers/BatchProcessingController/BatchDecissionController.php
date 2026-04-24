@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\BatchProcessingController;
 
-use App\Contracts\Services\Auth\ExecuteBatchDecisionServiceInterface;
+use App\Services\Auth\ExecuteBatchDecisionService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class BatchDecissionController extends Controller
 {
-      public function __construct(protected ExecuteBatchDecisionServiceInterface $batchDecissionService){}
+      public function __construct(protected ExecuteBatchDecisionService $batchDecissionService){}
 
     public function batchApprove(Request $request)
     {

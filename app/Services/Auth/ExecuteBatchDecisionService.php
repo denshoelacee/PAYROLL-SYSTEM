@@ -5,7 +5,7 @@ namespace App\Services\Auth;
 use App\Contracts\Repository\UserRepositoryInterface;
 use App\Contracts\Services\Auth\ExecuteBatchDecisionServiceInterface;
 
-class ExecuteBatchDecisionService implements ExecuteBatchDecisionServiceInterface
+class ExecuteBatchDecisionService
 {
 
     public function __construct(protected UserRepositoryInterface $userRepository){}

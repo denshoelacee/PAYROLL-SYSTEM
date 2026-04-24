@@ -284,16 +284,6 @@ class PayrollRepository implements PayrollRepositoryInterface{
         ];
     }
 
-
-    private function formatPayrollPeriod($date)
-    {
-        $carbonDate = \Carbon\Carbon::parse($date);
-        $month = $carbonDate->format('F'); // Full month name
-        $year = $carbonDate->format('Y');
-        $lastDay = $carbonDate->endOfMonth()->format('j'); // Last day of month
-        
-        return "{$month} 1–{$lastDay}, {$year}";
-    }
      
     /**
      * Update the specified payroll  

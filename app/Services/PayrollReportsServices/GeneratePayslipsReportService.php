@@ -5,7 +5,8 @@ namespace App\Services\PayrollReportsServices;
 use App\Contracts\Repository\PayrollRepositoryInterface;
 use App\Contracts\Services\IPayrollReportsServices\GeneratePayslipsReportServiceInterface;
 
-class GeneratePayslipsReportService implements GeneratePayslipsReportServiceInterface {
+class GeneratePayslipsReportService
+{
 
    public function __construct(
            protected PayrollRepositoryInterface $payrollRepository

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\AdminController;
-use App\Contracts\Services\HrMetaDataServiceInterface;
+use App\Services\HrMetaDataService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -9,7 +9,7 @@ use Inertia\Inertia;
 
 class AdminMetaDataController extends Controller
 {
-    public function __construct(protected HrMetaDataServiceInterface $metadataService){}
+    public function __construct(protected HrMetaDataService $metadataService){}
 
     public function displayEmpTypeList()
     {

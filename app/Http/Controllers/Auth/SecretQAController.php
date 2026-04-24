@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Contracts\Services\Auth\SecretQAServiceInterface;
+use App\Services\Auth\SecretQAService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 
 class SecretQAController extends Controller
 {
-    public function __construct(protected SecretQAServiceInterface $secretQAService) {}
+    public function __construct(protected SecretQAService $secretQAService) {}
 
     public function store(Request $request):RedirectResponse
     {

@@ -3,18 +3,17 @@
 namespace App\Services;
 
 use App\Contracts\Repository\UserRepositoryInterface;
-use App\Contracts\Services\EmployeeServiceInterface;
-use Illuminate\Pagination\LengthAwarePaginator;
 
-class EmployeeService implements EmployeeServiceInterface{
+class EmployeeManagementService
+{
 
-    public function __construct(protected UserRepositoryInterface $userRepo){}
+    public function __construct(protected UserRepositoryInterface $userRepository){}
 
     public function approveAccount($id)
     {
        try
        {
-         $verified = $this->userRepo->setApproveAccount($id);
+         $verified = $this->userRepository->setApproveAccount($id);
          if($verified){
             return[
                 'success' => true,
@@ -35,7 +34,7 @@ class EmployeeService implements EmployeeServiceInterface{
     {
         try
         {
-            $reject = $this->userRepo->setRejectAccount($id);
+            $reject = $this->userRepository->setRejectAccount($id);
             if($reject){
                 return [
                     'success' =>true,
@@ -55,11 +54,21 @@ class EmployeeService implements EmployeeServiceInterface{
 
     public function pendingUsers()
     {
-        return $this->userRepo->getPendingUsers();
+        return $this->userRepository->getPendingUsers();
     }
 
     public function employeeList()
     {
-        return $this->userRepo->getEmployeeList();
+        return $this->userRepository->getEmployeeList();
+    }
+
+     public function handleApproveRejectBatch(array $user_ids, string $checker)
+    {
+       return $this->userRepository->executeBatchDecission($user_ids,$checker);
+    }
+
+    public function handleDeleteBatch(array $user_ids)
+    {
+        return $this->userRepository->batchDeleteAccount($user_ids);
     }
 }

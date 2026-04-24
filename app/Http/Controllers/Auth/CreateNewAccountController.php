@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Contracts\Services\Auth\CreateNewAccountServiceInterface;
+use App\Services\Auth\CreateNewAccountService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class CreateNewAccountController extends Controller
 {
 
-    public function __construct(protected CreateNewAccountServiceInterface $createNewAccountService){}
+    public function __construct(protected CreateNewAccountService $createNewAccountService){}
     public function store(Request $request):RedirectResponse
     {
        $request->validate([

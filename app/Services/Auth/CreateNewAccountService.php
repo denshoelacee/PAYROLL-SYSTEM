@@ -8,7 +8,7 @@ use App\Contracts\Services\Auth\CreateNewAccountServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class CreateNewAccountService implements CreateNewAccountServiceInterface
+class CreateNewAccountService
 {
 
       public function __construct(

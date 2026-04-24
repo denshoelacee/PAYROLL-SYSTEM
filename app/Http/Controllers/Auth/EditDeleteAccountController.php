@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Contracts\Services\Auth\EditDeleteAccountServiceInterface;
+use App\Services\Auth\EditDeleteAccountService;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class EditDeleteAccountController extends Controller
 {
 
-    public function __construct(protected EditDeleteAccountServiceInterface $editDeleteAccountService){}
+    public function __construct(protected EditDeleteAccountService $editDeleteAccountService){}
 
     public function deleteAccount($id)
     {

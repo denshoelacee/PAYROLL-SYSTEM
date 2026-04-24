@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 
-use App\Contracts\Services\Auth\PasswordResetServiceInterface;
+use App\Services\Auth\PasswordResetService;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ use Inertia\Response;
 
 class PasswordResetLinkController extends Controller
 {
-    public function __construct(protected PasswordResetServiceInterface $passResetService){}
+    public function __construct(protected PasswordResetService $passResetService){}
 
     /**
      * Display the password reset link request view.

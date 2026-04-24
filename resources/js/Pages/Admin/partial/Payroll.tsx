@@ -29,8 +29,12 @@ type Props = {
     selectedMonth: string;
     filteredEmployementType: filteredSelectedTypeUser[];
     jobLists: JobTitles[];
+    statutoryDeductions: {
+        rlip: number;
+        philhealth: number;
+    }
 }
-export default function PayrollPartial ({jobLists,newPayroll,payslips=[],availableYears=[],availableMonths=[],selectedYear,selectedMonth,filteredEmployementType=[]}:Props) {
+export default function PayrollPartial ({jobLists,newPayroll,payslips=[],availableYears=[],availableMonths=[],selectedYear,selectedMonth,filteredEmployementType=[],statutoryDeductions}:Props) {
     const [addModal, setAddModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -206,15 +210,17 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips=[],availab
             {addModal && (
                 <PayrollAddModal show={addModal} onClose={() => {
                     setAddModal(false);
-                    router.replace(route("admin.payroll")); 
+                    router.get(route("admin.payroll")); 
                 }}  
                 newPayroll={newPayroll} 
                 filteredEmployementType={filteredEmployementType}
-                jobLists={jobLists}/>
+                jobLists={jobLists}
+                statutoryDeductions={statutoryDeductions}
+                />
             )}
             {/*Edit Modal */}
             {editModal && selectedRow && (
-                <PayrollEditModal show={editModal} onClose={() => {setEditModal(false); router.replace(route("admin.payroll")); }
+                <PayrollEditModal statutoryDeductions={statutoryDeductions} show={editModal} onClose={() => {setEditModal(false); router.get(route("admin.payroll")); }
                 } row={selectedRow as any} />
             )}
 

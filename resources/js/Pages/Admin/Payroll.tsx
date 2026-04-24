@@ -18,6 +18,10 @@ type Props = PageProps<{
     selectedMonth: string;
     filteredEmployementType: filteredSelectedTypeUser[];
     jobLists: JobTitles[];
+    statutoryDeductions: {
+        rlip: number;
+        philhealth: number;
+    }
 }>;
 
 export default function Payroll({ auth,thisMonth,newPayroll,payslips,
@@ -26,7 +30,9 @@ export default function Payroll({ auth,thisMonth,newPayroll,payslips,
     selectedYear,
     selectedMonth,
     filteredEmployementType,
-    jobLists}:Props) {
+    jobLists,
+    statutoryDeductions
+}:Props) {
              
     return (
         
@@ -47,7 +53,9 @@ export default function Payroll({ auth,thisMonth,newPayroll,payslips,
                     availableYears={availableYears}
                     selectedMonth={selectedMonth}
                     selectedYear={selectedYear}
-                    jobLists={jobLists}/>
+                    jobLists={jobLists}
+                    statutoryDeductions={statutoryDeductions}
+                    />
                 </div>
                 </AdminLayout>
             </div>

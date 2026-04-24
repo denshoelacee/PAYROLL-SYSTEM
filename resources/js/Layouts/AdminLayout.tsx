@@ -3,7 +3,7 @@ import React, { PropsWithChildren, useEffect, useState } from "react";
 import Authenticated from "./AuthenticatedLayout";
 import Loader from "@/Components/Loader"; // 👈 loader
 import { InfoMessage } from "@/Components/Alert";
-
+import CTULOGO from '/resources/images/CTULOGO.png';
 export default function AdminLayout({ title, children }: PropsWithChildren) {
   const { auth, notif, message }: any = usePage().props;
   const [notifications, setNotifications] = useState<any[]>(notif || []);

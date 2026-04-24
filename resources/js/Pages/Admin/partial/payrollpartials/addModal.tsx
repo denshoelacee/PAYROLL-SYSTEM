@@ -6,7 +6,7 @@ import TextInputGroup from "@/Components/TextInputGroup";
 import Dropdown from "@/Components/Dropdown";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoMdClose } from "react-icons/io";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "@inertiajs/react";
 import { fieldTitles, validFieldIds } from "./fieldTitles";
 import type { UserPayroll, filteredSelectedTypeUser } from "@/types";
@@ -19,6 +19,7 @@ interface Props {
     newPayroll: UserPayroll[];
     filteredEmployementType: filteredSelectedTypeUser[];
     jobLists: JobTitles[];
+    statutoryDeductions: { rlip: number; philhealth: number }
 }
 
 const fillable = {
@@ -42,7 +43,7 @@ const fillable = {
     contributions: "",
     loans: "",
     housing_loan: "",
-    philhealth: "" ,
+    philhealth: "",
     sss: "",
     cfi: "",
     tipid: "",
@@ -62,20 +63,21 @@ const fillable = {
     employment_type: "",
     // For Part-Time & Job Order
     hourly_rate: "",
-    service_rendered:"",
+    service_rendered: "",
     units: "",
     duty_count: "",
     daily_rate: "",
     assigned_department: "",
     assigned_designation: "",
-    philhealth_auto:false,
-    rlip_auto:false
+    philhealth_auto: false,
+    rlip_auto: false
 }
 export default function PayrollAddModal({
     show,
     onClose,
     filteredEmployementType,
-    jobLists
+    jobLists,
+    statutoryDeductions
 }: Props) {
     const [selectName, setSelectName] = useState("Select Employee");
     const [disableInput, setDisableInput] = useState(true);
@@ -83,28 +85,114 @@ export default function PayrollAddModal({
     const [activeTab, setActiveTab] = useState("Select Employment Type");
     const [selectDepartment, setselectDepartment] = useState("Select Department");
     const [selectDesignation, setselectDesignation] = useState("Select Designation");
-    const [autoPhilhealthChecked, setAutoPhilhealthChecked] = useState(false);
-    const [autoRlipChecked, setAutoRlipChecked] = useState(false);
-    
+    const [autoPhilhealthChecked, setAutoPhilhealthChecked] = useState(true);
+    const [autoRlipChecked, setAutoRlipChecked] = useState(true);
+
     const { data, setData, post, reset } = useForm<any>(fillable);
 
+useEffect(() => {
+    let base = 0;
+
+    if (activeTab === "Regular") {
+        base = Number(data.basic_pay || 0);
+    } 
+    else if (activeTab === "Part-Time") {
+        base =
+            Number(data.hourly_rate || 0) *
+            Number(data.units || 0);
+    } 
+    else if (activeTab === "Job Order") {
+        base =
+            Number(data.daily_rate || 0) *
+            Number(data.duty_count || 0);
+    }
+
+    const minSalary = 10000;
+    const maxSalary = 100000;
+    const rate = statutoryDeductions.philhealth / 100;
+
+    // =========================
+    // ✅ REGULAR (always auto)
+    // =========================
+    if (activeTab === "Regular") {
+        // PhilHealth
+        let philhealthValue = 0;
+
+        if (base <= minSalary) {
+            philhealthValue = 250;
+        } else if (base <= maxSalary) {
+            philhealthValue = base * rate;
+        } else {
+            philhealthValue = maxSalary * rate;
+        }
+
+        setData("philhealth", philhealthValue.toFixed(2));
+
+        // RLIP (always auto)
+        const rlipValue = (base * (statutoryDeductions.rlip / 100)).toFixed(2);
+        setData("rlip", rlipValue);
+    }
+
+    // =========================
+    // ✅ PART-TIME / JOB ORDER
+    // =========================
+    else {
+        // PhilHealth (with toggle)
+        if (autoPhilhealthChecked) {
+            let philhealthValue = 0;
+
+            if (base <= minSalary) {
+                philhealthValue = 250;
+            } else if (base <= maxSalary) {
+                philhealthValue = base * rate;
+            } else {
+                philhealthValue = maxSalary * rate;
+            }
+
+            setData("philhealth", philhealthValue.toFixed(2));
+            setAutoPhilhealthChecked(true);
+            setAutoRlipChecked(true);
+        } else {
+            setData("philhealth", "0");
+        }
+
+        // RLIP (with toggle)
+        if (autoRlipChecked) {
+            const rlipValue = (base * (statutoryDeductions.rlip / 100)).toFixed(2);
+            setData("rlip", rlipValue);
+        } else {
+            setData("rlip", "0");
+        }
+    }
+
+}, [
+    activeTab,
+    data.basic_pay,
+    data.hourly_rate,
+    data.units,
+    data.daily_rate,
+    data.duty_count,
+    autoPhilhealthChecked,
+    autoRlipChecked,
+    statutoryDeductions
+]);
     const isInvalid =
-    (activeTab === "Regular" && Number(data.basic_pay) === 0) ||
-    (activeTab === "Part-Time" &&
-        (
-        !data.hourly_rate?.trim() ||
-        !data.units?.trim() ||
-        !data.service_rendered?.trim() ||
-        !data.assigned_department?.trim() ||
-        !data.assigned_designation?.trim()
-        )
-    ) ||
-    (activeTab === "Job Order" && 
-        (
-        !data.daily_rate?.trim() || 
-        !data.duty_count?.trim()
-        )
-    );
+        (activeTab === "Regular" && Number(data.basic_pay) === 0) ||
+        (activeTab === "Part-Time" &&
+            (
+                !data.hourly_rate?.trim() ||
+                !data.units?.trim() ||
+                !data.service_rendered?.trim() ||
+                !data.assigned_department?.trim() ||
+                !data.assigned_designation?.trim()
+            )
+        ) ||
+        (activeTab === "Job Order" &&
+            (
+                !data.daily_rate?.trim() ||
+                !data.duty_count?.trim()
+            )
+        );
 
 
     const employeeOptions = useMemo(
@@ -112,7 +200,7 @@ export default function PayrollAddModal({
         [filteredEmployementType]
     );
 
-  /** --- Handlers --- **/
+    /** --- Handlers --- **/
     const handleDropdownSelect = (value: filteredSelectedTypeUser) => {
         setSelectName(`${value.employee_id} - ${value.full_name}`);
         setDisableInput(true);
@@ -153,103 +241,103 @@ export default function PayrollAddModal({
             employment_type: currentEmploymentType,
         });
 
-    if (value.user_id) {
-        setLoading(true);
-        const employmentType = activeTab.toLowerCase().replace(/\s+/g, "-");
-        router.get(`/admin/payroll/select/${employmentType}/${value.user_id}`,{},
-            {
-            preserveState: true,
-            preserveScroll: true,
-            only: ["newPayroll"],
-            onSuccess: (page: any) => {
-                const newPayroll: UserPayroll = page.props.newPayroll;
-                setData((prevData: any) => ({
-                ...prevData,
-                ...newPayroll,
-                basic_pay: newPayroll?.basic_pay || prevData.basic_pay,
-                pera: newPayroll?.latest_payroll?.pera ?? "",
-                absent: newPayroll?.latest_payroll?.absent ?? "",
-                late: newPayroll?.latest_payroll?.late ?? "",
-                holding_tax: newPayroll?.latest_payroll?.holding_tax ?? "",
-                tax_bal_due: newPayroll?.latest_payroll?.tax_bal_due ?? "",
-                rlip: newPayroll?.latest_payroll?.rlip ?? "",
-                policy_loan: newPayroll?.latest_payroll?.policy_loan ?? "",
-                consol_loan: newPayroll?.latest_payroll?.consol_loan ?? "",
-                emerg_loan: newPayroll?.latest_payroll?.emerg_loan ?? "",
-                gel: newPayroll?.latest_payroll?.gel ?? "",
-                gfal: newPayroll?.latest_payroll?.gfal ?? "",
-                mpl: newPayroll?.latest_payroll?.mpl ?? "",
-                mpl_lite: newPayroll?.latest_payroll?.mpl_lite ?? "",
-                contributions: newPayroll?.latest_payroll?.contributions ?? "",
-                loans: newPayroll?.latest_payroll?.loans ?? "",
-                housing_loan: newPayroll?.latest_payroll?.housing_loan ?? "",
-                philhealth: newPayroll?.latest_payroll?.philhealth ?? "",
-                sss: newPayroll?.latest_payroll?.sss ?? "",
-                cfi: newPayroll?.latest_payroll?.cfi ?? "",
-                tipid: newPayroll?.latest_payroll?.tipid ?? "",
-                city_savings_bank: newPayroll?.latest_payroll?.city_savings_bank ?? "",
-                fea: newPayroll?.latest_payroll?.fea ?? "",
-                canteen: newPayroll?.latest_payroll?.canteen ?? "",
-                disallowance: newPayroll?.latest_payroll?.disallowance ?? "",
-                unliquidated_ca: newPayroll?.latest_payroll?.unliquidated_ca ?? "",
-                disallowance_honoraria: newPayroll?.latest_payroll?.disallowance_honoraria ?? "",
-                coop: newPayroll?.latest_payroll?.coop ?? "",
-                landbank: newPayroll?.latest_payroll?.landbank ?? "",
-                ucpb: newPayroll?.latest_payroll?.ucpb ?? "",
-                employment_type: currentEmploymentType,
-                }));
-                //console.log(newPayroll)
-                setLoading(false);
-                setDisableInput(false);
-            },   
-            onError: () => {
-                setLoading(false);
-                setDisableInput(false);
-            },
-            }
-        
-        );
+        if (value.user_id) {
+            setLoading(true);
+            const employmentType = activeTab.toLowerCase().replace(/\s+/g, "-");
+            router.get(`/admin/payroll/select/${employmentType}/${value.user_id}`, {},
+                {
+                    preserveState: true,
+                    preserveScroll: true,
+                    only: ["newPayroll"],
+                    onSuccess: (page: any) => {
+                        const newPayroll: UserPayroll = page.props.newPayroll;
+                        setData((prevData: any) => ({
+                            ...prevData,
+                            ...newPayroll,
+                            basic_pay: newPayroll?.basic_pay || prevData.basic_pay,
+                            pera: newPayroll?.latest_payroll?.pera ?? "",
+                            absent: newPayroll?.latest_payroll?.absent ?? "",
+                            late: newPayroll?.latest_payroll?.late ?? "",
+                            holding_tax: newPayroll?.latest_payroll?.holding_tax ?? "",
+                            tax_bal_due: newPayroll?.latest_payroll?.tax_bal_due ?? "",
+                            rlip: newPayroll?.latest_payroll?.rlip ?? "",
+                            policy_loan: newPayroll?.latest_payroll?.policy_loan ?? "",
+                            consol_loan: newPayroll?.latest_payroll?.consol_loan ?? "",
+                            emerg_loan: newPayroll?.latest_payroll?.emerg_loan ?? "",
+                            gel: newPayroll?.latest_payroll?.gel ?? "",
+                            gfal: newPayroll?.latest_payroll?.gfal ?? "",
+                            mpl: newPayroll?.latest_payroll?.mpl ?? "",
+                            mpl_lite: newPayroll?.latest_payroll?.mpl_lite ?? "",
+                            contributions: newPayroll?.latest_payroll?.contributions ?? "",
+                            loans: newPayroll?.latest_payroll?.loans ?? "",
+                            housing_loan: newPayroll?.latest_payroll?.housing_loan ?? "",
+                            philhealth: newPayroll?.latest_payroll?.philhealth ?? "",
+                            sss: newPayroll?.latest_payroll?.sss ?? "",
+                            cfi: newPayroll?.latest_payroll?.cfi ?? "",
+                            tipid: newPayroll?.latest_payroll?.tipid ?? "",
+                            city_savings_bank: newPayroll?.latest_payroll?.city_savings_bank ?? "",
+                            fea: newPayroll?.latest_payroll?.fea ?? "",
+                            canteen: newPayroll?.latest_payroll?.canteen ?? "",
+                            disallowance: newPayroll?.latest_payroll?.disallowance ?? "",
+                            unliquidated_ca: newPayroll?.latest_payroll?.unliquidated_ca ?? "",
+                            disallowance_honoraria: newPayroll?.latest_payroll?.disallowance_honoraria ?? "",
+                            coop: newPayroll?.latest_payroll?.coop ?? "",
+                            landbank: newPayroll?.latest_payroll?.landbank ?? "",
+                            ucpb: newPayroll?.latest_payroll?.ucpb ?? "",
+                            employment_type: currentEmploymentType,
+                        }));
+                        //console.log(newPayroll)
+                        setLoading(false);
+                        setDisableInput(false);
+                    },
+                    onError: () => {
+                        setLoading(false);
+                        setDisableInput(false);
+                    },
+                }
+
+            );
         } else {
-        setDisableInput(false);
+            setDisableInput(false);
         }
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         if (validFieldIds.includes(name) && /^\d*\.?\d*$/.test(value)) {
-        setData(name, value);
+            setData(name, value);
         }
     };
 
     const handleSubmit =
-    (actionType: "partial" | "publish") => (e: React.FormEvent) => {
-        e.preventDefault();
+        (actionType: "partial" | "publish") => (e: React.FormEvent) => {
+            e.preventDefault();
 
-        const url = actionType === "partial" ? "/admin/payroll/store": "/admin/payroll/publish";
-        
-        const requestPayload = {
-        ...data,
-        philhealth_auto: autoPhilhealthChecked,
-        rlip_auto: autoRlipChecked,
+            const url = actionType === "partial" ? "/admin/payroll/store" : "/admin/payroll/publish";
+
+            const requestPayload = {
+                ...data,
+                philhealth_auto: autoPhilhealthChecked,
+                rlip_auto: autoRlipChecked,
+            };
+            console.log("Submitting with payload:", requestPayload);
+            post(url, {
+                data: requestPayload,
+                onSuccess: () => {
+                    reset();
+                    setSelectName("Select Employee");
+                    onClose();
+                },
+            });
         };
-
-        post(url, {
-        data: requestPayload,
-        onSuccess: () => {
-            reset();
-            setSelectName("Select Employee");
-            onClose();
-        },
-        });
-    };
 
 
     const handleEmploymentType = (field: string) => {
         reset();
 
-        setSelectName("Select Employee"); 
-        setselectDepartment("Select Department"); 
-        setselectDesignation("Select Designation"); 
+        setSelectName("Select Employee");
+        setselectDepartment("Select Department");
+        setselectDesignation("Select Designation");
         setDisableInput(true);
         setData("employment_type", field);
         setActiveTab(field);
@@ -257,148 +345,145 @@ export default function PayrollAddModal({
         const typeParam = field.toLowerCase().replace(/\s+/g, "-");
 
         router.post(
-            `/admin/payroll/select/${typeParam}`, 
+            `/admin/payroll/select/${typeParam}`,
             { employmentType: field },
             { preserveState: true }
         );
     };
 
 
-
-  /** --- Reusable Renders --- **/
+    /** --- Reusable Renders --- **/
     const renderEmployeeDropdown = () => (
         <div className="my-2">
-        <InputLabel htmlFor="employee" value="Employee *" className="text-white" />
-        <Dropdown>
-            <Dropdown.Trigger>
-            <button
-                type="button"
-                className="bg-transparent w-full border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center"
-            >
-                <p className="text-sm">{selectName}</p>
-                <RiArrowDropDownLine className="text-2xl" />
-            </button>
-            </Dropdown.Trigger>
-            <Dropdown.Content
-            ableSearch
-            contentClasses="w-[275px] md:w-[225px] lg:w-[300px] max-h-[200px] overflow-y-auto p-0"
-            align="left"
-            >
-            {employeeOptions.map((user, index) => (
-                <button
-                key={index}
-                type="button"
-                onClick={() => handleDropdownSelect(user)}
-                disabled={loading}
-                className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black disabled:opacity-50"
+            <InputLabel htmlFor="employee" value="Employee *" className="text-white" />
+            <Dropdown>
+                <Dropdown.Trigger>
+                    <button
+                        type="button"
+                        className="bg-transparent w-full border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center"
+                    >
+                        <p className="text-sm">{selectName}</p>
+                        <RiArrowDropDownLine className="text-2xl" />
+                    </button>
+                </Dropdown.Trigger>
+                <Dropdown.Content
+                    ableSearch
+                    contentClasses="w-[275px] md:w-[225px] lg:w-[300px] max-h-[200px] overflow-y-auto p-0"
+                    align="left"
                 >
-                {loading && data.user_id === user.user_id
-                    ? "Loading..."
-                    : `${user.employee_id} - ${user.full_name}`}
-                </button>
-            ))}
-            </Dropdown.Content>
-        </Dropdown>
+                    {employeeOptions.map((user, index) => (
+                        <button
+                            key={index}
+                            type="button"
+                            onClick={() => handleDropdownSelect(user)}
+                            disabled={loading}
+                            className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black disabled:opacity-50"
+                        >
+                            {loading && data.user_id === user.user_id
+                                ? "Loading..."
+                                : `${user.employee_id} - ${user.full_name}`}
+                        </button>
+                    ))}
+                </Dropdown.Content>
+            </Dropdown>
         </div>
-        
+
     );
 
     const renderSectionFields = () =>
-    fieldTitles.map((section, index) => (
-        <InputWrapper
-            key={index}
-            className="justify-between p-3 w-full text-white"
-        >
-            <p>{section.title}</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-                {section.fields
-                    // .filter(({ id }) => {
-                    //     if (activeTab === "Part-Time" || activeTab === "Job Order") {
-                    //         return id !== "philhealth" && id !== "rlip" && id !== "contributions";
-                    //     }
-                    //     return true;
-                    // })
-                    .map(({ label, id, disabled }) => (
-                        <div key={id} className="flex flex-col gap-1">
-                            <TextInputGroup
-                                label={label}
-                                id={id}
-                                name={id}
-                                value={data[id]}
-                                onChange={handleInputChange}
-                                disabled={
-                                    activeTab === 'Regular' &&
-                                    (id === 'rlip' || id === 'philhealth')
-                                    ? true
-                                    : false
-                                }
-                                placeholder={
-                                    activeTab === 'Regular' &&
-                                    (id === 'rlip' || id === 'philhealth')
-                                    ? '(AUTOGENERATED)'
-                                    : ''
-                                }
-                            />
-                            {/*
-                            {(activeTab === "Part-Time" || activeTab === "Job Order") && (
-                                <>
-                                    {id === "philhealth" && (
-                                        <label className="flex items-center gap-2 text-xs">
-                                            <input
-                                                type="checkbox"
-                                                checked={autoPhilhealthChecked}
-                                                onChange={(e) =>
-                                                    setAutoPhilhealthChecked(e.target.checked)
-                                                }
-                                            />
-                                            {autoPhilhealthChecked
-                                                ? "Auto Deduction"
-                                                : "No Deduction"}
-                                        </label>
-                                    )}
-                                    {id === "rlip" && (
-                                        <label className="flex items-center gap-2 text-xs">
-                                            <input
-                                                type="checkbox"
-                                                checked={autoRlipChecked}
-                                                onChange={(e) =>
-                                                    setAutoRlipChecked(e.target.checked)
-                                                }
-                                            />
-                                            {autoRlipChecked
-                                                ? "Auto Deduction"
-                                                : "No Deduction"}
-                                        </label>
-                                    )}
-                                </>
-                            )}
-                            */}
-                        </div>
-                    ))}
-            </div>
-        </InputWrapper>
-    ));
+        fieldTitles.map((section, index) => (
+            <InputWrapper
+                key={index}
+                className="justify-between p-3 w-full text-white"
+            >
+                <p>{section.title}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                    {section.fields
+                        // .filter(({ id }) => {
+                        //     if (activeTab === "Part-Time" || activeTab === "Job Order") {
+                        //         return id !== "philhealth" && id !== "rlip" && id !== "contributions";
+                        //     }
+                        //     return true;
+                        // })
+                        .map(({ label, id, disabled }) => (
+                            <div key={id} className="flex flex-col gap-1">
+                                <TextInputGroup
+                                    label={label}
+                                    id={id}
+                                    name={id}
+                                    value={data[id]}
+                                    onChange={handleInputChange}
+                                    disabled={
+                                        (id === 'rlip' || id === 'philhealth')
+                                            ? true
+                                            : false
+                                    }
+                                    placeholder={
+                                        (id === 'rlip' || id === 'philhealth')
+                                            ? '(AUTOGENERATED)'
+                                            : ''
+                                    }
+                                />
+
+                                {(activeTab === "Part-Time" || activeTab === "Job Order") && (
+                                    <>
+                                        {id === "philhealth" && (
+                                            <label className="flex items-center gap-2 text-xs">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={autoPhilhealthChecked}
+                                                    onChange={(e) =>
+                                                        setAutoPhilhealthChecked(e.target.checked)
+                                                    }
+                                                />
+                                                {autoPhilhealthChecked
+                                                    ? "Auto Deduction"
+                                                    : "No Deduction"}
+                                            </label>
+                                        )}
+                                        {id === "rlip" && (
+                                            <label className="flex items-center gap-2 text-xs">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={autoRlipChecked}
+                                                    onChange={(e) =>
+                                                        setAutoRlipChecked(e.target.checked)
+                                                    }
+                                                />
+                                                {autoRlipChecked
+                                                    ? "Auto Deduction"
+                                                    : "No Deduction"}
+                                            </label>
+                                        )}
+                                    </>
+                                )}
+
+                            </div>
+                        ))}
+                </div>
+            </InputWrapper>
+        ));
 
 
     const renderFooter = () => (
         <div className="flex gap-4">
-        <PrimaryButton
-            disabled={disableInput  || isInvalid || loading }
-            onClick={handleSubmit("publish")}
-            className="text-md mt-4 py-2 hover:bg-yellow-600"
-        >
-            {loading ? "Loading..." : "Publish"}
-        </PrimaryButton>
-        <PrimaryButton
-            disabled={disableInput  || isInvalid || loading}
-            onClick={handleSubmit("partial")}
-            className="text-md mt-4 hover:bg-yellow-600"
-        >
-            {loading ? "Loading..." : "Partial"}
-        </PrimaryButton>
-        <PrimaryButton onClick={onClose} className="text-md mt-4 hover:bg-yellow-600">
-            Cancel
-        </PrimaryButton>
+            <PrimaryButton
+                disabled={disableInput || isInvalid || loading}
+                onClick={handleSubmit("publish")}
+                className="text-md mt-4 py-2 hover:bg-yellow-600"
+            >
+                {loading ? "Loading..." : "Publish"}
+            </PrimaryButton>
+            <PrimaryButton
+                disabled={disableInput || isInvalid || loading}
+                onClick={handleSubmit("partial")}
+                className="text-md mt-4 hover:bg-yellow-600"
+            >
+                {loading ? "Loading..." : "Partial"}
+            </PrimaryButton>
+            <PrimaryButton onClick={onClose} className="text-md mt-4 hover:bg-yellow-600">
+                Cancel
+            </PrimaryButton>
         </div>
     );
 
@@ -406,247 +491,247 @@ export default function PayrollAddModal({
 
     return (
         <Modal
-        show={show}
-        onClose={onClose}
-        maxWidth="5xl"
-        className="h-full scrollbar-hidden"
+            show={show}
+            onClose={onClose}
+            maxWidth="5xl"
+            className="h-full scrollbar-hidden"
         >
-        {/* Header */}
-        <div>
-            <div className="px-6 py-5 flex justify-between">
-            <h2 className="text-lg text-white">New Payroll</h2>
-            <IoMdClose
-                color="white"
-                className="cursor-pointer text-2xl"
-                onClick={onClose}
-            />
-            </div>
-
-            {/* Employment Type Selector */}
-            <div className="px-6">
-            <InputWrapper className="p-3 flex">
-                <div className="w-full">
-                <InputLabel
-                    htmlFor="salary_type"
-                    value="Salary Type *"
-                    className="text-white"
-                />
-                <Dropdown>
-                    <Dropdown.Trigger>
-                    <button
-                        type="button"
-                        className="bg-transparent w-full border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full"
-                    >
-                        <p className="text-sm">{activeTab}</p>
-                        <RiArrowDropDownLine className="text-2xl" />
-                    </button>
-                    </Dropdown.Trigger>
-                    <Dropdown.Content
-                    ableSearch
-                    contentClasses=" w-full max-h-[200px] overflow-y-auto p-0"
-                    align="left"
-                    >
-                    {["Regular", "Part-Time", "Job Order"].map((field, index) => (
-                        <button
-                        key={index}
-                        type="button"
-                        onClick={() => handleEmploymentType(field)}
-                        className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
-                        >
-                        {field}
-                        </button>
-                    ))}
-                    </Dropdown.Content>
-                </Dropdown>
-                </div>
-            </InputWrapper>
-            </div>
-        </div>
-
-        {/* Regular */}
-        {activeTab === "Regular" && (
-            <form>
-            <div className="p-6 space-y-4">
-                <InputWrapper className="justify-between p-3 w-full text-white">
-                <p>Earning</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-                    {renderEmployeeDropdown()}
-                    <TextInputGroup
-                    label="Basic Salary"
-                    id="basic_pay"
-                    name="basic_pay"
-                    value={data.basic_pay}
-                    disabled
-                    />
-                    <TextInputGroup
-                    name="pera"
-                    label="PERA"
-                    id="pera"
-                    value={data.pera}
-                    onChange={handleInputChange}
-                    disabled={disableInput}
+            {/* Header */}
+            <div>
+                <div className="px-6 py-5 flex justify-between">
+                    <h2 className="text-lg text-white">New Payroll</h2>
+                    <IoMdClose
+                        color="white"
+                        className="cursor-pointer text-2xl"
+                        onClick={onClose}
                     />
                 </div>
-                </InputWrapper>
-                {renderSectionFields()}
-                {renderFooter()}
-            </div>
-            </form>
-        )}
 
-        {/* Part-Time */}
-        {activeTab === "Part-Time" && (
-            <form>
-            <div className="p-6 space-y-4">
-                <InputWrapper className="justify-between p-3 w-full text-white">
-                <p>Earning</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-                    {renderEmployeeDropdown()}
-                    <div className="w-full my-2">
-                        <InputLabel htmlFor="assigned_department" value="Department *" className='text-white' />
-                        <Dropdown>
-                            <Dropdown.Trigger>
-                                <button type="button" className="bg-transparent border w-full text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
-                                    <p className='text-sm'>{selectDepartment}</p>
-                                    <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
-                                </button>
-                            </Dropdown.Trigger> 
-                            <Dropdown.Content ableSearch={true} contentClasses="w-full" align="left">
-                            {jobLists
-                                .map(dep => dep.department)
-                                .filter(
-                                department => department && department.toUpperCase() !== "NULL"
-                                )
-                                .map((department, index) => (
-                                <button
-                                    key={index}
-                                    type="button"
-                                    id="assigned_department"
-                                    name="assigned_department"
-                                    onClick={() => {
-                                    setselectDepartment(department);
-                                    setData("assigned_department", department); 
-                                    }}
-                                    className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
+                {/* Employment Type Selector */}
+                <div className="px-6">
+                    <InputWrapper className="p-3 flex">
+                        <div className="w-full">
+                            <InputLabel
+                                htmlFor="salary_type"
+                                value="Salary Type *"
+                                className="text-white"
+                            />
+                            <Dropdown>
+                                <Dropdown.Trigger>
+                                    <button
+                                        type="button"
+                                        className="bg-transparent w-full border text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full"
+                                    >
+                                        <p className="text-sm">{activeTab}</p>
+                                        <RiArrowDropDownLine className="text-2xl" />
+                                    </button>
+                                </Dropdown.Trigger>
+                                <Dropdown.Content
+                                    ableSearch
+                                    contentClasses=" w-full max-h-[200px] overflow-y-auto p-0"
+                                    align="left"
                                 >
-                                    {department}
-                                </button>
-                                ))}
-                            </Dropdown.Content>
-                        </Dropdown>
-                    </div>
-                    <div className="w-full my-2">
-                        <InputLabel htmlFor="assigned_department" value="Department *" className='text-white' />
-                        <Dropdown>
-                            <Dropdown.Trigger>
-                                <button type="button" className="bg-transparent border w-full text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
-                                    <p className='text-sm'>{selectDesignation}</p>
-                                    <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`}/>
-                                </button>
-                            </Dropdown.Trigger> 
-                            <Dropdown.Content ableSearch={true} contentClasses="w-full" align="left">
-                            {jobLists
-                                .map(des => des.designation)
-                                .filter(
-                                designation => designation && designation.toUpperCase() !== "NULL"
-                                )
-                                .map((designation, index) => (
-                                <button
-                                    key={index}
-                                    type="button"
-                                    id="assigned_designation"
-                                    name="assigned_designation"
-                                    onClick={() => {
-                                    setselectDesignation(designation);
-                                    setData("assigned_designation", designation); 
-                                    }}
-                                    className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
-                                >
-                                    {designation}
-                                </button>
-                                ))}
-                            </Dropdown.Content>
-                        </Dropdown>
-                    </div>
-                    <TextInputGroup
-                    label="Hourly Rate"
-                    id="hourly_rate"
-                    name="hourly_rate"
-                    onChange={handleInputChange}
-                    value={data.hourly_rate}
-                    disabled={disableInput}
-                    />
-                    <TextInputGroup 
-                    name="units" 
-                    label="Units" 
-                    id="units" 
-                    onChange={handleInputChange} 
-                    value={data.units}
-                    disabled={disableInput}
-                    />
-                    <TextInputGroup
-                    name="service_rendered"
-                    label="Service Rendered"
-                    id="service_rendered"
-                    value={data.service_rendered}
-                    onChange={handleInputChange}
-                    disabled={disableInput}
-                    />
-                    <TextInputGroup
-                    name="pera"
-                    label="PERA"
-                    id="pera"
-                    value={data.pera}
-                    onChange={handleInputChange}
-                    disabled={disableInput}
-                    />
+                                    {["Regular", "Part-Time", "Job Order"].map((field, index) => (
+                                        <button
+                                            key={index}
+                                            type="button"
+                                            onClick={() => handleEmploymentType(field)}
+                                            className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
+                                        >
+                                            {field}
+                                        </button>
+                                    ))}
+                                </Dropdown.Content>
+                            </Dropdown>
+                        </div>
+                    </InputWrapper>
                 </div>
-                </InputWrapper>
-                {renderSectionFields()}
-                {renderFooter()}
             </div>
-        </form>
-        )}
 
-        {/* Job Order */}
-        {activeTab === "Job Order" && (
-            <form>
-            <div className="p-6 space-y-4">
-                <InputWrapper className="justify-between p-3 w-full text-white">
-                <p>Earning</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-                    {renderEmployeeDropdown()}
-                    <TextInputGroup
-                    label="Daily Rate"
-                    id="daily_rate"
-                    name="daily_rate"
-                    value={data.daily_rate}
-                    onChange={handleInputChange}
-                    disabled={disableInput}
-                    />
-                    <TextInputGroup
-                    label="Duty Count"
-                    id="duty_count"
-                    name="duty_count"
-                    value={data.duty_count}
-                    onChange={handleInputChange}
-                    disabled={disableInput}
-                    />
-                    <TextInputGroup
-                    name="pera"
-                    label="PERA"
-                    id="pera"
-                    value={data.pera}
-                    onChange={handleInputChange}
-                    disabled={disableInput}
-                    />
-                </div>
-                </InputWrapper>
-                {renderSectionFields()}
-                {renderFooter()}
-            </div>
-            </form>
-        )}
+            {/* Regular */}
+            {activeTab === "Regular" && (
+                <form>
+                    <div className="p-6 space-y-4">
+                        <InputWrapper className="justify-between p-3 w-full text-white">
+                            <p>Earning</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                                {renderEmployeeDropdown()}
+                                <TextInputGroup
+                                    label="Basic Salary"
+                                    id="basic_pay"
+                                    name="basic_pay"
+                                    value={data.basic_pay}
+                                    disabled
+                                />
+                                <TextInputGroup
+                                    name="pera"
+                                    label="PERA"
+                                    id="pera"
+                                    value={data.pera}
+                                    onChange={handleInputChange}
+                                    disabled={disableInput}
+                                />
+                            </div>
+                        </InputWrapper>
+                        {renderSectionFields()}
+                        {renderFooter()}
+                    </div>
+                </form>
+            )}
+
+            {/* Part-Time */}
+            {activeTab === "Part-Time" && (
+                <form>
+                    <div className="p-6 space-y-4">
+                        <InputWrapper className="justify-between p-3 w-full text-white">
+                            <p>Earning</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                                {renderEmployeeDropdown()}
+                                <div className="w-full my-2">
+                                    <InputLabel htmlFor="assigned_department" value="Department *" className='text-white' />
+                                    <Dropdown>
+                                        <Dropdown.Trigger>
+                                            <button type="button" className="bg-transparent border w-full text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                                <p className='text-sm'>{selectDepartment}</p>
+                                                <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`} />
+                                            </button>
+                                        </Dropdown.Trigger>
+                                        <Dropdown.Content ableSearch={true} contentClasses="w-full" align="left">
+                                            {jobLists
+                                                .map(dep => dep.department)
+                                                .filter(
+                                                    department => department && department.toUpperCase() !== "NULL"
+                                                )
+                                                .map((department, index) => (
+                                                    <button
+                                                        key={index}
+                                                        type="button"
+                                                        id="assigned_department"
+                                                        name="assigned_department"
+                                                        onClick={() => {
+                                                            setselectDepartment(department);
+                                                            setData("assigned_department", department);
+                                                        }}
+                                                        className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
+                                                    >
+                                                        {department}
+                                                    </button>
+                                                ))}
+                                        </Dropdown.Content>
+                                    </Dropdown>
+                                </div>
+                                <div className="w-full my-2">
+                                    <InputLabel htmlFor="assigned_department" value="Department *" className='text-white' />
+                                    <Dropdown>
+                                        <Dropdown.Trigger>
+                                            <button type="button" className="bg-transparent border w-full text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
+                                                <p className='text-sm'>{selectDesignation}</p>
+                                                <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`} />
+                                            </button>
+                                        </Dropdown.Trigger>
+                                        <Dropdown.Content ableSearch={true} contentClasses="w-full" align="left">
+                                            {jobLists
+                                                .map(des => des.designation)
+                                                .filter(
+                                                    designation => designation && designation.toUpperCase() !== "NULL"
+                                                )
+                                                .map((designation, index) => (
+                                                    <button
+                                                        key={index}
+                                                        type="button"
+                                                        id="assigned_designation"
+                                                        name="assigned_designation"
+                                                        onClick={() => {
+                                                            setselectDesignation(designation);
+                                                            setData("assigned_designation", designation);
+                                                        }}
+                                                        className="w-full px-4 py-2 text-left hover:bg-white text-white hover:text-black"
+                                                    >
+                                                        {designation}
+                                                    </button>
+                                                ))}
+                                        </Dropdown.Content>
+                                    </Dropdown>
+                                </div>
+                                <TextInputGroup
+                                    label="Hourly Rate"
+                                    id="hourly_rate"
+                                    name="hourly_rate"
+                                    onChange={handleInputChange}
+                                    value={data.hourly_rate}
+                                    disabled={disableInput}
+                                />
+                                <TextInputGroup
+                                    name="units"
+                                    label="Units"
+                                    id="units"
+                                    onChange={handleInputChange}
+                                    value={data.units}
+                                    disabled={disableInput}
+                                />
+                                <TextInputGroup
+                                    name="service_rendered"
+                                    label="Service Rendered"
+                                    id="service_rendered"
+                                    value={data.service_rendered}
+                                    onChange={handleInputChange}
+                                    disabled={disableInput}
+                                />
+                                <TextInputGroup
+                                    name="pera"
+                                    label="PERA"
+                                    id="pera"
+                                    value={data.pera}
+                                    onChange={handleInputChange}
+                                    disabled={disableInput}
+                                />
+                            </div>
+                        </InputWrapper>
+                        {renderSectionFields()}
+                        {renderFooter()}
+                    </div>
+                </form>
+            )}
+
+            {/* Job Order */}
+            {activeTab === "Job Order" && (
+                <form>
+                    <div className="p-6 space-y-4">
+                        <InputWrapper className="justify-between p-3 w-full text-white">
+                            <p>Earning</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                                {renderEmployeeDropdown()}
+                                <TextInputGroup
+                                    label="Daily Rate"
+                                    id="daily_rate"
+                                    name="daily_rate"
+                                    value={data.daily_rate}
+                                    onChange={handleInputChange}
+                                    disabled={disableInput}
+                                />
+                                <TextInputGroup
+                                    label="Duty Count"
+                                    id="duty_count"
+                                    name="duty_count"
+                                    value={data.duty_count}
+                                    onChange={handleInputChange}
+                                    disabled={disableInput}
+                                />
+                                <TextInputGroup
+                                    name="pera"
+                                    label="PERA"
+                                    id="pera"
+                                    value={data.pera}
+                                    onChange={handleInputChange}
+                                    disabled={disableInput}
+                                />
+                            </div>
+                        </InputWrapper>
+                        {renderSectionFields()}
+                        {renderFooter()}
+                    </div>
+                </form>
+            )}
         </Modal>
     );
 }

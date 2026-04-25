@@ -152,16 +152,14 @@ class PayrollRepository implements PayrollRepositoryInterface{
         $user = $this->userRepository->findById($data['user_id']);
         $salary = $user->basic_pay;
 
-          $rlipContribution = $this->contributionTypeRepo->rlipDeduction($salary);
-          $philContribution = $this->contributionTypeRepo->philDeduction($salary);
-          $totalContribution = $rlipContribution + $philContribution;
+        //   $rlipContribution = $this->contributionTypeRepo->rlipDeduction($salary);
+        //   $philContribution = $this->contributionTypeRepo->philDeduction($salary);
+          $totalContribution = $data['rlip'] + $data['philhealth'];
 
           $totalAccruedPeriod = $salary + ($data['pera'] ?? 0);
           $totalDeduction = $this->payrollDeductionRepo->calculateTotalDeduction($data,$totalContribution);
           $netPay = $totalAccruedPeriod - $totalDeduction;
 
-           $data['rlip'] = $rlipContribution;
-           $data['philhealth'] = $philContribution;
            $data['basic_salary'] = $salary;
 
         $payroll = $this->payrollModel($id);

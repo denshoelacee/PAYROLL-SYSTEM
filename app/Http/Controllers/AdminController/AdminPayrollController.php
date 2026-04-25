@@ -29,7 +29,7 @@ class AdminPayrollController extends Controller
      */
     public function savePartial(EditPublishRequest $request)
     {
-
+        // dd($request);
        $this->payrollService->storePartial($request->validated());
 
     }
@@ -103,6 +103,7 @@ class AdminPayrollController extends Controller
      */
     public function editedPartialPublish(EditPublishRequest $request, $id): RedirectResponse
     {
+       //dd($request);
         $validated = $request->validated();
         $validated['publish_status'] = $request->input('publish_status');
 

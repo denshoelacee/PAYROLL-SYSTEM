@@ -55,7 +55,7 @@ class PayrollService
 
     public function storePartial(array $data)
     {
-
+        //dd($data);
         $user = $this->userRepository->findById($data['user_id']);
            $salary = $user->basic_pay;
 
@@ -81,8 +81,8 @@ class PayrollService
 
        $data['payslip_id'] = $generateId['id'];
        $data['payslip_type'] = $generateId['type'];
-       $data['rlip'] = $contribution['rlip'];      
-       $data['philhealth'] = $contribution['philhealth'];
+      //  $data['rlip'] = $contribution['rlip'];      
+      //  $data['philhealth'] = $contribution['philhealth'];
        $data['basic_salary'] = $salary;
        $data['assigned_designation'] = $jobAssigned['designation'];
        $data['assigned_department'] = $jobAssigned['department'];
@@ -100,6 +100,7 @@ class PayrollService
 
     public function publish(array $data):void
     {
+        // dd($data);
 
          $user = $this->userRepository->findById($data['user_id']);
           $salary = $user->basic_pay;
@@ -126,8 +127,8 @@ class PayrollService
 
        $data['payslip_id'] = $generateId['id'];
        $data['payslip_type'] = $generateId['type'];
-       $data['rlip'] = $contribution['rlip'];      
-       $data['philhealth'] = $contribution['philhealth'];
+      //  $data['rlip'] = $contribution['rlip'];      
+      //  $data['philhealth'] = $contribution['philhealth'];
        $data['basic_salary'] = $salary;
        $data['assigned_designation'] = $jobAssigned['designation'];
        $data['assigned_department'] = $jobAssigned['department'];

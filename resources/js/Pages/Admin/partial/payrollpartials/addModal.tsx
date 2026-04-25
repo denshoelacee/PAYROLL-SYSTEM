@@ -20,6 +20,8 @@ interface Props {
     filteredEmployementType: filteredSelectedTypeUser[];
     jobLists: JobTitles[];
     statutoryDeductions: { rlip: number; philhealth: number }
+    selectedYear: string;
+    selectedMonth: string;
 }
 
 const fillable = {
@@ -77,7 +79,9 @@ export default function PayrollAddModal({
     onClose,
     filteredEmployementType,
     jobLists,
-    statutoryDeductions
+    statutoryDeductions,
+    selectedYear,
+    selectedMonth
 }: Props) {
     const [selectName, setSelectName] = useState("Select Employee");
     const [disableInput, setDisableInput] = useState(true);
@@ -317,6 +321,8 @@ useEffect(() => {
 
             const requestPayload = {
                 ...data,
+                rlip : data.rlip,
+                philhealth : data.philhealth,
                 philhealth_auto: autoPhilhealthChecked,
                 rlip_auto: autoRlipChecked,
             };
@@ -488,6 +494,29 @@ useEffect(() => {
     );
 
     if (!show) return null;
+    const getMonthName = (month: number | string) => {
+    const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ];
+
+    const index = Number(month) - 1;
+
+    return months[index] || "";
+};
+const modalTitle = useMemo(() => {
+    return `Payroll Entry — ${selectName || "Employee"} (${activeTab || "Type"}) — ${getMonthName(selectedMonth)} ${selectedYear}`;
+}, [activeTab, selectName, selectedYear, selectedMonth]);
 
     return (
         <Modal
@@ -499,7 +528,7 @@ useEffect(() => {
             {/* Header */}
             <div>
                 <div className="px-6 py-5 flex justify-between">
-                    <h2 className="text-lg text-white">New Payroll</h2>
+                    <h2 className="text-lg text-white">{modalTitle}</h2>
                     <IoMdClose
                         color="white"
                         className="cursor-pointer text-2xl"

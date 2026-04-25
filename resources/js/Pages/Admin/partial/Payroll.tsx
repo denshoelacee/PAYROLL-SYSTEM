@@ -216,11 +216,13 @@ export default function PayrollPartial ({jobLists,newPayroll,payslips=[],availab
                 filteredEmployementType={filteredEmployementType}
                 jobLists={jobLists}
                 statutoryDeductions={statutoryDeductions}
+                selectedYear={selectedYear}
+                selectedMonth={selectedMonth}
                 />
             )}
             {/*Edit Modal */}
             {editModal && selectedRow && (
-                <PayrollEditModal statutoryDeductions={statutoryDeductions} show={editModal} onClose={() => {setEditModal(false); router.get(route("admin.payroll")); }
+                <PayrollEditModal selectedMonth={selectedMonth} selectedYear={selectedYear} statutoryDeductions={statutoryDeductions} show={editModal} onClose={() => {setEditModal(false); router.get(route("admin.payroll"));  }
                 } row={selectedRow as any} />
             )}
 

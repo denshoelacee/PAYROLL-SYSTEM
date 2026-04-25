@@ -3,7 +3,7 @@ import InputWrapper from "@/Components/InputWrapper";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInputGroup from "@/Components/TextInputGroup";
 import { IoMdClose } from "react-icons/io";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { router, useForm } from "@inertiajs/react";
 import { fieldTitles, validFieldIds } from "./fieldTitles";
 interface Row {
@@ -28,6 +28,8 @@ interface Props {
         rlip: number;
         philhealth: number;
     };
+    selectedYear: string;
+    selectedMonth: string;
 }
 
 const fillable = {
@@ -76,7 +78,7 @@ const fillable = {
 }
 
 
-export default function PayrollEditModal({ show, onClose, row, statutoryDeductions }: Props) {
+export default function PayrollEditModal({ show, onClose, row, statutoryDeductions, selectedYear, selectedMonth }: Props) {
 const [autoPhilhealth, setAutoPhilhealth] = useState(true);
 const [autoRlip, setAutoRlip] = useState(true);
     const [submitTrigger, setSubmitTrigger] = useState<"partial" | "publish" | null>(null);
@@ -203,7 +205,10 @@ const [autoRlip, setAutoRlip] = useState(true);
         if (submitTrigger && data.publish_status === submitTrigger) {
             const requestPayload = {
                 ...data,
+                philhealth_auto: autoPhilhealth,
+                rlip_auto: autoRlip,
             };
+            console.log("Submitting with payload:", requestPayload);
             post(route("admin.payroll.update-partial-publish", data.payroll_id), {
                 data: requestPayload,
                 onSuccess: () => {
@@ -250,7 +255,7 @@ const [autoRlip, setAutoRlip] = useState(true);
                                     }
                                 />
 
-                                {(row?.payslip_type === "Part-Time" || row?.payslip_type === "Job Order" || row?.payslip_type === "Job Order|Part-Time") && (
+                                {(row?.payslip_type === "Part-Time" || row?.payslip_type === "Job Order" || row?.payslip_type === "Job Order|Part-Time" || row?.payslip_type === "Regular|Part-Time") && (
                                     <>
                                         {id === "philhealth" && (
                                             <label className="flex items-center gap-2 text-xs">
@@ -296,14 +301,37 @@ const [autoRlip, setAutoRlip] = useState(true);
         </div>
     )
     if (!show) return null;
+    const getMonthName = (month: number | string) => {
+    const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ];
 
+    const index = Number(month) - 1;
+
+    return months[index] || "";
+};
+
+const modalTitle = useMemo(() => {
+    return `Update Payroll — ${row?.full_name || "Employee"} (${row?.payslip_type || "Type"}) — ${getMonthName(selectedMonth)} ${selectedYear}`;
+}, [row?.payslip_type, row?.full_name, selectedYear, selectedMonth]);
     return (
         <Modal show={show} onClose={onClose} maxWidth="5xl" className="h-full">
             <form>
                 <div className="p-6 space-y-4 border rounded-lg">
                     <div className="flex justify-between">
                         <h2 className="text-lg font-bold mb-4 text-white">
-                            Edit Employee's Payroll - {row?.full_name}
+                            {modalTitle}
                         </h2>
                         <span onClick={onClose}>
                             <IoMdClose color="white" className="cursor-pointer text-2xl" />

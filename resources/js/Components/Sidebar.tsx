@@ -7,7 +7,7 @@ import { PageProps } from '@/types';
 import { Link } from 'lucide-react';
 import NavLink from './NavLink';
 export default React.memo(function Sidebar({ auth }: PageProps) {
-
+  
   const linkClass = (isActive: boolean) =>
     `inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition duration-300 ease-in-out  ${
       isActive ? 'bg-[#006654] hover:bg-[#006654] text-white' : 'text-white hover:bg-[#006654]'
@@ -52,9 +52,7 @@ export default React.memo(function Sidebar({ auth }: PageProps) {
               </>
             ) : (
               <div className="p-2 ">
-                <a href='/' className='flex items-center justify-center'>
-                    <CtuLogo className='p-1 w-20 h-15'/>
-                </a>
+
                 
                 <div className="flex flex-col items-center  justify-center gap-5 h-[500px]">
                         <NavLink title="Dashboard" href={route('employee.dashboard')} className={linkClass(route().current('admin.department'))}>

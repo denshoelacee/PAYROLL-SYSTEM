@@ -59,13 +59,13 @@ class GeneratePayrollsReportService
         $userId = $this->getAuthUserId();
 
         $user = $this->userRepository->findById($userId);
-        if($user && $user->employment_type === 'Regular'){
+        //if($user && $user->employment_type === 'Regular'){
 
            return $this->payrollReportRepository->getContributionThisMonthById($userId);
 
-        }
         
-        return null;
+        
+        //return null;
 
     }
 

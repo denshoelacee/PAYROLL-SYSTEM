@@ -40,15 +40,16 @@ export default function Dashboard({ auth}: PageProps) {
         contributions: totalContribution
       }>>().props
 
+    console.log("🚀 ~ file: Dashboard.tsx:35 ~ Dashboard ~ contributions:", taxAndLoans)
   const sampleData: DataPoint[] = Array.from({ length: 12 }, (_, index) => {
     const month = index + 1
     const found = yearReports.find((item) => item.month === month)
 
     return {
       date: `${selectedYear}-${String(month).padStart(2, '0')}-01`,
-      NetPay: found ? found.net_pay : 0,
-      GrossPay: found ? found.total_gross : 0,
-      Deductions: found ? found.total_deduction : 0,
+      NetPay: found ? found?.net_pay : 0,
+      GrossPay: found ? found?.total_gross : 0,
+      Deductions: found ? found?.total_deduction : 0,
     }
   })
   function formatCurrency(amount: number): string {
@@ -73,7 +74,7 @@ export default function Dashboard({ auth}: PageProps) {
             <CardWrapper
               fontsize='text-sm'
               label={"Total Contribution this month"}
-              data={formatCurrency(contributions.total_contributions)}
+              data={formatCurrency(contributions?.total_contributions)}
               icon={
                 <div className='rounded-full border-white bg-amber-200 border h-14 w-14 place-items-center justify-center flex'>
                   <TbTax className='text-4xl text-yellow-400' />
@@ -85,7 +86,7 @@ export default function Dashboard({ auth}: PageProps) {
             <CardWrapper
               fontsize='text-sm'
               label={"Total Tax This Month"}
-              data={formatCurrency(taxAndLoans.tax)}
+              data={formatCurrency(taxAndLoans?.tax)}
               icon={
                 <div className='rounded-full border-white bg-amber-200 border h-14 w-14 place-items-center justify-center flex'>
                   <TbTax className='text-4xl text-yellow-400' />
@@ -97,7 +98,7 @@ export default function Dashboard({ auth}: PageProps) {
             <CardWrapper
               fontsize='text-sm'
               label={"Total Due Tax This Month"}
-              data={formatCurrency(taxAndLoans.due_tax)}
+              data={formatCurrency(taxAndLoans?.due_tax)}
               icon={
                 <div className='rounded-full border-white bg-rose-400 border h-14 w-14 place-items-center justify-center flex'>
                   <TbTax className='text-4xl text-white' />
@@ -109,7 +110,7 @@ export default function Dashboard({ auth}: PageProps) {
             <CardWrapper
               fontsize='text-sm'
               label={"Total Loans This Month"}
-              data={formatCurrency(taxAndLoans.loan)}
+              data={formatCurrency(taxAndLoans?.loan)}
               icon={
                 <div className='rounded-full border-white bg-emerald-800 border h-14 w-14 place-items-center justify-center flex'>
                   <HiOutlineBanknotes className='text-5xl text-white' />

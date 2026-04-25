@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use App\Notifications\NewUserApprovalNotification;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Illuminate\Support\Facades\Auth;
-
 
 class HandleInertiaRequests extends Middleware
 {
@@ -45,6 +45,9 @@ class HandleInertiaRequests extends Middleware
                 'error' => $request->session()->get('error'),
                 'information' => $request->session()->get('information'),
                 'warning' => $request->session()->get('warning'),
+            ],
+            'stats' => [
+                  'pendingApprovals' => User::where('status', 'pending')->count(),
             ],
         ]);
     }

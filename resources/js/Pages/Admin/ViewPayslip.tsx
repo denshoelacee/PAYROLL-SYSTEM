@@ -436,7 +436,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                         <div className="mx-5 w-full rounded-lg h-full text-white">
                             <p className="text-md md:text-lg">HDMF</p>
                             <div className="flex flex-col w-full justify-between text-xs lg:text-[14px]">
-                                {shouldDisplay(payslip.contributions) && <DisplayItem label="Contributions" value={format(payslip.contributions)} />}
+                                {shouldDisplay(payslip.contributions) && <DisplayItem label="Pag-IBIG" value={format(payslip.contributions)} />}
                                 {shouldDisplay(payslip.loans) && <DisplayItem label="LOANS" value={format(payslip.loans)} />}
                                 {shouldDisplay(payslip.housing_loan) && <DisplayItem label="Housing Loan" value={format(payslip.housing_loan)} />}
                             </div>

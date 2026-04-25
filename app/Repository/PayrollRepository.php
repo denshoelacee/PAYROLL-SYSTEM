@@ -141,7 +141,25 @@ class PayrollRepository implements PayrollRepositoryInterface{
     public function updatePartial(array $data,$id): void
     {
 
-       $payroll = $this->payrollModel($id);
+       $user = $this->userRepository->findById($data['user_id']);
+        $salary = $user->basic_pay;
+
+        //   $rlipContribution = $this->contributionTypeRepo->rlipDeduction($salary);
+        //   $philContribution = $this->contributionTypeRepo->philDeduction($salary);
+          $totalContribution = $data['rlip'] + $data['philhealth'];
+
+          $totalAccruedPeriod = $salary + ($data['pera'] ?? 0);
+          $totalDeduction = $this->payrollDeductionRepo->calculateTotalDeduction($data,$totalContribution);
+          $netPay = $totalAccruedPeriod - $totalDeduction;
+
+           $data['basic_salary'] = $salary;
+
+        $payroll = $this->payrollModel($id);
+        $payroll->deduction()->update([
+            'total_accrued_period' => $totalAccruedPeriod,
+            'total_deduction' => $totalDeduction,
+            'net_pay' => $netPay
+       ]);
        $payroll->update($data);
 
     }

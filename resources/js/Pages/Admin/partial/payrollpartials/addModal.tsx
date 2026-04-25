@@ -625,7 +625,7 @@ const modalTitle = useMemo(() => {
                                                 <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`} />
                                             </button>
                                         </Dropdown.Trigger>
-                                        <Dropdown.Content ableSearch={true} contentClasses="w-full" align="left">
+                                        <Dropdown.Content ableSearch={true} contentClasses=" w-full max-h-[200px] overflow-y-auto p-0" align="left">
                                             {jobLists
                                                 .map(dep => dep.department)
                                                 .filter(
@@ -650,7 +650,7 @@ const modalTitle = useMemo(() => {
                                     </Dropdown>
                                 </div>
                                 <div className="w-full my-2">
-                                    <InputLabel htmlFor="assigned_department" value="Department *" className='text-white' />
+                                    <InputLabel htmlFor="assigned_department" value="Designation *" className='text-white' />
                                     <Dropdown>
                                         <Dropdown.Trigger>
                                             <button type="button" className="bg-transparent border w-full text-white border-button-border-color rounded-lg py-1.5 px-3 flex justify-between items-center md:w-full">
@@ -658,7 +658,7 @@ const modalTitle = useMemo(() => {
                                                 <RiArrowDropDownLine className={`text-2xl transition-transform duration-500 ease-in-out`} />
                                             </button>
                                         </Dropdown.Trigger>
-                                        <Dropdown.Content ableSearch={true} contentClasses="w-full" align="left">
+                                        <Dropdown.Content ableSearch={true} contentClasses=" w-full max-h-[200px] overflow-y-auto p-0" align="left">
                                             {jobLists
                                                 .map(des => des.designation)
                                                 .filter(

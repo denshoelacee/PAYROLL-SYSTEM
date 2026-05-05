@@ -215,10 +215,10 @@ export default function ManageUserPartial({ employees}: Props) {
                         Are you sure you want to {actionType} this user?    
                     </p>
                         <div className="flex justify-evenly gap-3 py-3">
-                            <PrimaryButton className="py-2"onClick={handleSubmitAction}>
+                            <PrimaryButton className="py-2 "onClick={handleSubmitAction}>
                             Confirm
                         </PrimaryButton>
-                        <PrimaryButton onClick={handleClose}>
+                        <PrimaryButton onClick={handleClose} >
                             Close
                         </PrimaryButton>
                         </div>

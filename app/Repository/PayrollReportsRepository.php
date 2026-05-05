@@ -68,7 +68,8 @@ class PayrollReportsRepository implements PayrollReportsRepositoryInterface
                     COALESCE(landbank, 0) + 
                     COALESCE(ucpb, 0) + 
                     COALESCE(cfi, 0) + 
-                    COALESCE(tipid, 0)
+                    COALESCE(tipid, 0)+
+                    COALESCE(sss,0)
                 ), 0) AS totalLoan
             ')
             ->where('publish_status', 'publish')
@@ -134,6 +135,7 @@ class PayrollReportsRepository implements PayrollReportsRepositoryInterface
                 'payrolls.disallowance', 'payrolls.unliquidated_ca',
                 'payrolls.disallowance_honoraria', 'payrolls.coop',
                 'payrolls.landbank', 'payrolls.ucpb',
+                'payrolls.sss',
                 // Totals
                 'payroll_deductions.total_accrued_period as gross_salary',
                 'payroll_deductions.total_deduction', 
@@ -206,7 +208,8 @@ class PayrollReportsRepository implements PayrollReportsRepositoryInterface
                     COALESCE(landbank, 0) + 
                     COALESCE(ucpb, 0) + 
                     COALESCE(cfi, 0) + 
-                    COALESCE(tipid, 0)
+                    COALESCE(tipid, 0) + 
+                    COALESCE(sss, 0)
                 ), 0) AS loan
              ')
             ->where('user_id', $userId)

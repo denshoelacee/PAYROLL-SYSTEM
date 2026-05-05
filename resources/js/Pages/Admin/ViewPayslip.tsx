@@ -63,6 +63,7 @@ interface PayslipPageProps extends PageProps {
 }
 
 export default function Payslip({ auth, payslip }: PayslipPageProps) {
+
     // Only render if payslip data exists
     const isRegularOrPart = payslip.payslip_type.includes("Regular") || payslip.payslip_type.includes("Part-Time");
     const isJobOrder = payslip.payslip_type.includes("Job Order");
@@ -81,7 +82,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
             </>
         );
     }
-
+    console.log("PAYSLIP",payslip)
     const handleDownloadPDF = () => {
         const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
         const pageHeight = doc.internal.pageSize.getHeight();
@@ -194,7 +195,9 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
         addSectionTitle("Deductions");
         if (shouldDisplay(payslip.absent)) addText("Absences w/o pay", payslip.absent ?? 0);
         if (shouldDisplay(payslip.holding_tax)) addText("W/holding Tax", payslip.holding_tax ??0);
+        if (shouldDisplay(payslip.tax_bal_due)) addText("Tax Balance Due", payslip.tax_bal_due ?? 0);
         if (shouldDisplay(payslip.late)) addText("Late/Undertime", payslip.late?? 0);
+
         
         y -= 10;
         
@@ -211,7 +214,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
         y -= 10;
         
         addSectionTitle("HDMF");
-        if (shouldDisplay(payslip.contributions)) addText("Contributions", payslip.contributions ?? 0);
+        if (shouldDisplay(payslip.contributions)) addText("Pag-IBIG", payslip.contributions ?? 0);
         if (shouldDisplay(payslip.loans)) addText("Loans", payslip.loans ?? 0);
         if (shouldDisplay(payslip.housing_loan)) addText("Housing Loan", payslip.housing_loan ?? 0);
         
@@ -306,14 +309,14 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
             if (payslipId?.toString().endsWith("-01")) {
             return (
                 <p className="text-end text-sm">
-                    {ranges[0]} {netPay}
+                    {ranges[0]} {format(netPay)}
                 </p>
             );
             }
             if (payslipId?.toString().endsWith("-02")) {
                 return (
                     <p className="text-end text-sm">
-                        {ranges[1]} {netPay}
+                        {ranges[1]} {format(netPay)}
                     </p>
                 );
             }
@@ -409,6 +412,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                             <div className="w-full flex flex-col justify-between text-xs lg:text-[14px]">
                                 {shouldDisplay(payslip.absent) && <DisplayItem label="Absences w/o pay" value={format(payslip.absent)} />}
                                 {shouldDisplay(payslip.holding_tax) && <DisplayItem label="W/holding Tax" value={format(payslip.holding_tax)} />}
+                                {shouldDisplay(payslip.tax_bal_due) && <DisplayItem label="Tax Balance Due" value={format(payslip.tax_bal_due)} />}
                                 {shouldDisplay(payslip.late) && <DisplayItem label="Late/Undertime" value={format(payslip.late)} />}
                             </div>
                         </div>
@@ -472,7 +476,7 @@ export default function Payslip({ auth, payslip }: PayslipPageProps) {
                             {isRegularOrPart ? (
                                 getHalfMonthRanges().map((range, i) => (
                                     <p key={i} className="text-end text-xs lg:text-[14px]">
-                                        {range} {(Number(payslip.net_pay) / 2).toFixed(2)}
+                                        {range} {format((Number(payslip.net_pay) / 2).toFixed(2))}
                                     </p>
                                 ))
                             ) : isJobOrder ? (

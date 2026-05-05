@@ -14,7 +14,7 @@ class PayrollDeductionRepository implements PayrollDeductionRepositoryInterface
     }
 
     public function calculateTotalAccruedPeriod(array $data):float
-    {
+    {   
          $basic = isset($data['basic_salary']) ? floatval($data['basic_salary']) : 0;
          $pera = isset($data['pera']) ? floatval($data['pera']) : 0;
 
@@ -49,6 +49,12 @@ class PayrollDeductionRepository implements PayrollDeductionRepositoryInterface
         'coop',
         'landbank',
         'ucpb',
+        // 'philhealth',
+        // 'rlip',
+        'sss',
+        'deduction1',
+        'deduction2',
+        'deduction3',
     ];
 
     $total = 0;

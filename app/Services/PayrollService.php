@@ -75,9 +75,9 @@ class PayrollService
             throw new \Exception('User not found');
           }
 
-         $contribution = $this->calculateContributionDeduction($salary, $data['employment_type']);
+    $totalContribution = $data['rlip'] + $data['philhealth'];
 
-         $payData = $this->calculateSalaryAndDeduction($data, $contribution['totalContribution']);
+         $payData = $this->calculateSalaryAndDeduction($user, $data, $totalContribution);
 
        $data['payslip_id'] = $generateId['id'];
        $data['payslip_type'] = $generateId['type'];
@@ -120,10 +120,9 @@ class PayrollService
           if (!$user){
             throw new \Exception('User not found');
           }
-
-          $contribution = $this->calculateContributionDeduction($salary, $data['employment_type']);
-
-         $payData = $this->calculateSalaryAndDeduction($data, $contribution['totalContribution']);
+          // $contribution = $this->calculateContributionDeduction($salary, $data['employment_type']);
+        
+         $payData = $this->calculateSalaryAndDeduction($user, $data);
 
        $data['payslip_id'] = $generateId['id'];
        $data['payslip_type'] = $generateId['type'];

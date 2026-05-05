@@ -77,7 +77,7 @@ export default function Table({
                     color: 'white',
                     },
 
-                    '& .MuiDataGrid-columnHeaders': {
+                    '& .MuiDataGrid-columnHeaders253': {
                     fontSize: 13,
                     border: 'none !important',
                     backgroundColor: tableColor

@@ -10,9 +10,11 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Payroll;
 use App\Models\User;
 use Carbon\Carbon;
+use App\Traits\PayrollDeduction;
 
 class PayrollRepository implements PayrollRepositoryInterface{
 
+    use PayrollDeduction;
 
     public function __construct(
         protected UserRepositoryInterface             $userRepository,
@@ -138,53 +140,43 @@ class PayrollRepository implements PayrollRepositoryInterface{
 
     }
 
-    public function updatePartial(array $data,$id): void
-    {
+public function updatePartial(array $data, $id): void
+{   
+    $user = $this->userRepository->findById($data['user_id']);
 
-       $user = $this->userRepository->findById($data['user_id']);
-        $salary = $user->basic_pay;
+    $totalContribution = $data['rlip'] + $data['philhealth'];
 
-        //   $rlipContribution = $this->contributionTypeRepo->rlipDeduction($salary);
-        //   $philContribution = $this->contributionTypeRepo->philDeduction($salary);
-          $totalContribution = $data['rlip'] + $data['philhealth'];
+    $result = $this->calculateSalaryAndDeduction($user, $data, $totalContribution);
 
-          $totalAccruedPeriod = $salary + ($data['pera'] ?? 0);
-          $totalDeduction = $this->payrollDeductionRepo->calculateTotalDeduction($data,$totalContribution);
-          $netPay = $totalAccruedPeriod - $totalDeduction;
 
-           $data['basic_salary'] = $salary;
+    $payroll = $this->payrollModel($id);
 
-        $payroll = $this->payrollModel($id);
-        $payroll->deduction()->update([
-            'total_accrued_period' => $totalAccruedPeriod,
-            'total_deduction' => $totalDeduction,
-            'net_pay' => $netPay
-       ]);
-       $payroll->update($data);
+    $payroll->deduction()->update([
+        'total_accrued_period' => $result['grossPay'],
+        'total_deduction' => $result['totalDeduction'],
+        'net_pay' => $result['netPay'],
+    ]);
 
-    }
+    $payroll->update($data);
+}
 
     public function updatePublish(array $data,$id): void
     {
 
         $user = $this->userRepository->findById($data['user_id']);
-        $salary = $user->basic_pay;
 
         //   $rlipContribution = $this->contributionTypeRepo->rlipDeduction($salary);
         //   $philContribution = $this->contributionTypeRepo->philDeduction($salary);
           $totalContribution = $data['rlip'] + $data['philhealth'];
 
-          $totalAccruedPeriod = $salary + ($data['pera'] ?? 0);
-          $totalDeduction = $this->payrollDeductionRepo->calculateTotalDeduction($data,$totalContribution);
-          $netPay = $totalAccruedPeriod - $totalDeduction;
+        $result = $this->calculateSalaryAndDeduction($user,$data, $totalContribution);
 
-           $data['basic_salary'] = $salary;
 
         $payroll = $this->payrollModel($id);
         $payroll->deduction()->update([
-            'total_accrued_period' => $totalAccruedPeriod,
-            'total_deduction' => $totalDeduction,
-            'net_pay' => $netPay
+            'total_accrued_period' => $result['grossPay'],
+            'total_deduction' => $result['totalDeduction'],
+            'net_pay' => $result['netPay']
        ]);
        $payroll->update($data);
     }

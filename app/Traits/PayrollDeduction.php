@@ -6,20 +6,21 @@ use InvalidArgumentException;
 trait PayrollDeduction
 {
         
-    public function calculateSalaryAndDeduction($data, $totalContributionDeduction)
+    public function calculateSalaryAndDeduction($user,$data)
     {
-        $totalDeduction = $this->calculateTotalDeduction($data, $totalContributionDeduction);
-        
+        $totalDeduction = $this->calculateTotalDeduction($data);
+
         switch($data['employment_type']) {
             case 'Regular':
-                $grossPay = $data['basic_pay'] + ($data['pera'] ?? 0);
+                $user = $data['basic_salary'] = $user->basic_pay;
+                $grossPay = $user + ($data['pera'] ?? 0);
                 break;
                 
-            case 'Job Order':
+            case 'Job Order' :
                 $grossPay = $this->calculateDailyWork($data['daily_rate'], $data['duty_count']);
                 break;
                 
-            case 'Part-Time':
+            case 'Part-Time' || 'Regular|Part-Time' || 'Job Order|Part-Time':
                 $grossPay = $this->calculateHourlyWork($data['hourly_rate'], $data['service_rendered']);
                 break;
                 
@@ -34,7 +35,7 @@ trait PayrollDeduction
         ];
     }
 
-    private function calculateTotalDeduction(array $data, float $totalContribution):float
+    private function calculateTotalDeduction(array $data):float
     {
          $deductionFields = [
             'absent',
@@ -62,6 +63,8 @@ trait PayrollDeduction
             'coop',
             'landbank',
             'ucpb',
+            'rlip',
+            'philhealth',
             'sss',
             'deduction1',
             'deduction2',
@@ -75,7 +78,7 @@ trait PayrollDeduction
             $total += $value;
         }
 
-        $total += $totalContribution;
+        // $total += $totalContribution;
 
         return round($total, 2);
     }

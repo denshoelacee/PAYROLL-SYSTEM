@@ -127,6 +127,7 @@ export default function Payslip({ auth }: PageProps) {
     addSectionTitle("Deductions");
     if (shouldDisplay(payroll.absent)) addText("Absences w/o pay", payroll.absent ?? 0);
     if (shouldDisplay(payroll.holding_tax)) addText("W/holding Tax", payroll.holding_tax ??0);
+    if (shouldDisplay(payroll.tax_bal_due)) addText("Tax Balance Due", payroll.tax_bal_due ?? 0);
     if (shouldDisplay(payroll.late)) addText("Late/Undertime", payroll.late?? 0);
     
     y -= 10;
@@ -310,6 +311,7 @@ return (
                         <div className="w-full flex flex-col justify-between text-sm lg:text-md">
                             {shouldDisplay(payroll?.absent) && <DisplayItem label="Absences w/o pay" value={format(payroll?.absent)} />}
                             {shouldDisplay(payroll?.holding_tax) && <DisplayItem label="W/holding Tax" value={format(payroll?.holding_tax)} />}
+                            {shouldDisplay(payroll?.tax_bal_due) && <DisplayItem label="Tax Balance Due" value={format(payroll?.tax_bal_due)} />}
                             {shouldDisplay(payroll?.late) && <DisplayItem label="Late/Undertime" value={format(payroll?.late)} />}
                         </div>
                 </div>

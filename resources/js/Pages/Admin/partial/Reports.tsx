@@ -30,7 +30,7 @@ export default function ReportsPartial({ selectedYear, availableYears, monthlySu
     const reloadReports = (year: string | number, tab: string) => {
         router.get(route("admin.payroll.summary"),{ year, payrollType: tab },{ preserveState: true });
     };
-
+    console.log("REPORTS",monthlySummary)
     const handleChangeYear = (year: number) => {
         reloadReports(year, activeTab);
     };
@@ -43,7 +43,6 @@ export default function ReportsPartial({ selectedYear, availableYears, monthlySu
     const handleView = (data: MonthlySummaryRow) => {
         router.visit(`payroll/${selectedYear}/${data.month}/view/summary?payrollType=${activeTab}`);
     };
-
     const columns: GridColDef[] = useMemo(
         () => [
             {

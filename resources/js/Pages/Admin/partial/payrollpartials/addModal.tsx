@@ -154,8 +154,8 @@ useEffect(() => {
             }
 
             setData("philhealth", philhealthValue.toFixed(2));
-            setAutoPhilhealthChecked(true);
-            setAutoRlipChecked(true);
+            // setAutoPhilhealthChecked(true);
+            // setAutoRlipChecked(true);
         } else {
             setData("philhealth", "0");
         }
@@ -706,14 +706,14 @@ const modalTitle = useMemo(() => {
                                     onChange={handleInputChange}
                                     disabled={disableInput}
                                 />
-                                <TextInputGroup
+                                {/* <TextInputGroup
                                     name="pera"
                                     label="PERA"
                                     id="pera"
                                     value={data.pera}
                                     onChange={handleInputChange}
                                     disabled={disableInput}
-                                />
+                                /> */}
                             </div>
                         </InputWrapper>
                         {renderSectionFields()}
@@ -746,14 +746,14 @@ const modalTitle = useMemo(() => {
                                     onChange={handleInputChange}
                                     disabled={disableInput}
                                 />
-                                <TextInputGroup
+                                {/* <TextInputGroup
                                     name="pera"
                                     label="PERA"
                                     id="pera"
                                     value={data.pera}
                                     onChange={handleInputChange}
                                     disabled={disableInput}
-                                />
+                                /> */}
                             </div>
                         </InputWrapper>
                         {renderSectionFields()}

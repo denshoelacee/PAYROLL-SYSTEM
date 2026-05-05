@@ -121,7 +121,7 @@ export default function Dashboard({ auth}: PageProps) {
           </div>
 
           <div className="flex w-full overflow-x-auto">
-            <div className="min-w-[1230px]"> {/* adjust width as needed */}
+            <div className="w-full min-w-[1230px] max-w-[122rem]"> {/* adjust width as needed */}
               <ChartAreaInteractive
                 data={sampleData}
                 selectedYear={selectedYear}

@@ -22,12 +22,38 @@ export default function generateregularmonthlyReport({activePayrollType,workshee
             footer: 0,
         };
         // Define header row
-            const headerRow = [
-            "No.", "Name", "Monthly Rate", "PERA","Gross Salary","Amount of Tardiness and Absences without pay", "W/ Holding TAX",
-            "Tax Balance Due", "GSIS - Life and Retirement",
-            "Pag-IBIG", "PHIC", "Other Deductions",
-            "Net Pay", "Signature of Employee"
-            ];
+          let headerRow: string[] = [];
+
+  switch (activePayrollType) {
+    case 'Regular':
+      headerRow = [
+        "No.", "Name", "Monthly Rate", "PERA", "Gross Salary",
+        "Tardiness/Absences", "W/ Holding TAX", "Tax Balance Due",
+        "GSIS", "Pag-IBIG", "PHIC",
+        "Other Deductions", "Net Pay", "Signature"
+      ];
+      break;
+
+    case 'Part-Time':
+    case 'Regular|Part-Time':
+    case 'Job Order|Part-Time':
+      headerRow = [
+        "No.", "Name", "Hourly Rate", "Service Rendered", "Gross Salary",
+        "Tardiness/Absences", "W/ Holding TAX", "Tax Balance Due",
+        "GSIS", "Pag-IBIG", "PHIC",
+        "Other Deductions", "Net Pay", "Signature"
+      ];
+      break;
+
+    case 'Job Order':
+      headerRow = [
+        "No.", "Name", "Daily Rate", "Duty Count", "Gross Salary",
+        "Tardiness/Absences", "W/ Holding TAX", "Tax Balance Due",
+        "GSIS", "Pag-IBIG", "PHIC",
+        "Other Deductions", "Net Pay", "Signature"
+      ];
+      break;
+  }
             //HEADER TITLE
             // Add title row if you want to display the selected month
             worksheet.mergeCells('A1:O1');
@@ -93,29 +119,54 @@ export default function generateregularmonthlyReport({activePayrollType,workshee
                     row.late,
                 ].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
                 const otherDeductionTotal = [
-                    row.loans,row.housing_loan,row.policy_loan,row.consol_loan,row.emerg_loan,row.gel,row.gfal,row.mpl,row.mpl_lite,row.cfi,row.tipid,row.city_savings_bank,row.fea,row.canteen,row.disallowance,row.unliquidated_ca,row.disallowance_honoraria,row.coop,row.landbank,row.ucpb
+                    row.loans,row.housing_loan,row.policy_loan,row.consol_loan,row.emerg_loan,row.gel,row.gfal,row.mpl,row.mpl_lite,row.cfi,row.tipid,row.city_savings_bank,row.fea,row.canteen,row.disallowance,row.unliquidated_ca,row.disallowance_honoraria,row.coop,row.landbank,row.ucpb,row.sss
                 ].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
-                const excelRow = worksheet.addRow([
-                    index + 1,
-                    row.employee_name ?? 0,
-                    row.basic_salary ?? 0,
-                    row.pera ?? 0,
-                    row.gross_salary ?? 0, 
-                    absentandLate,
-                    row.holding_tax ?? 0,
-                    row.tax_bal_due ?? 0,
-                    row.rlip ?? 0,
-                    row.contributions ?? 0,
-                    row.philhealth ?? 0,
-                    otherDeductionTotal,
-                    row.net_pay ?? 0,
-                    ''
-                    ]);
+                // ✅ Dynamic rate + extra
+    let rate = 0;
+    let extra = 0;
+
+    switch (activePayrollType) {
+      case 'Regular':
+        rate = row.basic_salary ?? 0;
+        extra = row.pera ?? 0;
+        break;
+
+      case 'Part-Time':
+      case 'Regular|Part-Time':
+      case 'Job Order|Part-Time':
+        rate = row.hourly_rate ?? 0;
+        extra = row.service_rendered ?? 0;
+        break;
+
+      case 'Job Order':
+        rate = row.daily_rate ?? 0;
+        extra = row.duty_count ?? 0;
+        break;
+    }
+
+    const excelRow = worksheet.addRow([
+      index + 1,
+      row.employee_name ?? '',
+       Number(rate),
+  Number(extra),
+  Number(row.gross_salary ?? 0),
+  Number(absentandLate),
+  Number(row.holding_tax ?? 0),
+  Number(row.tax_bal_due ?? 0),
+  Number(row.rlip ?? 0),
+  Number(row.contributions ?? 0),
+  Number(row.philhealth ?? 0),
+  Number(otherDeductionTotal),
+  Number(row.net_pay ?? 0),
+      ''
+    ]);
     
                 // Style the data row
                 excelRow.eachCell((cell, colNumber) => {
                 cell.alignment = { horizontal: 'right', wrapText: true };
-    
+    if (colNumber >= 3 && colNumber <= 13) {
+        cell.numFmt = '#,##0.00';
+    }
                 // Apply medium border only to Column A
                 if (colNumber === 1) {
                     cell.border = {
@@ -160,9 +211,9 @@ export default function generateregularmonthlyReport({activePayrollType,workshee
         //FOOTER
         // Compute footer totals
         const footerTotals = {
-            basic_salary :0,
-            pera :0,
-            gross_salary :0,
+            rate: 0,
+            extra: 0,
+            gross: 0,
             absentandLate :0, 
             holding_tax :0,
             tax_bal_due :0,
@@ -174,25 +225,43 @@ export default function generateregularmonthlyReport({activePayrollType,workshee
         };
     
         viewReport.forEach((row:any) => {
-            footerTotals.basic_salary   += parseFloat(row.basic_salary ?? 0);
-            footerTotals.pera           += parseFloat(row.pera ?? 0);
-            footerTotals.gross_salary   += parseFloat(row.gross_salary ?? 0);
-            footerTotals.absentandLate  += [row.absent,row.late,].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
+                switch (activePayrollType) {
+      case 'Regular':
+        footerTotals.rate += parseFloat(row.basic_salary ?? 0);
+        footerTotals.extra += parseFloat(row.pera ?? 0);
+        break;
+
+      case 'Part-Time':
+      case 'Regular|Part-Time':
+      case 'Job Order|Part-Time':
+        footerTotals.rate += parseFloat(row.hourly_rate ?? 0);
+        footerTotals.extra += parseFloat(row.service_rendered ?? 0);
+        break;
+
+      case 'Job Order':
+        footerTotals.rate += parseFloat(row.daily_rate ?? 0);
+        footerTotals.extra += parseFloat(row.duty_count ?? 0);
+        break;
+    }
+    footerTotals.gross += parseFloat(row.gross_salary ?? 0);
+    footerTotals.absentandLate  += [row.absent,row.late,].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
             footerTotals.holding_tax    += parseFloat(row.holding_tax ?? 0)
             footerTotals.tax_bal_due    += parseFloat(row.tax_bal_due?? 0)
             footerTotals.gsisrlipTotal      += parseFloat(row.rlip ?? 0)
             footerTotals.contributionspagibig      += parseFloat(row.contributions ?? 0)
             footerTotals.philhealth     += parseFloat(row.philhealth ?? 0);
-            footerTotals.other_deduction+= [row.loans,row.housing_loan,row.policy_loan,row.consol_loan,row.emerg_loan,row.gel,row.gfal,row.mpl,row.mpl_lite,row.cfi,row.tipid,row.city_savings_bank,row.fea,row.canteen,row.disallowance,row.unliquidated_ca,row.disallowance_honoraria,row.coop,row.landbank,row.ucpb].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
+            footerTotals.other_deduction+= [row.loans,row.housing_loan,row.policy_loan,row.consol_loan,row.emerg_loan,row.gel,row.gfal,row.mpl,row.mpl_lite,row.cfi,row.tipid,row.city_savings_bank,row.fea,row.canteen,row.disallowance,row.unliquidated_ca,row.disallowance_honoraria,row.coop,row.landbank,row.ucpb,row.sss].reduce((sum, val) => sum + parseFloat(val ?? 0), 0);
             footerTotals.net_pay        += parseFloat(row.net_pay ?? 0);
-        });
+  });
+           
+            
     
         const footerRow = worksheet.addRow([
             '', // No.
             'TOTAL:', // Name
-            footerTotals.basic_salary,
-            footerTotals.pera,
-            footerTotals.gross_salary,
+            footerTotals.rate,
+            footerTotals.extra,
+            footerTotals.gross,
             footerTotals.absentandLate,
             footerTotals.holding_tax,
             footerTotals.tax_bal_due,
@@ -207,6 +276,9 @@ export default function generateregularmonthlyReport({activePayrollType,workshee
             footerRow.eachCell((cell:any,colNumber:any) => {
                 cell.font = { bold: true };
                 cell.alignment = { horizontal: 'right', vertical: 'middle' };
+                if (colNumber >= 3 && colNumber <= 50) {
+        cell.numFmt = '#,##0.00';
+    }
                 cell.border = {
                     top: { style: 'medium' },
                     left: { style: 'medium' },
@@ -682,28 +754,39 @@ export default function generateregularmonthlyReport({activePayrollType,workshee
             
             }
     
-            const eStartRow = signatureStartRow + 10;
-            const eEndRow = eStartRow + 6;
-        
-    
-            const eDataCell = worksheet.getCell(`M${eStartRow}`);
-    
-            eDataCell.value =
-            'ORS/BURS No. : _______________\n' +
-            'Date         : _______________\n' +
-            '\n' +
-            'JEV No.      : _______________\n' +
-            'Date         : _______________';
-    
-            eDataCell.alignment = {
-            vertical: 'top',
-            horizontal: 'left',
-            wrapText: true
-            };
-    
-            // Set row height for visibility
-            for (let i = eStartRow; i <= eEndRow; i++) {
-            worksheet.getRow(i).height = 20;
-    }
+const eStartRow = signatureStartRow + 10;
+
+const eLines = [
+    'ORS/BURS No. : _______________',
+    'Date         : _______________',
+    '',
+    'JEV No.      : _______________',
+    'Date         : _______________'
+];
+
+eLines.forEach((text, index) => {
+    const row = eStartRow + index;
+
+    // ✅ Merge M and N
+    worksheet.mergeCells(`M${row}:N${row}`);
+
+    const cell = worksheet.getCell(`M${row}`);
+    cell.value = text;
+
+    cell.alignment = {
+        vertical: 'middle',
+        horizontal: 'left',
+        wrapText: true
+    };
+     cell.border = {
+        left: { style: 'medium' },
+        right: { style: 'medium' }
+    };
+});
+
+// Optional: set row height
+for (let i = 0; i < eLines.length; i++) {
+    worksheet.getRow(eStartRow + i).height = 20;
+}
     
 }

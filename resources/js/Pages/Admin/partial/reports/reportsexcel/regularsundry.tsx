@@ -111,33 +111,35 @@ export default function generateRegularSundry({ activePayrollType,worksheet2, he
         const excelRow = worksheet2.addRow([
             index + 1,
             row.employee_name ?? '',
-            row.policy_loan ?? 0,
-            row.consol_loan ?? 0,
-            row.emerg_loan ?? 0,
-            row.gel ?? 0,
-            row.gfal ?? 0,
-            row.mpl?? 0,
-            row.mpl_lite ?? 0,
-            row.loans ?? 0,
-            row.housing_loan ?? 0,
-            row.cfi ?? 0,
-            row.tipid ?? 0,
-            row.city_savings_bank ?? 0,
-            row.fea ?? 0,
-            row.canteen ?? 0,
-            row.disallowance ?? 0,
-            row.unliquidated_ca?? 0,
-            row.disallowance_honoraria?? 0,
-            row.coop ?? 0,
-            row.landbank ?? 0,
-            row.ucpb?? 0,
-            row.sss ?? 0,
-            otherdeductiontotal
+            Number(row.policy_loan ?? 0),
+            Number(row.consol_loan ?? 0),
+            Number(row.emerg_loan ?? 0),
+            Number(row.gel ?? 0),
+            Number(row.gfal ?? 0),
+            Number(row.mpl?? 0),
+            Number(row.mpl_lite ?? 0),
+            Number(row.loans ?? 0),
+            Number(row.housing_loan ?? 0),
+            Number(row.cfi ?? 0),
+            Number(row.tipid ?? 0),
+            Number(row.city_savings_bank ?? 0),
+            Number(row.fea ?? 0),
+            Number(row.canteen ?? 0),
+            Number(row.disallowance ?? 0),
+            Number(row.unliquidated_ca?? 0),
+            Number(row.disallowance_honoraria?? 0),
+            Number(row.coop ?? 0),
+            Number(row.landbank ?? 0),
+            Number(row.ucpb?? 0),
+            Number(row.sss ?? 0),
+            Number(otherdeductiontotal)
             ]);
 
             excelRow.eachCell((cell, colNumber) => {
                 cell.alignment = { horizontal: 'right', wrapText: true };
-    
+    if (colNumber >= 3 && colNumber <= 50) {
+        cell.numFmt = '#,##0.00';
+    }
                 // Apply medium border only to Column A
                 if (colNumber === 1) {
                     cell.border = {
@@ -264,6 +266,10 @@ export default function generateRegularSundry({ activePayrollType,worksheet2, he
                     bottom: { style: 'medium' },
                     right: { style: 'medium' },
                 };
+
+                if (colNumber >= 3 && colNumber <= 50) {
+        cell.numFmt = '#,##0.00';
+    }
                 if(colNumber === 2){
                     cell.alignment = {horizontal: 'center'}
                 }

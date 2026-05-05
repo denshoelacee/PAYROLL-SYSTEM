@@ -76,10 +76,10 @@ export default React.memo(function Sidebar({ auth }: PageProps) {
 
 
                 <div className="flex flex-col items-center  justify-center gap-5 h-[500px]">
-                  <NavLink title="Dashboard" href={route('employee.dashboard')} className={linkClass(route().current('admin.department'))}>
+                  <NavLink title="Dashboard" href={route('employee.dashboard')} className={linkClass(route().current('employee.dashboard'))}>
                     <FiGrid className='text-2xl text-white' />
                   </NavLink>
-                  <NavLink title="Payslips" href={route('employee.payslip.summary')} className={linkClass(route().current('admin.department'))} >
+                  <NavLink title="Payslips" href={route('employee.payslip.summary')} className={linkClass(route().current('employee.payslip.summary'))} >
                     <BiCoinStack className='font-black text-2xl text-white' />
                   </NavLink>
                 </div>

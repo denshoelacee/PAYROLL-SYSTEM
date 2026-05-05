@@ -340,7 +340,10 @@ const modalTitle = useMemo(() => {
 
                     <InputWrapper className="p-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 text-white">
                         {row?.payslip_type === "Regular" && (
+                            <>
                             <TextInputGroup label="Basic Salary" id="basic_pay" name="basic_pay" value={data?.basic_salary} disabled />
+                            <TextInputGroup name="pera" label="PERA" id="PERA" value={data?.pera} onChange={handleInputChange} />
+                            </>
                         )}
                         {(row?.payslip_type === "Regular|Part-Time" || row?.payslip_type === "Part-Time" || row?.payslip_type === "Job Order|Part-Time") && (
                             <>
@@ -355,7 +358,6 @@ const modalTitle = useMemo(() => {
                                 <TextInputGroup name="duty_count" label="Daily Count" id="duty_count" value={data?.duty_count} onChange={handleInputChange} />
                             </>
                         )}
-                        <TextInputGroup name="pera" label="PERA" id="PERA" value={data?.pera} onChange={handleInputChange} />
                     </InputWrapper>
                     {renderSectionFields()}
                     {renderFooter()}

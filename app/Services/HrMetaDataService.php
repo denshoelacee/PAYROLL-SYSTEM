@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Contracts\Repository\IContributionTypeRepository;
-use App\Contracts\Repository\IHrMetaDataRepository;
+use App\Contracts\Repositories\IContributionTypeRepository;
+use App\Contracts\Repositories\IHrMetaDataRepository;
 use App\Contracts\Services\IHrMetaDataService;
 
 class HrMetaDataService implements IHrMetaDataService

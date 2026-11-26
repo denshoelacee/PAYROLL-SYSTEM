@@ -39,11 +39,11 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof TokenMismatchException){
-            return Inertia::render('Errors/419')->toResponse($request)->setStatusCode(419);
+            return Inertia::render('Errors/Error419')->toResponse($request)->setStatusCode(419);
         }
         
         if ($exception instanceof HttpException && $exception->getStatusCode() === 419) {
-            return Inertia::render('Errors/419')->toResponse($request)->setStatusCode(419);
+            return Inertia::render('Errors/Error419')->toResponse($request)->setStatusCode(419);
         }
 
         return parent::render($request, $exception);

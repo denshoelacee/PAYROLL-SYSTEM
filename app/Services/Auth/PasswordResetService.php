@@ -2,7 +2,7 @@
 
 namespace App\Services\Auth;
 
-use App\Contracts\Repository\IUserRepository;
+use App\Contracts\Repositories\IUserRepository;
 use App\Contracts\Services\Auth\IPasswordResetService;
 use Illuminate\Support\Facades\Hash;
 

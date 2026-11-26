@@ -3,7 +3,7 @@ import { Head } from '@inertiajs/react';
 import { PageProps,Employee,UserPayroll} from '@/types';
 import Sidebar from '@/Components/Sidebar';
 import AdminLayout from '@/Layouts/AdminLayout';
-import EmployeePayrollPartial from '../Employee/partial/Payroll';
+import EmployeePayrollPartial from '@/Features/Employee/Payslips/PayslipList';
 import EmployeeLayout from '@/Layouts/EmployeeLayout';
 type MonthlySummaryRow = {
         month: number;

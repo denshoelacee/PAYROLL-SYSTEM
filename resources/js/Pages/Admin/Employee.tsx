@@ -3,9 +3,9 @@ import {Employee, JobTitles, PageProps,EmploymentTypes} from '@/types';
 import Sidebar from '@/Components/Sidebar';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { useState } from 'react';
-import '../../../styles/style.css';
-import EmployeePartial from './partial/Employee';
-import ManageUserPartial from './partial/ManageUsers';
+import '../../../css/style.css';
+import EmployeePartial from '@/Features/Admin/Employees/EmployeeList';
+import ManageUserPartial from '@/Features/Admin/Employees/ManageUsers';
 
 type Props = PageProps<{
     pendingUsers: Employee[];

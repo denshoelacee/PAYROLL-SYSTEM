@@ -7,8 +7,7 @@ import { createAvatar } from '@dicebear/core';
 import { initials } from '@dicebear/collection';
 import Authenticated from './AuthenticatedLayout';
 
-//@ts-ignore
-export default function EmployeeLayout({ title, children }: PropsWithChildren) {
+export default function EmployeeLayout({ title, children }: PropsWithChildren<{ title?: string }>) {
   const { message, auth }: any = usePage().props;
   const [dismissed, setDismissed] = useState(true);
   const [notification, setNotification] = useState<string | null>(null);

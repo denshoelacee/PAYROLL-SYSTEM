@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Contracts\Repository\IPayrollRepository;
+use App\Contracts\Repositories\IPayrollRepository;
 use Carbon\Carbon;
-use App\Contracts\Repository\IUserRepository;
+use App\Contracts\Repositories\IUserRepository;
 use App\Contracts\Services\IDashboardService;
 
 class DashboardService implements IDashboardService{
@@ -17,7 +17,7 @@ class DashboardService implements IDashboardService{
    public function getTaxAndUserSummary()
    {
         $totalUsers = $this->userRepository->countUser();
-        $taxSummary = $this->payrollRepository->geTotalTaxThisMonth();
+        $taxSummary = $this->payrollRepository->getTotalTaxThisMonth();
 
         return [
             'total_users' => $totalUsers,

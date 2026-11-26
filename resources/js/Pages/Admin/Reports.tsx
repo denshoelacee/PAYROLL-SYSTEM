@@ -2,7 +2,7 @@ import { PageProps } from '@/types'
 import { Head } from '@inertiajs/react'
 import Sidebar from '@/Components/Sidebar'
 import AdminLayout from '@/Layouts/AdminLayout'
-import ReportsPartial from './partial/Reports'
+import ReportsPartial from '@/Features/Admin/Reports/ReportsList'
 
 type MonthlySummaryRow = {
     month: number;

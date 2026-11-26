@@ -7,8 +7,7 @@ import { initials } from '@dicebear/collection';
 import Authenticated from './AuthenticatedLayout';
 import { InfoMessage } from '@/Components/Alert';
 
-//@ts-ignore
-export default function AdminLayout({ title, children }: PropsWithChildren) {
+export default function AdminLayout({ title, children }: PropsWithChildren<{ title?: string }>) {
 
   const { auth, notif,message }: any = usePage().props;
   const [notifications, setNotifications] = useState<any[]>(notif || []);

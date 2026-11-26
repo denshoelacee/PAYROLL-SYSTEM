@@ -5,8 +5,8 @@ import { FaArrowLeft } from "react-icons/fa"
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { UserPayroll } from "@/types"
-import generatemonthlyReport from "./partial/reports/monthlyReport"
-import generateSundry from "./partial/reports/sundry"
+import generatemonthlyReport from "@/Features/Admin/Reports/generateMonthlyReport"
+import generateSundry from "@/Features/Admin/Reports/generateSundry"
 import { LiaPrintSolid } from "react-icons/lia";
 import { Head } from "@inertiajs/react"
 

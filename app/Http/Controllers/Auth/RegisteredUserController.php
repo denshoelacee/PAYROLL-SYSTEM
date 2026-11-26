@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Contracts\Services\IHrMetaDataService;
-use App\Events\newRegister;
+use App\Events\NewRegister;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Notifications\NewUserApprovalNotification;
@@ -86,7 +86,7 @@ class RegisteredUserController extends Controller
             $hrUser->notify(new NewUserApprovalNotification($user));
             }
 
-            event(new newRegister($user));
+            event(new NewRegister($user));
             return redirect()->route('login')->with('information','Register successfully, Please wait for approval.');     
             
         }

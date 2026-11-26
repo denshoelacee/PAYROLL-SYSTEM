@@ -5,7 +5,7 @@ import { FaChevronUp } from "react-icons/fa6";
 import { CtuLogo } from '@/Components/CtuLogo';
 import { Developers } from '@/Components/Developers';
 import Modal from '@/Components/Modal';
-import '../../styles/style.css';
+import '../../css/style.css';
 import { FaChevronDown } from 'react-icons/fa';
 
 export default function Welcome({ auth }: PageProps) {

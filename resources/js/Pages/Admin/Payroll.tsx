@@ -2,7 +2,7 @@ import { Head } from '@inertiajs/react';
 import { PageProps,Employee,UserPayroll} from '@/types';
 import Sidebar from '@/Components/Sidebar';
 import AdminLayout from '@/Layouts/AdminLayout';
-import PayrollPartial from './partial/Payroll';
+import PayrollPartial from '@/Features/Admin/Payroll/PayrollList';
 
 type MonthOption = {
     number: string;

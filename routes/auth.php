@@ -3,7 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\PasswordController;
-use App\Http\Controllers\Auth\PasswordResetConfirmControlller;
+use App\Http\Controllers\Auth\PasswordResetConfirmController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
@@ -40,7 +40,7 @@ Route::middleware('guest')->group(function () {
     Route::post('forgot-password', [PasswordResetLinkController::class, 'reset'])
                 ->name('reset.password');
 
-    Route::get('/reset-password/{employee_id}',[PasswordResetConfirmControlller::class, 'passwordReset'])
+    Route::get('/reset-password/{employee_id}',[PasswordResetConfirmController::class, 'passwordReset'])
               ->name('password.reset.form');
     
     Route::post('reset-password', [PasswordController::class, 'update'])

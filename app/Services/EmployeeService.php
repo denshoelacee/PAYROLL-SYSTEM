@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Contracts\Repository\IUserRepository;
+use App\Contracts\Repositories\IUserRepository;
 use App\Contracts\Services\IEmployeeService;
 use Illuminate\Pagination\LengthAwarePaginator;
 

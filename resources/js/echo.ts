@@ -1,5 +1,5 @@
 import Echo from 'laravel-echo';
-import Pusher from 'pusher-js'; // ✅ Use import, not require
+import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
 
@@ -12,7 +12,6 @@ const echo = new Echo({
   forceTLS: false,
   enabledTransports: ['ws'],
   auth: {
-    withCredentials: true, 
      headers: {
       'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
     },

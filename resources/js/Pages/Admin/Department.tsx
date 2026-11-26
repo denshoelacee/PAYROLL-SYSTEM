@@ -2,9 +2,9 @@ import { EmploymentTypes, JobTitles, PageProps } from "@/types";
 import { Head, useForm } from "@inertiajs/react";
 import Sidebar from "@/Components/Sidebar";
 import AdminLayout from "@/Layouts/AdminLayout";
-import AddDepartment from "./partial/AddDepartment";
-import AddDesignation from "./partial/AddDesignation";
-import AddEmployment from "./partial/AddEmployment";
+import AddDepartment from "@/Features/Admin/Department/AddDepartment";
+import AddDesignation from "@/Features/Admin/Department/AddDesignation";
+import AddEmployment from "@/Features/Admin/Department/AddEmployment";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInputGroup from "@/Components/TextInputGroup";
 import InputWrapper from "@/Components/InputWrapper";
@@ -32,7 +32,7 @@ const handleNumberChange = (key: 'rlip' | 'philhealth', value: string) => {
 };
 
   const handleSubmit = () => {
-    post(route('admin.contribution.add')),{
+    post(route('admin.contributions.store')),{
       
     }
   }

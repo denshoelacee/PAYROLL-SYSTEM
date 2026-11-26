@@ -272,7 +272,7 @@ export default function PayrollPartial ({ payrollthisMonth,newPayroll,payslips,
     const handleSubmit = (actionType: 'partial' | 'publish'): FormEventHandler => {
         return (e) => {
             e.preventDefault();
-            post(route(`admin.store.${actionType}`), {
+            post(route(actionType === 'partial' ? 'admin.payroll.store-partial' : 'admin.payroll.publish'), {
                 onSuccess: () => {
                     setAddModal(false);
                     reset();

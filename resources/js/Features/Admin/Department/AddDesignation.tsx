@@ -47,7 +47,7 @@ export default function AddDesignation({jobTitleList}:Props) {
             return (e) => {
             e.preventDefault();
                 setData('checker', actionType); 
-            post(route(`admin.update.position`,selectedRow?.id), {
+            post(route('admin.positions.update', selectedRow?.id), {
                 onSuccess: () => {
                 setEditModal(false);
                 reset();

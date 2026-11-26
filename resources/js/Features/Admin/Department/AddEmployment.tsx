@@ -25,7 +25,7 @@ export default function AddEmployment({empTypeList}:Props) {
 
     const handleSubmit: FormEventHandler = (e) => {
     e.preventDefault();
-        post(route(`adminAdd.EmploymentType`), {
+        post(route('admin.employment-types.store'), {
             onSuccess: () => {
             setShowModal(false);
             reset();
@@ -35,7 +35,7 @@ export default function AddEmployment({empTypeList}:Props) {
 
     const HandleEditSubmit: FormEventHandler = (e) => {
     e.preventDefault();
-        post(route(`adminUpdate.EmploymentType`,selectedRow?.id), {
+        post(route('admin.employment-types.update', selectedRow?.id), {
             onSuccess: () => {
             setEditModal(false);
             reset();
